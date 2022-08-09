@@ -1,0 +1,1 @@
+export { DeliveryDetailsView } from "./DeliveryDetailsView";
