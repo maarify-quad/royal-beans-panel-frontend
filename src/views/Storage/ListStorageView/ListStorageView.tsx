@@ -38,6 +38,7 @@ export const ListStorageView = () => {
           <Tabs.Tab value="HM">Hammadde</Tabs.Tab>
           <Tabs.Tab value="YM">Yarı Mamül</Tabs.Tab>
           <Tabs.Tab value="FN">Bitmiş Ürün</Tabs.Tab>
+          <Tabs.Tab value="Other">Diğer</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="HM" mt="md">
@@ -48,6 +49,9 @@ export const ListStorageView = () => {
         </Tabs.Panel>
         <Tabs.Panel value="FN" mt="md">
           <StorageProducts storageType="FN" />
+        </Tabs.Panel>
+        <Tabs.Panel value="Other" mt="md">
+          <StorageProducts storageType="Other" />
         </Tabs.Panel>
       </Tabs>
     </div>
