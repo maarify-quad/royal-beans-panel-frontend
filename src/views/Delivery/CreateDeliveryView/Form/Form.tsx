@@ -54,7 +54,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
 
   const handleAddProduct = () => {
     // Destructuring form values
-    const { deliveryDetails, supplierId, date, ...item } = form.values;
+    const { deliveryDetails, supplierId, deliveryDate, invoiceDate, ...item } = form.values;
 
     // Check if product already exists
     const product = products?.find((p) => p.id === item.productId);
@@ -114,10 +114,17 @@ export const Form: React.FC<FormProps> = ({ form }) => {
     <div>
       <LoadingOverlay visible={isSuppliersLoading || isProductsLoading} />
       <DatePicker
-        label="Tarih"
-        placeholder="Tarih"
+        label="Sevkiyat Tarihi"
+        placeholder="Sevkiyat Tarihi"
         clearable={false}
-        {...form.getInputProps("date")}
+        {...form.getInputProps("deliveryDate")}
+      />
+      <DatePicker
+        label="Fatura Tarihi"
+        placeholder="Fatura Tarihi"
+        mt="md"
+        clearable={false}
+        {...form.getInputProps("invoiceDate")}
       />
       <Select
         label="Tedarikçi"
@@ -161,9 +168,9 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         {...form.getInputProps("productId")}
       />
       <Select
-        label="Hammadde sınıfı"
+        label="Depo türü"
         mt="md"
-        placeholder="Hammadde sınıfı seçiniz"
+        placeholder="Depo türü seçiniz"
         dropdownComponent="div"
         data={[
           { label: "HM", value: "HM" },

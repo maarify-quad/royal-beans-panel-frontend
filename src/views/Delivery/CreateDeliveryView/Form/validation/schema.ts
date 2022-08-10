@@ -1,9 +1,13 @@
 import { z } from "zod";
 
 export const schema = z.object({
-  date: z.date({
-    required_error: "Tarih gereklidir",
-    invalid_type_error: "Geçersiz tarih değeri",
+  deliveryDate: z.date({
+    required_error: "Sevkiyat tarihi gereklidir",
+    invalid_type_error: "Geçersiz sevkiyat tarih değeri",
+  }),
+  invoiceDate: z.date({
+    required_error: "Fatura tarihi gereklidir",
+    invalid_type_error: "Geçersiz fatura tarih değeri",
   }),
   supplierId: z
     .string({
@@ -71,7 +75,8 @@ export const schema = z.object({
 });
 
 export const initialValues = {
-  date: new Date(),
+  deliveryDate: new Date(),
+  invoiceDate: new Date(),
   supplierId: "",
   deliveryDetails: [],
   productId: 0,

@@ -8,7 +8,8 @@ export interface DeliveryState {
 export interface Delivery {
   id: string;
   supplierId: string;
-  date: string;
+  deliveryDate: string;
+  invoiceDate: string;
   subTotal: number;
   taxTotal: number;
   total: number;

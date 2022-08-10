@@ -1,7 +1,8 @@
 import { Product } from "@interfaces/product";
 
 export type Inputs = {
-  date: Date;
+  deliveryDate: Date;
+  invoiceDate: Date;
   supplierId: string;
   productId: number;
   storageType: string;

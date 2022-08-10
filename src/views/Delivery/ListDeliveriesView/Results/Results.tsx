@@ -61,7 +61,7 @@ export const Results = () => {
       <Table highlightOnHover verticalSpacing="sm">
         <thead>
           <tr>
-            <th>Tarih</th>
+            <th>Sevkiyat Tarihi</th>
             <th>Sevkiyat Kodu</th>
             <th>Tedarikçi</th>
             <th>Tutar</th>
@@ -74,7 +74,7 @@ export const Results = () => {
               style={{ width: "100%", cursor: "pointer" }}
               key={i}
             >
-              <td>{dayjs(delivery.date).format("DD/MM/YYYY - HH:mm")}</td>
+              <td>{dayjs(delivery.deliveryDate).format("DD MMM YYYY")}</td>
               <td>{delivery.id}</td>
               <td>{delivery.supplier.name}</td>
               <td>{delivery.total} ₺</td>
