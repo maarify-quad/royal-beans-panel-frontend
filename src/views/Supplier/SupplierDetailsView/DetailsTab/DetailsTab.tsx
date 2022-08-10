@@ -43,7 +43,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
           </Text>
           <MapPinIcon />
         </Group>
-        <Text mt="md">{supplier?.address}</Text>
+        <Text mt="md">{supplier?.address || "-"}</Text>
       </Card>
       <Card withBorder p="xl" radius="md" className={classes.card}>
         <Group position="apart">
@@ -53,7 +53,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
           <ReceiptTaxIcon />
         </Group>
         <Text mt="md">
-          {supplier?.taxNo} / {supplier?.taxOffice}
+          {supplier?.taxNo || "-"} / {supplier?.taxOffice || "-"}
         </Text>
       </Card>
       <Card withBorder p="xl" radius="md" className={classes.card}>
