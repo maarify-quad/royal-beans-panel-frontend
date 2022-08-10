@@ -28,7 +28,7 @@ export const DeliveriesTab: React.FC<DeliveriesTabProps> = ({ deliveries }) => {
         <Table highlightOnHover verticalSpacing="sm">
           <thead>
             <tr>
-              <th>Tarih</th>
+              <th>Sevkiyat Tarihi</th>
               <th>Sevkiyat Kodu</th>
               <th>Tutar</th>
             </tr>
@@ -43,7 +43,7 @@ export const DeliveriesTab: React.FC<DeliveriesTabProps> = ({ deliveries }) => {
                 }}
                 key={i}
               >
-                <td>{dayjs(delivery.date).format("DD/MM/YYYY - HH:mm")}</td>
+                <td>{dayjs(delivery.deliveryDate).format("DD MMM YYYY")}</td>
                 <td>{delivery.id}</td>
                 <td>{delivery.total} ₺</td>
               </tr>

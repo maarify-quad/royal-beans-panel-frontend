@@ -73,7 +73,7 @@ export const Results = () => {
               }}
               key={i}
             >
-              <td>{dayjs(roast.date).format("DD MMM YYYY - HH:mm")}</td>
+              <td>{dayjs(roast.date).format("DD MMM YYYY")}</td>
               <td>{roast.id}</td>
               <td>{roast.totalInputAmount} kg</td>
             </tr>
