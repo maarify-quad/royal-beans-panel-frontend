@@ -4,10 +4,32 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 // UI Components
-import { createStyles, Title, Breadcrumbs, Tabs, Anchor } from "@mantine/core";
+import {
+  createStyles,
+  Title,
+  Breadcrumbs,
+  Tabs,
+  Anchor,
+  Group,
+  Button,
+  LoadingOverlay,
+} from "@mantine/core";
+
+// UI Utils
+import { openModal } from "@mantine/modals";
+
+// Icons
+import { Plus as PlusIcon } from "tabler-icons-react";
 
 // Components
 import { StorageProducts } from "./StorageProducts";
+
+// Lazy Components
+const CreateProductForm = React.lazy(() =>
+  import("../../../components/Product/CreateProductForm").then((module) => ({
+    default: module.CreateProductForm,
+  }))
+);
 
 // Styles
 const useStyles = createStyles((theme) => ({
@@ -22,6 +44,17 @@ const useStyles = createStyles((theme) => ({
 export const ListStorageView = () => {
   const { classes } = useStyles();
 
+  const onCreateProductClick = () => {
+    openModal({
+      title: "Ürün Oluştur",
+      children: (
+        <React.Suspense fallback={<LoadingOverlay visible />}>
+          <CreateProductForm />
+        </React.Suspense>
+      ),
+    });
+  };
+
   return (
     <div className={classes.root}>
       <Breadcrumbs mb={16}>
@@ -32,7 +65,12 @@ export const ListStorageView = () => {
           Depo
         </Anchor>
       </Breadcrumbs>
-      <Title className={classes.rootTitle}>Depo</Title>
+      <Group position="apart">
+        <Title className={classes.rootTitle}>Depo</Title>
+        <Button leftIcon={<PlusIcon />} onClick={onCreateProductClick}>
+          Yeni Ürün
+        </Button>
+      </Group>
       <Tabs defaultValue="HM" mt="md">
         <Tabs.List>
           <Tabs.Tab value="HM">Hammadde</Tabs.Tab>
