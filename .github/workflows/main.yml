@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build & Deploy
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -29,8 +29,13 @@ jobs:
         run: npm run build
         env:
           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
-
-      - name: Deploy to AWS
+          
+  deploy:
+    name: Deploy to AWS
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy to EC2
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
@@ -40,3 +45,4 @@ jobs:
           TARGET: ${{ secrets.TARGET_DIR }}
           ARGS: "-rltgoDzvO"
           EXCLUDE: "/node_modules/"
+      
