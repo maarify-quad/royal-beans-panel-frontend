@@ -10,7 +10,13 @@ export const schema = z.object({
       required_error: "Tedarikçi gereklidir",
       invalid_type_error: "Geçersiz tedarikçi değeri",
     })
-    .min(1, "Tedarikçi gereklidir"),
+    .min(1, "Tedarikçi gereklidir")
+    .or(
+      z.number({
+        required_error: "Tedarikçi gereklidir",
+        invalid_type_error: "Geçersiz tedarikçi değeri",
+      })
+    ),
   deliveryDetails: z
     .object({
       productId: z.number({

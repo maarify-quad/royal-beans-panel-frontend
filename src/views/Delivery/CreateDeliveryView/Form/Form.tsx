@@ -43,6 +43,15 @@ export const Form: React.FC<FormProps> = ({ form }) => {
     [products?.length]
   );
 
+  const supplierSelectOptions = React.useMemo(
+    () =>
+      suppliersData?.suppliers.map((supplier) => ({
+        value: supplier.id,
+        label: supplier.name,
+      })) || [],
+    [suppliersData?.suppliers.length]
+  );
+
   const handleAddProduct = () => {
     // Destructuring form values
     const { deliveryDetails, supplierId, date, ...item } = form.values;
@@ -115,14 +124,21 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         mt="md"
         placeholder="Tedarikçi seçiniz"
         searchable
+        creatable
         nothingFound="Sonuç bulunamadı"
         dropdownComponent="div"
-        data={
-          suppliersData?.suppliers.map((supplier) => ({
-            label: `${supplier.name}`,
-            value: supplier.id,
-          })) || []
-        }
+        getCreateLabel={(query) => `+ ${query} oluştur`}
+        onCreate={(query) => {
+          const value = `NEW_${query}`;
+          const item = { value, label: query };
+          supplierSelectOptions.push({
+            label: query,
+            value: value,
+          });
+          form.setFieldValue("supplierId", value);
+          return item;
+        }}
+        data={supplierSelectOptions}
         {...form.getInputProps("supplierId")}
       />
       <Select
