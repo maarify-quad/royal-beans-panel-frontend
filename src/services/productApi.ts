@@ -25,6 +25,19 @@ export const productApi = emptyApi.injectEndpoints({
       invalidatesTags: (result, _error, params) =>
         result ? [{ type: "Product" as const, id: params.storageType }] : ["Product"],
     }),
+    createBulkProductsFromExcel: builder.mutation<any, CreateBulkProductsFromExcelParams>({
+      query: (body) => {
+        const formData = new FormData();
+        formData.append("excel", body.excel);
+
+        return {
+          url: "/products/bulk/excel",
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 
@@ -32,6 +45,7 @@ export const {
   useGetAllProductsQuery,
   useGetProductsByStorageTypeQuery,
   useCreateProductMutation,
+  useCreateBulkProductsFromExcelMutation,
 } = productApi;
 
 interface CreateProductParams {
@@ -39,4 +53,8 @@ interface CreateProductParams {
   storageType: string;
   amount: number;
   amountUnit: string;
+}
+
+interface CreateBulkProductsFromExcelParams {
+  excel: File;
 }
