@@ -43,9 +43,18 @@ export const Form: React.FC<FormProps> = ({ form }) => {
     [products?.length]
   );
 
+  const supplierSelectOptions = React.useMemo(
+    () =>
+      suppliersData?.suppliers.map((supplier) => ({
+        value: supplier.id,
+        label: supplier.name,
+      })) || [],
+    [suppliersData?.suppliers.length]
+  );
+
   const handleAddProduct = () => {
     // Destructuring form values
-    const { deliveryDetails, supplierId, date, ...item } = form.values;
+    const { deliveryDetails, supplierId, deliveryDate, invoiceDate, ...item } = form.values;
 
     // Check if product already exists
     const product = products?.find((p) => p.id === item.productId);
@@ -105,24 +114,38 @@ export const Form: React.FC<FormProps> = ({ form }) => {
     <div>
       <LoadingOverlay visible={isSuppliersLoading || isProductsLoading} />
       <DatePicker
-        label="Tarih"
-        placeholder="Tarih"
+        label="Sevkiyat Tarihi"
+        placeholder="Sevkiyat Tarihi"
         clearable={false}
-        {...form.getInputProps("date")}
+        {...form.getInputProps("deliveryDate")}
+      />
+      <DatePicker
+        label="Fatura Tarihi"
+        placeholder="Fatura Tarihi"
+        mt="md"
+        clearable={false}
+        {...form.getInputProps("invoiceDate")}
       />
       <Select
         label="Tedarikçi"
         mt="md"
         placeholder="Tedarikçi seçiniz"
         searchable
+        creatable
         nothingFound="Sonuç bulunamadı"
         dropdownComponent="div"
-        data={
-          suppliersData?.suppliers.map((supplier) => ({
-            label: `${supplier.name}`,
-            value: supplier.id,
-          })) || []
-        }
+        getCreateLabel={(query) => `+ ${query} oluştur`}
+        onCreate={(query) => {
+          const value = `NEW_${query}`;
+          const item = { value, label: query };
+          supplierSelectOptions.push({
+            label: query,
+            value: value,
+          });
+          form.setFieldValue("supplierId", value);
+          return item;
+        }}
+        data={supplierSelectOptions}
         {...form.getInputProps("supplierId")}
       />
       <Select
@@ -145,9 +168,9 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         {...form.getInputProps("productId")}
       />
       <Select
-        label="Hammadde sınıfı"
+        label="Depo türü"
         mt="md"
-        placeholder="Hammadde sınıfı seçiniz"
+        placeholder="Depo türü seçiniz"
         dropdownComponent="div"
         data={[
           { label: "HM", value: "HM" },

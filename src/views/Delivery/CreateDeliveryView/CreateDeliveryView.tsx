@@ -50,9 +50,10 @@ export const CreateDeliveryView = () => {
 
   const onCreateDeliverySubmit = async (values: typeof form.values) => {
     try {
-      const { date, supplierId, deliveryDetails } = values;
+      const { deliveryDate, invoiceDate, supplierId, deliveryDetails } = values;
       await createDelivery({
-        date,
+        deliveryDate,
+        invoiceDate,
         supplierId,
         deliveryDetails,
       });

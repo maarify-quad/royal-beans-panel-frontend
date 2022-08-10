@@ -14,8 +14,10 @@ import jwtDecode from "jwt-decode";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_BASE_URL,
-  prepareHeaders: (headers, _) => {
-    headers.set("Content-Type", "application/json");
+  prepareHeaders: (headers, api) => {
+    if (api.endpoint !== "createBulkProductsFromExcel") {
+      headers.set("Content-Type", "application/json");
+    }
 
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {

@@ -15,6 +15,7 @@ export default ({ mode }) => {
       alias: [
         { find: "@components", replacement: resolve(__dirname, "src", "components") },
         { find: "@app", replacement: resolve(__dirname, "src", "app") },
+        { find: "@assets", replacement: resolve(__dirname, "src", "assets") },
         { find: "@slices", replacement: resolve(__dirname, "src", "slices") },
         { find: "@services", replacement: resolve(__dirname, "src", "services") },
         { find: "@interfaces", replacement: resolve(__dirname, "src", "interfaces") },

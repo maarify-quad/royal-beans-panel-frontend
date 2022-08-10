@@ -25,7 +25,7 @@ import { Results } from "./Results";
 
 // Lazy Components
 const CreateSupplierForm = React.lazy(() =>
-  import("../../../components/Suppliers/CreateSupplierForm").then((module) => ({
+  import("../../../components/Supplier/CreateSupplierForm").then((module) => ({
     default: module.CreateSupplierForm,
   }))
 );

@@ -33,7 +33,8 @@ interface GetAllDeliveriesResponse {
 }
 
 interface CreateDeliveryPayload {
-  date: Date;
+  deliveryDate: Date;
+  invoiceDate: Date;
   supplierId: string;
   deliveryDetails: CreateDeliveryDetail[];
 }
