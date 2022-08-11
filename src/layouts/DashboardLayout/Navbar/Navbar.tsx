@@ -17,6 +17,7 @@ import {
   UserCircle as UserCircleIcon,
   Package as PackageIcon,
   Coffee as CoffeeIcon,
+  Tags as TagsIcon,
   Logout as LogoutIcon,
   Settings as SettingsIcon,
 } from "tabler-icons-react";
@@ -110,6 +111,12 @@ const navLinks = [
     icon: UserCircleIcon,
     match: "customers",
     link: "/dashboard/customers",
+  },
+  {
+    label: "Fiyat Listeleri",
+    icon: TagsIcon,
+    match: "price-lists",
+    link: "/dashboard/price-lists",
   },
 ];
 
