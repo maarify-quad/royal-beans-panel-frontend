@@ -71,6 +71,13 @@ const CreateRoastView = React.lazy(() =>
   }))
 );
 
+// Customer Views
+const ListCustomersView = React.lazy(() =>
+  import("./views/Customer/ListCustomersView").then((module) => ({
+    default: module.ListCustomersView,
+  }))
+);
+
 // Error Views
 const NotFoundView = React.lazy(() =>
   import("./views/Error/NotFoundView").then((module) => ({ default: module.NotFoundView }))
@@ -129,6 +136,10 @@ export const AppRoutes = () => {
         {
           path: "/dashboard/roasts/create",
           element: <CreateRoastView />,
+        },
+        {
+          path: "/dashboard/customers",
+          element: <ListCustomersView />,
         },
       ],
     },
