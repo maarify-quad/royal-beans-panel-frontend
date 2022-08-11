@@ -37,7 +37,7 @@ export const CommercialStep: React.FC<CommercialStepProps> = ({ form }) => {
         {...form.getInputProps("startBalance")}
       />
       <TextInput
-        label="Çalışma prensini"
+        label="Çalışma prensibi"
         placeholder="Çalışma prensibi giriniz"
         mt="md"
         {...form.getInputProps("commercialPrinciple")}
