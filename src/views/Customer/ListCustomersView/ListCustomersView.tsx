@@ -14,11 +14,21 @@ import {
   LoadingOverlay,
 } from "@mantine/core";
 
+// UI Utils
+import { openModal } from "@mantine/modals";
+
 // Icons
 import { UserPlus as UserPlusIcon } from "tabler-icons-react";
 
 // Components
 import { Results } from "./Results";
+
+// Lazy Components
+const CreateCustomerForm = React.lazy(() =>
+  import("../../../components/Customer/CreateCustomerForm").then((module) => ({
+    default: module.CreateCustomerForm,
+  }))
+);
 
 // Styles
 const useStyles = createStyles((theme) => ({
@@ -33,6 +43,17 @@ const useStyles = createStyles((theme) => ({
 export const ListCustomersView = () => {
   const { classes } = useStyles();
 
+  const onCreateCustomerClick = () => {
+    openModal({
+      title: "Müşteri Oluştur",
+      children: (
+        <React.Suspense fallback={<LoadingOverlay visible />}>
+          <CreateCustomerForm />
+        </React.Suspense>
+      ),
+    });
+  };
+
   return (
     <div className={classes.root}>
       <Breadcrumbs mb={16}>
@@ -45,7 +66,9 @@ export const ListCustomersView = () => {
       </Breadcrumbs>
       <Group align="center" position="apart">
         <Title className={classes.rootTitle}>Müşteriler</Title>
-        <Button leftIcon={<UserPlusIcon />}>Yeni Müşteri</Button>
+        <Button leftIcon={<UserPlusIcon />} onClick={onCreateCustomerClick}>
+          Yeni Müşteri
+        </Button>
       </Group>
       <Results />
     </div>
