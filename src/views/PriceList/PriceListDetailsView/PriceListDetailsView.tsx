@@ -15,11 +15,15 @@ import {
   Alert,
   Center,
   Loader,
-  Box,
+  Grid,
 } from "@mantine/core";
 
 // Icons
 import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+
+// Components
+import { ProductsResult } from "./ProductsResult";
+import { CustomersResult } from "./CustomersResult";
 
 // Styles
 const useStyles = createStyles((theme) => ({
@@ -82,6 +86,14 @@ export const PriceListDetailsView = () => {
         </Anchor>
       </Breadcrumbs>
       <Title className={classes.rootTitle}>{data?.name}</Title>
+      <Grid mt="md">
+        <Grid.Col lg={8}>
+          <ProductsResult priceListProducts={data?.priceListProducts} />
+        </Grid.Col>
+        <Grid.Col lg={4}>
+          <CustomersResult customers={data?.customers} />
+        </Grid.Col>
+      </Grid>
     </div>
   );
 };

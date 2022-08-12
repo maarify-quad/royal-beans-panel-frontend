@@ -1,5 +1,5 @@
 import { Customer } from "./customer";
-import { Product } from "./product";
+import { PriceListProduct } from "./priceListProduct";
 
 export interface PriceList {
   id: number;
@@ -8,5 +8,5 @@ export interface PriceList {
   createdAt: string;
   updatedAt: string;
   customers?: Customer[];
-  products?: Product[];
+  priceListProducts?: PriceListProduct[];
 }
