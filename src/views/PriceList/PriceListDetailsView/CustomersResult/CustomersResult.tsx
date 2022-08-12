@@ -17,14 +17,14 @@ type CustomersResultProps = {
 export const CustomersResult: React.FC<CustomersResultProps> = ({ customers }) => {
   if (customers?.length === 0) {
     return (
-      <Alert icon={<AlertCircleIcon />} color="cyan" mt="md">
-        Bü fiyat listesinde müşteri bulunmamaktadır.
+      <Alert icon={<AlertCircleIcon />} color="cyan">
+        Bu fiyat listesinde müşteri bulunmamaktadır.
       </Alert>
     );
   }
 
   return (
-    <Container fluid mt="md" p={0}>
+    <Container fluid p={0}>
       <Table highlightOnHover verticalSpacing="sm">
         <thead>
           <tr>

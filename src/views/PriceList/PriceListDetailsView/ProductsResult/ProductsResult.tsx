@@ -17,14 +17,14 @@ type ProductsResultProps = {
 export const ProductsResult: React.FC<ProductsResultProps> = ({ priceListProducts }) => {
   if (priceListProducts?.length === 0) {
     return (
-      <Alert icon={<AlertCircleIcon />} color="cyan" mt="md">
-        Bü fiyat listesinde ürün bulunmamaktadır.
+      <Alert icon={<AlertCircleIcon />} color="cyan">
+        Bu fiyat listesinde ürün bulunmamaktadır.
       </Alert>
     );
   }
 
   return (
-    <Container fluid mt="md" p={0}>
+    <Container fluid p={0}>
       <Table highlightOnHover verticalSpacing="sm">
         <thead>
           <tr>
