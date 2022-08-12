@@ -8,10 +8,18 @@ import { Table, Container, Loader, Alert } from "@mantine/core";
 
 // Icons
 import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { useNavigate } from "react-router-dom";
 
 export const Results = () => {
   // Queries
   const { data, isLoading, error } = useGetPriceListsQuery();
+
+  // Routing
+  const navigate = useNavigate();
+
+  const handleRowClick = (id: string) => () => {
+    navigate(`/dashboard/price-lists/${id}`);
+  };
 
   if (isLoading) {
     return <Loader />;
@@ -51,7 +59,14 @@ export const Results = () => {
         </thead>
         <tbody>
           {data?.priceLists.map((priceList, i) => (
-            <tr key={i}>
+            <tr
+              onClick={handleRowClick(priceList.id.toString())}
+              style={{
+                cursor: "pointer",
+                width: "100%",
+              }}
+              key={i}
+            >
               <td>{priceList.name}</td>
               <td>{priceList.description || "-"}</td>
               <td>{priceList.customers?.length || "0"}</td>

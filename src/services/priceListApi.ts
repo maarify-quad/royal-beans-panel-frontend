@@ -9,10 +9,14 @@ export const priceListApi = emptyApi.injectEndpoints({
       query: () => "/price_lists",
       providesTags: ["PriceList"],
     }),
+    getPriceListById: builder.query<PriceList, string>({
+      query: (id) => `/price_lists/${id}`,
+      providesTags: ["PriceList"],
+    }),
   }),
 });
 
-export const { useGetPriceListsQuery } = priceListApi;
+export const { useGetPriceListsQuery, useGetPriceListByIdQuery } = priceListApi;
 
 interface GetPriceListsResponse {
   priceLists: PriceList[];
