@@ -25,7 +25,11 @@ import {
 import { openModal } from "@mantine/modals";
 
 // Icons
-import { AlertCircle as AlertCircleIcon, Plus as PlusIcon } from "tabler-icons-react";
+import {
+  AlertCircle as AlertCircleIcon,
+  Plus as PlusIcon,
+  UserPlus as UserPlusIcon,
+} from "tabler-icons-react";
 
 // Components
 import { ProductsResult } from "./ProductsResult";
@@ -36,6 +40,13 @@ const AddProductForm = React.lazy(() =>
   import("../../../components/PriceList/AddProductForm").then(({ AddProductForm }) => ({
     default: AddProductForm,
   }))
+);
+const AssignPriceListForm = React.lazy(() =>
+  import("../../../components/PriceList/AssignPriceListForm").then(
+    ({ AssignPriceListForm }) => ({
+      default: AssignPriceListForm,
+    })
+  )
 );
 
 // Styles
@@ -80,6 +91,18 @@ export const PriceListDetailsView = () => {
     });
   };
 
+  const onAssignPriceListClick = () => {
+    openModal({
+      key: "assignPriceList",
+      title: "Müşteri Ekle",
+      children: (
+        <React.Suspense fallback={<LoadingOverlay visible />}>
+          <AssignPriceListForm priceListId={parseInt(id)} />
+        </React.Suspense>
+      ),
+    });
+  };
+
   if (error) {
     return (
       <Alert
@@ -115,9 +138,18 @@ export const PriceListDetailsView = () => {
       </Breadcrumbs>
       <Group position="apart">
         <Title className={classes.rootTitle}>{data?.name}</Title>
-        <Button leftIcon={<PlusIcon />} onClick={onAddProductClick}>
-          Ürün Ekle
-        </Button>
+        <Group>
+          <Button leftIcon={<PlusIcon />} onClick={onAddProductClick}>
+            Ürün Ekle
+          </Button>
+          <Button
+            variant="default"
+            leftIcon={<UserPlusIcon />}
+            onClick={onAssignPriceListClick}
+          >
+            Müşteri Ekle
+          </Button>
+        </Group>
       </Group>
       <Grid mt="md">
         <Grid.Col lg={8}>

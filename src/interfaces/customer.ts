@@ -1,5 +1,9 @@
+import { PriceList } from "./priceList";
+
 export interface Customer {
   id: number;
+  priceListId?: number;
+  priceList?: PriceList;
   name: string;
   companyTitle?: string;
   contactName?: string;

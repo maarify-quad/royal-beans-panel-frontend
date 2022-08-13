@@ -20,10 +20,24 @@ export const customerApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: ["Customer"],
     }),
+    updateCustomer: builder.mutation<Customer, UpdateCustomerParams>({
+      query: (body) => ({
+        url: "/customers",
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: (_result, _error, params) => [
+        { type: "Customer" as const, id: params.id },
+        ...(params.priceListId
+          ? [{ type: "PriceList" as const, id: params.priceListId }]
+          : []),
+      ],
+    }),
   }),
 });
 
-export const { useGetCustomersQuery, useCreateCustomerMutation } = customerApi;
+export const { useGetCustomersQuery, useCreateCustomerMutation, useUpdateCustomerMutation } =
+  customerApi;
 
 interface GetCustomersResponse {
   customers: Customer[];
@@ -31,6 +45,7 @@ interface GetCustomersResponse {
 
 interface CreateCustomerParams {
   name: string;
+  priceListId?: number;
   companyTitle?: string;
   contactName?: string;
   contactTitle?: string;
@@ -50,4 +65,8 @@ interface CreateCustomerParams {
   commercialPrinciple?: string;
   comment?: string;
   specialNote?: string;
+}
+
+interface UpdateCustomerParams extends Partial<CreateCustomerParams> {
+  id: number;
 }
