@@ -16,14 +16,27 @@ import {
   Center,
   Loader,
   Grid,
+  Group,
+  Button,
+  LoadingOverlay,
 } from "@mantine/core";
 
+// UI Utils
+import { openModal } from "@mantine/modals";
+
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { AlertCircle as AlertCircleIcon, Plus as PlusIcon } from "tabler-icons-react";
 
 // Components
 import { ProductsResult } from "./ProductsResult";
 import { CustomersResult } from "./CustomersResult";
+
+// Lazy Components
+const AddProductForm = React.lazy(() =>
+  import("../../../components/PriceList/AddProductForm").then(({ AddProductForm }) => ({
+    default: AddProductForm,
+  }))
+);
 
 // Styles
 const useStyles = createStyles((theme) => ({
@@ -51,6 +64,21 @@ export const PriceListDetailsView = () => {
   }
 
   const { data, isLoading, error } = useGetPriceListByIdQuery(id);
+
+  const onAddProductClick = () => {
+    openModal({
+      key: "addPriceListProduct",
+      title: "Ürün Ekle",
+      children: (
+        <React.Suspense fallback={<LoadingOverlay visible />}>
+          <AddProductForm
+            priceListId={parseInt(id)}
+            priceListProducts={data?.priceListProducts}
+          />
+        </React.Suspense>
+      ),
+    });
+  };
 
   if (error) {
     return (
@@ -85,7 +113,12 @@ export const PriceListDetailsView = () => {
           {data?.name}
         </Anchor>
       </Breadcrumbs>
-      <Title className={classes.rootTitle}>{data?.name}</Title>
+      <Group position="apart">
+        <Title className={classes.rootTitle}>{data?.name}</Title>
+        <Button leftIcon={<PlusIcon />} onClick={onAddProductClick}>
+          Ürün Ekle
+        </Button>
+      </Group>
       <Grid mt="md">
         <Grid.Col lg={8}>
           <ProductsResult priceListProducts={data?.priceListProducts} />

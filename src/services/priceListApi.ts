@@ -11,7 +11,7 @@ export const priceListApi = emptyApi.injectEndpoints({
     }),
     getPriceListById: builder.query<PriceList, string>({
       query: (id) => `/price_lists/${id}`,
-      providesTags: ["PriceList"],
+      providesTags: (_result, _error, id) => [{ type: "PriceList" as const, id }],
     }),
   }),
 });

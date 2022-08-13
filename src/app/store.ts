@@ -13,6 +13,7 @@ import { productApi } from "@services/productApi";
 import { roastApi } from "@services/roastApi";
 import { customerApi } from "@services/customerApi";
 import { priceListApi } from "@services/priceListApi";
+import { priceListProductApi } from "@services/priceListProductApi";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     [roastApi.reducerPath]: roastApi.reducer,
     [customerApi.reducerPath]: customerApi.reducer,
     [priceListApi.reducerPath]: priceListApi.reducer,
+    [priceListProductApi.reducerPath]: priceListProductApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(emptyApi.middleware),
   devTools: process.env.NODE_ENV !== "production",
