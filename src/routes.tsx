@@ -95,6 +95,13 @@ const PriceListDetailsView = React.lazy(() =>
   }))
 );
 
+// Order Views
+const ListOrdersView = React.lazy(() =>
+  import("./views/Order/ListOrdersView").then((module) => ({
+    default: module.ListOrdersView,
+  }))
+);
+
 // Error Views
 const NotFoundView = React.lazy(() =>
   import("./views/Error/NotFoundView").then((module) => ({ default: module.NotFoundView }))
@@ -169,6 +176,10 @@ export const AppRoutes = () => {
         {
           path: "/dashboard/price-lists/:id",
           element: <PriceListDetailsView />,
+        },
+        {
+          path: "/dashboard/orders",
+          element: <ListOrdersView />,
         },
       ],
     },

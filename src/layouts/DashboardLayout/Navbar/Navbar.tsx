@@ -14,6 +14,7 @@ import { Navbar as MantineNavbar, ScrollArea, createStyles, Menu } from "@mantin
 import {
   TruckDelivery as TruckDeliveryIcon,
   Users as UsersIcon,
+  ShoppingCart as ShoppingCartIcon,
   UserCircle as UserCircleIcon,
   Package as PackageIcon,
   Coffee as CoffeeIcon,
@@ -105,6 +106,12 @@ const navLinks = [
     icon: CoffeeIcon,
     match: "roasts",
     link: "/dashboard/roasts",
+  },
+  {
+    label: "Siparişler",
+    icon: ShoppingCartIcon,
+    match: "orders",
+    link: "/dashboard/orders",
   },
   {
     label: "Müşteriler",
