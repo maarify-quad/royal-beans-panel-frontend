@@ -8,10 +8,15 @@ import { useNavigate } from "react-router-dom";
 import { useGetOrdersQuery } from "@services/orderApi";
 
 // UI Components
-import { Table, Container, Loader, Alert } from "@mantine/core";
+import { Table, Container, Loader, Alert, ThemeIcon } from "@mantine/core";
 
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import {
+  AlertCircle as AlertCircleIcon,
+  CircleCheck as CircleCheckIcon,
+  X as XIcon,
+} from "tabler-icons-react";
+import { StatusBadge } from "@components/Order/StatusBadge";
 
 export const Results = () => {
   // Queries
@@ -79,8 +84,20 @@ export const Results = () => {
               <td>{order.customer.name}</td>
               <td>{order.total} ₺</td>
               <td>{order.customerBalanceAfterOrder} ₺</td>
-              <td>{order.isParasutVerified ? "VAR" : "YOK"}</td>
-              <td>{order.status}</td>
+              <td>
+                {order.isParasutVerified ? (
+                  <ThemeIcon color="green" radius="xl">
+                    <CircleCheckIcon />
+                  </ThemeIcon>
+                ) : (
+                  <ThemeIcon color="red" radius="xl">
+                    <XIcon />
+                  </ThemeIcon>
+                )}
+              </td>
+              <td>
+                <StatusBadge status={order.status} deliveryType={order.deliveryType} />
+              </td>
             </tr>
           ))}
         </tbody>

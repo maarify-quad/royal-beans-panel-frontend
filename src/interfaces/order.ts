@@ -9,7 +9,7 @@ export interface Order {
   customerBalanceAfterOrder: number;
   total: number;
   specialNote: string | null;
-  cargoType: string;
+  deliveryType: string;
   cargoTrackNo: string | null;
   status: string;
   isParasutVerified: boolean;
