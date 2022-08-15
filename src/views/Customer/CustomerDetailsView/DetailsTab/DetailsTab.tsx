@@ -45,7 +45,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
         <Text size="xl" weight={700}>
           Çalışma Prensibi
         </Text>
-        <Text mt="md">{customer?.commercialPrinciple || "-"} ₺</Text>
+        <Text mt="md">{customer?.commercialPrinciple || "-"}</Text>
       </Card>
       <Card withBorder p="xl" radius="md" className={classes.card}>
         <Text size="xl" weight={700}>
