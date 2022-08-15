@@ -4,25 +4,23 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 // UI Components
-import { createStyles, Title, Group, Button, Breadcrumbs, Anchor } from "@mantine/core";
-
-// Icons
-import { ShoppingCartPlus as ShoppingCartPlusIcon } from "tabler-icons-react";
+import { createStyles, Title, Breadcrumbs, Anchor } from "@mantine/core";
 
 // Components
-import { Results } from "./Results";
+import { Form } from "./Form";
 
 // Styles
 const useStyles = createStyles((theme) => ({
   root: {
     height: "100%",
+    position: "relative",
   },
   rootTitle: {
     color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
   },
 }));
 
-export const ListOrdersView = () => {
+export const CreateOrderView = () => {
   const { classes } = useStyles();
 
   return (
@@ -34,18 +32,12 @@ export const ListOrdersView = () => {
         <Anchor component={Link} to="/dashboard/orders">
           Siparişler
         </Anchor>
-      </Breadcrumbs>
-      <Group align="center" position="apart">
-        <Title className={classes.rootTitle}>Siparişler</Title>
-        <Button
-          leftIcon={<ShoppingCartPlusIcon />}
-          component={Link}
-          to="/dashboard/orders/create"
-        >
+        <Anchor component={Link} to="/dashboard/orders/create">
           Yeni Sipariş
-        </Button>
-      </Group>
-      <Results />
+        </Anchor>
+      </Breadcrumbs>
+      <Title className={classes.rootTitle}>Sipariş Oluştur</Title>
+      <Form />
     </div>
   );
 };

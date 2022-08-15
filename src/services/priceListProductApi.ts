@@ -5,6 +5,9 @@ import { PriceListProduct } from "@interfaces/priceListProduct";
 
 export const priceListProductApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
+    getPriceListProducts: builder.query<PriceListProduct[], number>({
+      query: (priceListId) => `/price_list_products/${priceListId}`,
+    }),
     createPriceListProduct: builder.mutation<PriceListProduct, CreatePriceListProductParams>({
       query: (body) => ({
         url: "/price_list_products",
@@ -18,7 +21,8 @@ export const priceListProductApi = emptyApi.injectEndpoints({
   }),
 });
 
-export const { useCreatePriceListProductMutation } = priceListProductApi;
+export const { useGetPriceListProductsQuery, useCreatePriceListProductMutation } =
+  priceListProductApi;
 
 interface CreatePriceListProductParams {
   productId: number;
