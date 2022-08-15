@@ -77,6 +77,11 @@ const ListCustomersView = React.lazy(() =>
     default: module.ListCustomersView,
   }))
 );
+const CustomerDetailsView = React.lazy(() =>
+  import("./views/Customer/CustomerDetailsView").then((module) => ({
+    default: module.CustomerDetailsView,
+  }))
+);
 
 // PriceList Views
 const ListPriceListsView = React.lazy(() =>
@@ -152,6 +157,10 @@ export const AppRoutes = () => {
         {
           path: "/dashboard/customers",
           element: <ListCustomersView />,
+        },
+        {
+          path: "/dashboard/customers/:id",
+          element: <CustomerDetailsView />,
         },
         {
           path: "/dashboard/price-lists",

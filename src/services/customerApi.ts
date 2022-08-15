@@ -12,6 +12,10 @@ export const customerApi = emptyApi.injectEndpoints({
       query: () => "/customers",
       providesTags: ["Customer"],
     }),
+    getCustomerById: builder.query<Customer, number>({
+      query: (id) => `/customers/${id}`,
+      providesTags: (_result, _error, id) => [{ type: "Customer" as const, id }],
+    }),
     createCustomer: builder.mutation<Customer, CreateCustomerParams>({
       query: (body) => ({
         url: "/customers",
@@ -36,8 +40,12 @@ export const customerApi = emptyApi.injectEndpoints({
   }),
 });
 
-export const { useGetCustomersQuery, useCreateCustomerMutation, useUpdateCustomerMutation } =
-  customerApi;
+export const {
+  useGetCustomersQuery,
+  useGetCustomerByIdQuery,
+  useCreateCustomerMutation,
+  useUpdateCustomerMutation,
+} = customerApi;
 
 interface GetCustomersResponse {
   customers: Customer[];

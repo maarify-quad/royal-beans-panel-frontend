@@ -1,5 +1,8 @@
 import React from "react";
 
+// Routing
+import { useNavigate } from "react-router-dom";
+
 // Services
 import { useGetCustomersQuery } from "@services/customerApi";
 
@@ -12,6 +15,13 @@ import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
 export const Results = () => {
   // Queries
   const { data, isLoading, error } = useGetCustomersQuery();
+
+  // Routing
+  const navigate = useNavigate();
+
+  const handleRowClick = (id: number) => () => {
+    navigate(`/dashboard/customers/${id}`);
+  };
 
   if (isLoading) {
     return <Loader />;
@@ -50,7 +60,14 @@ export const Results = () => {
         </thead>
         <tbody>
           {data?.customers.map((customer, i) => (
-            <tr key={i}>
+            <tr
+              onClick={handleRowClick(customer.id)}
+              style={{
+                cursor: "pointer",
+                width: "100%",
+              }}
+              key={i}
+            >
               <td>{customer.name}</td>
               <td>{customer.currentBalance} ₺</td>
             </tr>
