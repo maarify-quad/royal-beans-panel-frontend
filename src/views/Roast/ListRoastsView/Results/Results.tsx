@@ -12,7 +12,6 @@ import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
 
 // Components
 import { ResultsTable } from "@components/ResultsTable";
-import { Pagination } from "./Pagination";
 
 // Interfaces
 import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
@@ -68,10 +67,12 @@ export const Results = () => {
       <ResultsTable
         headers={[{ value: "Kavrum Kodu" }, { value: "Tarih" }, { value: "Toplam Miktar" }]}
         rows={roastRows}
+        pagination={{
+          totalPage: data?.totalPage || 0,
+          currentPage: page,
+          onPageChange: (page) => setPage(page),
+        }}
       />
-      {data?.totalPage && data.totalPage > 1 ? (
-        <Pagination onPageChange={setPage} total={data?.totalPage} page={page} />
-      ) : null}
     </Container>
   );
 };

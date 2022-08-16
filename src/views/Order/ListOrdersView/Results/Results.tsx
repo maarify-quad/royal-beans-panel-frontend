@@ -15,7 +15,6 @@ import {
 } from "tabler-icons-react";
 
 // Components
-import { Pagination } from "./Pagination";
 import { ResultsTable } from "@components/ResultsTable";
 import { StatusBadge } from "@components/Order/StatusBadge";
 
@@ -92,10 +91,12 @@ export const Results = () => {
           { value: "Durum" },
         ]}
         rows={orderRows}
+        pagination={{
+          totalPage: data?.totalPage || 0,
+          currentPage: page,
+          onPageChange: (page) => setPage(page),
+        }}
       />
-      {data?.totalPage && data.totalPage > 1 ? (
-        <Pagination onPageChange={setPage} total={data?.totalPage} page={page} />
-      ) : null}
     </Container>
   );
 };

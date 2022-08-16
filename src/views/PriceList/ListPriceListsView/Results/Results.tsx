@@ -14,7 +14,6 @@ import { ResultsTable } from "@components/ResultsTable";
 
 // Interfaces
 import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
-import { Pagination } from "./Pagination";
 
 export const Results = () => {
   // Internal state
@@ -68,10 +67,12 @@ export const Results = () => {
           { value: "Müşteri Sayısı" },
         ]}
         rows={priceListRows}
+        pagination={{
+          totalPage: data?.totalPage || 0,
+          currentPage: page,
+          onPageChange: (page) => setPage(page),
+        }}
       />
-      {data?.totalPage && data.totalPage > 1 ? (
-        <Pagination onPageChange={setPage} total={data?.totalPage} page={page} />
-      ) : null}
     </Container>
   );
 };

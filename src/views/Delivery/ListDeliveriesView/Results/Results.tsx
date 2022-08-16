@@ -11,7 +11,6 @@ import { Container, Loader, Alert } from "@mantine/core";
 import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
 
 // Components
-import { Pagination } from "./Pagination";
 import { ResultsTable } from "@components/ResultsTable";
 
 // Interfaces
@@ -71,10 +70,12 @@ export const Results = () => {
           { value: "Tutar" },
         ]}
         rows={deliveryRows}
+        pagination={{
+          totalPage: data?.totalPage || 0,
+          currentPage: page,
+          onPageChange: (page) => setPage(page),
+        }}
       />
-      {data?.totalPage && data.totalPage > 1 ? (
-        <Pagination onPageChange={setPage} total={data?.totalPage} page={page} />
-      ) : null}
     </Container>
   );
 };
