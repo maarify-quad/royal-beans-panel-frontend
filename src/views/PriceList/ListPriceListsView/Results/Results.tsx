@@ -14,10 +14,14 @@ import { ResultsTable } from "@components/ResultsTable";
 
 // Interfaces
 import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
+import { Pagination } from "./Pagination";
 
 export const Results = () => {
+  // Internal state
+  const [page, setPage] = React.useState(1);
+
   // Queries
-  const { data, isLoading, error } = useGetPriceListsQuery();
+  const { data, isLoading, error } = useGetPriceListsQuery(page);
 
   const priceListRows: RowDef[][] = React.useMemo(
     () =>
@@ -65,6 +69,9 @@ export const Results = () => {
         ]}
         rows={priceListRows}
       />
+      {data?.totalPage && data.totalPage > 1 ? (
+        <Pagination onPageChange={setPage} total={data?.totalPage} page={page} />
+      ) : null}
     </Container>
   );
 };

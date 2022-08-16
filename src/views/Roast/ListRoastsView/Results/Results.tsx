@@ -12,6 +12,7 @@ import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
 
 // Components
 import { ResultsTable } from "@components/ResultsTable";
+import { Pagination } from "./Pagination";
 
 // Interfaces
 import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
@@ -21,7 +22,7 @@ export const Results = () => {
   const [page, setPage] = React.useState(1);
 
   // Queries
-  const { data, isLoading, error } = useGetAllRoastsQuery();
+  const { data, isLoading, error } = useGetAllRoastsQuery(page);
 
   const roastRows: RowDef[][] = React.useMemo(
     () =>
@@ -68,6 +69,9 @@ export const Results = () => {
         headers={[{ value: "Kavrum Kodu" }, { value: "Tarih" }, { value: "Toplam Miktar" }]}
         rows={roastRows}
       />
+      {data?.totalPage && data.totalPage > 1 ? (
+        <Pagination onPageChange={setPage} total={data?.totalPage} page={page} />
+      ) : null}
     </Container>
   );
 };
