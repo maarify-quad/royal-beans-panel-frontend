@@ -84,7 +84,7 @@ export const StepOne: React.FC<StepOneProps> = ({
         mt="md"
         data={[
           { label: "Kargo", value: "Kargo" },
-          { label: "Elden", value: "KaEldenrgo" },
+          { label: "Elden", value: "Elden" },
           { label: "Moto Kurye", value: "Moto Kurye" },
           { label: "Dükkan Teslim", value: "Dükkan Teslim" },
           { label: "Belirsiz", value: "Belirsiz" },
