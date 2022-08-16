@@ -1,0 +1,1 @@
+export { PriceListDetailsView } from "./PriceListDetailsView";

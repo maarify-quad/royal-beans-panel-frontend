@@ -1,31 +1,40 @@
 import React from "react";
 import dayjs from "dayjs";
 
-// Routing
-import { useNavigate } from "react-router-dom";
-
 // Services
 import { useGetAllRoastsQuery } from "@services/roastApi";
 
 // UI Components
-import { Table, Container, Loader, Alert } from "@mantine/core";
+import { Container, Loader, Alert } from "@mantine/core";
 
 // Icons
 import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+
+// Components
+import { ResultsTable } from "@components/ResultsTable";
+
+// Interfaces
+import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
 
 export const Results = () => {
   // Internal state
   const [page, setPage] = React.useState(1);
 
   // Queries
-  const { data, isLoading, error } = useGetAllRoastsQuery();
+  const { data, isLoading, error } = useGetAllRoastsQuery(page);
 
-  // Routing
-  const navigate = useNavigate();
-
-  const handleRowClick = (id: string) => () => {
-    navigate(`/dashboard/roasts/${id}`);
-  };
+  const roastRows: RowDef[][] = React.useMemo(
+    () =>
+      data?.roasts.map((roast) => [
+        { value: roast.id },
+        {
+          value: dayjs(roast.date).format("DD MMM YYYY"),
+          link: `/dashboard/roasts/${roast.id}`,
+        },
+        { value: `${roast.totalInputAmount} kg` },
+      ]) || [],
+    [data]
+  );
 
   if (isLoading) {
     return <Loader />;
@@ -55,31 +64,15 @@ export const Results = () => {
 
   return (
     <Container fluid mt="md" p={0}>
-      <Table highlightOnHover verticalSpacing="sm">
-        <thead>
-          <tr>
-            <th>Tarih</th>
-            <th>Kavrum Kodu</th>
-            <th>Toplam Miktar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.roasts.map((roast, i) => (
-            <tr
-              onClick={handleRowClick(roast.id)}
-              style={{
-                cursor: "pointer",
-                width: "100%",
-              }}
-              key={i}
-            >
-              <td>{dayjs(roast.date).format("DD MMM YYYY")}</td>
-              <td>{roast.id}</td>
-              <td>{roast.totalInputAmount} kg</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <ResultsTable
+        headers={[{ value: "Kavrum Kodu" }, { value: "Tarih" }, { value: "Toplam Miktar" }]}
+        rows={roastRows}
+        pagination={{
+          totalPage: data?.totalPage || 0,
+          currentPage: page,
+          onPageChange: (page) => setPage(page),
+        }}
+      />
     </Container>
   );
 };

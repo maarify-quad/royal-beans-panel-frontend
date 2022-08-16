@@ -71,6 +71,47 @@ const CreateRoastView = React.lazy(() =>
   }))
 );
 
+// Customer Views
+const ListCustomersView = React.lazy(() =>
+  import("./views/Customer/ListCustomersView").then((module) => ({
+    default: module.ListCustomersView,
+  }))
+);
+const CustomerDetailsView = React.lazy(() =>
+  import("./views/Customer/CustomerDetailsView").then((module) => ({
+    default: module.CustomerDetailsView,
+  }))
+);
+
+// PriceList Views
+const ListPriceListsView = React.lazy(() =>
+  import("./views/PriceList/ListPriceListsView").then((module) => ({
+    default: module.ListPriceListsView,
+  }))
+);
+const PriceListDetailsView = React.lazy(() =>
+  import("./views/PriceList/PriceListDetailsView").then((module) => ({
+    default: module.PriceListDetailsView,
+  }))
+);
+
+// Order Views
+const ListOrdersView = React.lazy(() =>
+  import("./views/Order/ListOrdersView").then((module) => ({
+    default: module.ListOrdersView,
+  }))
+);
+const OrderDetailsView = React.lazy(() =>
+  import("./views/Order/OrderDetailsView").then((module) => ({
+    default: module.OrderDetailsView,
+  }))
+);
+const CreateOrderView = React.lazy(() =>
+  import("./views/Order/CreateOrderView").then((module) => ({
+    default: module.CreateOrderView,
+  }))
+);
+
 // Error Views
 const NotFoundView = React.lazy(() =>
   import("./views/Error/NotFoundView").then((module) => ({ default: module.NotFoundView }))
@@ -129,6 +170,34 @@ export const AppRoutes = () => {
         {
           path: "/dashboard/roasts/create",
           element: <CreateRoastView />,
+        },
+        {
+          path: "/dashboard/customers",
+          element: <ListCustomersView />,
+        },
+        {
+          path: "/dashboard/customers/:id",
+          element: <CustomerDetailsView />,
+        },
+        {
+          path: "/dashboard/price-lists",
+          element: <ListPriceListsView />,
+        },
+        {
+          path: "/dashboard/price-lists/:id",
+          element: <PriceListDetailsView />,
+        },
+        {
+          path: "/dashboard/orders",
+          element: <ListOrdersView />,
+        },
+        {
+          path: "/dashboard/orders/:orderNumber",
+          element: <OrderDetailsView />,
+        },
+        {
+          path: "/dashboard/orders/create",
+          element: <CreateOrderView />,
         },
       ],
     },

@@ -4,13 +4,19 @@ import React from "react";
 import { useGetProductsByStorageTypeQuery } from "@services/productApi";
 
 // UI Components
-import { Alert, Container, Loader, ScrollArea, Table } from "@mantine/core";
+import { Alert, Container, Loader, ScrollArea } from "@mantine/core";
 
 // Icons
 import {
   AlertCircle as AlertCircleIcon,
   InfoCircle as InfoCircleIcon,
 } from "tabler-icons-react";
+
+// Components
+import { ResultsTable } from "@components/ResultsTable";
+
+// Interfaces
+import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
 
 // Props
 type StorageProductsProps = {
@@ -19,6 +25,17 @@ type StorageProductsProps = {
 
 export const StorageProducts: React.FC<StorageProductsProps> = ({ storageType }) => {
   const { data, isLoading, error } = useGetProductsByStorageTypeQuery(storageType);
+
+  const productsRow: RowDef[][] = React.useMemo(
+    () =>
+      data?.map((product) => [
+        { value: product.name },
+        { value: product.stockCode || "-" },
+        { value: product.amount },
+        { value: product.amountUnit },
+      ]) || [],
+    [data]
+  );
 
   if (isLoading) {
     return <Loader />;
@@ -48,26 +65,15 @@ export const StorageProducts: React.FC<StorageProductsProps> = ({ storageType })
   return (
     <Container fluid p={0}>
       <ScrollArea>
-        <Table highlightOnHover verticalSpacing="sm">
-          <thead>
-            <tr>
-              <th>Ürün</th>
-              <th>Stok Kodu</th>
-              <th>Stok Miktarı</th>
-              <th>Birim</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data?.map((product, i) => (
-              <tr key={i}>
-                <td>{product.name}</td>
-                <td>{product.stockCode || "-"}</td>
-                <td>{product.amount}</td>
-                <td>{product.amountUnit}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <ResultsTable
+          headers={[
+            { value: "Ürün" },
+            { value: "Stok Kodu" },
+            { value: "Miktar" },
+            { value: "Miktar Birimi" },
+          ]}
+          rows={productsRow}
+        />
       </ScrollArea>
     </Container>
   );

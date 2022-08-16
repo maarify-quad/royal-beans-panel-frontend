@@ -1,0 +1,1 @@
+export { LastOrdersTab } from "./LastOrdersTab";

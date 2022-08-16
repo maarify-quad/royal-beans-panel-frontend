@@ -14,8 +14,11 @@ import { Navbar as MantineNavbar, ScrollArea, createStyles, Menu } from "@mantin
 import {
   TruckDelivery as TruckDeliveryIcon,
   Users as UsersIcon,
+  ShoppingCart as ShoppingCartIcon,
+  UserCircle as UserCircleIcon,
   Package as PackageIcon,
   Coffee as CoffeeIcon,
+  Tags as TagsIcon,
   Logout as LogoutIcon,
   Settings as SettingsIcon,
 } from "tabler-icons-react";
@@ -103,6 +106,24 @@ const navLinks = [
     icon: CoffeeIcon,
     match: "roasts",
     link: "/dashboard/roasts",
+  },
+  {
+    label: "Siparişler",
+    icon: ShoppingCartIcon,
+    match: "orders",
+    link: "/dashboard/orders",
+  },
+  {
+    label: "Müşteriler",
+    icon: UserCircleIcon,
+    match: "customers",
+    link: "/dashboard/customers",
+  },
+  {
+    label: "Fiyat Listeleri",
+    icon: TagsIcon,
+    match: "price-lists",
+    link: "/dashboard/price-lists",
   },
 ];
 

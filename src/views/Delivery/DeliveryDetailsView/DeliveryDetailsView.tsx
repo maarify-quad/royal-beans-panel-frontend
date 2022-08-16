@@ -84,7 +84,7 @@ export const DeliveryDetailsView = () => {
           {id}
         </Anchor>
       </Breadcrumbs>
-      <Link className={classes.titleLink} to={`/dashboard/suppliers/${data?.supplier.id}`}>
+      <Link className={classes.titleLink} to={`/dashboard/deliveries/${data?.supplier.id}`}>
         <Title className={classes.rootTitle}>{data?.supplier.name}</Title>
       </Link>
       <Box mt="md">{data && <Results delivery={data} />}</Box>

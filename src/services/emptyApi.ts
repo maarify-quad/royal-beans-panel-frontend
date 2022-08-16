@@ -62,5 +62,5 @@ const baseQueryWithReauth: BaseQueryFn<
 export const emptyApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: () => ({}),
-  tagTypes: ["Supplier", "Delivery", "Product", "Roast"],
+  tagTypes: ["Supplier", "Delivery", "Product", "Roast", "Customer", "PriceList", "Order"],
 });
