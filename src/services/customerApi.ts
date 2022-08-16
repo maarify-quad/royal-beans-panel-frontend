@@ -8,8 +8,8 @@ import { Customer } from "@interfaces/customer";
 
 export const customerApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getCustomers: builder.query<GetCustomersResponse, void>({
-      query: () => "/customers",
+    getCustomers: builder.query<GetCustomersResponse, number | void>({
+      query: (page) => (page ? `/customers?page=${page}` : "/customers"),
       providesTags: ["Customer"],
     }),
     getCustomerById: builder.query<Customer, number>({
@@ -49,6 +49,7 @@ export const {
 
 interface GetCustomersResponse {
   customers: Customer[];
+  totalPage?: number;
 }
 
 interface CreateCustomerParams {

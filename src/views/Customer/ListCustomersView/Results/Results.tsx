@@ -14,10 +14,14 @@ import { ResultsTable } from "@components/ResultsTable";
 
 // Interfaces
 import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
+import { Pagination } from "./Pagination";
 
 export const Results = () => {
+  // Internal state
+  const [page, setPage] = React.useState(1);
+
   // Queries
-  const { data, isLoading, error } = useGetCustomersQuery();
+  const { data, isLoading, error } = useGetCustomersQuery(page);
 
   const customerRows: RowDef[][] = React.useMemo(
     () =>
@@ -60,6 +64,9 @@ export const Results = () => {
         headers={[{ value: "Müşteri" }, { value: "Bakiye" }]}
         rows={customerRows}
       />
+      {data?.totalPage && data.totalPage > 1 ? (
+        <Pagination onPageChange={setPage} total={data?.totalPage} page={page} />
+      ) : null}
     </Container>
   );
 };
