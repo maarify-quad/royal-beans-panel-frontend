@@ -12,7 +12,6 @@ import {
   Title,
   Breadcrumbs,
   Anchor,
-  Box,
   Alert,
   Loader,
   Center,
@@ -24,6 +23,7 @@ import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
 
 // Components
 import { DetailsTab } from "./DetailsTab";
+import { LastOrdersTab } from "./LastOrdersTab";
 
 // Styles
 const useStyles = createStyles((theme) => ({
@@ -79,15 +79,21 @@ export const CustomerDetailsView = () => {
         </Anchor>
       </Breadcrumbs>
       <Title className={classes.rootTitle}>{data?.name}</Title>
-      <Tabs defaultValue="details" mt="md">
-        <Tabs.List>
-          <Tabs.Tab value="details">Detaylar</Tabs.Tab>
-        </Tabs.List>
+      {data && (
+        <Tabs defaultValue="details" mt="md">
+          <Tabs.List>
+            <Tabs.Tab value="details">Detaylar</Tabs.Tab>
+            <Tabs.Tab value="lastOrders">Son Siparişler</Tabs.Tab>
+          </Tabs.List>
 
-        <Tabs.Panel value="details" mt="md">
-          <DetailsTab customer={data} />
-        </Tabs.Panel>
-      </Tabs>
+          <Tabs.Panel value="details" mt="md">
+            <DetailsTab customer={data} />
+          </Tabs.Panel>
+          <Tabs.Panel value="lastOrders" mt="md">
+            <LastOrdersTab customer={data.name} />
+          </Tabs.Panel>
+        </Tabs>
+      )}
     </div>
   );
 };

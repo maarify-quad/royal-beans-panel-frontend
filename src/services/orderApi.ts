@@ -14,6 +14,10 @@ export const orderApi = emptyApi.injectEndpoints({
       query: (orderNumber) => `/orders/orderNumber/${orderNumber}`,
       providesTags: (_result, _error, orderNumber) => [{ type: "Order", id: orderNumber }],
     }),
+    getOrdersByCustomer: builder.query<GetOrdersResponse, GetOrdersByCustomerParams>({
+      query: (params) => `/orders/customer/${params.customer}?page=${params.page}`,
+      providesTags: (_result, _error, params) => [{ type: "Order", id: params.customer }],
+    }),
     createOrder: builder.mutation<Order, CreateOrderParams>({
       query: (body) => ({
         url: "/orders",
@@ -25,12 +29,21 @@ export const orderApi = emptyApi.injectEndpoints({
   }),
 });
 
-export const { useGetOrdersQuery, useGetOrderByOrderNumberQuery, useCreateOrderMutation } =
-  orderApi;
+export const {
+  useGetOrdersQuery,
+  useGetOrderByOrderNumberQuery,
+  useGetOrdersByCustomerQuery,
+  useCreateOrderMutation,
+} = orderApi;
 
 interface GetOrdersResponse {
   orders: OrderWithCustomer[];
   totalPage?: number;
+}
+
+interface GetOrdersByCustomerParams {
+  customer: string;
+  page: number;
 }
 
 interface CreateOrderParams {
