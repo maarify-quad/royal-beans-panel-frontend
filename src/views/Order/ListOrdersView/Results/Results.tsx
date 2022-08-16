@@ -15,6 +15,7 @@ import {
 } from "tabler-icons-react";
 
 // Components
+import { Pagination } from "./Pagination";
 import { ResultsTable } from "@components/ResultsTable";
 import { StatusBadge } from "@components/Order/StatusBadge";
 
@@ -22,8 +23,11 @@ import { StatusBadge } from "@components/Order/StatusBadge";
 import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
 
 export const Results = () => {
+  // Internal state
+  const [page, setPage] = React.useState(1);
+
   // Queries
-  const { data, isLoading, error } = useGetOrdersQuery();
+  const { data, isLoading, error } = useGetOrdersQuery(page);
 
   const orderRows: RowDef[][] = React.useMemo(
     () =>
@@ -89,6 +93,9 @@ export const Results = () => {
         ]}
         rows={orderRows}
       />
+      {data?.totalPage && data.totalPage > 1 ? (
+        <Pagination onPageChange={setPage} total={data?.totalPage} page={page} />
+      ) : null}
     </Container>
   );
 };

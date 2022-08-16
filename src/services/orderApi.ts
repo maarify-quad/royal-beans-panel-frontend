@@ -6,8 +6,8 @@ import { CreateOrderProductParams } from "@interfaces/orderProduct";
 
 export const orderApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getOrders: builder.query<GetOrdersResponse, void>({
-      query: () => "/orders",
+    getOrders: builder.query<GetOrdersResponse, number | void>({
+      query: (page) => (page ? `/orders?page=${page}` : "/orders"),
       providesTags: ["Order"],
     }),
     getOrderByOrderNumber: builder.query<{ order: OrderWithAll }, number>({
@@ -30,6 +30,7 @@ export const { useGetOrdersQuery, useGetOrderByOrderNumberQuery, useCreateOrderM
 
 interface GetOrdersResponse {
   orders: OrderWithCustomer[];
+  totalPage?: number;
 }
 
 interface CreateOrderParams {
