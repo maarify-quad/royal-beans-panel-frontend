@@ -4,7 +4,7 @@ import React from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 
 // Services
-import { useGetDeliveryByIdQuery } from "@services/deliveryApi";
+import { useGetOrderByOrderNumberQuery } from "@services/orderApi";
 
 // UI Components
 import {
@@ -15,14 +15,15 @@ import {
   Alert,
   Center,
   Loader,
-  Box,
+  Tabs,
 } from "@mantine/core";
 
 // Icons
 import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
 
 // Components
-import { Results } from "./Results";
+import { ProductsTab } from "./ProductsTab";
+import { DetailsTab } from "./DetailsTab";
 
 // Styles
 const useStyles = createStyles((theme) => ({
@@ -41,22 +42,22 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const DeliveryDetailsView = () => {
-  const { id } = useParams();
+export const OrderDetailsView = () => {
+  const { orderNumber } = useParams();
   const { classes } = useStyles();
 
-  if (!id) {
+  if (!orderNumber) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  const { data, isLoading, error } = useGetDeliveryByIdQuery(id);
+  const { data, isLoading, error } = useGetOrderByOrderNumberQuery(parseInt(orderNumber));
 
   if (error) {
     return (
       <Alert
         icon={<AlertCircleIcon />}
         color="red"
-        title="Tedarikçiye ulaşılamadı"
+        title="Siparişe ulaşılamadı"
         variant="filled"
         mt="md"
       >
@@ -77,17 +78,31 @@ export const DeliveryDetailsView = () => {
         <Anchor component={Link} to="/dashboard">
           Panel
         </Anchor>
-        <Anchor component={Link} to="/dashboard/deliveries">
-          Sevkiyatlar
+        <Anchor component={Link} to="/dashboard/orders">
+          Siparişler
         </Anchor>
-        <Anchor component={Link} to={`/dashboard/deliveries/${id}`}>
-          {id}
+        <Anchor component={Link} to={`/dashboard/orders/${orderNumber}`}>
+          {orderNumber}
         </Anchor>
       </Breadcrumbs>
-      <Link className={classes.titleLink} to={`/dashboard/deliveries/${data?.supplier.id}`}>
-        <Title className={classes.rootTitle}>{data?.supplier.name}</Title>
-      </Link>
-      <Box mt="md">{data && <Results delivery={data} />}</Box>
+      <Title className={classes.rootTitle}>
+        #{data?.order.orderNumber} - {data?.order.customer.name}
+      </Title>
+      {data && (
+        <Tabs defaultValue="products" mt="md">
+          <Tabs.List>
+            <Tabs.Tab value="products">Ürünler</Tabs.Tab>
+            <Tabs.Tab value="details">Detaylar</Tabs.Tab>
+          </Tabs.List>
+
+          <Tabs.Panel value="products" mt="md">
+            <ProductsTab order={data.order} />
+          </Tabs.Panel>
+          <Tabs.Panel value="details" mt="md">
+            <DetailsTab order={data.order} />
+          </Tabs.Panel>
+        </Tabs>
+      )}
     </div>
   );
 };

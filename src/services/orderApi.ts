@@ -1,7 +1,7 @@
 import { emptyApi } from "./emptyApi";
 
 // Interfaces
-import { Order } from "@interfaces/order";
+import { Order, OrderWithAll, OrderWithCustomer } from "@interfaces/order";
 import { CreateOrderProductParams } from "@interfaces/orderProduct";
 
 export const orderApi = emptyApi.injectEndpoints({
@@ -9,6 +9,10 @@ export const orderApi = emptyApi.injectEndpoints({
     getOrders: builder.query<GetOrdersResponse, void>({
       query: () => "/orders",
       providesTags: ["Order"],
+    }),
+    getOrderByOrderNumber: builder.query<{ order: OrderWithAll }, number>({
+      query: (orderNumber) => `/orders/orderNumber/${orderNumber}`,
+      providesTags: (_result, _error, orderNumber) => [{ type: "Order", id: orderNumber }],
     }),
     createOrder: builder.mutation<Order, CreateOrderParams>({
       query: (body) => ({
@@ -21,10 +25,11 @@ export const orderApi = emptyApi.injectEndpoints({
   }),
 });
 
-export const { useGetOrdersQuery, useCreateOrderMutation } = orderApi;
+export const { useGetOrdersQuery, useGetOrderByOrderNumberQuery, useCreateOrderMutation } =
+  orderApi;
 
 interface GetOrdersResponse {
-  orders: Order[];
+  orders: OrderWithCustomer[];
 }
 
 interface CreateOrderParams {

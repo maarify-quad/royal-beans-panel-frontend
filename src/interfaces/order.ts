@@ -1,4 +1,5 @@
 import { Customer } from "./customer";
+import { OrderProduct } from "./orderProduct";
 
 export interface Order {
   id: number;
@@ -7,6 +8,8 @@ export interface Order {
   orderNumber: number;
   deliveryDate: string;
   customerBalanceAfterOrder: number;
+  subTotal: number;
+  taxTotal: number;
   total: number;
   specialNote: string | null;
   deliveryType: string;
@@ -15,4 +18,13 @@ export interface Order {
   isParasutVerified: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface OrderWithCustomer extends Order {
+  customer: Customer;
+}
+
+export interface OrderWithAll extends Order {
+  customer: Customer;
+  orderProducts: OrderProduct[];
 }

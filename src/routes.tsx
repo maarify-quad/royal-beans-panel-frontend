@@ -101,6 +101,11 @@ const ListOrdersView = React.lazy(() =>
     default: module.ListOrdersView,
   }))
 );
+const OrderDetailsView = React.lazy(() =>
+  import("./views/Order/OrderDetailsView").then((module) => ({
+    default: module.OrderDetailsView,
+  }))
+);
 const CreateOrderView = React.lazy(() =>
   import("./views/Order/CreateOrderView").then((module) => ({
     default: module.CreateOrderView,
@@ -185,6 +190,10 @@ export const AppRoutes = () => {
         {
           path: "/dashboard/orders",
           element: <ListOrdersView />,
+        },
+        {
+          path: "/dashboard/orders/:orderNumber",
+          element: <OrderDetailsView />,
         },
         {
           path: "/dashboard/orders/create",

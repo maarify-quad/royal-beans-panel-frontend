@@ -28,7 +28,7 @@ export const Results = () => {
   const orderRows: RowDef[][] = React.useMemo(
     () =>
       data?.orders.map((order) => [
-        { value: order.orderNumber },
+        { value: order.orderNumber, link: `/dashboard/orders/${order.orderNumber}` },
         { value: dayjs(order.createdAt).format("DD MMM YYYY") },
         { value: order.customer.name },
         { value: `${order.total} ₺` },
