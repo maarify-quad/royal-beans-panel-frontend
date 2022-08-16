@@ -4,22 +4,30 @@ import React from "react";
 import { useGetPriceListsQuery } from "@services/priceListApi";
 
 // UI Components
-import { Table, Container, Loader, Alert } from "@mantine/core";
+import { Container, Loader, Alert } from "@mantine/core";
 
 // Icons
 import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
-import { useNavigate } from "react-router-dom";
+
+// Components
+import { ResultsTable } from "@components/ResultsTable";
+
+// Interfaces
+import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
 
 export const Results = () => {
   // Queries
   const { data, isLoading, error } = useGetPriceListsQuery();
 
-  // Routing
-  const navigate = useNavigate();
-
-  const handleRowClick = (id: string) => () => {
-    navigate(`/dashboard/price-lists/${id}`);
-  };
+  const priceListRows: RowDef[][] = React.useMemo(
+    () =>
+      data?.priceLists.map((priceList) => [
+        { value: priceList.name, link: `/dashboard/price-lists/${priceList.id}` },
+        { value: priceList.description || "-" },
+        { value: priceList.customers?.length || 0 },
+      ]) || [],
+    [data]
+  );
 
   if (isLoading) {
     return <Loader />;
@@ -49,31 +57,14 @@ export const Results = () => {
 
   return (
     <Container fluid mt="md" p={0}>
-      <Table highlightOnHover verticalSpacing="sm">
-        <thead>
-          <tr>
-            <th>Fiyat Listesi</th>
-            <th>Açıklama</th>
-            <th>Müşteri Sayısı</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.priceLists.map((priceList, i) => (
-            <tr
-              onClick={handleRowClick(priceList.id.toString())}
-              style={{
-                cursor: "pointer",
-                width: "100%",
-              }}
-              key={i}
-            >
-              <td>{priceList.name}</td>
-              <td>{priceList.description || "-"}</td>
-              <td>{priceList.customers?.length || "0"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <ResultsTable
+        headers={[
+          { value: "Fiyat Listesi" },
+          { value: "Açıklama" },
+          { value: "Müşteri Sayısı" },
+        ]}
+        rows={priceListRows}
+      />
     </Container>
   );
 };

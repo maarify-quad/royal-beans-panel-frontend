@@ -1,27 +1,32 @@
 import React from "react";
 
-// Routing
-import { useNavigate } from "react-router-dom";
-
 // Services
 import { useGetCustomersQuery } from "@services/customerApi";
 
 // UI Components
-import { Table, Container, Loader, Alert } from "@mantine/core";
+import { Container, Loader, Alert } from "@mantine/core";
 
 // Icons
 import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+
+// Components
+import { ResultsTable } from "@components/ResultsTable";
+
+// Interfaces
+import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
 
 export const Results = () => {
   // Queries
   const { data, isLoading, error } = useGetCustomersQuery();
 
-  // Routing
-  const navigate = useNavigate();
-
-  const handleRowClick = (id: number) => () => {
-    navigate(`/dashboard/customers/${id}`);
-  };
+  const customerRows: RowDef[][] = React.useMemo(
+    () =>
+      data?.customers.map((customer) => [
+        { value: customer.name, link: `/dashboard/customers/${customer.id}` },
+        { value: `${customer.currentBalance} ₺` },
+      ]) || [],
+    [data]
+  );
 
   if (isLoading) {
     return <Loader />;
@@ -51,29 +56,10 @@ export const Results = () => {
 
   return (
     <Container fluid mt="md" p={0}>
-      <Table highlightOnHover verticalSpacing="sm">
-        <thead>
-          <tr>
-            <th>Müşteri</th>
-            <th>Bakiye</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.customers.map((customer, i) => (
-            <tr
-              onClick={handleRowClick(customer.id)}
-              style={{
-                cursor: "pointer",
-                width: "100%",
-              }}
-              key={i}
-            >
-              <td>{customer.name}</td>
-              <td>{customer.currentBalance} ₺</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <ResultsTable
+        headers={[{ value: "Müşteri" }, { value: "Bakiye" }]}
+        rows={customerRows}
+      />
     </Container>
   );
 };
