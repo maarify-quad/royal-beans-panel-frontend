@@ -23,12 +23,12 @@ import { schema } from "./validation/schema";
 import { PriceListProduct } from "@interfaces/priceListProduct";
 
 // Props
-type AddProductFormProps = {
+type CreatePriceListProductProps = {
   priceListId: number;
   priceListProducts?: PriceListProduct[];
 };
 
-export const AddProductForm: React.FC<AddProductFormProps> = ({
+export const CreatePriceListProduct: React.FC<CreatePriceListProductProps> = ({
   priceListId,
   priceListProducts,
 }) => {

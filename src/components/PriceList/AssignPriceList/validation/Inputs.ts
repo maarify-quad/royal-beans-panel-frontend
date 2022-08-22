@@ -1,7 +1,7 @@
 export type Inputs = {
-  customerId: number;
+  customerId: string;
 };
 
 export const initialValues: Inputs = {
-  customerId: 0,
+  customerId: "",
 };

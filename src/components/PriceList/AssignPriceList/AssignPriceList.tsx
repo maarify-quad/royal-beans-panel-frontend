@@ -26,11 +26,11 @@ import { schema } from "./validation/schema";
 import { Customer } from "@interfaces/customer";
 
 // Props
-type AssignPriceListFormProps = {
+type AssignPriceListProps = {
   priceListId: number;
 };
 
-export const AssignPriceListForm: React.FC<AssignPriceListFormProps> = ({ priceListId }) => {
+export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId }) => {
   // Internal state
   const [selectedCustomer, setSelectedCustomer] = React.useState<Customer>();
 
@@ -84,9 +84,7 @@ export const AssignPriceListForm: React.FC<AssignPriceListFormProps> = ({ priceL
 
   // Set selected customer object on select change
   useEffect(() => {
-    setSelectedCustomer(
-      data?.customers.find((customer) => customer.id === form.values.customerId)
-    );
+    setSelectedCustomer(data?.customers.find((customer) => customer.id === form.values.customerId));
   }, [form.values.customerId]);
 
   useEffect(() => {
@@ -123,8 +121,8 @@ export const AssignPriceListForm: React.FC<AssignPriceListFormProps> = ({ priceL
       />
       {selectedCustomer?.priceList ? (
         <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
-          Bu müşteri "{selectedCustomer.priceList.name}" fiyat listesinde kayıtlıdır. Yeni
-          fiyat listesi üzerine yazılacaktır
+          Bu müşteri "{selectedCustomer.priceList.name}" fiyat listesinde kayıtlıdır. Yeni fiyat
+          listesi üzerine yazılacaktır
         </Alert>
       ) : null}
       <Button type="submit" mt="lg">
