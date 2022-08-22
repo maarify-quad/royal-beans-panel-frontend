@@ -44,7 +44,7 @@ export const CustomerDetailsView = () => {
     return <Navigate to="/dashboard" replace />;
   }
 
-  const { data, isLoading, error } = useGetCustomerByIdQuery(parseInt(id));
+  const { data, isLoading, error } = useGetCustomerByIdQuery(id);
 
   if (error) {
     return (
