@@ -26,7 +26,9 @@ export const { useGetPriceListProductsQuery, useCreatePriceListProductMutation }
 
 interface CreatePriceListProductParams {
   productId: number;
+  newProductName: string;
   priceListId: number;
   unitPrice: number;
   taxRate: number;
+  unit: string;
 }

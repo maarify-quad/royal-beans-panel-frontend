@@ -5,7 +5,7 @@ import { useGetAllProductsQuery } from "@services/productApi";
 import { useCreatePriceListProductMutation } from "@services/priceListProductApi";
 
 // UI Components
-import { Button, LoadingOverlay, NumberInput, Select } from "@mantine/core";
+import { Button, LoadingOverlay, NumberInput, Select, TextInput } from "@mantine/core";
 
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
@@ -18,6 +18,8 @@ import { X as ErrorIcon, CircleCheck as CircleCheckIcon } from "tabler-icons-rea
 // Validation
 import { Inputs, initialValues } from "./validation/Inputs";
 import { schema } from "./validation/schema";
+
+// Interfaces
 import { PriceListProduct } from "@interfaces/priceListProduct";
 
 // Props
@@ -106,16 +108,40 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({
       <Select
         label="Ürün"
         placeholder="Ürün seçiniz"
+        nothingFound="Sonuç bulunamadı"
+        dropdownComponent="div"
         searchable
+        creatable
+        required
+        getCreateLabel={(query) => `+ ${query} oluştur`}
+        onCreate={(query) => {
+          const value = -Math.random();
+          const item = { value, label: query };
+          productSelectOptions.push(item);
+          form.setFieldValue("productId", value);
+          form.setFieldValue("newProductName", query);
+          return item;
+        }}
         data={productSelectOptions}
         {...form.getInputProps("productId")}
       />
+      {form.values.productId < 0 && (
+        <TextInput
+          label="Birim"
+          placeholder="Miktar birimi giriniz"
+          precision={2}
+          mt="md"
+          required
+          {...form.getInputProps("unit")}
+        />
+      )}
       <NumberInput
         label="Birim fiyat"
         placeholder="Birim fiyat giriniz"
         mt="md"
         precision={2}
         icon={<span>₺</span>}
+        required
         min={0}
         {...form.getInputProps("unitPrice")}
       />
@@ -124,6 +150,7 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({
         mt="md"
         placeholder="KDV oranı seçiniz"
         dropdownComponent="div"
+        required
         icon={<span>%</span>}
         data={[
           { label: "0", value: 0 },
