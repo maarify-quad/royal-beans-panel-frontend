@@ -14,6 +14,7 @@ import {
 
 // Interfaces
 import { Supplier } from "@interfaces/supplier";
+import { DetailsCard } from "@components/DetailsCard";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -36,49 +37,57 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
       ]}
       style={{ alignItems: "stretch" }}
     >
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Group position="apart">
-          <Text size="xl" weight={700}>
-            Adres
-          </Text>
-          <MapPinIcon />
-        </Group>
-        <Text mt="md">{supplier?.address || "-"}</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Group position="apart">
-          <Text size="xl" weight={700}>
-            Vergi
-          </Text>
-          <ReceiptTaxIcon />
-        </Group>
-        <Text mt="md">
-          {supplier?.taxNo || "-"} / {supplier?.taxOffice || "-"}
-        </Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Group position="apart">
-          <Text size="xl" weight={700}>
-            Yetkili
-          </Text>
-          <UserIcon />
-        </Group>
-        <Text mt="md">
-          {supplier?.contactName || "-"} / {supplier?.contactPosition || "-"}
-        </Text>
-        <Group mt="sm">
-          <PhoneIcon size={16} />
-          <Text size="sm" color="dimmed">
-            {supplier?.contactPhone || "-"}
-          </Text>
-        </Group>
-        <Group>
-          <MailIcon size={16} />
-          <Text size="sm" color="dimmed">
-            {supplier?.contactEmail || "-"}
-          </Text>
-        </Group>
-      </Card>
+      <DetailsCard
+        title={
+          <Group position="apart">
+            <Text size="xl" weight={700}>
+              Adres
+            </Text>
+            <MapPinIcon />
+          </Group>
+        }
+        value={supplier?.address || "-"}
+      />
+      <DetailsCard
+        title={
+          <Group position="apart">
+            <Text size="xl" weight={700}>
+              Vergi
+            </Text>
+            <ReceiptTaxIcon />
+          </Group>
+        }
+        value={`${supplier?.taxNo || "-"} / ${supplier?.taxOffice || "-"}`}
+      />
+      <DetailsCard
+        title={
+          <Group position="apart">
+            <Text size="xl" weight={700}>
+              Yetkili
+            </Text>
+            <UserIcon />
+          </Group>
+        }
+        value={
+          <>
+            <Text mt="md">
+              {supplier?.contactName || "-"} / {supplier?.contactPosition || "-"}
+            </Text>
+            <Group mt="sm">
+              <PhoneIcon size={16} />
+              <Text size="sm" color="dimmed">
+                {supplier?.contactPhone || "-"}
+              </Text>
+            </Group>
+            <Group>
+              <MailIcon size={16} />
+              <Text size="sm" color="dimmed">
+                {supplier?.contactEmail || "-"}
+              </Text>
+            </Group>
+          </>
+        }
+      />
     </SimpleGrid>
   );
 };

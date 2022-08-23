@@ -34,7 +34,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ order }) => {
         ])}
       />
       <Group>
-        <Card withBorder mt="md" style={{ minWidth: 320, width: "max-content" }}>
+        <Card withBorder shadow="xs" mt="md" style={{ minWidth: 320, width: "max-content" }}>
           <Group position="apart">
             <Text>Ara Toplam</Text>
             <Text size="lg" weight="bold">

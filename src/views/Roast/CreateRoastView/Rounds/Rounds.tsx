@@ -52,7 +52,7 @@ export const Rounds: React.FC<RoundsProps> = ({ form, setRoundId }) => {
           )}
           <Stack>
             {roastDetail.map((detail, i) => (
-              <Card withBorder key={i}>
+              <Card withBorder shadow="xs" key={i}>
                 <Group position="apart">
                   <div>
                     <Text weight={700}>{detail.product.name}</Text>

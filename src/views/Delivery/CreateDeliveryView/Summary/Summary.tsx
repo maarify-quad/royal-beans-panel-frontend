@@ -26,7 +26,7 @@ export const Summary: React.FC<SummaryProps> = ({ form }) => {
     <>
       <Stack mt="md">
         {form.values.deliveryDetails.map((deliveryDetail, index) => (
-          <Card withBorder key={index}>
+          <Card withBorder shadow="xs" key={index}>
             <Card.Section inheritPadding py="xs">
               <Group position="apart">
                 <div>
@@ -40,8 +40,8 @@ export const Summary: React.FC<SummaryProps> = ({ form }) => {
                     {deliveryDetail.unit} = {deliveryDetail.subTotal} ₺
                   </Text>
                   <Text size="sm">
-                    {deliveryDetail.subTotal} ₺ + %{deliveryDetail.taxRate} ={" "}
-                    {deliveryDetail.total} ₺
+                    {deliveryDetail.subTotal} ₺ + %{deliveryDetail.taxRate} = {deliveryDetail.total}{" "}
+                    ₺
                   </Text>
                 </div>
                 <ActionIcon color="red" onClick={handleRemoveProduct(index)}>
