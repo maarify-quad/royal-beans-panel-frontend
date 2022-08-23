@@ -1,26 +1,20 @@
 import React from "react";
 
 // UI Components
-import { Card, createStyles, SimpleGrid, Text } from "@mantine/core";
+import { SimpleGrid } from "@mantine/core";
+
+// Components
+import { DetailsCard } from "@components/DetailsCard";
 
 // Interfaces
 import { Customer } from "@interfaces/customer";
 
 // Props
 type DetailsTabProps = {
-  customer?: Customer;
+  customer: Customer;
 };
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  card: {
-    backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-  },
-}));
-
 export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
-  const { classes } = useStyles();
-
   return (
     <SimpleGrid
       breakpoints={[
@@ -29,79 +23,59 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
       ]}
       style={{ alignItems: "stretch" }}
     >
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Bakiye
-        </Text>
-        <Text mt="md">{customer?.currentBalance} ₺</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Fiyat Listesi
-        </Text>
-        <Text mt="md">{customer?.priceList?.name || "-"}</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Çalışma Prensibi
-        </Text>
-        <Text mt="md">{customer?.commercialPrinciple || "-"}</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Performans
-        </Text>
-        <Text mt="md">TODO</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Ekstra
-        </Text>
-        <Text mt="md">
-          Özel Not: {customer?.specialNote || "-"}
-          <br />
-          Yorum: {customer?.comment || "-"}
-        </Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Vergi
-        </Text>
-        <Text mt="md">
-          Vergi Dairesi: {customer?.taxOffice || "-"}
-          <br />
-          Vergi No: {customer?.taxNo || "-"}
-        </Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          İletişim
-        </Text>
-        <Text mt="md">
-          {customer?.companyTitle || "-"}
-          <br />
-          {customer?.contactName || "-"} / {customer?.contactTitle || "-"}
-          <br />
-          {customer?.secondContactName || "-"} / {customer?.secondContactTitle || "-"}
-          <br />
-          {customer?.address || "-"}
-          <br />
-          {customer?.province || "-"} / {customer?.city || "-"}
-          <br />
-          {customer?.phone || "-"} / {customer?.email || "-"}
-          <br />
-        </Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Kargo
-        </Text>
-        <Text mt="md">
-          {customer?.cargoAddress || "-"}
-          <br />
-          {customer?.cargoCity || "-"} / {customer?.cargoProvince || "-"}
-        </Text>
-      </Card>
+      <DetailsCard title="Bakiye" value={`${customer.currentBalance} ₺`} />
+      <DetailsCard title="Fiyat Listesi" value={customer.priceList?.name || "-"} />
+      <DetailsCard title="Çalışma Prensibi" value={customer.commercialPrinciple || "-"} />
+      <DetailsCard title="Performans" value={"TODO"} />
+      <DetailsCard
+        title="Ekstra"
+        value={
+          <>
+            Özel Not: {customer?.specialNote || "-"}
+            <br />
+            Yorum: {customer?.comment || "-"}
+          </>
+        }
+      />
+      <DetailsCard
+        title="Vergi"
+        value={
+          <>
+            Vergi Dairesi: {customer?.taxOffice || "-"}
+            <br />
+            Vergi No: {customer?.taxNo || "-"}
+          </>
+        }
+      />
+      <DetailsCard
+        title="İletişim"
+        value={
+          <>
+            {customer?.companyTitle || "-"}
+            <br />
+            {customer?.contactName || "-"} / {customer?.contactTitle || "-"}
+            <br />
+            {customer?.secondContactName || "-"} / {customer?.secondContactTitle || "-"}
+            <br />
+            {customer?.address || "-"}
+            <br />
+            {customer?.province || "-"} / {customer?.city || "-"}
+            <br />
+            {customer?.phone || "-"} / {customer?.email || "-"}
+            <br />
+          </>
+        }
+      />
+      <DetailsCard
+        title="Kargo"
+        value={
+          <>
+            {customer?.cargoAddress || "-"}
+            <br />
+            {customer?.cargoCity || "-"} / {customer?.cargoProvince || "-"}
+          </>
+        }
+      />
     </SimpleGrid>
   );
 };

@@ -1,18 +1,24 @@
 import React from "react";
+import dayjs from "dayjs";
+
+// Routing
+import { Link } from "react-router-dom";
 
 // UI Components
-import { Card, SimpleGrid, Text, createStyles } from "@mantine/core";
+import { SimpleGrid, ThemeIcon } from "@mantine/core";
+
+// Components
+import { DetailsCard } from "@components/DetailsCard";
+
+// Icons
+import {
+  AlertCircle as AlertCircleIcon,
+  CircleCheck as CircleCheckIcon,
+  X as XIcon,
+} from "tabler-icons-react";
 
 // Interfaces
 import { OrderWithAll } from "@interfaces/order";
-import dayjs from "dayjs";
-
-// Styles
-const useStyles = createStyles((theme) => ({
-  card: {
-    backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-  },
-}));
 
 // Props
 type DetailsTabProps = {
@@ -20,8 +26,6 @@ type DetailsTabProps = {
 };
 
 export const DetailsTab: React.FC<DetailsTabProps> = ({ order }) => {
-  const { classes } = useStyles();
-
   return (
     <SimpleGrid
       breakpoints={[
@@ -30,68 +34,34 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ order }) => {
       ]}
       style={{ alignItems: "stretch" }}
     >
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Müşteri
-        </Text>
-        <Text mt="md">{order.customer.name}</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Müşteri Bakiye (Sipariş Sonrası)
-        </Text>
-        <Text mt="md">{order.customerBalanceAfterOrder} ₺</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Tutar
-        </Text>
-        <Text mt="md">{order.total} ₺</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Özel Not
-        </Text>
-        <Text mt="md">{order.specialNote || "-"}</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Faturalandırma
-        </Text>
-        <Text mt="md" color={order.isParasutVerified ? "green" : "red"}>
-          {order.isParasutVerified ? "RESMİLEŞTİ" : "RESMİLEŞMEDİ"}
-        </Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Gönderi Tipi
-        </Text>
-        <Text mt="md">{order.deliveryType}</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Gönderi Durumu
-        </Text>
-        <Text mt="md">{order.status}</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Kargo Takip No
-        </Text>
-        <Text mt="md">{order.cargoTrackNo || "-"}</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Gönderi Tarihi
-        </Text>
-        <Text mt="md">{dayjs(order.deliveryDate).format("DD MMM YYYY")}</Text>
-      </Card>
-      <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Text size="xl" weight={700}>
-          Sipariş Tarihi
-        </Text>
-        <Text mt="md">{dayjs(order.createdAt).format("DD MMM YYYY")}</Text>
-      </Card>
+      <Link to={`/dashboard/customers/${order.customer.id}`} style={{ textDecoration: "none" }}>
+        <DetailsCard title="Müşteri" value={order.customer.name} />
+      </Link>
+      <DetailsCard
+        title="Müşteri Bakiye (Sipariş Sonrası)"
+        value={`${order.customerBalanceAfterOrder} ₺`}
+      />
+      <DetailsCard title="Tutar" value={`${order.total} ₺`} />
+      <DetailsCard title="Özel Not" value={order.specialNote || "-"} />
+      <DetailsCard
+        title="Faturalandırma"
+        value={
+          order.isParasutVerified ? (
+            <ThemeIcon color="green" radius="xl">
+              <CircleCheckIcon />
+            </ThemeIcon>
+          ) : (
+            <ThemeIcon color="red" radius="xl">
+              <XIcon />
+            </ThemeIcon>
+          )
+        }
+      />
+      <DetailsCard title="Gönderi Tipi" value={order.deliveryType} />
+      <DetailsCard title="Gönderi Durumu" value={order.status} />
+      <DetailsCard title="Kargo Takip No" value={order.cargoTrackNo || "-"} />
+      <DetailsCard title="Gönderi Tarihi" value={dayjs(order.deliveryDate).format("DD MMM YYYY")} />
+      <DetailsCard title="Sipariş Tarihi" value={dayjs(order.createdAt).format("DD MMM YYYY")} />
     </SimpleGrid>
   );
 };

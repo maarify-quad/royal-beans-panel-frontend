@@ -36,17 +36,17 @@ import { ProductsResult } from "./ProductsResult";
 import { CustomersResult } from "./CustomersResult";
 
 // Lazy Components
-const AddProductForm = React.lazy(() =>
-  import("../../../components/PriceList/AddProductForm").then(({ AddProductForm }) => ({
-    default: AddProductForm,
-  }))
-);
-const AssignPriceListForm = React.lazy(() =>
-  import("../../../components/PriceList/AssignPriceListForm").then(
-    ({ AssignPriceListForm }) => ({
-      default: AssignPriceListForm,
+const CreatePriceListProduct = React.lazy(() =>
+  import("../../../components/PriceListProduct/CreatePriceListProduct").then(
+    ({ CreatePriceListProduct }) => ({
+      default: CreatePriceListProduct,
     })
   )
+);
+const AssignPriceList = React.lazy(() =>
+  import("../../../components/PriceList/AssignPriceList").then(({ AssignPriceList }) => ({
+    default: AssignPriceList,
+  }))
 );
 
 // Styles
@@ -78,11 +78,11 @@ export const PriceListDetailsView = () => {
 
   const onAddProductClick = () => {
     openModal({
-      key: "addPriceListProduct",
+      key: "createPriceListProduct",
       title: "Ürün Ekle",
       children: (
         <React.Suspense fallback={<LoadingOverlay visible />}>
-          <AddProductForm
+          <CreatePriceListProduct
             priceListId={parseInt(id)}
             priceListProducts={data?.priceListProducts}
           />
@@ -97,7 +97,7 @@ export const PriceListDetailsView = () => {
       title: "Müşteri Ekle",
       children: (
         <React.Suspense fallback={<LoadingOverlay visible />}>
-          <AssignPriceListForm priceListId={parseInt(id)} />
+          <AssignPriceList priceListId={parseInt(id)} />
         </React.Suspense>
       ),
     });
@@ -142,11 +142,7 @@ export const PriceListDetailsView = () => {
           <Button leftIcon={<PlusIcon />} onClick={onAddProductClick}>
             Ürün Ekle
           </Button>
-          <Button
-            variant="default"
-            leftIcon={<UserPlusIcon />}
-            onClick={onAssignPriceListClick}
-          >
+          <Button variant="default" leftIcon={<UserPlusIcon />} onClick={onAssignPriceListClick}>
             Müşteri Ekle
           </Button>
         </Group>

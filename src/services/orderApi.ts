@@ -47,7 +47,7 @@ interface GetOrdersByCustomerParams {
 }
 
 interface CreateOrderParams {
-  customerId: number;
+  customerId: string;
   deliveryDate: Date;
   specialNote: string;
   deliveryType: string;

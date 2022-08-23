@@ -1,7 +1,7 @@
 import { PriceList } from "./priceList";
 
 export interface Customer {
-  id: number;
+  id: string;
   priceListId?: number;
   priceList?: PriceList;
   name: string;

@@ -1,7 +1,7 @@
 import { PriceListProduct } from "@interfaces/priceListProduct";
 
 export type Inputs = {
-  customerId: number;
+  customerId: string;
   priceListProductId: number;
   deliveryDate: Date;
   specialNote: string;
@@ -25,7 +25,7 @@ export type Inputs = {
 };
 
 export const initialValues: Inputs = {
-  customerId: 0,
+  customerId: "",
   priceListProductId: 0,
   deliveryDate: new Date(),
   specialNote: "",

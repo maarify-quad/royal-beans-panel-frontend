@@ -37,6 +37,9 @@ export const productApi = emptyApi.injectEndpoints({
         };
       },
       invalidatesTags: ["Product"],
+      extraOptions: {
+        multipart: true,
+      },
     }),
   }),
 });

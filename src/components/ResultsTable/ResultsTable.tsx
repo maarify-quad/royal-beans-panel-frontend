@@ -19,7 +19,8 @@ type ResultsTableProps = {
   headers: HeaderDef[];
   rows: RowDef[][];
   pagination?: IPagination;
-  onRowClick?: (index: number) => () => void;
+  onRowClick?: (row: RowDef[], index: number) => void;
+  rowStyles?: React.CSSProperties;
 };
 
 export const ResultsTable: React.FC<ResultsTableProps> = ({
@@ -27,6 +28,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
   rows,
   pagination,
   onRowClick,
+  rowStyles,
 }) => {
   return (
     <div>
@@ -40,15 +42,19 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr onClick={onRowClick ? onRowClick(i) : undefined} key={i}>
-              {row.map((data, j) => (
+            <tr
+              style={rowStyles}
+              onClick={onRowClick ? () => onRowClick(row, i) : undefined}
+              key={i}
+            >
+              {row.map(({ value, link, renderCell }, j) => (
                 <td key={j}>
-                  {data.link ? (
-                    <Link style={{ color: "inherit" }} to={data.link}>
-                      {data.value}
+                  {link ? (
+                    <Link style={{ color: "inherit" }} to={link}>
+                      {renderCell ? renderCell() : value}
                     </Link>
                   ) : (
-                    data.value
+                    <>{renderCell ? renderCell() : value}</>
                   )}
                 </td>
               ))}

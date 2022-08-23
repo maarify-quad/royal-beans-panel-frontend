@@ -12,7 +12,7 @@ export const customerApi = emptyApi.injectEndpoints({
       query: (page) => (page ? `/customers?page=${page}` : "/customers"),
       providesTags: ["Customer"],
     }),
-    getCustomerById: builder.query<Customer, number>({
+    getCustomerById: builder.query<Customer, string>({
       query: (id) => `/customers/${id}`,
       providesTags: (_result, _error, id) => [{ type: "Customer" as const, id }],
     }),
@@ -32,9 +32,7 @@ export const customerApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, params) => [
         { type: "Customer" as const, id: params.id },
-        ...(params.priceListId
-          ? [{ type: "PriceList" as const, id: params.priceListId }]
-          : []),
+        ...(params.priceListId ? [{ type: "PriceList" as const, id: params.priceListId }] : []),
       ],
     }),
   }),
@@ -77,5 +75,5 @@ interface CreateCustomerParams {
 }
 
 interface UpdateCustomerParams extends Partial<CreateCustomerParams> {
-  id: number;
+  id: string;
 }

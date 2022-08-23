@@ -43,28 +43,26 @@ export const Results: React.FC<ResultsProps> = ({ delivery }) => {
           </tbody>
         </Table>
       </ScrollArea>
-      <Group position="right">
-        <Card withBorder mt="md" style={{ minWidth: 320, width: "max-content" }}>
-          <Group position="apart">
-            <Text>Ara Toplam</Text>
-            <Text size="lg" weight="bold">
-              {delivery.subTotal} ₺
-            </Text>
-          </Group>
-          <Group position="apart">
-            <Text>KDV Toplam</Text>
-            <Text size="lg" weight="bold">
-              {delivery.taxTotal} ₺
-            </Text>
-          </Group>
-          <Group position="apart">
-            <Text>Toplam</Text>
-            <Text size="lg" weight="bold">
-              {delivery.total} ₺
-            </Text>
-          </Group>
-        </Card>
-      </Group>
+      <Card withBorder shadow="xs" mt="md" style={{ minWidth: 320, width: "max-content" }}>
+        <Group position="apart">
+          <Text>Ara Toplam</Text>
+          <Text size="lg" weight="bold">
+            {delivery.subTotal} ₺
+          </Text>
+        </Group>
+        <Group position="apart">
+          <Text>KDV Toplam</Text>
+          <Text size="lg" weight="bold">
+            {delivery.taxTotal} ₺
+          </Text>
+        </Group>
+        <Group position="apart">
+          <Text>Toplam</Text>
+          <Text size="lg" weight="bold">
+            {delivery.total} ₺
+          </Text>
+        </Group>
+      </Card>
     </Container>
   );
 };

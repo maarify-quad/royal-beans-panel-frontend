@@ -24,9 +24,9 @@ import { UserPlus as UserPlusIcon } from "tabler-icons-react";
 import { Results } from "./Results";
 
 // Lazy Components
-const CreateSupplierForm = React.lazy(() =>
-  import("../../../components/Supplier/CreateSupplierForm").then((module) => ({
-    default: module.CreateSupplierForm,
+const CreateSupplier = React.lazy(() =>
+  import("../../../components/Supplier/CreateSupplier").then((module) => ({
+    default: module.CreateSupplier,
   }))
 );
 
@@ -45,10 +45,11 @@ export const ListSuppliersView = () => {
 
   const onCreateSupplierClick = () => {
     openModal({
+      key: "createSupplier",
       title: "Tedarikçi Oluştur",
       children: (
         <React.Suspense fallback={<LoadingOverlay visible />}>
-          <CreateSupplierForm />
+          <CreateSupplier />
         </React.Suspense>
       ),
     });
