@@ -1,7 +1,7 @@
 import React from "react";
 
 // UI Components
-import { Card, createStyles, Group, SimpleGrid, Text } from "@mantine/core";
+import { Group, SimpleGrid, Text } from "@mantine/core";
 
 // Icons
 import {
@@ -16,19 +16,12 @@ import {
 import { Supplier } from "@interfaces/supplier";
 import { DetailsCard } from "@components/DetailsCard";
 
-const useStyles = createStyles((theme) => ({
-  card: {
-    backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-  },
-}));
-
 // Props
 type DetailsTabProps = {
   supplier?: Supplier;
 };
 
 export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
-  const { classes } = useStyles();
   return (
     <SimpleGrid
       breakpoints={[
