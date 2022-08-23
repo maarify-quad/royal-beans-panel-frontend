@@ -11,6 +11,9 @@ export const supplierApi = emptyApi.injectEndpoints({
     getAllSuppliers: builder.query<GetAllSuppliersResponse, number | void>({
       query: (page) => (page ? `/suppliers?page=${page}` : "/suppliers"),
       providesTags: ["Supplier"],
+      extraOptions: {
+        multipart: true,
+      },
     }),
     getSupplierById: builder.query<Supplier, string>({
       query: (id) => `/suppliers/${id}`,

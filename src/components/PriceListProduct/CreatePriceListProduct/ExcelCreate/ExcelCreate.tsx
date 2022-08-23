@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 // Services
-import { useCreateBulkProductsFromExcelMutation } from "@services/productApi";
+import { useCreateBulkPriceListProductsFromExcelMutation } from "@services/priceListProductApi";
 
 // UI Components
 import { Box, Button, FileInput, Text } from "@mantine/core";
@@ -12,7 +12,7 @@ import { closeModal } from "@mantine/modals";
 import { useForm, zodResolver } from "@mantine/form";
 
 // Assets
-import ExcelFormatExampleImage from "@assets/create-bulk-products-excel-format-example.png";
+import ExcelFormatExampleImage from "@assets/create-bulk-price-list-products-excel-format-example.png";
 
 // Icons
 import { CircleCheck as CircleCheckIcon, X as ErrorIcon } from "tabler-icons-react";
@@ -21,10 +21,15 @@ import { CircleCheck as CircleCheckIcon, X as ErrorIcon } from "tabler-icons-rea
 import { Inputs } from "./validation/Inputs";
 import { schema, initialValues } from "./validation/schema";
 
-export const ExcelCreate = () => {
+// Props
+type ExcelCreateProps = {
+  priceListId: number;
+};
+
+export const ExcelCreate: React.FC<ExcelCreateProps> = ({ priceListId }) => {
   // Mutations
-  const [createBulkProductsMutation, { isSuccess, isLoading, error }] =
-    useCreateBulkProductsFromExcelMutation();
+  const [createBulkPriceListProductsMutation, { isSuccess, isLoading, error }] =
+    useCreateBulkPriceListProductsFromExcelMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -44,7 +49,7 @@ export const ExcelCreate = () => {
         });
       }
 
-      await createBulkProductsMutation({ excel });
+      await createBulkPriceListProductsMutation({ excel, priceListId });
     } catch {
       showNotification({
         title: "Ürün oluşturulamadı",

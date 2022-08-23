@@ -18,11 +18,35 @@ export const priceListProductApi = emptyApi.injectEndpoints({
         { type: "PriceList" as const, id: params.priceListId },
       ],
     }),
+    createBulkPriceListProductsFromExcel: builder.mutation<
+      any,
+      CreateBulkPriceListProductsFromExcelParams
+    >({
+      query: (body) => {
+        const formData = new FormData();
+        formData.append("excel", body.excel);
+        formData.append("priceListId", body.priceListId.toString());
+        return {
+          url: "/price_list_products/bulk/excel",
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: (_result, _error, params) => [
+        { type: "PriceList" as const, id: params.priceListId },
+      ],
+      extraOptions: {
+        multipart: true,
+      },
+    }),
   }),
 });
 
-export const { useGetPriceListProductsQuery, useCreatePriceListProductMutation } =
-  priceListProductApi;
+export const {
+  useGetPriceListProductsQuery,
+  useCreatePriceListProductMutation,
+  useCreateBulkPriceListProductsFromExcelMutation,
+} = priceListProductApi;
 
 interface CreatePriceListProductParams {
   productId: number;
@@ -31,4 +55,9 @@ interface CreatePriceListProductParams {
   unitPrice: number;
   taxRate: number;
   unit: string;
+}
+
+interface CreateBulkPriceListProductsFromExcelParams {
+  priceListId: number;
+  excel: File;
 }

@@ -1,10 +1,6 @@
 // RTK Query
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type {
-  BaseQueryFn,
-  FetchArgs,
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query/react";
+import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 
 // Actions
 import { setAuthentication } from "@slices/authSlice";
@@ -15,7 +11,7 @@ import jwtDecode from "jwt-decode";
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_BASE_URL,
   prepareHeaders: (headers, api) => {
-    if (api.endpoint !== "createBulkProductsFromExcel") {
+    if (!(api.extra as any)?.multipart) {
       headers.set("Content-Type", "application/json");
     }
 
@@ -28,11 +24,11 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-const baseQueryWithReauth: BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  FetchBaseQueryError
-> = async (args, api, extraOptions) => {
+const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
+  args,
+  api,
+  extraOptions
+) => {
   // Get the access token from the local storage
   const accessToken = localStorage.getItem("accessToken");
 
@@ -55,7 +51,7 @@ const baseQueryWithReauth: BaseQueryFn<
   }
 
   // If the access token is valid, continue with the request
-  let result = await baseQuery(args, api, extraOptions);
+  let result = await baseQuery(args, { ...api, extra: extraOptions }, extraOptions);
   return result;
 };
 
