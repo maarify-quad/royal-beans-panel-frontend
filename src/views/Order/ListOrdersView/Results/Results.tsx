@@ -1,6 +1,9 @@
 import React from "react";
 import dayjs from "dayjs";
 
+// Routing
+import { useNavigate } from "react-router-dom";
+
 // Services
 import { useGetOrdersQuery } from "@services/orderApi";
 
@@ -25,13 +28,16 @@ export const Results = () => {
   // Internal state
   const [page, setPage] = React.useState(1);
 
+  // Routing
+  const navigate = useNavigate();
+
   // Queries
   const { data, isLoading, error } = useGetOrdersQuery(page);
 
   const orderRows: RowDef[][] = React.useMemo(
     () =>
       data?.orders.map((order) => [
-        { value: order.orderNumber, link: `/dashboard/orders/${order.orderNumber}` },
+        { value: order.orderNumber, renderCell: () => `#${order.orderNumber}` },
         { value: dayjs(order.createdAt).format("DD MMM YYYY") },
         { value: order.customer.name },
         { value: `${order.total} ₺` },
@@ -95,6 +101,13 @@ export const Results = () => {
           totalPage: data?.totalPage || 0,
           currentPage: page,
           onPageChange: (page) => setPage(page),
+        }}
+        onRowClick={(row, i) => {
+          const orderNumber = row[0].value;
+          navigate(`/dashboard/orders/${orderNumber}`);
+        }}
+        rowStyles={{
+          cursor: "pointer",
         }}
       />
     </Container>
