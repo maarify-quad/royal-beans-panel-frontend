@@ -18,7 +18,7 @@ import { CircleCheck as CircleCheckIcon, X as ErrorIcon } from "tabler-icons-rea
 import { Inputs } from "./validation/Inputs";
 import { schema, initialValues } from "./validation/schema";
 
-export const CreateSupplierForm = () => {
+export const CreateSupplier = () => {
   const [createSupplier, { data, isSuccess, isLoading, error }] = useCreateSupplierMutation();
   const form = useForm<Inputs>({
     initialValues,
@@ -44,9 +44,7 @@ export const CreateSupplierForm = () => {
     if (isSuccess) {
       showNotification({
         title: "Başarılı",
-        message: data?.id
-          ? `${data.id} koduyla tedarikçi oluşturuldu`
-          : "Tedarikçi oluşturuldu",
+        message: data?.id ? `${data.id} koduyla tedarikçi oluşturuldu` : "Tedarikçi oluşturuldu",
         icon: <CircleCheckIcon />,
         color: "green",
       });

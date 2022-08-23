@@ -25,9 +25,9 @@ import { Plus as PlusIcon } from "tabler-icons-react";
 import { StorageProducts } from "./StorageProducts";
 
 // Lazy Components
-const CreateProductForm = React.lazy(() =>
-  import("../../../components/Product/CreateProductForm").then((module) => ({
-    default: module.CreateProductForm,
+const CreateProduct = React.lazy(() =>
+  import("../../../components/Product/CreateProduct").then((module) => ({
+    default: module.CreateProduct,
   }))
 );
 
@@ -49,7 +49,7 @@ export const ListStorageView = () => {
       title: "Ürün Oluştur",
       children: (
         <React.Suspense fallback={<LoadingOverlay visible />}>
-          <CreateProductForm />
+          <CreateProduct />
         </React.Suspense>
       ),
     });

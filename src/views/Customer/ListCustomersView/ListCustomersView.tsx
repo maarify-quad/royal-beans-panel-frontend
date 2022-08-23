@@ -24,9 +24,9 @@ import { UserPlus as UserPlusIcon } from "tabler-icons-react";
 import { Results } from "./Results";
 
 // Lazy Components
-const CreateCustomerForm = React.lazy(() =>
-  import("../../../components/Customer/CreateCustomerForm").then((module) => ({
-    default: module.CreateCustomerForm,
+const CreateCustomer = React.lazy(() =>
+  import("../../../components/Customer/CreateCustomer").then((module) => ({
+    default: module.CreateCustomer,
   }))
 );
 
@@ -49,7 +49,7 @@ export const ListCustomersView = () => {
       title: "Müşteri Oluştur",
       children: (
         <React.Suspense fallback={<LoadingOverlay visible />}>
-          <CreateCustomerForm />
+          <CreateCustomer />
         </React.Suspense>
       ),
     });

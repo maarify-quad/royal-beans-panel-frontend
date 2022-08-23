@@ -24,7 +24,7 @@ import { ExtraStep } from "./ExtraStep";
 import { Inputs, initialValues } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
-export const CreateCustomerForm = () => {
+export const CreateCustomer = () => {
   // Internal state
   const [step, setStep] = React.useState(0);
 

@@ -11,7 +11,7 @@ const ExcelCreate = React.lazy(() =>
   import("./ExcelCreate").then((module) => ({ default: module.ExcelCreate }))
 );
 
-export const CreateProductForm = () => {
+export const CreateProduct = () => {
   return (
     <Tabs defaultValue="manual" mt="md">
       <Tabs.List>
