@@ -3,10 +3,6 @@ import React, { useEffect } from "react";
 // Services
 import { useLoginMutation } from "@services/authApi";
 
-// Redux
-import { useReduxDispatch } from "@app/hook";
-import { setAuthentication, setUser } from "@slices/authSlice";
-
 // UI Components
 import { TextInput, PasswordInput, Checkbox, Anchor, Group, Button } from "@mantine/core";
 
@@ -22,7 +18,6 @@ import { Inputs } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
 export const LoginForm = () => {
-  const dispatch = useReduxDispatch();
   const [login, { isLoading, data, error }] = useLoginMutation();
   const form = useForm<Inputs>({
     initialValues: {
@@ -56,14 +51,6 @@ export const LoginForm = () => {
       });
     }
   }, [(error as any)?.data?.message]);
-
-  useEffect(() => {
-    if (data) {
-      localStorage.setItem("accessToken", data.accessToken);
-      dispatch(setAuthentication({ isAuthenticated: true, user: data.user }));
-      dispatch(setUser(data.user));
-    }
-  }, [data]);
 
   return (
     <form onSubmit={form.onSubmit(onLoginSubmit)}>

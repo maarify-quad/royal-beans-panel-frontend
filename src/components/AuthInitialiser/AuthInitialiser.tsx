@@ -3,10 +3,6 @@ import React, { useEffect } from "react";
 // Services
 import { useGetProfileQuery } from "@services/authApi";
 
-// Redux
-import { useReduxDispatch } from "@app/hook";
-import { setUser, setAuthenticated } from "@slices/authSlice";
-
 // UI Utils
 import { showNotification } from "@mantine/notifications";
 
@@ -22,15 +18,7 @@ type AuthInitialiserProps = {
 };
 
 export const AuthInitialiser: React.FC<AuthInitialiserProps> = ({ children }) => {
-  const dispatch = useReduxDispatch();
-  const { data, isLoading, error } = useGetProfileQuery();
-
-  useEffect(() => {
-    if (data?.user) {
-      dispatch(setUser(data.user));
-      dispatch(setAuthenticated(true));
-    }
-  }, [data?.user]);
+  const { isLoading, error } = useGetProfileQuery();
 
   useEffect(() => {
     if ((error as any)?.message && (error as any)?.message === "tokenExpired") {

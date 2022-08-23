@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+
+// Services
+import { useLazyLogoutQuery } from "@services/authApi";
 
 // Routing
 import { Outlet } from "react-router-dom";
@@ -17,16 +20,21 @@ import {
   MediaQuery,
   Group,
   Title,
+  LoadingOverlay,
 } from "@mantine/core";
+
+// UI Utils
+import { showNotification } from "@mantine/notifications";
 import { useMediaQuery } from "@mantine/hooks";
+
+// Icons
+import { X as ErrorIcon } from "tabler-icons-react";
 
 // Components
 import { ColorSchemeToggler } from "@components/ColorSchemeToggler";
 
 // Lazy Components
-const Navbar = React.lazy(() =>
-  import("./Navbar").then((module) => ({ default: module.Navbar }))
-);
+const Navbar = React.lazy(() => import("./Navbar").then((module) => ({ default: module.Navbar })));
 const Drawer = React.lazy(() =>
   import("./Drawer").then((module) => ({
     default: module.Drawer,
@@ -37,8 +45,7 @@ const Drawer = React.lazy(() =>
 const useStyles = createStyles((theme) => ({
   main: {
     height: "100%",
-    backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[0],
+    backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[0],
   },
   title: {
     fontSize: theme.fontSizes.xl,
@@ -57,6 +64,31 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const isMediumScreen = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
+  const [logout, { isLoading: isLogoutLoading, error: logoutError }] = useLazyLogoutQuery();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      showNotification({
+        title: "Çıkış başarısız",
+        message: "Beklenmedik bir hata oluştu",
+        icon: <ErrorIcon />,
+        color: "red",
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (logoutError) {
+      showNotification({
+        title: "Çıkış başarısız",
+        message: (logoutError as any)?.data?.message || "Beklenmedik bir hata oluştu",
+        icon: <ErrorIcon />,
+        color: "red",
+      });
+    }
+  }, [(logoutError as any)?.data?.message]);
 
   const onBurgerClick = () => {
     dispatch(toggleDrawer());
@@ -70,7 +102,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
       // fixed prop on AppShell will be automatically added to Header and Navbar
       className={classes.main}
       fixed
-      navbar={isMediumScreen ? <Drawer /> : <Navbar />}
+      navbar={isMediumScreen ? <Drawer /> : <Navbar onLogout={handleLogout} />}
       header={
         <Header height={70} p="md">
           <div
@@ -98,6 +130,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         </Header>
       }
     >
+      <LoadingOverlay visible={isLogoutLoading} />
       {children}
       <Outlet />
     </AppShell>

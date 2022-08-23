@@ -1,11 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // Routing
 import { Link, NavLink, useMatch } from "react-router-dom";
-
-// Redux
-import { useReduxDispatch } from "@app/hook";
-import { setAuthentication } from "@slices/authSlice";
 
 // UI Components
 import { Navbar as MantineNavbar, ScrollArea, createStyles, Menu } from "@mantine/core";
@@ -45,8 +41,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
       borderRadius: theme.radius.sm,
       fontWeight: 500,
       "&:hover": {
-        backgroundColor:
-          theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
         color: theme.colorScheme === "dark" ? theme.white : theme.black,
 
         [`& .${icon}`]: {
@@ -65,8 +60,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
           theme.colorScheme === "dark"
             ? theme.fn.rgba(theme.colors[theme.primaryColor][8], 0.25)
             : theme.colors[theme.primaryColor][0],
-        color:
-          theme.colorScheme === "dark" ? theme.white : theme.colors[theme.primaryColor][7],
+        color: theme.colorScheme === "dark" ? theme.white : theme.colors[theme.primaryColor][7],
         [`& .${icon}`]: {
           color: theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 5 : 7],
         },
@@ -127,23 +121,17 @@ const navLinks = [
   },
 ];
 
-export const Navbar = () => {
-  const dispatch = useReduxDispatch();
+// Props
+type NavbarProps = {
+  onLogout: () => void;
+};
+
+export const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   const { classes, cx } = useStyles();
   const match = useMatch(window.location.pathname);
 
-  const onLogoutClick = () => {
-    localStorage.removeItem("accessToken");
-    dispatch(setAuthentication({ isAuthenticated: false, user: null }));
-  };
-
   return (
-    <MantineNavbar
-      p="md"
-      hiddenBreakpoint="sm"
-      width={{ base: 240 }}
-      className={classes.navbar}
-    >
+    <MantineNavbar p="md" hiddenBreakpoint="sm" width={{ base: 240 }} className={classes.navbar}>
       <MantineNavbar.Section grow component={ScrollArea}>
         {navLinks.map((item) => (
           <NavLink
@@ -168,7 +156,7 @@ export const Navbar = () => {
             <Menu.Item component={Link} to="/dashboard/settings" icon={<SettingsIcon />}>
               Ayarlar
             </Menu.Item>
-            <Menu.Item color="red" icon={<LogoutIcon />} onClick={onLogoutClick}>
+            <Menu.Item color="red" icon={<LogoutIcon />} onClick={onLogout}>
               Çıkış yap
             </Menu.Item>
           </Menu.Dropdown>

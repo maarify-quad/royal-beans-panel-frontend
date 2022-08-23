@@ -8,14 +8,18 @@ import { setAuthentication } from "@slices/authSlice";
 // Utils
 import jwtDecode from "jwt-decode";
 
+// Types
+import type { RootState } from "@app/store";
+
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_BASE_URL,
+  credentials: "include",
   prepareHeaders: (headers, api) => {
     if (!(api.extra as any)?.multipart) {
       headers.set("Content-Type", "application/json");
     }
 
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = (api.getState() as RootState).auth.accessToken;
     if (accessToken) {
       headers.set("Authorization", `Bearer ${accessToken}`);
     }
@@ -30,7 +34,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
   extraOptions
 ) => {
   // Get the access token from the local storage
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = (api.getState() as RootState).auth.accessToken;
 
   // Check if access token exists
   if (accessToken) {
@@ -39,14 +43,36 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 
     // Check if the token is expired
     if (decoded.exp * 1000 < Date.now()) {
-      // If the token is expired, dispatch logout action
-      api.dispatch(setAuthentication({ isAuthenticated: false, user: null }));
+      // If the JWT is expired get a new one with the refresh token
+      const refreshTokenResponse = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/auth/refresh_token`,
+        {
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      // Remove access token from the local storage
-      localStorage.removeItem("accessToken");
+      // Check if the refresh token was successful
+      if (!refreshTokenResponse.ok || refreshTokenResponse.status !== 200) {
+        api.dispatch(setAuthentication({ isAuthenticated: false, user: null, accessToken: null }));
+        return Promise.reject("tokenExpired");
+      }
 
-      // Reject the request promise
-      return Promise.reject("tokenExpired");
+      // Get the new access token from the response
+      const refreshTokenData = await refreshTokenResponse.json();
+
+      console.log(refreshTokenData.accessToken);
+
+      // Set the new access token in store
+      api.dispatch(
+        setAuthentication({
+          isAuthenticated: true,
+          accessToken: refreshTokenData.accessToken,
+          user: refreshTokenData.user,
+        })
+      );
     }
   }
 

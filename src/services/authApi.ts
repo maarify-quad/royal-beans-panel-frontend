@@ -15,18 +15,20 @@ export const authApi = emptyApi.injectEndpoints({
         body,
       }),
     }),
+    logout: builder.query<any, void>({
+      query: () => "/auth/logout",
+    }),
   }),
 });
 
-export const { useGetProfileQuery, useLoginMutation } = authApi;
+export const { useGetProfileQuery, useLoginMutation, useLazyLogoutQuery } = authApi;
 
 interface ProfileResponse {
+  accessToken: string;
   user: User;
 }
 
-interface LoginResponse extends ProfileResponse {
-  accessToken: string;
-}
+interface LoginResponse extends ProfileResponse {}
 
 interface LoginParams {
   username: string;
