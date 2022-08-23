@@ -45,7 +45,7 @@ export const ListCustomersView = () => {
 
   const onCreateCustomerClick = () => {
     openModal({
-      key: "createCustomerModal",
+      key: "createCustomer",
       title: "Müşteri Oluştur",
       children: (
         <React.Suspense fallback={<LoadingOverlay visible />}>

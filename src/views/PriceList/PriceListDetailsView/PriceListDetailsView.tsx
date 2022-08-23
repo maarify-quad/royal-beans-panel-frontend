@@ -78,7 +78,7 @@ export const PriceListDetailsView = () => {
 
   const onAddProductClick = () => {
     openModal({
-      key: "addPriceListProduct",
+      key: "createPriceListProduct",
       title: "Ürün Ekle",
       children: (
         <React.Suspense fallback={<LoadingOverlay visible />}>

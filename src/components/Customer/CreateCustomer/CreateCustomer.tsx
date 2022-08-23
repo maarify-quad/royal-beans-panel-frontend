@@ -63,7 +63,7 @@ export const CreateCustomer = () => {
         icon: <CircleCheckIcon />,
         color: "green",
       });
-      closeModal("createCustomerModal");
+      closeModal("createCustomer");
     }
   }, [isSuccess]);
 

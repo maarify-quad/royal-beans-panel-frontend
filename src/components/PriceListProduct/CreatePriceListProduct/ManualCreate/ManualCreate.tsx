@@ -84,7 +84,7 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
         icon: <CircleCheckIcon />,
         color: "green",
       });
-      closeModal("addPriceListProduct");
+      closeModal("createPriceListProduct");
     }
   }, [isCreateProductSuccess]);
 

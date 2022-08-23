@@ -48,7 +48,7 @@ export const CreateSupplier = () => {
         icon: <CircleCheckIcon />,
         color: "green",
       });
-      closeModal("createSupplierModal");
+      closeModal("createSupplier");
     }
   }, [isSuccess]);
 

@@ -46,6 +46,7 @@ export const ListStorageView = () => {
 
   const onCreateProductClick = () => {
     openModal({
+      key: "createProduct",
       title: "Ürün Oluştur",
       children: (
         <React.Suspense fallback={<LoadingOverlay visible />}>

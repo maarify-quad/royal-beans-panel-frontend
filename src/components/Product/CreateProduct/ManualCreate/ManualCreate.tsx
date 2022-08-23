@@ -51,7 +51,7 @@ export const ManualCreate = () => {
         icon: <CircleCheckIcon />,
         color: "green",
       });
-      closeModal("createProductModal");
+      closeModal("createProduct");
     }
   }, [isSuccess]);
 

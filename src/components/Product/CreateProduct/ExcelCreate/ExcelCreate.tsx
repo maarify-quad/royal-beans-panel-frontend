@@ -63,7 +63,7 @@ export const ExcelCreate = () => {
         icon: <CircleCheckIcon />,
         color: "green",
       });
-      closeModal("createProductModal");
+      closeModal("createProduct");
     }
   }, [isSuccess]);
 

@@ -68,7 +68,7 @@ export const ExcelCreate: React.FC<ExcelCreateProps> = ({ priceListId }) => {
         icon: <CircleCheckIcon />,
         color: "green",
       });
-      closeModal("createProductModal");
+      closeModal("createPriceListProduct");
     }
   }, [isSuccess]);
 

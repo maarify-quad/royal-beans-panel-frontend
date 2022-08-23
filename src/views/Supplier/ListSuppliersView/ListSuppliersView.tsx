@@ -45,6 +45,7 @@ export const ListSuppliersView = () => {
 
   const onCreateSupplierClick = () => {
     openModal({
+      key: "createSupplier",
       title: "Tedarikçi Oluştur",
       children: (
         <React.Suspense fallback={<LoadingOverlay visible />}>
