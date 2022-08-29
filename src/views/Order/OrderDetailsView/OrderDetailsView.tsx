@@ -116,7 +116,7 @@ export const OrderDetailsView = () => {
         </Anchor>
       </Breadcrumbs>
       <Group position="apart">
-        <Title className={classes.rootTitle}>
+        <Title order={2} className={classes.rootTitle}>
           #{data?.order.orderNumber} - {data?.order.customer.name}
         </Title>
         <Button leftIcon={<TruckDeliveryIcon />} onClick={openUpdateDelivery}>

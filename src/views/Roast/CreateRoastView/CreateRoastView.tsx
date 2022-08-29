@@ -105,7 +105,9 @@ export const CreateRoastView = () => {
           Yeni Kavrum
         </Anchor>
       </Breadcrumbs>
-      <Title className={classes.rootTitle}>Kavrum Oluştur</Title>
+      <Title order={2} className={classes.rootTitle}>
+        Kavrum Oluştur
+      </Title>
       <form onSubmit={form.onSubmit(onCreateRoastSubmit)}>
         <Grid gutter="xl" mt="md">
           <Grid.Col lg={6}>

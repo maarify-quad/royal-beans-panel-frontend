@@ -36,7 +36,9 @@ export const CreateOrderView = () => {
           Yeni Sipariş
         </Anchor>
       </Breadcrumbs>
-      <Title className={classes.rootTitle}>Sipariş Oluştur</Title>
+      <Title order={2} className={classes.rootTitle}>
+        Sipariş Oluştur
+      </Title>
       <Form />
     </div>
   );

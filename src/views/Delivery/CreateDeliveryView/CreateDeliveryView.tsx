@@ -105,7 +105,9 @@ export const CreateDeliveryView = () => {
           Yeni Sevkiyat
         </Anchor>
       </Breadcrumbs>
-      <Title className={classes.rootTitle}>Sevkiyat Oluştur</Title>
+      <Title order={2} className={classes.rootTitle}>
+        Sevkiyat Oluştur
+      </Title>
       <form onSubmit={form.onSubmit(onCreateDeliverySubmit)}>
         <Grid mt="md">
           <Grid.Col lg={6}>

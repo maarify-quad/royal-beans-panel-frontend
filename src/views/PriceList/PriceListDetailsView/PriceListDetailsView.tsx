@@ -137,7 +137,9 @@ export const PriceListDetailsView = () => {
         </Anchor>
       </Breadcrumbs>
       <Group position="apart">
-        <Title className={classes.rootTitle}>{data?.name}</Title>
+        <Title order={2} className={classes.rootTitle}>
+          {data?.name}
+        </Title>
         <Group>
           <Button leftIcon={<PlusIcon />} onClick={onAddProductClick}>
             Ürün Ekle

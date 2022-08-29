@@ -66,7 +66,9 @@ export const ListCustomersView = () => {
         </Anchor>
       </Breadcrumbs>
       <Group align="center" position="apart">
-        <Title className={classes.rootTitle}>Müşteriler</Title>
+        <Title order={2} className={classes.rootTitle}>
+          Müşteriler
+        </Title>
         <Button leftIcon={<UserPlusIcon />} onClick={onCreateCustomerClick}>
           Yeni Müşteri
         </Button>

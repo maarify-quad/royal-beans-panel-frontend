@@ -66,7 +66,9 @@ export const ListPriceListsView = () => {
         </Anchor>
       </Breadcrumbs>
       <Group align="center" position="apart">
-        <Title className={classes.rootTitle}>Fiyat Listeleri</Title>
+        <Title order={2} className={classes.rootTitle}>
+          Fiyat Listeleri
+        </Title>
         <Button leftIcon={<PlusIcon />} onClick={openCreatePriceList}>
           Yeni Fiyat Listesi
         </Button>

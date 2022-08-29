@@ -36,12 +36,10 @@ export const ListDeliveriesView = () => {
         </Anchor>
       </Breadcrumbs>
       <Group align="center" position="apart">
-        <Title className={classes.rootTitle}>Sevkiyatlar</Title>
-        <Button
-          leftIcon={<TruckLoadingIcon />}
-          component={Link}
-          to="/dashboard/deliveries/create"
-        >
+        <Title order={2} className={classes.rootTitle}>
+          Sevkiyatlar
+        </Title>
+        <Button leftIcon={<TruckLoadingIcon />} component={Link} to="/dashboard/deliveries/create">
           Yeni Sevkiyat
         </Button>
       </Group>
