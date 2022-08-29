@@ -26,6 +26,14 @@ export const orderApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: ["Order"],
     }),
+    updateOrder: builder.mutation<Order, UpdateOrderParams>({
+      query: (body) => ({
+        url: `/orders`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: (_result, _error, params) => [{ type: "Order", id: params.orderNumber }],
+    }),
   }),
 });
 
@@ -34,6 +42,7 @@ export const {
   useGetOrderByOrderNumberQuery,
   useGetOrdersByCustomerQuery,
   useCreateOrderMutation,
+  useUpdateOrderMutation,
 } = orderApi;
 
 interface GetOrdersResponse {
@@ -52,4 +61,10 @@ interface CreateOrderParams {
   specialNote: string;
   deliveryType: string;
   orderProducts: CreateOrderProductParams[];
+}
+
+interface UpdateOrderParams {
+  orderNumber: number;
+  deliveryType?: string;
+  cargoTrackNo?: string;
 }

@@ -16,10 +16,19 @@ import {
   Center,
   Loader,
   Tabs,
+  Group,
+  Button,
+  LoadingOverlay,
 } from "@mantine/core";
 
+// UI Utils
+import { openModal } from "@mantine/modals";
+
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import {
+  AlertCircle as AlertCircleIcon,
+  TruckDelivery as TruckDeliveryIcon,
+} from "tabler-icons-react";
 
 // Components
 import { ProductsTab } from "./ProductsTab";
@@ -41,6 +50,13 @@ const useStyles = createStyles((theme) => ({
     },
   },
 }));
+
+// Lazy Imports
+const UpdateDelivery = React.lazy(() =>
+  import("../../../components/Order/UpdateDelivery").then((module) => ({
+    default: module.UpdateDelivery,
+  }))
+);
 
 export const OrderDetailsView = () => {
   const { orderNumber } = useParams();
@@ -72,6 +88,20 @@ export const OrderDetailsView = () => {
     </Center>;
   }
 
+  const openUpdateDelivery = () => {
+    if (!data?.order) return;
+
+    openModal({
+      key: "updateDelivery",
+      title: "Kargola",
+      children: (
+        <React.Suspense fallback={<LoadingOverlay visible />}>
+          <UpdateDelivery order={data.order} />
+        </React.Suspense>
+      ),
+    });
+  };
+
   return (
     <div className={classes.root}>
       <Breadcrumbs mb={16}>
@@ -85,9 +115,14 @@ export const OrderDetailsView = () => {
           {orderNumber}
         </Anchor>
       </Breadcrumbs>
-      <Title className={classes.rootTitle}>
-        #{data?.order.orderNumber} - {data?.order.customer.name}
-      </Title>
+      <Group position="apart">
+        <Title className={classes.rootTitle}>
+          #{data?.order.orderNumber} - {data?.order.customer.name}
+        </Title>
+        <Button leftIcon={<TruckDeliveryIcon />} onClick={openUpdateDelivery}>
+          Kargola
+        </Button>
+      </Group>
       {data && (
         <Tabs defaultValue="products" mt="md">
           <Tabs.List>
