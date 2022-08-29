@@ -13,12 +13,26 @@ export const priceListApi = emptyApi.injectEndpoints({
       query: (id) => `/price_lists/${id}`,
       providesTags: (_result, _error, id) => [{ type: "PriceList" as const, id }],
     }),
+    createPriceList: builder.mutation<PriceList, CreatePriceListParams>({
+      query: (body) => ({
+        url: "/price_lists",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["PriceList"],
+    }),
   }),
 });
 
-export const { useGetPriceListsQuery, useGetPriceListByIdQuery } = priceListApi;
+export const { useGetPriceListsQuery, useGetPriceListByIdQuery, useCreatePriceListMutation } =
+  priceListApi;
 
 interface GetPriceListsResponse {
   priceLists: PriceList[];
   totalPage?: number;
+}
+
+interface CreatePriceListParams {
+  name: string;
+  description?: string;
 }
