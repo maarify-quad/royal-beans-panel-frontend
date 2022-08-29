@@ -1,7 +1,10 @@
 import React from "react";
 
 // UI Components
-import { SimpleGrid } from "@mantine/core";
+import { LoadingOverlay, SimpleGrid } from "@mantine/core";
+
+// UI Utils
+import { openModal } from "@mantine/modals";
 
 // Components
 import { DetailsCard } from "@components/DetailsCard";
@@ -14,7 +17,32 @@ type DetailsTabProps = {
   customer: Customer;
 };
 
+// Lazy Imports
+const EditCustomer = React.lazy(() =>
+  import("../../../../components/Customer/EditCustomer").then((module) => ({
+    default: module.EditCustomer,
+  }))
+);
+
 export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
+  const openEditCustomer = (
+    title: string,
+    fields: {
+      label: string;
+      key: string;
+    }[]
+  ) => {
+    openModal({
+      key: "editCustomer",
+      title,
+      children: (
+        <React.Suspense fallback={<LoadingOverlay visible />}>
+          <EditCustomer fields={fields} customer={customer} />
+        </React.Suspense>
+      ),
+    });
+  };
+
   return (
     <SimpleGrid
       breakpoints={[
@@ -25,7 +53,15 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
     >
       <DetailsCard title="Bakiye" value={`${customer.currentBalance} ₺`} />
       <DetailsCard title="Fiyat Listesi" value={customer.priceList?.name || "-"} />
-      <DetailsCard title="Çalışma Prensibi" value={customer.commercialPrinciple || "-"} />
+      <DetailsCard
+        title="Çalışma Prensibi"
+        value={customer.commercialPrinciple || "-"}
+        editAction={() => {
+          openEditCustomer("Çalışma Prensibi Güncelle", [
+            { label: "Çalışma prensibi", key: "commercialPrinciple" },
+          ]);
+        }}
+      />
       <DetailsCard title="Performans" value={"TODO"} />
       <DetailsCard
         title="Ekstra"
@@ -36,6 +72,12 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
             Yorum: {customer?.comment || "-"}
           </>
         }
+        editAction={() => {
+          openEditCustomer("Ekstra Güncelle", [
+            { label: "Özel not", key: "specialNote" },
+            { label: "Yorum", key: "comment" },
+          ]);
+        }}
       />
       <DetailsCard
         title="Vergi"
@@ -46,6 +88,12 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
             Vergi No: {customer?.taxNo || "-"}
           </>
         }
+        editAction={() => {
+          openEditCustomer("Vergi Güncelle", [
+            { label: "Vergi dairesi", key: "taxOffice" },
+            { label: "Vergi no", key: "taxNo" },
+          ]);
+        }}
       />
       <DetailsCard
         title="İletişim"
@@ -65,6 +113,20 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
             <br />
           </>
         }
+        editAction={() => {
+          openEditCustomer("İletişim Güncelle", [
+            { label: "Firma unvanı", key: "companyTitle" },
+            { label: "Yetkili adı", key: "contactName" },
+            { label: "Yetkili unvanı", key: "contactTitle" },
+            { label: "İkincil yetkili adı", key: "secondContactName" },
+            { label: "İkincil yetkili unvanı", key: "secondContactTitle" },
+            { label: "Adres", key: "address" },
+            { label: "İl", key: "city" },
+            { label: "İlçe", key: "province" },
+            { label: "Telefon", key: "phone" },
+            { label: "E-posta", key: "email" },
+          ]);
+        }}
       />
       <DetailsCard
         title="Kargo"
@@ -72,9 +134,16 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
           <>
             {customer?.cargoAddress || "-"}
             <br />
-            {customer?.cargoCity || "-"} / {customer?.cargoProvince || "-"}
+            {customer?.cargoProvince || "-"} / {customer?.cargoCity || "-"}
           </>
         }
+        editAction={() => {
+          openEditCustomer("Kargo Güncelle", [
+            { label: "Kargo adresi", key: "cargoAddress" },
+            { label: "Kargo il", key: "cargoCity" },
+            { label: "Kargo ilçe", key: "cargoProvince" },
+          ]);
+        }}
       />
     </SimpleGrid>
   );
