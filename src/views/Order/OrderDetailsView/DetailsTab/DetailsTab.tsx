@@ -11,11 +11,7 @@ import { SimpleGrid, ThemeIcon } from "@mantine/core";
 import { DetailsCard } from "@components/DetailsCard";
 
 // Icons
-import {
-  AlertCircle as AlertCircleIcon,
-  CircleCheck as CircleCheckIcon,
-  X as XIcon,
-} from "tabler-icons-react";
+import { CircleCheck as CircleCheckIcon, X as XIcon } from "tabler-icons-react";
 
 // Interfaces
 import { OrderWithAll } from "@interfaces/order";
@@ -55,6 +51,16 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ order }) => {
               <XIcon />
             </ThemeIcon>
           )
+        }
+      />
+      <DetailsCard
+        title="Gönderim Adresi"
+        value={
+          <>
+            {order.customer.address || "-"}
+            <br />
+            {order.customer.city || "-"} / {order.customer.province || "-"}
+          </>
         }
       />
       <DetailsCard title="Gönderi Tipi" value={order.deliveryType} />

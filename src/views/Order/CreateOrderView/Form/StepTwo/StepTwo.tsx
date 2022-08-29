@@ -34,8 +34,7 @@ export const StepTwo: React.FC<StepTwoProps> = ({ form, priceListProducts }) => 
 
     if (priceListProduct) {
       const subTotal = priceListProduct.unitPrice * form.values.quantity;
-      const tax =
-        priceListProduct.taxRate !== 0 ? (subTotal * priceListProduct.taxRate) / 100 : 0;
+      const tax = priceListProduct.taxRate !== 0 ? (subTotal * priceListProduct.taxRate) / 100 : 0;
 
       form.setFieldValue("unitPrice", priceListProduct.unitPrice);
       form.setFieldValue("taxRate", priceListProduct.taxRate);
@@ -50,6 +49,7 @@ export const StepTwo: React.FC<StepTwoProps> = ({ form, priceListProducts }) => 
         <Select
           label="Ürün"
           placeholder="Ürün seçiniz"
+          searchable
           required
           data={priceListProductsSelectOptions}
           {...form.getInputProps("priceListProductId")}
