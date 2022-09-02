@@ -39,6 +39,16 @@ export const priceListProductApi = emptyApi.injectEndpoints({
         multipart: true,
       },
     }),
+    updatePriceListProduct: builder.mutation<PriceListProduct, UpdatePriceListProductParams>({
+      query: (body) => ({
+        url: `/price_list_products`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: (_result, _error, params) => [
+        { type: "PriceList" as const, id: params.priceListId },
+      ],
+    }),
   }),
 });
 
@@ -46,6 +56,7 @@ export const {
   useGetPriceListProductsQuery,
   useCreatePriceListProductMutation,
   useCreateBulkPriceListProductsFromExcelMutation,
+  useUpdatePriceListProductMutation,
 } = priceListProductApi;
 
 interface CreatePriceListProductParams {
@@ -61,3 +72,5 @@ interface CreateBulkPriceListProductsFromExcelParams {
   priceListId: number;
   excel: File;
 }
+
+interface UpdatePriceListProductParams extends Partial<PriceListProduct> {}

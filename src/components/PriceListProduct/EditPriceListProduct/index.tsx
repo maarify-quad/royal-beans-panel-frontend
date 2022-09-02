@@ -1,0 +1,1 @@
+export { EditPriceListProduct } from "./EditPriceListProduct";

@@ -25,6 +25,7 @@ import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
 import { DetailsTab } from "./DetailsTab";
 import { LastOrdersTab } from "./LastOrdersTab";
 import { LastProductsTab } from "./LastProductsTab";
+import { PriceListTab } from "./PriceListTab";
 
 // Styles
 const useStyles = createStyles((theme) => ({
@@ -88,6 +89,7 @@ export const CustomerDetailsView = () => {
             <Tabs.Tab value="details">Detaylar</Tabs.Tab>
             <Tabs.Tab value="lastOrders">Son Siparişler</Tabs.Tab>
             <Tabs.Tab value="lastProducts">Son Ürünler</Tabs.Tab>
+            <Tabs.Tab value="priceList">Fiyat Listesi</Tabs.Tab>
           </Tabs.List>
 
           <Tabs.Panel value="details" mt="md">
@@ -98,6 +100,9 @@ export const CustomerDetailsView = () => {
           </Tabs.Panel>
           <Tabs.Panel value="lastProducts" mt="md">
             <LastProductsTab customer={data.name} />
+          </Tabs.Panel>
+          <Tabs.Panel value="priceList" mt="md">
+            <PriceListTab customer={data} />
           </Tabs.Panel>
         </Tabs>
       )}
