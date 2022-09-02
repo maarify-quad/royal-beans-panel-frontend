@@ -9,6 +9,7 @@ import { MantineProvider, ColorSchemeProvider, ColorScheme } from "@mantine/core
 import { NotificationsProvider } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import { Provider } from "react-redux";
+import { ErrorProvider } from "@components/ErrorProvider";
 
 // Config
 import { AuthInitialiser } from "@components/AuthInitialiser";
@@ -40,9 +41,11 @@ function App() {
           >
             <NotificationsProvider position="top-right">
               <ModalsProvider>
-                <AuthInitialiser>
-                  <AppRoutes />
-                </AuthInitialiser>
+                <ErrorProvider>
+                  <AuthInitialiser>
+                    <AppRoutes />
+                  </AuthInitialiser>
+                </ErrorProvider>
               </ModalsProvider>
             </NotificationsProvider>
           </MantineProvider>
