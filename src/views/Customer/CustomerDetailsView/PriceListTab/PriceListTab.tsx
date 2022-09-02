@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // Services
-import { useGetPriceListProductsQuery } from "@services/priceListProductApi";
+import {
+  useGetPriceListProductsQuery,
+  useDeletePriceListProductMutation,
+} from "@services/priceListProductApi";
 
 // UI Components
-import { Alert, Button, Container, Group, Loader, LoadingOverlay } from "@mantine/core";
+import { Alert, Button, Container, Group, Loader, LoadingOverlay, Text } from "@mantine/core";
 
 // UI Utils
-import { openModal } from "@mantine/modals";
+import { openConfirmModal, openModal } from "@mantine/modals";
+import { showNotification } from "@mantine/notifications";
 
 // Icons
 import {
+  X as ErrorIcon,
   AlertCircle as AlertCircleIcon,
   Edit as EditIcon,
   Trash as TrashIcon,
@@ -40,6 +45,8 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
   const { data, isLoading, error } = useGetPriceListProductsQuery(customer.priceListId!, {
     skip: !customer.priceListId,
   });
+  const [deletePriceListProduct, { isLoading: isDeleting, error: deleteError }] =
+    useDeletePriceListProductMutation();
 
   const openEditPriceListProduct = (priceListProduct: PriceListProduct) => () => {
     openModal({
@@ -50,6 +57,21 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
           <EditPriceListProduct priceListProduct={priceListProduct} />
         </React.Suspense>
       ),
+    });
+  };
+
+  const openDeletePriceListProduct = (id: number, priceListId: number) => () => {
+    openConfirmModal({
+      centered: true,
+      title: "Fiyat Listesi Ürünü Sil",
+      children: (
+        <Text size="sm">Bu ürünü silmek istediğinize emin misiniz? Bu işlem geri alınamaz</Text>
+      ),
+      labels: { confirm: "Sil", cancel: "Vazgeç" },
+      confirmProps: { color: "red" },
+      onConfirm: async () => {
+        await deletePriceListProduct({ id, priceListId });
+      },
     });
   };
 
@@ -72,7 +94,16 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
               >
                 <EditIcon size={18} />
               </Button>
-              <Button px={4} size="xs" variant="subtle" color="red">
+              <Button
+                px={4}
+                size="xs"
+                variant="subtle"
+                color="red"
+                onClick={openDeletePriceListProduct(
+                  priceListProduct.id,
+                  priceListProduct.priceListId
+                )}
+              >
                 <TrashIcon size={18} />
               </Button>
             </Group>
@@ -81,6 +112,17 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
       ]) || [],
     [data]
   );
+
+  useEffect(() => {
+    if (deleteError) {
+      showNotification({
+        title: "Ürün silme başarısız",
+        message: (deleteError as any)?.data?.message || "Beklenmedik bir hata oluştu",
+        color: "red",
+        icon: <ErrorIcon />,
+      });
+    }
+  }, [deleteError]);
 
   if (isLoading) {
     return <Loader />;
@@ -110,6 +152,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
 
   return (
     <Container fluid mt="md" p={0}>
+      <LoadingOverlay visible={isDeleting} />
       <ResultsTable
         headers={[{ value: "Ürün" }, { value: "Fiyat" }, { value: "Vergi" }, { value: "İşlem" }]}
         rows={priceListProducts}
