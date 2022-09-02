@@ -27,8 +27,7 @@ type UpdateDeliveryProps = {
 };
 
 export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
-  const [updateOrder, { isLoading: isUpdating, isSuccess: isUpdated, error }] =
-    useUpdateOrderMutation();
+  const [updateOrder, { isLoading: isUpdating, isSuccess: isUpdated }] = useUpdateOrderMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -54,18 +53,6 @@ export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
       });
     }
   };
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Hata",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        color: "red",
-        icon: <ErrorIcon />,
-      });
-      closeModal("updateDelivery");
-    }
-  }, [error]);
 
   useEffect(() => {
     if (isUpdated) {

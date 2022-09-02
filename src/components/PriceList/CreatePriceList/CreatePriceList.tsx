@@ -19,7 +19,7 @@ import { Inputs } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
 export const CreatePriceList = () => {
-  const [createPriceList, { isLoading: isCreating, isSuccess: isCreated, error }] =
+  const [createPriceList, { isLoading: isCreating, isSuccess: isCreated }] =
     useCreatePriceListMutation();
 
   // Form utils
@@ -55,17 +55,6 @@ export const CreatePriceList = () => {
       closeModal("createPriceList");
     }
   }, [isCreated]);
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Fiyat Listesi Oluşturulamadı",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        color: "red",
-        icon: <ErrorIcon />,
-      });
-    }
-  }, [error]);
 
   return (
     <form onSubmit={form.onSubmit(onCreatePriceListSubmit)}>

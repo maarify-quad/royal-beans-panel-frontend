@@ -8,10 +8,6 @@ import { LoadingOverlay, Select, TextInput } from "@mantine/core";
 
 // UI Utils
 import { UseFormReturnType } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
-
-// Icons
-import { X as ErrorIcon } from "tabler-icons-react";
 
 // Validation
 import { Inputs } from "../validation/Inputs";
@@ -22,7 +18,7 @@ type GeneralStepProps = {
 };
 
 export const GeneralStep: React.FC<GeneralStepProps> = ({ form }) => {
-  const { data, isLoading, error } = useGetPriceListsQuery();
+  const { data, isLoading } = useGetPriceListsQuery();
 
   const priceListSelectOptions = React.useMemo(
     () =>
@@ -32,17 +28,6 @@ export const GeneralStep: React.FC<GeneralStepProps> = ({ form }) => {
       })) || [],
     [data?.priceLists.length]
   );
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Fiyat listelerine ulaşılamadı",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(error as any)?.data?.message]);
 
   return (
     <React.Fragment>

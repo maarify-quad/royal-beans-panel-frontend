@@ -40,7 +40,7 @@ export const CreateDeliveryView = () => {
   const navigate = useNavigate();
 
   // Services
-  const [createDelivery, { isLoading, isSuccess, data, error }] = useCreateDeliveryMutation();
+  const [createDelivery, { isLoading, isSuccess, data }] = useCreateDeliveryMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -58,7 +58,6 @@ export const CreateDeliveryView = () => {
         deliveryDetails,
       });
     } catch (error) {
-      console.log(error);
       showNotification({
         title: "Sevkiyat oluşturma başarısız",
         message: "Beklenmedik bir hata oluştu",
@@ -79,17 +78,6 @@ export const CreateDeliveryView = () => {
       navigate("/dashboard/deliveries");
     }
   }, [isSuccess]);
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Sevkiyat oluşturma başarısız",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(error as any)?.data?.message]);
 
   return (
     <div className={classes.root}>

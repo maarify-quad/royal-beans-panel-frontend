@@ -27,7 +27,7 @@ type EditPriceListProductProps = {
 };
 
 export const EditPriceListProduct: React.FC<EditPriceListProductProps> = ({ priceListProduct }) => {
-  const [updatePriceListProduct, { isLoading: isUpdating, isSuccess: isUpdated, error }] =
+  const [updatePriceListProduct, { isLoading: isUpdating, isSuccess: isUpdated }] =
     useUpdatePriceListProductMutation();
 
   // Form utils
@@ -72,17 +72,6 @@ export const EditPriceListProduct: React.FC<EditPriceListProductProps> = ({ pric
       closeModal("updatePriceListProduct");
     }
   }, [isUpdated]);
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Ürün güncellenemedi",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [error]);
 
   return (
     <form onSubmit={form.onSubmit(onEditPriceListProductSubmit)}>

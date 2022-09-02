@@ -18,7 +18,7 @@ import { Inputs } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
 export const LoginForm = () => {
-  const [login, { isLoading, data, error }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const form = useForm<Inputs>({
     initialValues: {
       username: "",
@@ -31,7 +31,6 @@ export const LoginForm = () => {
     try {
       await login(inputs);
     } catch (error) {
-      console.log(error);
       showNotification({
         title: "Giriş başarısız",
         message: "Beklenmedik bir hata oluştu",
@@ -40,17 +39,6 @@ export const LoginForm = () => {
       });
     }
   };
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Giriş başarısız",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(error as any)?.data?.message]);
 
   return (
     <form onSubmit={form.onSubmit(onLoginSubmit)}>

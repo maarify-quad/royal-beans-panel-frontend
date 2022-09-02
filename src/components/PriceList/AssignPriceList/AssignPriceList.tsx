@@ -40,11 +40,7 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
   // Mutations
   const [
     updateCustomer,
-    {
-      isLoading: isUpdateCustomerLoading,
-      isSuccess: isUpdateCustomerSuccess,
-      error: updateCustomerError,
-    },
+    { isLoading: isUpdateCustomerLoading, isSuccess: isUpdateCustomerSuccess },
   ] = useUpdateCustomerMutation();
 
   // Form utils
@@ -72,7 +68,6 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
         priceListId,
       });
     } catch (error) {
-      console.log(error);
       showNotification({
         title: "Fiyat listesi atanamadı",
         message: "Beklenmedik bir hata oluştu",
@@ -98,17 +93,6 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
       closeModal("assignPriceList");
     }
   }, [isUpdateCustomerSuccess]);
-
-  useEffect(() => {
-    if (updateCustomerError) {
-      showNotification({
-        title: "Fiyat listesi atama başarısız",
-        message: (updateCustomerError as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(updateCustomerError as any)?.data?.message]);
 
   return (
     <form onSubmit={form.onSubmit(onAssignPriceListSubmit)}>

@@ -31,7 +31,7 @@ type EditCustomerProps = {
 };
 
 export const EditCustomer: React.FC<EditCustomerProps> = ({ fields, customer }) => {
-  const [updateCustomer, { isLoading: isUpdating, isSuccess: isUpdated, error }] =
+  const [updateCustomer, { isLoading: isUpdating, isSuccess: isUpdated }] =
     useUpdateCustomerMutation();
 
   // Form utils
@@ -59,17 +59,6 @@ export const EditCustomer: React.FC<EditCustomerProps> = ({ fields, customer }) 
       });
     }
   };
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Müşteri Güncellenemedi",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        color: "red",
-        icon: <ErrorIcon />,
-      });
-    }
-  }, [error]);
 
   useEffect(() => {
     if (isUpdated) {

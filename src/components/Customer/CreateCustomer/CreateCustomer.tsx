@@ -32,7 +32,7 @@ export const CreateCustomer = () => {
   const prevStep = () => setStep((current) => (current > 0 ? current - 1 : current));
 
   // Mutations
-  const [createCustomer, { isSuccess, isLoading, error }] = useCreateCustomerMutation();
+  const [createCustomer, { isSuccess, isLoading }] = useCreateCustomerMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -66,17 +66,6 @@ export const CreateCustomer = () => {
       closeModal("createCustomer");
     }
   }, [isSuccess]);
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Müşteri oluşturulamadı",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(error as any)?.data?.message]);
 
   return (
     <form onSubmit={form.onSubmit(onCreateCustomerSubmit)}>

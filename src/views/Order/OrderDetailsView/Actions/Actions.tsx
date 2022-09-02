@@ -15,7 +15,6 @@ import {
   Trash as TrashIcon,
   TruckDelivery as TruckDeliveryIcon,
   CircleCheck as SuccessIcon,
-  X as ErrorIcon,
 } from "tabler-icons-react";
 
 // Interfaces
@@ -34,7 +33,7 @@ const UpdateDelivery = React.lazy(() =>
 );
 
 export const Actions: React.FC<ActionsProps> = ({ order }) => {
-  const [cancelOrder, { isLoading: isCancelling, isSuccess: isCancelled, error: cancelError }] =
+  const [cancelOrder, { isLoading: isCancelling, isSuccess: isCancelled }] =
     useCancelOrderMutation();
 
   const openUpdateDelivery = () => {
@@ -72,17 +71,6 @@ export const Actions: React.FC<ActionsProps> = ({ order }) => {
       });
     }
   }, [isCancelled]);
-
-  useEffect(() => {
-    if (cancelError) {
-      showNotification({
-        title: "Sipariş iptal edilemedi",
-        message: (cancelError as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        color: "red",
-        icon: <ErrorIcon />,
-      });
-    }
-  }, [cancelError]);
 
   if (order.isCancelled) {
     return <></>;

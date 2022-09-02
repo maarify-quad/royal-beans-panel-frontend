@@ -43,7 +43,7 @@ export const CreateRoastView = () => {
   const [roundId, setRoundId] = React.useState(1);
 
   // Services
-  const [createRoast, { isLoading, isSuccess, error }] = useCreateRoastMutation();
+  const [createRoast, { isLoading, isSuccess }] = useCreateRoastMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -58,7 +58,6 @@ export const CreateRoastView = () => {
         roastDetails,
       });
     } catch (error) {
-      console.log(error);
       showNotification({
         title: "Sevkiyat oluşturma başarısız",
         message: "Beklenmedik bir hata oluştu",
@@ -79,17 +78,6 @@ export const CreateRoastView = () => {
       navigate("/dashboard/roasts");
     }
   }, [isSuccess]);
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Kavrum oluşturma başarısız",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(error as any)?.data?.message]);
 
   return (
     <div className={classes.root}>

@@ -11,11 +11,9 @@ import { Alert, Button, Container, Group, Loader, LoadingOverlay, Text } from "@
 
 // UI Utils
 import { openConfirmModal, openModal } from "@mantine/modals";
-import { showNotification } from "@mantine/notifications";
 
 // Icons
 import {
-  X as ErrorIcon,
   AlertCircle as AlertCircleIcon,
   Edit as EditIcon,
   Trash as TrashIcon,
@@ -45,8 +43,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
   const { data, isLoading, error } = useGetPriceListProductsQuery(customer.priceListId!, {
     skip: !customer.priceListId,
   });
-  const [deletePriceListProduct, { isLoading: isDeleting, error: deleteError }] =
-    useDeletePriceListProductMutation();
+  const [deletePriceListProduct, { isLoading: isDeleting }] = useDeletePriceListProductMutation();
 
   const openEditPriceListProduct = (priceListProduct: PriceListProduct) => () => {
     openModal({
@@ -112,17 +109,6 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
       ]) || [],
     [data]
   );
-
-  useEffect(() => {
-    if (deleteError) {
-      showNotification({
-        title: "Ürün silme başarısız",
-        message: (deleteError as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        color: "red",
-        icon: <ErrorIcon />,
-      });
-    }
-  }, [deleteError]);
 
   if (isLoading) {
     return <Loader />;

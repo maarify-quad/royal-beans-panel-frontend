@@ -19,7 +19,7 @@ import { Inputs } from "./validation/Inputs";
 import { schema, initialValues } from "./validation/schema";
 
 export const CreateSupplier = () => {
-  const [createSupplier, { data, isSuccess, isLoading, error }] = useCreateSupplierMutation();
+  const [createSupplier, { data, isSuccess, isLoading }] = useCreateSupplierMutation();
   const form = useForm<Inputs>({
     initialValues,
     validate: zodResolver(schema),
@@ -51,17 +51,6 @@ export const CreateSupplier = () => {
       closeModal("createSupplier");
     }
   }, [isSuccess]);
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Tedarikçi oluşturulamadı",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(error as any)?.data?.message]);
 
   return (
     <form onSubmit={form.onSubmit(onCreateSupplierSubmit)}>
