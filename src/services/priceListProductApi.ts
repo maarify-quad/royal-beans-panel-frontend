@@ -88,7 +88,9 @@ interface CreateBulkPriceListProductsFromExcelParams {
   excel: File;
 }
 
-interface UpdatePriceListProductParams extends Partial<PriceListProduct> {}
+interface UpdatePriceListProductParams extends Partial<Omit<PriceListProduct, "id">> {
+  id: number;
+}
 
 interface DeletePriceListProductParams {
   id: number;
