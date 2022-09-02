@@ -17,10 +17,8 @@ import {
   Loader,
   Tabs,
   Group,
+  Text,
 } from "@mantine/core";
-
-// UI Utils
-import { openModal } from "@mantine/modals";
 
 // Icons
 import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
@@ -96,6 +94,11 @@ export const OrderDetailsView = () => {
         </Title>
         {data?.order && <Actions order={data?.order} />}
       </Group>
+      {data?.order && data.order.isCancelled && (
+        <Alert mt="md" color="red" variant="filled" icon={<AlertCircleIcon />}>
+          <Text weight={700}>Bu sipariş iptal edilmiştir</Text>
+        </Alert>
+      )}
       {data && (
         <Tabs defaultValue="products" mt="md">
           <Tabs.List>

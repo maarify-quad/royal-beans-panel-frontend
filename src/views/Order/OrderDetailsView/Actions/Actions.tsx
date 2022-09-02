@@ -84,6 +84,10 @@ export const Actions: React.FC<ActionsProps> = ({ order }) => {
     }
   }, [cancelError]);
 
+  if (order.isCancelled) {
+    return <></>;
+  }
+
   return (
     <Group>
       <Button leftIcon={<TruckDeliveryIcon />} onClick={openUpdateDelivery}>

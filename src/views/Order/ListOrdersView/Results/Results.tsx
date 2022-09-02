@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetOrdersQuery } from "@services/orderApi";
 
 // UI Components
-import { Container, Loader, Alert, ThemeIcon } from "@mantine/core";
+import { Container, Loader, Alert, ThemeIcon, Group } from "@mantine/core";
 
 // Icons
 import {
@@ -53,7 +53,14 @@ export const Results = () => {
             </ThemeIcon>
           ),
         },
-        { value: <StatusBadge status={order.status} deliveryType={order.deliveryType} /> },
+        {
+          value: (
+            <Group>
+              <StatusBadge status={order.status} deliveryType={order.deliveryType} />
+              {order.isCancelled && <StatusBadge status={"İPTAL"} />}
+            </Group>
+          ),
+        },
       ]) || [],
     [data]
   );
