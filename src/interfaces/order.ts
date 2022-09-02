@@ -16,6 +16,7 @@ export interface Order {
   cargoTrackNo: string | null;
   status: string;
   isParasutVerified: boolean;
+  isCancelled: boolean;
   createdAt: string;
   updatedAt: string;
 }

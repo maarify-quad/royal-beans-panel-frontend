@@ -34,6 +34,12 @@ export const orderApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, params) => [{ type: "Order", id: params.orderNumber }],
     }),
+    cancelOrder: builder.mutation<any, number>({
+      query: (orderNumber) => ({
+        url: `/orders/cancel/${orderNumber}`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -43,6 +49,7 @@ export const {
   useGetOrdersByCustomerQuery,
   useCreateOrderMutation,
   useUpdateOrderMutation,
+  useCancelOrderMutation,
 } = orderApi;
 
 interface GetOrdersResponse {
