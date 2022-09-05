@@ -111,6 +111,11 @@ const CreateOrderView = React.lazy(() =>
     default: module.CreateOrderView,
   }))
 );
+const UpdateOrderView = React.lazy(() =>
+  import("./views/Order/UpdateOrderView").then((module) => ({
+    default: module.UpdateOrderView,
+  }))
+);
 
 // Error Views
 const NotFoundView = React.lazy(() =>
@@ -198,6 +203,10 @@ export const AppRoutes = () => {
         {
           path: "/dashboard/orders/create",
           element: <CreateOrderView />,
+        },
+        {
+          path: "/dashboard/orders/update/:orderNumber",
+          element: <UpdateOrderView />,
         },
       ],
     },

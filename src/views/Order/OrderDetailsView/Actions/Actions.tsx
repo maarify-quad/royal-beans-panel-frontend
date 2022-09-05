@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 
+// Routing
+import { Link } from "react-router-dom";
+
 // Services
 import { useCancelOrderMutation } from "@services/orderApi";
 
@@ -15,6 +18,7 @@ import {
   Trash as TrashIcon,
   TruckDelivery as TruckDeliveryIcon,
   CircleCheck as SuccessIcon,
+  Basket as BasketIcon,
 } from "tabler-icons-react";
 
 // Interfaces
@@ -78,8 +82,16 @@ export const Actions: React.FC<ActionsProps> = ({ order }) => {
 
   return (
     <Group>
-      <Button leftIcon={<TruckDeliveryIcon />} onClick={openUpdateDelivery}>
+      <Button color="teal" leftIcon={<TruckDeliveryIcon />} onClick={openUpdateDelivery}>
         Kargola
+      </Button>
+      <Button
+        variant="outline"
+        leftIcon={<BasketIcon />}
+        component={Link}
+        to={`/dashboard/orders/update/${order.orderNumber}`}
+      >
+        Güncelle
       </Button>
       <Button
         color="red"
