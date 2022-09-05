@@ -51,7 +51,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
       ]}
       style={{ alignItems: "stretch" }}
     >
-      <DetailsCard title="Bakiye" value={`${customer.currentBalance} ₺`} />
+      <DetailsCard title="Bakiye" value={`${customer.currentBalance.toFixed(2)} ₺`} />
       <DetailsCard title="Fiyat Listesi" value={customer.priceList?.name || "-"} />
       <DetailsCard
         title="Çalışma Prensibi"

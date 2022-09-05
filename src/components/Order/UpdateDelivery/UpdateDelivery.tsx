@@ -69,6 +69,7 @@ export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
   return (
     <form onSubmit={form.onSubmit(onUpdateDeliverySubmit)}>
       <Select
+        label="Kargo Tipi"
         data={[
           { label: "Kargo", value: "Kargo" },
           { label: "Elden", value: "Elden" },

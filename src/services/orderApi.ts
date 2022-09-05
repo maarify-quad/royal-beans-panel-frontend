@@ -79,9 +79,8 @@ interface CreateOrderParams {
   orderProducts: CreateOrderProductParams[];
 }
 
-interface UpdateOrderParams extends Partial<Omit<OrderWithAll, "orderProducts">> {
+interface UpdateOrderParams extends Partial<OrderWithAll> {
   orderNumber: number;
-  orderProducts: CreateOrderProductParams[];
 }
 
 interface UpdateOrderProductsParams {

@@ -35,9 +35,9 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ order }) => {
       </Link>
       <DetailsCard
         title="Müşteri Bakiye (Sipariş Sonrası)"
-        value={`${order.customerBalanceAfterOrder} ₺`}
+        value={`${order.customerBalanceAfterOrder.toFixed(2)} ₺`}
       />
-      <DetailsCard title="Tutar" value={`${order.total} ₺`} />
+      <DetailsCard title="Tutar" value={`${order.total.toFixed(2)} ₺`} />
       <DetailsCard title="Özel Not" value={order.specialNote || "-"} />
       <DetailsCard
         title="Faturalandırma"

@@ -86,7 +86,7 @@ export const Actions: React.FC<ActionsProps> = ({ order }) => {
         Kargola
       </Button>
       <Button
-        variant="outline"
+        color="orange"
         leftIcon={<BasketIcon />}
         component={Link}
         to={`/dashboard/orders/update/${order.orderNumber}`}

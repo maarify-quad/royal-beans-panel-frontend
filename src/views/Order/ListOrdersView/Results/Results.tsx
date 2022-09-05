@@ -40,8 +40,8 @@ export const Results = () => {
         { value: order.orderNumber, renderCell: () => `#${order.orderNumber}` },
         { value: dayjs(order.createdAt).format("DD MMM YYYY") },
         { value: order.customer.name },
-        { value: `${order.total} ₺` },
-        { value: `${order.customerBalanceAfterOrder} ₺` },
+        { value: `${order.total.toFixed(2)} ₺` },
+        { value: `${order.customerBalanceAfterOrder.toFixed(2)} ₺` },
         {
           value: order.isParasutVerified ? (
             <ThemeIcon color="green" radius="xl">

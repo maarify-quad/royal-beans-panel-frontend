@@ -36,7 +36,7 @@ export const CustomersResult: React.FC<CustomersResultProps> = ({ customers }) =
           {customers?.map((customer, i) => (
             <tr key={i}>
               <td>{customer.name}</td>
-              <td>{customer.currentBalance} ₺</td>
+              <td>{customer.currentBalance.toFixed(2)} ₺</td>
             </tr>
           ))}
         </tbody>

@@ -76,7 +76,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
     () =>
       data?.map((priceListProduct) => [
         { value: priceListProduct.product.name },
-        { value: `${priceListProduct.unitPrice} ₺` },
+        { value: `${priceListProduct.unitPrice.toFixed(2)} ₺` },
         { value: `${priceListProduct.taxRate} %` },
         {
           value: "actions",

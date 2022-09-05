@@ -61,7 +61,7 @@ export const LastProductsTab: React.FC<LastProductsTabProps> = ({ customer }) =>
             { value: orderProduct.priceListProduct.product.name },
             { value: orderProduct.quantity },
             { value: orderProduct.grindType },
-            { value: `${orderProduct.unitPrice} ₺` },
+            { value: `${orderProduct.unitPrice.toFixed(2)} ₺` },
           ]) || []
         }
       />

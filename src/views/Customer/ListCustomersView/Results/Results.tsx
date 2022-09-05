@@ -26,7 +26,7 @@ export const Results = () => {
     () =>
       data?.customers.map((customer) => [
         { value: customer.name, link: `/dashboard/customers/${customer.id}` },
-        { value: `${customer.currentBalance} ₺` },
+        { value: `${customer.currentBalance.toFixed(2)} ₺` },
       ]) || [],
     [data]
   );
