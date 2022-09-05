@@ -26,10 +26,9 @@ export const Results = () => {
   const roastRows: RowDef[][] = React.useMemo(
     () =>
       data?.roasts.map((roast) => [
-        { value: roast.id },
+        { value: roast.id, link: `/dashboard/roasts/${roast.id}` },
         {
           value: dayjs(roast.date).format("DD MMM YYYY"),
-          link: `/dashboard/roasts/${roast.id}`,
         },
         { value: `${roast.totalInputAmount} kg` },
       ]) || [],
