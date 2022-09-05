@@ -39,9 +39,6 @@ export const CreateRoastView = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
 
-  // Internal state
-  const [roundId, setRoundId] = React.useState(1);
-
   // Services
   const [createRoast, { isLoading, isSuccess }] = useCreateRoastMutation();
 
@@ -99,10 +96,10 @@ export const CreateRoastView = () => {
       <form onSubmit={form.onSubmit(onCreateRoastSubmit)}>
         <Grid gutter="xl" mt="md">
           <Grid.Col lg={6}>
-            <Form roundId={roundId} form={form} setRoundId={setRoundId} />
+            <Form form={form} />
           </Grid.Col>
           <Grid.Col lg={6}>
-            <Rounds form={form} setRoundId={setRoundId} />
+            <Rounds form={form} />
           </Grid.Col>
         </Grid>
       </form>

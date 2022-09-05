@@ -14,23 +14,12 @@ import { Inputs } from "./validation/Inputs";
 
 // Props
 type FormProps = {
-  roundId: number;
   form: UseFormReturnType<Inputs>;
-  setRoundId: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export const Form: React.FC<FormProps> = ({ roundId, form, setRoundId }) => {
+export const Form: React.FC<FormProps> = ({ form }) => {
   // Queries
-  const {
-    data: products,
-    isLoading: isProductsLoading,
-    error: productsError,
-  } = useGetProductsByStorageTypeQuery("YM");
-
-  const handleAddRound = () => {
-    setRoundId((prev) => prev + 1);
-    form.setFieldValue(`roastDetails.${roundId}`, []);
-  };
+  const { data: products, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery("YM");
 
   const handleAddProduct = () => {
     const { roastDetails, ...item } = form.values;
@@ -38,10 +27,7 @@ export const Form: React.FC<FormProps> = ({ roundId, form, setRoundId }) => {
     // Check if product already exists
     const product = products?.find((p) => p.id === item.productId);
     if (product) {
-      if (!form.values.roastDetails[roundId - 1]) {
-        form.setFieldValue(`roastDetails.${roundId - 1}`, []);
-      }
-      form.insertListItem(`roastDetails.${roundId - 1}`, {
+      form.insertListItem(`roastDetails`, {
         ...item,
         product,
       });
@@ -92,11 +78,6 @@ export const Form: React.FC<FormProps> = ({ roundId, form, setRoundId }) => {
         >
           Ekle
         </Button>
-        {form.values.roastDetails[0]?.length > 0 && (
-          <Button onClick={handleAddRound} variant="light">
-            Yeni Posta
-          </Button>
-        )}
       </Group>
     </div>
   );
