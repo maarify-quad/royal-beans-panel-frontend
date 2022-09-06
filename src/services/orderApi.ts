@@ -26,6 +26,28 @@ export const orderApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: ["Order"],
     }),
+    updateOrder: builder.mutation<Order, UpdateOrderParams>({
+      query: (body) => ({
+        url: `/orders`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: (_result, _error, params) => [{ type: "Order", id: params.orderNumber }],
+    }),
+    updateOrderProducts: builder.mutation<Order, UpdateOrderProductsParams>({
+      query: (body) => ({
+        url: `/orders/order_products`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: (_result, _error, params) => [{ type: "Order", id: params.orderNumber }],
+    }),
+    cancelOrder: builder.mutation<any, number>({
+      query: (orderNumber) => ({
+        url: `/orders/cancel/${orderNumber}`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -34,6 +56,9 @@ export const {
   useGetOrderByOrderNumberQuery,
   useGetOrdersByCustomerQuery,
   useCreateOrderMutation,
+  useUpdateOrderMutation,
+  useUpdateOrderProductsMutation,
+  useCancelOrderMutation,
 } = orderApi;
 
 interface GetOrdersResponse {
@@ -51,5 +76,14 @@ interface CreateOrderParams {
   deliveryDate: Date;
   specialNote: string;
   deliveryType: string;
+  orderProducts: CreateOrderProductParams[];
+}
+
+interface UpdateOrderParams extends Partial<OrderWithAll> {
+  orderNumber: number;
+}
+
+interface UpdateOrderProductsParams {
+  orderNumber: number;
   orderProducts: CreateOrderProductParams[];
 }

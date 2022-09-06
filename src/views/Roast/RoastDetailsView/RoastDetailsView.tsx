@@ -80,7 +80,9 @@ export const RoastDetailsView = () => {
           {id}
         </Anchor>
       </Breadcrumbs>
-      <Title className={classes.rootTitle}>{data?.roast.id}</Title>
+      <Title order={2} className={classes.rootTitle}>
+        {data?.roast.id}
+      </Title>
       <Text color="dimmed">{dayjs(data?.roast.date).format("DD MMM YYYY")}</Text>
       <Stack spacing="lg" mt="md">
         <RoastedCoffees roastDetails={data?.roast.roastDetails} />

@@ -36,7 +36,9 @@ export const ListRoastsView = () => {
         </Anchor>
       </Breadcrumbs>
       <Group align="center" position="apart">
-        <Title className={classes.rootTitle}>Kavrumlar</Title>
+        <Title order={2} className={classes.rootTitle}>
+          Kavrumlar
+        </Title>
         <Button leftIcon={<PlusIcon />} component={Link} to="/dashboard/roasts/create">
           Yeni Kavrum
         </Button>

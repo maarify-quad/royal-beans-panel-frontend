@@ -29,8 +29,8 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ order }) => {
           { value: orderProduct.priceListProduct.product.name },
           { value: orderProduct.grindType },
           { value: orderProduct.quantity },
-          { value: `${orderProduct.unitPrice} ₺` },
-          { value: `${orderProduct.subTotal} ₺` },
+          { value: `${orderProduct.unitPrice.toFixed(2)} ₺` },
+          { value: `${orderProduct.subTotal.toFixed(2)} ₺` },
         ])}
       />
       <Group>
@@ -38,19 +38,19 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ order }) => {
           <Group position="apart">
             <Text>Ara Toplam</Text>
             <Text size="lg" weight="bold">
-              {order.subTotal} ₺
+              {order.subTotal.toFixed(2)} ₺
             </Text>
           </Group>
           <Group position="apart">
             <Text>KDV Toplam</Text>
             <Text size="lg" weight="bold">
-              {order.taxTotal} ₺
+              {order.taxTotal.toFixed(2)} ₺
             </Text>
           </Group>
           <Group position="apart">
             <Text>Toplam</Text>
             <Text size="lg" weight="bold">
-              {order.total} ₺
+              {order.total.toFixed(2)} ₺
             </Text>
           </Group>
         </Card>

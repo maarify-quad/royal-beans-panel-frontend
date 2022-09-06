@@ -84,5 +84,14 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 export const emptyApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: () => ({}),
-  tagTypes: ["Supplier", "Delivery", "Product", "Roast", "Customer", "PriceList", "Order"],
+  tagTypes: [
+    "Supplier",
+    "Delivery",
+    "Product",
+    "Roast",
+    "Customer",
+    "PriceList",
+    "PriceListProduct",
+    "Order",
+  ],
 });

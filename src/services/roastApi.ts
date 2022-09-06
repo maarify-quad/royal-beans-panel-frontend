@@ -41,5 +41,5 @@ export interface CreateRoastParams {
     inputAmount: number;
     outputAmount: number;
     product: Product;
-  }[][];
+  }[];
 }

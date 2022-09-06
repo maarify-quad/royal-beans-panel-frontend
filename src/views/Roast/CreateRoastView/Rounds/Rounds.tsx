@@ -15,62 +15,40 @@ import { Inputs } from "../Form/validation/Inputs";
 // Props
 type RoundsProps = {
   form: UseFormReturnType<Inputs>;
-  setRoundId: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export const Rounds: React.FC<RoundsProps> = ({ form, setRoundId }) => {
-  const handleRemoveProduct = (roundId: number, index: number) => () => {
+export const Rounds: React.FC<RoundsProps> = ({ form }) => {
+  const handleRemoveProduct = (index: number) => () => {
     // Remove the product from the round
-    form.removeListItem(`roastDetails.${roundId}`, index);
-
-    // Check if the removed product was the only item in that round
-    if (form.values.roastDetails[roundId].length === 1) {
-      // If it was the only product than remove that round too
-      form.removeListItem("roastDetails", roundId);
-
-      // If round id was bigger than 1 then set the latest round id to the previous one
-      if (roundId > 1) {
-        return setRoundId((prev) => prev - 1);
-      }
-
-      // If round id was 1 then set the latest round id to 1
-      setRoundId(1);
-    }
+    form.removeListItem(`roastDetails`, index);
   };
 
   return (
     <div>
-      {form.values.roastDetails.map((roastDetail, roundId) => (
-        <div key={roundId}>
+      {form.values.roastDetails.map((roastDetail, index) => (
+        <div key={index}>
           <Text my="md" size="xl">
-            {roundId + 1}. Posta
+            {index + 1}. Posta
           </Text>
-          {roastDetail.length === 0 && (
-            <Alert color="cyan" icon={<InfoCircleIcon />}>
-              Bu posta için ürün eklenmemiş.
-            </Alert>
-          )}
           <Stack>
-            {roastDetail.map((detail, i) => (
-              <Card withBorder shadow="xs" key={i}>
-                <Group position="apart">
-                  <div>
-                    <Text weight={700}>{detail.product.name}</Text>
-                  </div>
-                  <ActionIcon color="red" onClick={handleRemoveProduct(roundId, i)}>
-                    <TrashIcon size={16} />
-                  </ActionIcon>
-                </Group>
+            <Card withBorder shadow="xs">
+              <Group position="apart">
                 <div>
-                  <Text>Atılan: {detail.inputAmount} kg</Text>
-                  <Text>Alınan: {detail.outputAmount} kg</Text>
+                  <Text weight={700}>{roastDetail.product.name}</Text>
                 </div>
-              </Card>
-            ))}
+                <ActionIcon color="red" onClick={handleRemoveProduct(index)}>
+                  <TrashIcon size={16} />
+                </ActionIcon>
+              </Group>
+              <div>
+                <Text>Atılan: {roastDetail.inputAmount} kg</Text>
+                <Text>Alınan: {roastDetail.outputAmount} kg</Text>
+              </div>
+            </Card>
           </Stack>
         </div>
       ))}
-      {form.values.roastDetails[0]?.length > 0 && (
+      {form.values.roastDetails.length > 0 && (
         <Button mt="md" type="submit">
           Kavrum oluştur
         </Button>

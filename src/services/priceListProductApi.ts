@@ -7,6 +7,9 @@ export const priceListProductApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
     getPriceListProducts: builder.query<PriceListProduct[], number>({
       query: (priceListId) => `/price_list_products/${priceListId}`,
+      providesTags: (_result, _error, priceListId) => [
+        { type: "PriceListProduct" as const, id: priceListId },
+      ],
     }),
     createPriceListProduct: builder.mutation<PriceListProduct, CreatePriceListProductParams>({
       query: (body) => ({
@@ -39,6 +42,27 @@ export const priceListProductApi = emptyApi.injectEndpoints({
         multipart: true,
       },
     }),
+    updatePriceListProduct: builder.mutation<any, UpdatePriceListProductParams>({
+      query: (body) => ({
+        url: `/price_list_products`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: (_result, _error, params) => [
+        { type: "PriceList" as const, id: params.priceListId },
+        { type: "PriceListProduct" as const, id: params.priceListId },
+      ],
+    }),
+    deletePriceListProduct: builder.mutation<any, DeletePriceListProductParams>({
+      query: (params) => ({
+        url: `/price_list_products/${params.id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (_result, _error, params) => [
+        { type: "PriceList" as const, id: params.priceListId },
+        { type: "PriceListProduct" as const, id: params.priceListId },
+      ],
+    }),
   }),
 });
 
@@ -46,6 +70,8 @@ export const {
   useGetPriceListProductsQuery,
   useCreatePriceListProductMutation,
   useCreateBulkPriceListProductsFromExcelMutation,
+  useUpdatePriceListProductMutation,
+  useDeletePriceListProductMutation,
 } = priceListProductApi;
 
 interface CreatePriceListProductParams {
@@ -60,4 +86,13 @@ interface CreatePriceListProductParams {
 interface CreateBulkPriceListProductsFromExcelParams {
   priceListId: number;
   excel: File;
+}
+
+interface UpdatePriceListProductParams extends Partial<Omit<PriceListProduct, "id">> {
+  id: number;
+}
+
+interface DeletePriceListProductParams {
+  id: number;
+  priceListId: number;
 }

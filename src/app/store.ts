@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 // Reducers
 import authReducer from "@slices/authSlice";
 import layoutReducer from "@slices/layoutSlice";
+import errorReducer from "@slices/errorSlice";
 
 // APIs
 import { emptyApi } from "@services/emptyApi";
@@ -16,10 +17,14 @@ import { priceListApi } from "@services/priceListApi";
 import { priceListProductApi } from "@services/priceListProductApi";
 import { orderApi } from "@services/orderApi";
 
+// Middlewares
+import { rtkQueryErrorLogger } from "./middlewares/rtkQueryErrorLogger";
+
 const store = configureStore({
   reducer: {
     auth: authReducer,
     layout: layoutReducer,
+    error: errorReducer,
     [emptyApi.reducerPath]: emptyApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [supplierApi.reducerPath]: supplierApi.reducer,
@@ -31,7 +36,8 @@ const store = configureStore({
     [priceListProductApi.reducerPath]: priceListProductApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(emptyApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(emptyApi.middleware, rtkQueryErrorLogger),
   devTools: process.env.NODE_ENV !== "production",
 });
 

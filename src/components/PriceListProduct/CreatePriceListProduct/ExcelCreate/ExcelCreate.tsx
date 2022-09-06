@@ -28,7 +28,7 @@ type ExcelCreateProps = {
 
 export const ExcelCreate: React.FC<ExcelCreateProps> = ({ priceListId }) => {
   // Mutations
-  const [createBulkPriceListProductsMutation, { isSuccess, isLoading, error }] =
+  const [createBulkPriceListProductsMutation, { isSuccess, isLoading }] =
     useCreateBulkPriceListProductsFromExcelMutation();
 
   // Form utils
@@ -71,17 +71,6 @@ export const ExcelCreate: React.FC<ExcelCreateProps> = ({ priceListId }) => {
       closeModal("createPriceListProduct");
     }
   }, [isSuccess]);
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Ürünler oluşturulamadı",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(error as any)?.data?.message]);
 
   return (
     <form onSubmit={form.onSubmit(onCreateBulkProductSubmit)} encType="multipart/form-data">

@@ -27,7 +27,6 @@ export const schema = z.object({
         invalid_type_error: "Geçersiz kavrum ürünleri değeri",
       }
     )
-    .array()
     .min(1, "Kavrum için en az 1 ürün gereklidir"),
 });
 
@@ -36,5 +35,5 @@ export const initialValues: Inputs = {
   productId: 0,
   inputAmount: 0,
   outputAmount: 0,
-  roastDetails: [[]],
+  roastDetails: [],
 };

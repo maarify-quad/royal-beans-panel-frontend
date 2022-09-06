@@ -66,7 +66,9 @@ export const ListSuppliersView = () => {
         </Anchor>
       </Breadcrumbs>
       <Group align="center" position="apart">
-        <Title className={classes.rootTitle}>Tedarikçiler</Title>
+        <Title order={2} className={classes.rootTitle}>
+          Tedarikçiler
+        </Title>
         <Button leftIcon={<UserPlusIcon />} onClick={onCreateSupplierClick}>
           Yeni Tedarikçi
         </Button>

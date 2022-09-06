@@ -20,7 +20,7 @@ import { schema, initialValues } from "./validation/schema";
 
 export const ManualCreate = () => {
   // Mutations
-  const [createProductMutation, { isSuccess, isLoading, error }] = useCreateProductMutation();
+  const [createProductMutation, { isSuccess, isLoading }] = useCreateProductMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -54,17 +54,6 @@ export const ManualCreate = () => {
       closeModal("createProduct");
     }
   }, [isSuccess]);
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Ürün oluşturulamadı",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(error as any)?.data?.message]);
 
   return (
     <form onSubmit={form.onSubmit(onCreateProductSubmit)}>

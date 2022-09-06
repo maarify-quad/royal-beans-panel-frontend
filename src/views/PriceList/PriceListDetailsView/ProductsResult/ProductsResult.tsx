@@ -37,7 +37,7 @@ export const ProductsResult: React.FC<ProductsResultProps> = ({ priceListProduct
           {priceListProducts?.map((priceListProduct, i) => (
             <tr key={i}>
               <td>{priceListProduct.product.name}</td>
-              <td>{priceListProduct.unitPrice} ₺</td>
+              <td>{priceListProduct.unitPrice.toFixed(2)} ₺</td>
               <td>{priceListProduct.taxRate} %</td>
             </tr>
           ))}

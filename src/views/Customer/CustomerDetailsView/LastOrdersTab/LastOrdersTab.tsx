@@ -59,7 +59,7 @@ export const LastOrdersTab: React.FC<LastOrdersTabProps> = ({ customer }) => {
           data?.orders.map((order) => [
             { value: `#${order.orderNumber}`, link: `/dashboard/orders/${order.orderNumber}` },
             { value: `${dayjs(order.createdAt).format("DD MMM YYYY")}` },
-            { value: `${order.total} ₺` },
+            { value: `${order.total.toFixed(2)} ₺` },
           ]) || []
         }
         pagination={{

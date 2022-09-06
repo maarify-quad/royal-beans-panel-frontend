@@ -39,11 +39,8 @@ export const CreateRoastView = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
 
-  // Internal state
-  const [roundId, setRoundId] = React.useState(1);
-
   // Services
-  const [createRoast, { isLoading, isSuccess, error }] = useCreateRoastMutation();
+  const [createRoast, { isLoading, isSuccess }] = useCreateRoastMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -58,7 +55,6 @@ export const CreateRoastView = () => {
         roastDetails,
       });
     } catch (error) {
-      console.log(error);
       showNotification({
         title: "Sevkiyat oluşturma başarısız",
         message: "Beklenmedik bir hata oluştu",
@@ -80,17 +76,6 @@ export const CreateRoastView = () => {
     }
   }, [isSuccess]);
 
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Kavrum oluşturma başarısız",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(error as any)?.data?.message]);
-
   return (
     <div className={classes.root}>
       <LoadingOverlay visible={isLoading} />
@@ -105,14 +90,16 @@ export const CreateRoastView = () => {
           Yeni Kavrum
         </Anchor>
       </Breadcrumbs>
-      <Title className={classes.rootTitle}>Kavrum Oluştur</Title>
+      <Title order={2} className={classes.rootTitle}>
+        Kavrum Oluştur
+      </Title>
       <form onSubmit={form.onSubmit(onCreateRoastSubmit)}>
         <Grid gutter="xl" mt="md">
           <Grid.Col lg={6}>
-            <Form roundId={roundId} form={form} setRoundId={setRoundId} />
+            <Form form={form} />
           </Grid.Col>
           <Grid.Col lg={6}>
-            <Rounds form={form} setRoundId={setRoundId} />
+            <Rounds form={form} />
           </Grid.Col>
         </Grid>
       </form>

@@ -83,7 +83,9 @@ export const SupplierDetailsView = () => {
           {id}
         </Anchor>
       </Breadcrumbs>
-      <Title className={classes.rootTitle}>{data?.name}</Title>
+      <Title order={2} className={classes.rootTitle}>
+        {data?.name}
+      </Title>
       <Tabs defaultValue="details" mt="md">
         <Tabs.List>
           <Tabs.Tab value="details" icon={<ListDetailsIcon />}>

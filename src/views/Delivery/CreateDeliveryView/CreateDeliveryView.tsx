@@ -40,7 +40,7 @@ export const CreateDeliveryView = () => {
   const navigate = useNavigate();
 
   // Services
-  const [createDelivery, { isLoading, isSuccess, data, error }] = useCreateDeliveryMutation();
+  const [createDelivery, { isLoading, isSuccess, data }] = useCreateDeliveryMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -58,7 +58,6 @@ export const CreateDeliveryView = () => {
         deliveryDetails,
       });
     } catch (error) {
-      console.log(error);
       showNotification({
         title: "Sevkiyat oluşturma başarısız",
         message: "Beklenmedik bir hata oluştu",
@@ -80,17 +79,6 @@ export const CreateDeliveryView = () => {
     }
   }, [isSuccess]);
 
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Sevkiyat oluşturma başarısız",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(error as any)?.data?.message]);
-
   return (
     <div className={classes.root}>
       <LoadingOverlay visible={isLoading} />
@@ -105,7 +93,9 @@ export const CreateDeliveryView = () => {
           Yeni Sevkiyat
         </Anchor>
       </Breadcrumbs>
-      <Title className={classes.rootTitle}>Sevkiyat Oluştur</Title>
+      <Title order={2} className={classes.rootTitle}>
+        Sevkiyat Oluştur
+      </Title>
       <form onSubmit={form.onSubmit(onCreateDeliverySubmit)}>
         <Grid mt="md">
           <Grid.Col lg={6}>

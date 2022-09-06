@@ -45,10 +45,8 @@ export const Form = () => {
     });
 
   // Mutations
-  const [
-    createOrder,
-    { isLoading: isCreatingOrder, isSuccess: isCreateOrderSuccess, error: createOrderError },
-  ] = useCreateOrderMutation();
+  const [createOrder, { isLoading: isCreatingOrder, isSuccess: isCreateOrderSuccess }] =
+    useCreateOrderMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -93,7 +91,6 @@ export const Form = () => {
         orderProducts,
       });
     } catch (error) {
-      console.log(error);
       showNotification({
         title: "Sipariş oluşturma başarısız",
         message: "Beklenmedik bir hata oluştu",
@@ -114,17 +111,6 @@ export const Form = () => {
       navigate("/dashboard/orders");
     }
   }, [isCreateOrderSuccess]);
-
-  useEffect(() => {
-    if (createOrderError) {
-      showNotification({
-        title: "Sipariş oluşturma başarısız",
-        message: (createOrderError as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(createOrderError as any)?.data?.message]);
 
   return (
     <form onSubmit={form.onSubmit(onCreateOrderSubmit)}>

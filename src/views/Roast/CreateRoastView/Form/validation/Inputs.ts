@@ -10,5 +10,5 @@ export type Inputs = {
     productId: number;
     inputAmount: number;
     outputAmount: number;
-  }[][];
+  }[];
 };

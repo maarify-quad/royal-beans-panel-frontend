@@ -16,6 +16,8 @@ import {
   Center,
   Loader,
   Tabs,
+  Group,
+  Text,
 } from "@mantine/core";
 
 // Icons
@@ -24,6 +26,7 @@ import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
 // Components
 import { ProductsTab } from "./ProductsTab";
 import { DetailsTab } from "./DetailsTab";
+import { Actions } from "./Actions";
 
 // Styles
 const useStyles = createStyles((theme) => ({
@@ -85,9 +88,17 @@ export const OrderDetailsView = () => {
           {orderNumber}
         </Anchor>
       </Breadcrumbs>
-      <Title className={classes.rootTitle}>
-        #{data?.order.orderNumber} - {data?.order.customer.name}
-      </Title>
+      <Group position="apart">
+        <Title order={2} className={classes.rootTitle}>
+          #{data?.order.orderNumber} - {data?.order.customer.name}
+        </Title>
+        {data?.order && <Actions order={data?.order} />}
+      </Group>
+      {data?.order && data.order.isCancelled && (
+        <Alert mt="md" color="red" variant="filled" icon={<AlertCircleIcon />}>
+          <Text weight={700}>Bu sipariş iptal edilmiştir</Text>
+        </Alert>
+      )}
       {data && (
         <Tabs defaultValue="products" mt="md">
           <Tabs.List>

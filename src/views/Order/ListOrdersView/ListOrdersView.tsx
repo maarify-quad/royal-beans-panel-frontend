@@ -36,12 +36,10 @@ export const ListOrdersView = () => {
         </Anchor>
       </Breadcrumbs>
       <Group align="center" position="apart">
-        <Title className={classes.rootTitle}>Siparişler</Title>
-        <Button
-          leftIcon={<ShoppingCartPlusIcon />}
-          component={Link}
-          to="/dashboard/orders/create"
-        >
+        <Title order={2} className={classes.rootTitle}>
+          Siparişler
+        </Title>
+        <Button leftIcon={<ShoppingCartPlusIcon />} component={Link} to="/dashboard/orders/create">
           Yeni Sipariş
         </Button>
       </Group>

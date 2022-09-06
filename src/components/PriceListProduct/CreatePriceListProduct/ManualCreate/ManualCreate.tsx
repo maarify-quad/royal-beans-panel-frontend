@@ -35,11 +35,7 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
   // Mutations
   const [
     createPriceListProduct,
-    {
-      isLoading: isCreateProductLoading,
-      isSuccess: isCreateProductSuccess,
-      error: createProductError,
-    },
+    { isLoading: isCreateProductLoading, isSuccess: isCreateProductSuccess },
   ] = useCreatePriceListProductMutation();
 
   // Form utils
@@ -66,7 +62,6 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
         priceListId,
       });
     } catch (error) {
-      console.log(error);
       showNotification({
         title: "Ürün oluşturma başarısız",
         message: "Beklenmedik bir hata oluştu",
@@ -87,17 +82,6 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
       closeModal("createPriceListProduct");
     }
   }, [isCreateProductSuccess]);
-
-  useEffect(() => {
-    if (createProductError) {
-      showNotification({
-        title: "Ürün oluşturma başarısız",
-        message: (createProductError as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(createProductError as any)?.data?.message]);
 
   return (
     <form onSubmit={form.onSubmit(onAddProductSubmit)}>

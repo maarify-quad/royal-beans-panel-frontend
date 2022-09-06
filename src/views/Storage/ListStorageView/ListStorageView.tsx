@@ -67,7 +67,9 @@ export const ListStorageView = () => {
         </Anchor>
       </Breadcrumbs>
       <Group position="apart">
-        <Title className={classes.rootTitle}>Depo</Title>
+        <Title order={2} className={classes.rootTitle}>
+          Depo
+        </Title>
         <Button leftIcon={<PlusIcon />} onClick={onCreateProductClick}>
           Yeni Ürün
         </Button>

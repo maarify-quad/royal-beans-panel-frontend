@@ -23,7 +23,7 @@ import { schema, initialValues } from "./validation/schema";
 
 export const ExcelCreate = () => {
   // Mutations
-  const [createBulkProductsMutation, { isSuccess, isLoading, error }] =
+  const [createBulkProductsMutation, { isSuccess, isLoading }] =
     useCreateBulkProductsFromExcelMutation();
 
   // Form utils
@@ -66,17 +66,6 @@ export const ExcelCreate = () => {
       closeModal("createProduct");
     }
   }, [isSuccess]);
-
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Ürünler oluşturulamadı",
-        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  }, [(error as any)?.data?.message]);
 
   return (
     <form onSubmit={form.onSubmit(onCreateBulkProductSubmit)} encType="multipart/form-data">
