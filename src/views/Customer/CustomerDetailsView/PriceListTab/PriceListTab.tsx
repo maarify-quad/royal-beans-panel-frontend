@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import {
   useGetPriceListProductsQuery,
   useDeletePriceListProductMutation,
 } from "@services/priceListProductApi";
+import { useCreatePriceListMutation } from "@services/priceListApi";
+import { useUpdateCustomerMutation } from "@services/customerApi";
 
 // UI Components
 import { Alert, Button, Container, Group, Loader, LoadingOverlay, Text } from "@mantine/core";
@@ -40,11 +42,17 @@ type PriceListTabProps = {
 };
 
 export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
+  // Queries
   const { data, isLoading, error } = useGetPriceListProductsQuery(customer.priceListId!, {
-    skip: !customer.priceListId,
+    skip: !customer.priceListId || customer.priceList?.name === "Baz",
   });
-  const [deletePriceListProduct, { isLoading: isDeleting }] = useDeletePriceListProductMutation();
 
+  // Mutations
+  const [deletePriceListProduct, { isLoading: isDeleting }] = useDeletePriceListProductMutation();
+  const [createPriceList, { isLoading: isCreating }] = useCreatePriceListMutation();
+  const [updateCustomer, { isLoading: isUpdating }] = useUpdateCustomerMutation();
+
+  // Handlers
   const openEditPriceListProduct = (priceListProduct: PriceListProduct) => () => {
     openModal({
       key: "updatePriceListProduct",
@@ -72,6 +80,21 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
     });
   };
 
+  const handleCreateCustomPriceList = () => {
+    createPriceList({
+      name: `Özel-${customer.name}`,
+      cloneDefaultPriceList: true,
+    })
+      .unwrap()
+      .then((priceList) => {
+        updateCustomer({
+          id: customer.id,
+          priceListId: priceList.id,
+        });
+      });
+  };
+
+  // Table rows
   const priceListProducts: RowDef[][] = React.useMemo(
     () =>
       data?.map((priceListProduct) => [
@@ -110,7 +133,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
     [data]
   );
 
-  if (isLoading) {
+  if (isLoading || isCreating || isUpdating) {
     return <Loader />;
   }
 
@@ -132,6 +155,21 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
     return (
       <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
         Fiyat listesinde ürün bulunmamaktadır
+      </Alert>
+    );
+  }
+
+  if (customer.priceList?.name === "Baz") {
+    return (
+      <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
+        Bu müşteri <strong>Baz</strong> fiyat listesini kullanmaktadır. Özel fiyat listesi
+        oluşturmak için{" "}
+        <strong
+          style={{ textDecoration: "underline", cursor: "pointer" }}
+          onClick={handleCreateCustomPriceList}
+        >
+          tıklayınız
+        </strong>
       </Alert>
     );
   }
