@@ -16,10 +16,15 @@ import {
   Loader,
   Center,
   Tabs,
+  Group,
+  Button,
 } from "@mantine/core";
 
+// Hooks
+import { useCreateDeliveryAddress } from "@hooks/delivery-address/useCreateDeliveryAddress";
+
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { Plus as PlusIcon, AlertCircle as AlertCircleIcon } from "tabler-icons-react";
 
 // Components
 import { DetailsTab } from "./DetailsTab";
@@ -40,12 +45,16 @@ const useStyles = createStyles((theme) => ({
 export const CustomerDetailsView = () => {
   const { id } = useParams();
   const { classes } = useStyles();
+  const { openCreateDeliveryAddress } = useCreateDeliveryAddress();
+
+  // Queries
+  const { data, isLoading, error } = useGetCustomerByIdQuery(id!, {
+    skip: !id,
+  });
 
   if (!id) {
     return <Navigate to="/dashboard" replace />;
   }
-
-  const { data, isLoading, error } = useGetCustomerByIdQuery(id);
 
   if (error) {
     return (
@@ -80,9 +89,19 @@ export const CustomerDetailsView = () => {
           {id}
         </Anchor>
       </Breadcrumbs>
-      <Title order={2} className={classes.rootTitle}>
-        {data?.name}
-      </Title>
+      <Group position="apart">
+        <Title order={2} className={classes.rootTitle}>
+          {data?.name}
+        </Title>
+        <Button
+          leftIcon={<PlusIcon />}
+          onClick={() => {
+            openCreateDeliveryAddress(data!.id);
+          }}
+        >
+          Yeni Teslimat Adresi
+        </Button>
+      </Group>
       {data && (
         <Tabs defaultValue="details" mt="md">
           <Tabs.List>
