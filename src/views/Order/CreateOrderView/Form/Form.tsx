@@ -15,7 +15,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as CircleCheckIcon } from "tabler-icons-react";
+import { IconX, IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs, initialValues } from "./validation/Inputs";
@@ -101,7 +101,7 @@ export const Form = () => {
       showNotification({
         title: "Başarılı",
         message: "Sipariş oluşturuldu",
-        icon: <CircleCheckIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
 
@@ -110,7 +110,7 @@ export const Form = () => {
       showNotification({
         title: "Sipariş oluşturma başarısız",
         message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
         color: "red",
       });
     }

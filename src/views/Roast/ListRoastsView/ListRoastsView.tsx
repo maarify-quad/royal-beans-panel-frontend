@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { createStyles, Title, Group, Button, Breadcrumbs, Anchor } from "@mantine/core";
 
 // Icons
-import { Plus as PlusIcon } from "tabler-icons-react";
+import { IconPlus } from "@tabler/icons";
 
 // Components
 import { Results } from "./Results";
@@ -39,7 +39,7 @@ export const ListRoastsView = () => {
         <Title order={2} className={classes.rootTitle}>
           Kavrumlar
         </Title>
-        <Button leftIcon={<PlusIcon />} component={Link} to="/dashboard/roasts/create">
+        <Button leftIcon={<IconPlus />} component={Link} to="/dashboard/roasts/create">
           Yeni Kavrum
         </Button>
       </Group>

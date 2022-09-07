@@ -8,7 +8,7 @@ import { clearErrors, selectError } from "@slices/errorSlice";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { X as ErrorIcon } from "tabler-icons-react";
+import { IconX } from "@tabler/icons";
 
 // Props
 type ErrorProviderProps = {
@@ -24,7 +24,7 @@ export const ErrorProvider: React.FC<ErrorProviderProps> = ({ children }) => {
       showNotification({
         title: "Hata",
         message: error.message,
-        icon: <ErrorIcon />,
+        icon: <IconX />,
         color: "red",
       });
       dispatch(clearErrors());

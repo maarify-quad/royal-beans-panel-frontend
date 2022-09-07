@@ -16,7 +16,7 @@ import { showNotification } from "@mantine/notifications";
 import { closeModal } from "@mantine/modals";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as SuccessIcon } from "tabler-icons-react";
+import { IconX, IconCircleCheck } from "@tabler/icons";
 
 // Interfaces
 import { Customer } from "@interfaces/customer";
@@ -55,7 +55,7 @@ export const EditCustomer: React.FC<EditCustomerProps> = ({ fields, customer }) 
         title: "Müşteri Güncellenemedi",
         message: "Beklenmedik bir hata oluştur",
         color: "red",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
       });
     }
   };
@@ -66,7 +66,7 @@ export const EditCustomer: React.FC<EditCustomerProps> = ({ fields, customer }) 
         title: "Başarılı",
         message: "Müşteri güncellendi",
         color: "green",
-        icon: <SuccessIcon />,
+        icon: <IconCircleCheck />,
       });
       closeModal("editCustomer");
     }

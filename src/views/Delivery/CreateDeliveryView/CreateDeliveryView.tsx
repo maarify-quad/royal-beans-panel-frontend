@@ -14,7 +14,7 @@ import { showNotification } from "@mantine/notifications";
 import { useForm, zodResolver } from "@mantine/form";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as CircleCheckIcon } from "tabler-icons-react";
+import { IconX, IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./Form/validation/Inputs";
@@ -61,7 +61,7 @@ export const CreateDeliveryView = () => {
       showNotification({
         title: "Sevkiyat oluşturma başarısız",
         message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
         color: "red",
       });
     }
@@ -72,7 +72,7 @@ export const CreateDeliveryView = () => {
       showNotification({
         title: "Başarılı",
         message: data?.id ? `${data.id} koduyla sevkiyat oluşturuldu` : "Sevkiyat oluşturuldu",
-        icon: <CircleCheckIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
       navigate("/dashboard/deliveries");

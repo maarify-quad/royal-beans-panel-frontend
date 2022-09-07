@@ -19,7 +19,7 @@ import {
 import { openModal } from "@mantine/modals";
 
 // Icons
-import { Plus as PlusIcon } from "tabler-icons-react";
+import { IconPlus } from "@tabler/icons";
 
 // Components
 import { StorageProducts } from "./StorageProducts";
@@ -70,7 +70,7 @@ export const ListStorageView = () => {
         <Title order={2} className={classes.rootTitle}>
           Depo
         </Title>
-        <Button leftIcon={<PlusIcon />} onClick={onCreateProductClick}>
+        <Button leftIcon={<IconPlus />} onClick={onCreateProductClick}>
           Yeni Ürün
         </Button>
       </Group>

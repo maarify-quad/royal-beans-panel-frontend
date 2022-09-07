@@ -14,12 +14,7 @@ import { openConfirmModal, openModal } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import {
-  Trash as TrashIcon,
-  TruckDelivery as TruckDeliveryIcon,
-  CircleCheck as SuccessIcon,
-  Basket as BasketIcon,
-} from "tabler-icons-react";
+import { IconTrash, IconTruckDelivery, IconCircleCheck, IconBasket } from "@tabler/icons";
 
 // Interfaces
 import { OrderWithAll } from "@interfaces/order";
@@ -71,7 +66,7 @@ export const Actions: React.FC<ActionsProps> = ({ order }) => {
         title: "Başarılı",
         message: "Sipariş iptal edildi",
         color: "green",
-        icon: <SuccessIcon />,
+        icon: <IconCircleCheck />,
       });
     }
   }, [isCancelled]);
@@ -82,12 +77,12 @@ export const Actions: React.FC<ActionsProps> = ({ order }) => {
 
   return (
     <Group>
-      <Button color="teal" leftIcon={<TruckDeliveryIcon />} onClick={openUpdateDelivery}>
+      <Button color="teal" leftIcon={<IconTruckDelivery />} onClick={openUpdateDelivery}>
         Kargola
       </Button>
       <Button
         color="orange"
-        leftIcon={<BasketIcon />}
+        leftIcon={<IconBasket />}
         component={Link}
         to={`/dashboard/orders/update/${order.orderNumber}`}
       >
@@ -96,7 +91,7 @@ export const Actions: React.FC<ActionsProps> = ({ order }) => {
       <Button
         color="red"
         variant="subtle"
-        leftIcon={<TrashIcon />}
+        leftIcon={<IconTrash />}
         onClick={openCancelOrder}
         loading={isCancelling}
       >

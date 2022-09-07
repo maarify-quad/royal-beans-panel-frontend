@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useLoginMutation } from "@services/authApi";
@@ -11,7 +11,7 @@ import { showNotification } from "@mantine/notifications";
 import { useForm, zodResolver } from "@mantine/form";
 
 // Icons
-import { X as ErrorIcon } from "tabler-icons-react";
+import { IconX } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
@@ -34,7 +34,7 @@ export const LoginForm = () => {
       showNotification({
         title: "Giriş başarısız",
         message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
         color: "red",
       });
     }

@@ -15,11 +15,7 @@ import { Alert, Button, Container, Group, Loader, LoadingOverlay, Text } from "@
 import { openConfirmModal, openModal } from "@mantine/modals";
 
 // Icons
-import {
-  AlertCircle as AlertCircleIcon,
-  Edit as EditIcon,
-  Trash as TrashIcon,
-} from "tabler-icons-react";
+import { IconInfoCircle, IconTrash, IconEdit } from "@tabler/icons";
 
 // Components
 import { ResultsTable } from "@components/ResultsTable";
@@ -112,7 +108,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
                 color="gray"
                 onClick={openEditPriceListProduct(priceListProduct)}
               >
-                <EditIcon size={18} />
+                <IconEdit size={18} />
               </Button>
               <Button
                 px={4}
@@ -124,7 +120,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
                   priceListProduct.priceListId
                 )}
               >
-                <TrashIcon size={18} />
+                <IconTrash size={18} />
               </Button>
             </Group>
           ),
@@ -140,7 +136,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Fiyat listesine ulaşılamadı"
         variant="filled"
@@ -153,7 +149,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
 
   if (data?.length === 0) {
     return (
-      <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
+      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
         Fiyat listesinde ürün bulunmamaktadır
       </Alert>
     );
@@ -161,7 +157,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
 
   if (customer.priceList?.name === "Baz") {
     return (
-      <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
+      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
         Bu müşteri <strong>Baz</strong> fiyat listesini kullanmaktadır. Özel fiyat listesi
         oluşturmak için{" "}
         <strong

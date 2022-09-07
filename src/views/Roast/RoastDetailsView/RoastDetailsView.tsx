@@ -21,7 +21,7 @@ import {
 } from "@mantine/core";
 
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Components
 import { RoastedCoffees } from "./RoastedCoffees";
@@ -50,7 +50,7 @@ export const RoastDetailsView = () => {
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Tedarikçiye ulaşılamadı"
         variant="filled"

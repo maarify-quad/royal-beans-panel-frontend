@@ -15,7 +15,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import ExcelFormatExampleImage from "@assets/create-bulk-products-excel-format-example.png";
 
 // Icons
-import { CircleCheck as CircleCheckIcon, X as ErrorIcon } from "tabler-icons-react";
+import { IconCircleCheck, IconX } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
@@ -39,7 +39,7 @@ export const ExcelCreate = () => {
         return showNotification({
           title: "Hatalı dosya",
           message: "Lütfen geçerli bir excel dosyası seçiniz",
-          icon: <ErrorIcon />,
+          icon: <IconX />,
           color: "red",
         });
       }
@@ -49,7 +49,7 @@ export const ExcelCreate = () => {
       showNotification({
         title: "Ürün oluşturulamadı",
         message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
         color: "red",
       });
     }
@@ -60,7 +60,7 @@ export const ExcelCreate = () => {
       showNotification({
         title: "Başarılı",
         message: "Ürünler oluşturuldu",
-        icon: <CircleCheckIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
       closeModal("createProduct");

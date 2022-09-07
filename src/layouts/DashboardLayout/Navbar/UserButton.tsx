@@ -8,7 +8,7 @@ import { selectUser } from "@slices/authSlice";
 import { Group, UnstyledButton, Text } from "@mantine/core";
 
 // Icons
-import { ChevronRight as ChevronRightIcon } from "tabler-icons-react";
+import { IconChevronRight } from "@tabler/icons";
 
 export const UserButton = forwardRef<HTMLButtonElement>((props, ref) => {
   const user = useReduxSelector(selectUser);
@@ -39,7 +39,7 @@ export const UserButton = forwardRef<HTMLButtonElement>((props, ref) => {
           </Text>
         </div>
 
-        <ChevronRightIcon size={16} />
+        <IconChevronRight size={16} />
       </Group>
     </UnstyledButton>
   );

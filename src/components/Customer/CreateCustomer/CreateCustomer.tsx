@@ -12,7 +12,7 @@ import { closeModal } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { CircleCheck as CircleCheckIcon, X as ErrorIcon } from "tabler-icons-react";
+import { IconCircleCheck, IconX } from "@tabler/icons";
 
 // Components
 import { GeneralStep } from "./GeneralStep";
@@ -49,7 +49,7 @@ export const CreateCustomer = () => {
       showNotification({
         title: "Müşteri oluşturulamadı",
         message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
         color: "red",
       });
     }
@@ -60,7 +60,7 @@ export const CreateCustomer = () => {
       showNotification({
         title: "Başarılı",
         message: "Müşteri oluşturuldu",
-        icon: <CircleCheckIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
       closeModal("createCustomer");

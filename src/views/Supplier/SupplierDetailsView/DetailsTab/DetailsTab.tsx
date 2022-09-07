@@ -5,16 +5,19 @@ import { Group, SimpleGrid, Text } from "@mantine/core";
 
 // Icons
 import {
-  MapPin as MapPinIcon,
-  ReceiptTax as ReceiptTaxIcon,
-  UserCircle as UserIcon,
-  Mail as MailIcon,
-  Phone as PhoneIcon,
-} from "tabler-icons-react";
+  IconMapPin,
+  IconReceiptTax,
+  IconUserCircle,
+  IconMail,
+  IconPhone,
+  IconUser,
+} from "@tabler/icons";
+
+// Components
+import { DetailsCard } from "@components/DetailsCard";
 
 // Interfaces
 import { Supplier } from "@interfaces/supplier";
-import { DetailsCard } from "@components/DetailsCard";
 
 // Props
 type DetailsTabProps = {
@@ -36,7 +39,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
             <Text size="xl" weight={700}>
               Adres
             </Text>
-            <MapPinIcon />
+            <IconMapPin />
           </Group>
         }
         value={supplier?.address || "-"}
@@ -47,7 +50,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
             <Text size="xl" weight={700}>
               Vergi
             </Text>
-            <ReceiptTaxIcon />
+            <IconReceiptTax />
           </Group>
         }
         value={`${supplier?.taxNo || "-"} / ${supplier?.taxOffice || "-"}`}
@@ -58,7 +61,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
             <Text size="xl" weight={700}>
               Yetkili
             </Text>
-            <UserIcon />
+            <IconUser />
           </Group>
         }
         value={
@@ -67,13 +70,13 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
               {supplier?.contactName || "-"} / {supplier?.contactPosition || "-"}
             </Text>
             <Group mt="sm">
-              <PhoneIcon size={16} />
+              <IconPhone size={16} />
               <Text size="sm" color="dimmed">
                 {supplier?.contactPhone || "-"}
               </Text>
             </Group>
             <Group>
-              <MailIcon size={16} />
+              <IconMail size={16} />
               <Text size="sm" color="dimmed">
                 {supplier?.contactEmail || "-"}
               </Text>

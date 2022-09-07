@@ -15,7 +15,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as SuccessIcon } from "tabler-icons-react";
+import { IconX, IconCircleCheck } from "@tabler/icons";
 
 // Components
 import { Form, Summary, Inputs, schema, initialValues } from "@components/Order/CartForm";
@@ -77,7 +77,7 @@ export const UpdateOrderView = () => {
         title: "Hata",
         message: "Beklenmedik bir hata oluştu",
         color: "red",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
       });
     }
   };
@@ -88,7 +88,7 @@ export const UpdateOrderView = () => {
         title: "Başarılı",
         message: "Sipariş güncellendi",
         color: "green",
-        icon: <SuccessIcon />,
+        icon: <IconCircleCheck />,
       });
       navigate(`/dashboard/orders/${orderNumber}`);
     }

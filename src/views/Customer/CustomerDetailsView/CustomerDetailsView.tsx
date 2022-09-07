@@ -24,7 +24,7 @@ import {
 import { useCreateDeliveryAddress } from "@hooks/delivery-address/useCreateDeliveryAddress";
 
 // Icons
-import { Plus as PlusIcon, AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { IconPlus, IconInfoCircle } from "@tabler/icons";
 
 // Components
 import { DetailsTab } from "./DetailsTab";
@@ -59,7 +59,7 @@ export const CustomerDetailsView = () => {
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Tedarikçiye ulaşılamadı"
         variant="filled"
@@ -94,7 +94,7 @@ export const CustomerDetailsView = () => {
           {data?.name}
         </Title>
         <Button
-          leftIcon={<PlusIcon />}
+          leftIcon={<IconPlus />}
           onClick={() => {
             openCreateDeliveryAddress(data!.id);
           }}

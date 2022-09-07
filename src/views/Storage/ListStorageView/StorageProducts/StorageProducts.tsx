@@ -7,10 +7,7 @@ import { useGetProductsByStorageTypeQuery } from "@services/productApi";
 import { Alert, Container, Loader, ScrollArea } from "@mantine/core";
 
 // Icons
-import {
-  AlertCircle as AlertCircleIcon,
-  InfoCircle as InfoCircleIcon,
-} from "tabler-icons-react";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Components
 import { ResultsTable } from "@components/ResultsTable";
@@ -43,12 +40,7 @@ export const StorageProducts: React.FC<StorageProductsProps> = ({ storageType })
 
   if (error) {
     return (
-      <Alert
-        icon={<AlertCircleIcon />}
-        color="red"
-        title="Ürünlere ulaşılamadı"
-        variant="filled"
-      >
+      <Alert icon={<IconInfoCircle />} color="red" title="Ürünlere ulaşılamadı" variant="filled">
         {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
       </Alert>
     );
@@ -56,7 +48,7 @@ export const StorageProducts: React.FC<StorageProductsProps> = ({ storageType })
 
   if (data?.length === 0) {
     return (
-      <Alert color="cyan" icon={<InfoCircleIcon />}>
+      <Alert color="cyan" icon={<IconInfoCircle />}>
         Bu kategoriye ait ürün bulunmamaktadır
       </Alert>
     );

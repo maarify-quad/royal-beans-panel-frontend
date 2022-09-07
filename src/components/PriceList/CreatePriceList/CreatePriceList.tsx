@@ -12,7 +12,7 @@ import { showNotification } from "@mantine/notifications";
 import { closeModal } from "@mantine/modals";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as SuccessIcon } from "tabler-icons-react";
+import { IconX, IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
@@ -39,7 +39,7 @@ export const CreatePriceList = () => {
         title: "Hata",
         message: "Beklenmedik bir hata oluştu",
         color: "red",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
       });
     }
   };
@@ -50,7 +50,7 @@ export const CreatePriceList = () => {
         title: "Başarılı",
         message: "Fiyat listesi oluşturuldu",
         color: "green",
-        icon: <SuccessIcon />,
+        icon: <IconCircleCheck />,
       });
       closeModal("createPriceList");
     }

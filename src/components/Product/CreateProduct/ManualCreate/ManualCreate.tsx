@@ -12,7 +12,7 @@ import { closeModal } from "@mantine/modals";
 import { useForm, zodResolver } from "@mantine/form";
 
 // Icons
-import { CircleCheck as CircleCheckIcon, X as ErrorIcon } from "tabler-icons-react";
+import { IconCircleCheck, IconX } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
@@ -37,7 +37,7 @@ export const ManualCreate = () => {
       showNotification({
         title: "Ürün oluşturulamadı",
         message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
         color: "red",
       });
     }
@@ -48,7 +48,7 @@ export const ManualCreate = () => {
       showNotification({
         title: "Başarılı",
         message: `${form.values.name} ürünü oluşturuldu`,
-        icon: <CircleCheckIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
       closeModal("createProduct");

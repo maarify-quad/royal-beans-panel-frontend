@@ -12,11 +12,7 @@ import { showNotification } from "@mantine/notifications";
 import { closeModal } from "@mantine/modals";
 
 // Icons
-import {
-  AlertCircle as AlertCircleIcon,
-  X as ErrorIcon,
-  CircleCheck as CircleCheckIcon,
-} from "tabler-icons-react";
+import { IconAlertCircle, IconX, IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs, initialValues } from "./validation/Inputs";
@@ -71,7 +67,7 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
       showNotification({
         title: "Fiyat listesi atanamadı",
         message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
         color: "red",
       });
     }
@@ -87,7 +83,7 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
       showNotification({
         title: "Başarılı",
         message: "Fiyat listesi başarıyla atandı",
-        icon: <CircleCheckIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
       closeModal("assignPriceList");
@@ -104,7 +100,7 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
         {...form.getInputProps("customerId")}
       />
       {selectedCustomer?.priceList ? (
-        <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
+        <Alert color="cyan" mt="md" icon={<IconAlertCircle />}>
           Bu müşteri "{selectedCustomer.priceList.name}" fiyat listesinde kayıtlıdır. Yeni fiyat
           listesi üzerine yazılacaktır
         </Alert>

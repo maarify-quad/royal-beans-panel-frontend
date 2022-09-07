@@ -28,7 +28,7 @@ import { showNotification } from "@mantine/notifications";
 import { useMediaQuery } from "@mantine/hooks";
 
 // Icons
-import { X as ErrorIcon } from "tabler-icons-react";
+import { IconX } from "@tabler/icons";
 
 // Components
 import { ColorSchemeToggler } from "@components/ColorSchemeToggler";
@@ -73,7 +73,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
       showNotification({
         title: "Çıkış başarısız",
         message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
         color: "red",
       });
     }
@@ -84,7 +84,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
       showNotification({
         title: "Çıkış başarısız",
         message: (logoutError as any)?.data?.message || "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
         color: "red",
       });
     }

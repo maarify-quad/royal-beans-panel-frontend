@@ -18,7 +18,7 @@ import { Inputs } from "./Form/validation/Inputs";
 import { schema, initialValues } from "./Form/validation/schema";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as CircleCheckIcon } from "tabler-icons-react";
+import { IconX, IconCircleCheck } from "@tabler/icons";
 
 // Components
 import { Form } from "./Form";
@@ -58,7 +58,7 @@ export const CreateRoastView = () => {
       showNotification({
         title: "Sevkiyat oluşturma başarısız",
         message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
         color: "red",
       });
     }
@@ -69,7 +69,7 @@ export const CreateRoastView = () => {
       showNotification({
         title: "Başarılı",
         message: "Kavrum oluşturuldu",
-        icon: <CircleCheckIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
       navigate("/dashboard/roasts");

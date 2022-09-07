@@ -11,7 +11,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { CircleCheck as SuccessIcon } from "tabler-icons-react";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs, initialValues } from "./validation/Inputs";
@@ -42,7 +42,7 @@ export const CreateDeliveryAddress: React.FC<CreateDeliveryAddressProps> = ({ cu
         title: "Başarılı",
         message: "Sevkiyat adresi oluşturuldu",
         color: "green",
-        icon: <SuccessIcon />,
+        icon: <IconCircleCheck />,
       });
       closeModal("createDeliveryAddress");
     } catch (error) {}

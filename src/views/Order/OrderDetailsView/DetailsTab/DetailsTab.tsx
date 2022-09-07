@@ -11,7 +11,7 @@ import { SimpleGrid, ThemeIcon } from "@mantine/core";
 import { DetailsCard } from "@components/DetailsCard";
 
 // Icons
-import { CircleCheck as CircleCheckIcon, X as XIcon } from "tabler-icons-react";
+import { IconCircleCheck, IconX } from "@tabler/icons";
 
 // Interfaces
 import { OrderWithAll } from "@interfaces/order";
@@ -44,11 +44,11 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ order }) => {
         value={
           order.isParasutVerified ? (
             <ThemeIcon color="green" radius="xl">
-              <CircleCheckIcon />
+              <IconCircleCheck />
             </ThemeIcon>
           ) : (
             <ThemeIcon color="red" radius="xl">
-              <XIcon />
+              <IconX />
             </ThemeIcon>
           )
         }

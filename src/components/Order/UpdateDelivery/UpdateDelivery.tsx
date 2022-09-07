@@ -11,7 +11,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as SuccessIcon } from "tabler-icons-react";
+import { IconX, IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
@@ -49,7 +49,7 @@ export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
         title: "Sipariş kargolanamdı",
         message: "Beklenmedik bir hata oluştu",
         color: "red",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
       });
     }
   };
@@ -60,7 +60,7 @@ export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
         title: "Başarılı",
         message: "Sipariş kargolandı",
         color: "green",
-        icon: <SuccessIcon />,
+        icon: <IconCircleCheck />,
       });
       closeModal("updateDelivery");
     }

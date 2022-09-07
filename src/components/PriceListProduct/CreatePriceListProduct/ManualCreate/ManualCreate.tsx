@@ -13,7 +13,7 @@ import { showNotification } from "@mantine/notifications";
 import { closeModal } from "@mantine/modals";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as CircleCheckIcon } from "tabler-icons-react";
+import { IconX, IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs, initialValues } from "./validation/Inputs";
@@ -65,7 +65,7 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
       showNotification({
         title: "Ürün oluşturma başarısız",
         message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
+        icon: <IconX />,
         color: "red",
       });
     }
@@ -76,7 +76,7 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
       showNotification({
         title: "Başarılı",
         message: "Ürün oluşturuldu",
-        icon: <CircleCheckIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
       closeModal("createPriceListProduct");

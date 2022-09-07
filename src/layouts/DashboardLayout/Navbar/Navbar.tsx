@@ -8,16 +8,16 @@ import { Navbar as MantineNavbar, ScrollArea, createStyles, Menu } from "@mantin
 
 // Icons
 import {
-  TruckDelivery as TruckDeliveryIcon,
-  Users as UsersIcon,
-  ShoppingCart as ShoppingCartIcon,
-  UserCircle as UserCircleIcon,
-  Package as PackageIcon,
-  Coffee as CoffeeIcon,
-  Tags as TagsIcon,
-  Logout as LogoutIcon,
-  Settings as SettingsIcon,
-} from "tabler-icons-react";
+  IconTruckDelivery,
+  IconUsers,
+  IconShoppingCart,
+  IconUserCircle,
+  IconPackage,
+  IconCoffee,
+  IconSettings,
+  IconLogout,
+  IconTags,
+} from "@tabler/icons";
 
 // Components
 import { UserButton } from "./UserButton";
@@ -79,43 +79,43 @@ const useStyles = createStyles((theme, _params, getRef) => {
 const navLinks = [
   {
     label: "Tedarikçiler",
-    icon: UsersIcon,
+    icon: IconUsers,
     match: "/suppliers",
     link: "/dashboard/suppliers",
   },
   {
     label: "Sevkiyatlar",
-    icon: TruckDeliveryIcon,
+    icon: IconTruckDelivery,
     match: "/deliveries",
     link: "/dashboard/deliveries",
   },
   {
     label: "Depo",
-    icon: PackageIcon,
+    icon: IconPackage,
     match: "storage",
     link: "/dashboard/storage",
   },
   {
     label: "Kavrum",
-    icon: CoffeeIcon,
+    icon: IconCoffee,
     match: "roasts",
     link: "/dashboard/roasts",
   },
   {
     label: "Siparişler",
-    icon: ShoppingCartIcon,
+    icon: IconShoppingCart,
     match: "orders",
     link: "/dashboard/orders",
   },
   {
     label: "Müşteriler",
-    icon: UserCircleIcon,
+    icon: IconUserCircle,
     match: "customers",
     link: "/dashboard/customers",
   },
   {
     label: "Fiyat Listeleri",
-    icon: TagsIcon,
+    icon: IconTags,
     match: "price-lists",
     link: "/dashboard/price-lists",
   },
@@ -153,10 +153,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
             <UserButton />
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item component={Link} to="/dashboard/settings" icon={<SettingsIcon />}>
+            <Menu.Item component={Link} to="/dashboard/settings" icon={<IconSettings />}>
               Ayarlar
             </Menu.Item>
-            <Menu.Item color="red" icon={<LogoutIcon />} onClick={onLogout}>
+            <Menu.Item color="red" icon={<IconLogout />} onClick={onLogout}>
               Çıkış yap
             </Menu.Item>
           </Menu.Dropdown>
