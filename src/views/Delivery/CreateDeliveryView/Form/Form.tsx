@@ -21,18 +21,10 @@ type FormProps = {
 
 export const Form: React.FC<FormProps> = ({ form }) => {
   // Get latest suppliers
-  const {
-    data: suppliersData,
-    isLoading: isSuppliersLoading,
-    error: suppliersError,
-  } = useGetAllSuppliersQuery();
+  const { data: suppliersData, isLoading: isSuppliersLoading } = useGetAllSuppliersQuery();
 
   // Get latest products
-  const {
-    data: products,
-    isLoading: isProductsLoading,
-    error: productsError,
-  } = useGetAllProductsQuery();
+  const { data: products, isLoading: isProductsLoading } = useGetAllProductsQuery();
 
   const productSelectOptions = React.useMemo(
     () =>

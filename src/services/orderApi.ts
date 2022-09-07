@@ -75,6 +75,7 @@ interface CreateOrderParams {
   customerId: string;
   deliveryDate: Date;
   specialNote: string;
+  deliveryAddressId: number;
   deliveryType: string;
   orderProducts: CreateOrderProductParams[];
 }

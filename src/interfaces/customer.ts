@@ -1,9 +1,11 @@
 import { PriceList } from "./priceList";
+import { DeliveryAddress } from "./deliveryAddress";
 
 export interface Customer {
   id: string;
   priceListId?: number;
   priceList?: PriceList;
+  deliveryAddresses: DeliveryAddress[];
   name: string;
   companyTitle?: string;
   contactName?: string;

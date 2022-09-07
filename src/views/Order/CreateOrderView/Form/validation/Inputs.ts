@@ -5,6 +5,7 @@ export type Inputs = {
   priceListProductId: number;
   deliveryDate: Date;
   specialNote: string;
+  deliveryAddressId: number;
   deliveryType: string;
   grindType: string;
   quantity: number;
@@ -29,6 +30,7 @@ export const initialValues: Inputs = {
   priceListProductId: 0,
   deliveryDate: new Date(),
   specialNote: "",
+  deliveryAddressId: 0,
   deliveryType: "Kargo",
   grindType: "Çekirdek",
   quantity: 1,
