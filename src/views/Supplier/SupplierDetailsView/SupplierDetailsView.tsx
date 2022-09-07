@@ -40,11 +40,13 @@ export const SupplierDetailsView = () => {
   const { id } = useParams();
   const { classes } = useStyles();
 
+  const { data, isLoading, error } = useGetSupplierByIdQuery(id!, {
+    skip: !id,
+  });
+
   if (!id) {
     return <Navigate to="/dashboard" replace />;
   }
-
-  const { data, isLoading, error } = useGetSupplierByIdQuery(id);
 
   if (error) {
     return (

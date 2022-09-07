@@ -8,7 +8,7 @@ import { Supplier } from "@interfaces/supplier";
 
 export const supplierApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllSuppliers: builder.query<GetAllSuppliersResponse, number | void>({
+    getSuppliers: builder.query<GetAllSuppliersResponse, number | void>({
       query: (page) => (page ? `/suppliers?page=${page}` : "/suppliers"),
       providesTags: ["Supplier"],
       extraOptions: {
@@ -30,7 +30,7 @@ export const supplierApi = emptyApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllSuppliersQuery, useGetSupplierByIdQuery, useCreateSupplierMutation } =
+export const { useGetSuppliersQuery, useGetSupplierByIdQuery, useCreateSupplierMutation } =
   supplierApi;
 
 interface GetAllSuppliersResponse {

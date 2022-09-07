@@ -45,11 +45,13 @@ export const DeliveryDetailsView = () => {
   const { id } = useParams();
   const { classes } = useStyles();
 
+  const { data, isLoading, error } = useGetDeliveryByIdQuery(id!, {
+    skip: !id,
+  });
+
   if (!id) {
     return <Navigate to="/dashboard" replace />;
   }
-
-  const { data, isLoading, error } = useGetDeliveryByIdQuery(id);
 
   if (error) {
     return (

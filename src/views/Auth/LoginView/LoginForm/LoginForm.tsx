@@ -4,21 +4,20 @@ import React from "react";
 import { useLoginMutation } from "@services/authApi";
 
 // UI Components
-import { TextInput, PasswordInput, Checkbox, Anchor, Group, Button } from "@mantine/core";
+import { TextInput, PasswordInput, Button } from "@mantine/core";
 
 // UI Utils
-import { showNotification } from "@mantine/notifications";
 import { useForm, zodResolver } from "@mantine/form";
-
-// Icons
-import { IconX } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
 export const LoginForm = () => {
+  // Mutations
   const [login, { isLoading }] = useLoginMutation();
+
+  // Form utils
   const form = useForm<Inputs>({
     initialValues: {
       username: "",
@@ -28,16 +27,7 @@ export const LoginForm = () => {
   });
 
   const onLoginSubmit = async (inputs: typeof form.values) => {
-    try {
-      await login(inputs);
-    } catch (error) {
-      showNotification({
-        title: "Giriş başarısız",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <IconX />,
-        color: "red",
-      });
-    }
+    await login(inputs);
   };
 
   return (
@@ -55,13 +45,7 @@ export const LoginForm = () => {
         mt="md"
         {...form.getInputProps("password")}
       />
-      <Group position="apart" mt="md">
-        <Checkbox label="Beni hatırla" />
-        <Anchor<"a"> onClick={(event) => event.preventDefault()} href="#" size="sm">
-          Şifremi unuttum
-        </Anchor>
-      </Group>
-      <Button fullWidth type="submit" mt="xl" loading={isLoading}>
+      <Button fullWidth variant="gradient" type="submit" mt="xl" loading={isLoading}>
         Giriş yap
       </Button>
     </form>

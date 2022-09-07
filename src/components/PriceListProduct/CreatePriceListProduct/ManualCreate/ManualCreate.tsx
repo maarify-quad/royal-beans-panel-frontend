@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
-import { useGetAllProductsQuery } from "@services/productApi";
+import { useGetProductsQuery } from "@services/productApi";
 import { useCreatePriceListProductMutation } from "@services/priceListProductApi";
 
 // UI Components
@@ -13,7 +13,7 @@ import { showNotification } from "@mantine/notifications";
 import { closeModal } from "@mantine/modals";
 
 // Icons
-import { IconX, IconCircleCheck } from "@tabler/icons";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs, initialValues } from "./validation/Inputs";
@@ -30,13 +30,11 @@ type ManualCreateProps = {
 
 export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceListProducts }) => {
   // Queries
-  const { data: products, isLoading: isProductsLoading } = useGetAllProductsQuery();
+  const { data: products, isLoading: isProductsLoading } = useGetProductsQuery();
 
   // Mutations
-  const [
-    createPriceListProduct,
-    { isLoading: isCreateProductLoading, isSuccess: isCreateProductSuccess },
-  ] = useCreatePriceListProductMutation();
+  const [createPriceListProduct, { isLoading: isCreateProductLoading }] =
+    useCreatePriceListProductMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -60,19 +58,7 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
       await createPriceListProduct({
         ...values,
         priceListId,
-      });
-    } catch (error) {
-      showNotification({
-        title: "Ürün oluşturma başarısız",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <IconX />,
-        color: "red",
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isCreateProductSuccess) {
+      }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Ürün oluşturuldu",
@@ -80,8 +66,10 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
         color: "green",
       });
       closeModal("createPriceListProduct");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isCreateProductSuccess]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onAddProductSubmit)}>

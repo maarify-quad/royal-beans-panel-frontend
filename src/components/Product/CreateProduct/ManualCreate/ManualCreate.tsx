@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useCreateProductMutation } from "@services/productApi";
@@ -12,7 +12,7 @@ import { closeModal } from "@mantine/modals";
 import { useForm, zodResolver } from "@mantine/form";
 
 // Icons
-import { IconCircleCheck, IconX } from "@tabler/icons";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
@@ -20,7 +20,7 @@ import { schema, initialValues } from "./validation/schema";
 
 export const ManualCreate = () => {
   // Mutations
-  const [createProductMutation, { isSuccess, isLoading }] = useCreateProductMutation();
+  const [createProductMutation, { isLoading: isCreating }] = useCreateProductMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -32,19 +32,7 @@ export const ManualCreate = () => {
 
   const onCreateProductSubmit = async (values: Inputs) => {
     try {
-      await createProductMutation(values);
-    } catch {
-      showNotification({
-        title: "Ürün oluşturulamadı",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <IconX />,
-        color: "red",
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
+      await createProductMutation(values).unwrap();
       showNotification({
         title: "Başarılı",
         message: `${form.values.name} ürünü oluşturuldu`,
@@ -52,12 +40,14 @@ export const ManualCreate = () => {
         color: "green",
       });
       closeModal("createProduct");
+    } catch {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isSuccess]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onCreateProductSubmit)}>
-      <LoadingOverlay visible={isLoading} />
+      <LoadingOverlay visible={isCreating} />
       <TextInput
         label="Ürün adı"
         type="text"
@@ -96,7 +86,7 @@ export const ManualCreate = () => {
         required
         {...form.getInputProps("amountUnit")}
       />
-      <Button type="submit" mt="md" loading={isLoading}>
+      <Button type="submit" mt="md" loading={isCreating}>
         Oluştur
       </Button>
     </form>

@@ -49,11 +49,13 @@ export const OrderDetailsView = () => {
   const { orderNumber } = useParams();
   const { classes } = useStyles();
 
+  const { data, isLoading, error } = useGetOrderByOrderNumberQuery(parseInt(orderNumber!), {
+    skip: orderNumber ? isNaN(parseInt(orderNumber)) : true,
+  });
+
   if (!orderNumber) {
     return <Navigate to="/dashboard" replace />;
   }
-
-  const { data, isLoading, error } = useGetOrderByOrderNumberQuery(parseInt(orderNumber));
 
   if (error) {
     return (

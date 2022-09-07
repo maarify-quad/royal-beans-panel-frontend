@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useCreateCustomerMutation } from "@services/customerApi";
@@ -32,7 +32,7 @@ export const CreateCustomer = () => {
   const prevStep = () => setStep((current) => (current > 0 ? current - 1 : current));
 
   // Mutations
-  const [createCustomer, { isSuccess, isLoading }] = useCreateCustomerMutation();
+  const [createCustomer, { isLoading: isCreating }] = useCreateCustomerMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -44,19 +44,7 @@ export const CreateCustomer = () => {
 
   const onCreateCustomerSubmit = async (values: Inputs) => {
     try {
-      await createCustomer(values);
-    } catch (error) {
-      showNotification({
-        title: "Müşteri oluşturulamadı",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <IconX />,
-        color: "red",
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
+      await createCustomer(values).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Müşteri oluşturuldu",
@@ -64,12 +52,14 @@ export const CreateCustomer = () => {
         color: "green",
       });
       closeModal("createCustomer");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isSuccess]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onCreateCustomerSubmit)}>
-      <LoadingOverlay visible={isLoading} />
+      <LoadingOverlay visible={isCreating} />
       <Stepper active={step}>
         <Stepper.Step>
           <GeneralStep form={form} />
@@ -90,7 +80,7 @@ export const CreateCustomer = () => {
         </Button>
         {step === 3 ? (
           <>
-            <Button type="submit" loading={isLoading}>
+            <Button type="submit" loading={isCreating}>
               Müşteri Oluştur
             </Button>
           </>

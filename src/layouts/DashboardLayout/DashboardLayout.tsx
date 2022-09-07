@@ -67,16 +67,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
   const [logout, { isLoading: isLogoutLoading, error: logoutError }] = useLazyLogoutQuery();
 
   const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      showNotification({
-        title: "Çıkış başarısız",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <IconX />,
-        color: "red",
-      });
-    }
+    await logout();
   };
 
   useEffect(() => {

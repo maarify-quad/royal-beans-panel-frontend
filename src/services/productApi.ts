@@ -5,7 +5,7 @@ import { Product } from "@interfaces/product";
 
 export const productApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllProducts: builder.query<Product[], void>({
+    getProducts: builder.query<Product[], void>({
       query: () => "/products",
       providesTags: ["Product"],
       keepUnusedDataFor: 15,
@@ -45,7 +45,7 @@ export const productApi = emptyApi.injectEndpoints({
 });
 
 export const {
-  useGetAllProductsQuery,
+  useGetProductsQuery,
   useGetProductsByStorageTypeQuery,
   useCreateProductMutation,
   useCreateBulkProductsFromExcelMutation,

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useCreateBulkPriceListProductsFromExcelMutation } from "@services/priceListProductApi";
@@ -28,7 +28,7 @@ type ExcelCreateProps = {
 
 export const ExcelCreate: React.FC<ExcelCreateProps> = ({ priceListId }) => {
   // Mutations
-  const [createBulkPriceListProductsMutation, { isSuccess, isLoading }] =
+  const [createBulkPriceListProductsMutation, { isLoading }] =
     useCreateBulkPriceListProductsFromExcelMutation();
 
   // Form utils
@@ -48,20 +48,7 @@ export const ExcelCreate: React.FC<ExcelCreateProps> = ({ priceListId }) => {
           color: "red",
         });
       }
-
-      await createBulkPriceListProductsMutation({ excel, priceListId });
-    } catch {
-      showNotification({
-        title: "Ürün oluşturulamadı",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <IconX />,
-        color: "red",
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
+      await createBulkPriceListProductsMutation({ excel, priceListId }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Ürünler oluşturuldu",
@@ -69,8 +56,10 @@ export const ExcelCreate: React.FC<ExcelCreateProps> = ({ priceListId }) => {
         color: "green",
       });
       closeModal("createPriceListProduct");
+    } catch {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isSuccess]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onCreateBulkProductSubmit)} encType="multipart/form-data">

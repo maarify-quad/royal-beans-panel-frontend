@@ -15,7 +15,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { IconX, IconCircleCheck } from "@tabler/icons";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs, initialValues } from "./validation/Inputs";
@@ -107,12 +107,7 @@ export const Form = () => {
 
       navigate("/dashboard/orders");
     } catch (error) {
-      showNotification({
-        title: "Sipariş oluşturma başarısız",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <IconX />,
-        color: "red",
-      });
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
   };
 

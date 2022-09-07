@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useCreatePriceListMutation } from "@services/priceListApi";
@@ -19,8 +19,7 @@ import { Inputs } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
 export const CreatePriceList = () => {
-  const [createPriceList, { isLoading: isCreating, isSuccess: isCreated }] =
-    useCreatePriceListMutation();
+  const [createPriceList, { isLoading: isCreating }] = useCreatePriceListMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -33,19 +32,7 @@ export const CreatePriceList = () => {
 
   const onCreatePriceListSubmit = async (values: Inputs) => {
     try {
-      await createPriceList(values);
-    } catch (error) {
-      showNotification({
-        title: "Hata",
-        message: "Beklenmedik bir hata oluştu",
-        color: "red",
-        icon: <IconX />,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isCreated) {
+      await createPriceList(values).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Fiyat listesi oluşturuldu",
@@ -53,8 +40,10 @@ export const CreatePriceList = () => {
         icon: <IconCircleCheck />,
       });
       closeModal("createPriceList");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isCreated]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onCreatePriceListSubmit)}>
@@ -70,7 +59,7 @@ export const CreatePriceList = () => {
         mt="md"
         {...form.getInputProps("description")}
       />
-      <Button type="submit" mt="md">
+      <Button type="submit" mt="lg" loading={isCreating}>
         Oluştur
       </Button>
     </form>

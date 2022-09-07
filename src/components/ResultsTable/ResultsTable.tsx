@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 // UI Components
-import { Table } from "@mantine/core";
+import { Card, Table } from "@mantine/core";
 
 // Components
 import { Pagination } from "./Pagination";
@@ -31,7 +31,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
   rowStyles,
 }) => {
   return (
-    <div>
+    <Card withBorder shadow="xs" radius="md">
       <Table highlightOnHover verticalSpacing="sm">
         <thead>
           <tr>
@@ -69,6 +69,6 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
           page={pagination.currentPage}
         />
       ) : null}
-    </div>
+    </Card>
   );
 };

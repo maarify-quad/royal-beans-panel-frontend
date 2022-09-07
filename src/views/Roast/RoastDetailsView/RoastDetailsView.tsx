@@ -41,11 +41,13 @@ export const RoastDetailsView = () => {
   const { id } = useParams();
   const { classes } = useStyles();
 
+  const { data, isLoading, error } = useGetRoastByIdQuery(id!, {
+    skip: !id,
+  });
+
   if (!id) {
     return <Navigate to="/dashboard" replace />;
   }
-
-  const { data, isLoading, error } = useGetRoastByIdQuery(id);
 
   if (error) {
     return (

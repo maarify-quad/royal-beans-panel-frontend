@@ -2,7 +2,7 @@ import React from "react";
 import dayjs from "dayjs";
 
 // Services
-import { useGetAllRoastsQuery } from "@services/roastApi";
+import { useGetRoastsQuery } from "@services/roastApi";
 
 // UI Components
 import { Container, Loader, Alert } from "@mantine/core";
@@ -21,7 +21,7 @@ export const Results = () => {
   const [page, setPage] = React.useState(1);
 
   // Queries
-  const { data, isLoading, error } = useGetAllRoastsQuery(page);
+  const { data, isLoading, error } = useGetRoastsQuery(page);
 
   const roastRows: RowDef[][] = React.useMemo(
     () =>

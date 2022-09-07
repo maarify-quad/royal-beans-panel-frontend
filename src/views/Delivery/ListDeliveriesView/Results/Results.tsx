@@ -2,7 +2,7 @@ import React from "react";
 import dayjs from "dayjs";
 
 // Services
-import { useGetAllDeliveriesQuery } from "@services/deliveryApi";
+import { useGetDeliveriesQuery } from "@services/deliveryApi";
 
 // UI Components
 import { Container, Loader, Alert } from "@mantine/core";
@@ -21,7 +21,7 @@ export const Results = () => {
   const [page, setPage] = React.useState(1);
 
   // Queries
-  const { data, isLoading, error } = useGetAllDeliveriesQuery(page);
+  const { data, isLoading, error } = useGetDeliveriesQuery(page);
 
   const deliveryRows: RowDef[][] = React.useMemo(
     () =>

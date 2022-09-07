@@ -45,7 +45,9 @@ export const CreateDeliveryAddress: React.FC<CreateDeliveryAddressProps> = ({ cu
         icon: <IconCircleCheck />,
       });
       closeModal("createDeliveryAddress");
-    } catch (error) {}
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
+    }
   };
 
   return (

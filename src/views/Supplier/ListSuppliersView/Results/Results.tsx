@@ -1,7 +1,7 @@
 import React from "react";
 
 // Services
-import { useGetAllSuppliersQuery } from "@services/supplierApi";
+import { useGetSuppliersQuery } from "@services/supplierApi";
 
 // UI Components
 import { Container, Loader, Alert } from "@mantine/core";
@@ -20,7 +20,7 @@ export const Results = () => {
   const [page, setPage] = React.useState(1);
 
   // Queries
-  const { data, isLoading, error } = useGetAllSuppliersQuery(page);
+  const { data, isLoading, error } = useGetSuppliersQuery(page);
 
   const supplierRows: RowDef[][] = React.useMemo(
     () =>

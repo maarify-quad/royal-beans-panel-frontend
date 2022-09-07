@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useCreateBulkProductsFromExcelMutation } from "@services/productApi";
@@ -23,8 +23,7 @@ import { schema, initialValues } from "./validation/schema";
 
 export const ExcelCreate = () => {
   // Mutations
-  const [createBulkProductsMutation, { isSuccess, isLoading }] =
-    useCreateBulkProductsFromExcelMutation();
+  const [createBulkProductsMutation, { isLoading }] = useCreateBulkProductsFromExcelMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -43,20 +42,7 @@ export const ExcelCreate = () => {
           color: "red",
         });
       }
-
-      await createBulkProductsMutation({ excel });
-    } catch {
-      showNotification({
-        title: "Ürün oluşturulamadı",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <IconX />,
-        color: "red",
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
+      await createBulkProductsMutation({ excel }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Ürünler oluşturuldu",
@@ -64,8 +50,10 @@ export const ExcelCreate = () => {
         color: "green",
       });
       closeModal("createProduct");
+    } catch {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isSuccess]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onCreateBulkProductSubmit)} encType="multipart/form-data">

@@ -12,7 +12,7 @@ import { showNotification } from "@mantine/notifications";
 import { closeModal } from "@mantine/modals";
 
 // Icons
-import { IconAlertCircle, IconX, IconCircleCheck } from "@tabler/icons";
+import { IconAlertCircle, IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs, initialValues } from "./validation/Inputs";
@@ -34,10 +34,7 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
   const { data, isLoading: isCustomersLoading } = useGetCustomersQuery();
 
   // Mutations
-  const [
-    updateCustomer,
-    { isLoading: isUpdateCustomerLoading, isSuccess: isUpdateCustomerSuccess },
-  ] = useUpdateCustomerMutation();
+  const [updateCustomer, { isLoading: isUpdateCustomerLoading }] = useUpdateCustomerMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -62,24 +59,7 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
       await updateCustomer({
         id: values.customerId,
         priceListId,
-      });
-    } catch (error) {
-      showNotification({
-        title: "Fiyat listesi atanamadı",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <IconX />,
-        color: "red",
-      });
-    }
-  };
-
-  // Set selected customer object on select change
-  useEffect(() => {
-    setSelectedCustomer(data?.customers.find((customer) => customer.id === form.values.customerId));
-  }, [form.values.customerId]);
-
-  useEffect(() => {
-    if (isUpdateCustomerSuccess) {
+      }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Fiyat listesi başarıyla atandı",
@@ -87,8 +67,15 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
         color: "green",
       });
       closeModal("assignPriceList");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isUpdateCustomerSuccess]);
+  };
+
+  // Set selected customer object on select change
+  useEffect(() => {
+    setSelectedCustomer(data?.customers.find((customer) => customer.id === form.values.customerId));
+  }, [form.values.customerId]);
 
   return (
     <form onSubmit={form.onSubmit(onAssignPriceListSubmit)}>

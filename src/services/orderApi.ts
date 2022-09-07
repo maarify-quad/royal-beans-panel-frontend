@@ -47,6 +47,7 @@ export const orderApi = emptyApi.injectEndpoints({
         url: `/orders/cancel/${orderNumber}`,
         method: "POST",
       }),
+      invalidatesTags: (_result, _error, orderNumber) => [{ type: "Order", id: orderNumber }],
     }),
   }),
 });

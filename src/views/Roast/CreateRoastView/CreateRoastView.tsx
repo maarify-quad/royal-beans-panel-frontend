@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Routing
 import { Link, useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ import { Inputs } from "./Form/validation/Inputs";
 import { schema, initialValues } from "./Form/validation/schema";
 
 // Icons
-import { IconX, IconCircleCheck } from "@tabler/icons";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Components
 import { Form } from "./Form";
@@ -40,7 +40,7 @@ export const CreateRoastView = () => {
   const navigate = useNavigate();
 
   // Services
-  const [createRoast, { isLoading, isSuccess }] = useCreateRoastMutation();
+  const [createRoast, { isLoading }] = useCreateRoastMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -53,19 +53,7 @@ export const CreateRoastView = () => {
       const { roastDetails } = values;
       await createRoast({
         roastDetails,
-      });
-    } catch (error) {
-      showNotification({
-        title: "Sevkiyat oluşturma başarısız",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <IconX />,
-        color: "red",
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
+      }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Kavrum oluşturuldu",
@@ -73,8 +61,10 @@ export const CreateRoastView = () => {
         color: "green",
       });
       navigate("/dashboard/roasts");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isSuccess]);
+  };
 
   return (
     <div className={classes.root}>

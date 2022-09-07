@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Routing
 import { Link, useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ import { showNotification } from "@mantine/notifications";
 import { useForm, zodResolver } from "@mantine/form";
 
 // Icons
-import { IconX, IconCircleCheck } from "@tabler/icons";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./Form/validation/Inputs";
@@ -40,7 +40,7 @@ export const CreateDeliveryView = () => {
   const navigate = useNavigate();
 
   // Services
-  const [createDelivery, { isLoading, isSuccess, data }] = useCreateDeliveryMutation();
+  const [createDelivery, { isLoading }] = useCreateDeliveryMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -51,33 +51,23 @@ export const CreateDeliveryView = () => {
   const onCreateDeliverySubmit = async (values: typeof form.values) => {
     try {
       const { deliveryDate, invoiceDate, supplierId, deliveryDetails } = values;
-      await createDelivery({
+      const result = await createDelivery({
         deliveryDate,
         invoiceDate,
         supplierId,
         deliveryDetails,
-      });
-    } catch (error) {
-      showNotification({
-        title: "Sevkiyat oluşturma başarısız",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <IconX />,
-        color: "red",
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
+      }).unwrap();
       showNotification({
         title: "Başarılı",
-        message: data?.id ? `${data.id} koduyla sevkiyat oluşturuldu` : "Sevkiyat oluşturuldu",
+        message: `${result.id} koduyla sevkiyat oluşturuldu`,
         icon: <IconCircleCheck />,
         color: "green",
       });
       navigate("/dashboard/deliveries");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isSuccess]);
+  };
 
   return (
     <div className={classes.root}>

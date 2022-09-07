@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useCreateSupplierMutation } from "@services/supplierApi";
@@ -19,7 +19,7 @@ import { Inputs } from "./validation/Inputs";
 import { schema, initialValues } from "./validation/schema";
 
 export const CreateSupplier = () => {
-  const [createSupplier, { data, isSuccess, isLoading }] = useCreateSupplierMutation();
+  const [createSupplier, { data, isLoading }] = useCreateSupplierMutation();
   const form = useForm<Inputs>({
     initialValues,
     validate: zodResolver(schema),
@@ -29,19 +29,7 @@ export const CreateSupplier = () => {
 
   const onCreateSupplierSubmit = async (inputs: Inputs) => {
     try {
-      await createSupplier(inputs);
-    } catch {
-      showNotification({
-        title: "Tedarikçi oluşturulamadı",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <IconX />,
-        color: "red",
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
+      await createSupplier(inputs).unwrap();
       showNotification({
         title: "Başarılı",
         message: data?.id ? `${data.id} koduyla tedarikçi oluşturuldu` : "Tedarikçi oluşturuldu",
@@ -49,8 +37,10 @@ export const CreateSupplier = () => {
         color: "green",
       });
       closeModal("createSupplier");
+    } catch {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isSuccess]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onCreateSupplierSubmit)}>

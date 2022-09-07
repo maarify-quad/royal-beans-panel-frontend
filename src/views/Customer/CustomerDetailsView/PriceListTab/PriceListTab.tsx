@@ -76,18 +76,19 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
     });
   };
 
-  const handleCreateCustomPriceList = () => {
-    createPriceList({
-      name: `Özel-${customer.name}`,
-      cloneDefaultPriceList: true,
-    })
-      .unwrap()
-      .then((priceList) => {
-        updateCustomer({
-          id: customer.id,
-          priceListId: priceList.id,
-        });
+  const handleCreateCustomPriceList = async () => {
+    try {
+      const priceList = await createPriceList({
+        name: `Özel-${customer.name}`,
+        cloneDefaultPriceList: true,
+      }).unwrap();
+      await updateCustomer({
+        id: customer.id,
+        priceListId: priceList.id,
       });
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
+    }
   };
 
   // Table rows

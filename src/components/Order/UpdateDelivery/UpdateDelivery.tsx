@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useUpdateOrderMutation } from "@services/orderApi";
@@ -27,7 +27,7 @@ type UpdateDeliveryProps = {
 };
 
 export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
-  const [updateOrder, { isLoading: isUpdating, isSuccess: isUpdated }] = useUpdateOrderMutation();
+  const [updateOrder, { isLoading: isUpdating }] = useUpdateOrderMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -43,19 +43,7 @@ export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
       await updateOrder({
         orderNumber: order.orderNumber,
         ...values,
-      });
-    } catch (error) {
-      showNotification({
-        title: "Sipariş kargolanamdı",
-        message: "Beklenmedik bir hata oluştu",
-        color: "red",
-        icon: <IconX />,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isUpdated) {
+      }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Sipariş kargolandı",
@@ -63,8 +51,10 @@ export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
         icon: <IconCircleCheck />,
       });
       closeModal("updateDelivery");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isUpdated]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onUpdateDeliverySubmit)}>

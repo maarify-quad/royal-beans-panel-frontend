@@ -1,20 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Routing
 import { Link } from "react-router-dom";
 
-// Services
-import { useCancelOrderMutation } from "@services/orderApi";
-
 // UI Components
-import { Button, Group, LoadingOverlay, Text } from "@mantine/core";
+import { Button, Group, LoadingOverlay } from "@mantine/core";
 
 // UI Utils
-import { openConfirmModal, openModal } from "@mantine/modals";
-import { showNotification } from "@mantine/notifications";
+import { openModal } from "@mantine/modals";
+
+// Hooks
+import { useCancelOrder } from "@hooks/order/useCancelOrder";
 
 // Icons
-import { IconTrash, IconTruckDelivery, IconCircleCheck, IconBasket } from "@tabler/icons";
+import { IconTrash, IconTruckDelivery, IconBasket } from "@tabler/icons";
 
 // Interfaces
 import { OrderWithAll } from "@interfaces/order";
@@ -32,8 +31,7 @@ const UpdateDelivery = React.lazy(() =>
 );
 
 export const Actions: React.FC<ActionsProps> = ({ order }) => {
-  const [cancelOrder, { isLoading: isCancelling, isSuccess: isCancelled }] =
-    useCancelOrderMutation();
+  const { openCancelOrder } = useCancelOrder();
 
   const openUpdateDelivery = () => {
     openModal({
@@ -46,30 +44,6 @@ export const Actions: React.FC<ActionsProps> = ({ order }) => {
       ),
     });
   };
-
-  const openCancelOrder = () => {
-    openConfirmModal({
-      centered: true,
-      title: "Sipariş iptal et",
-      children: <Text size="sm">Siparişi iptal etmek istediğinize emin misiniz?</Text>,
-      labels: { confirm: "İptal Et", cancel: "Vazgeç" },
-      confirmProps: { color: "red" },
-      onConfirm: async () => {
-        await cancelOrder(order.orderNumber);
-      },
-    });
-  };
-
-  useEffect(() => {
-    if (isCancelled) {
-      showNotification({
-        title: "Başarılı",
-        message: "Sipariş iptal edildi",
-        color: "green",
-        icon: <IconCircleCheck />,
-      });
-    }
-  }, [isCancelled]);
 
   if (order.isCancelled) {
     return <></>;
@@ -92,8 +66,9 @@ export const Actions: React.FC<ActionsProps> = ({ order }) => {
         color="red"
         variant="subtle"
         leftIcon={<IconTrash />}
-        onClick={openCancelOrder}
-        loading={isCancelling}
+        onClick={() => {
+          openCancelOrder(order.orderNumber);
+        }}
       >
         İptal Et
       </Button>
