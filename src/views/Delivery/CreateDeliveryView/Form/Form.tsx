@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 
 // Services
-import { useGetAllSuppliersQuery } from "@services/supplierApi";
-import { useGetAllProductsQuery } from "@services/productApi";
+import { useGetSuppliersQuery } from "@services/supplierApi";
+import { useGetProductsQuery } from "@services/productApi";
 
 // UI Components
 import { Button, LoadingOverlay, NumberInput, Select, TextInput } from "@mantine/core";
@@ -21,18 +21,10 @@ type FormProps = {
 
 export const Form: React.FC<FormProps> = ({ form }) => {
   // Get latest suppliers
-  const {
-    data: suppliersData,
-    isLoading: isSuppliersLoading,
-    error: suppliersError,
-  } = useGetAllSuppliersQuery();
+  const { data: suppliersData, isLoading: isSuppliersLoading } = useGetSuppliersQuery();
 
   // Get latest products
-  const {
-    data: products,
-    isLoading: isProductsLoading,
-    error: productsError,
-  } = useGetAllProductsQuery();
+  const { data: products, isLoading: isProductsLoading } = useGetProductsQuery();
 
   const productSelectOptions = React.useMemo(
     () =>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useCreateBulkProductsFromExcelMutation } from "@services/productApi";
@@ -15,7 +15,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import ExcelFormatExampleImage from "@assets/create-bulk-products-excel-format-example.png";
 
 // Icons
-import { CircleCheck as CircleCheckIcon, X as ErrorIcon } from "tabler-icons-react";
+import { IconCircleCheck, IconX } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
@@ -23,8 +23,7 @@ import { schema, initialValues } from "./validation/schema";
 
 export const ExcelCreate = () => {
   // Mutations
-  const [createBulkProductsMutation, { isSuccess, isLoading }] =
-    useCreateBulkProductsFromExcelMutation();
+  const [createBulkProductsMutation, { isLoading }] = useCreateBulkProductsFromExcelMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -39,33 +38,22 @@ export const ExcelCreate = () => {
         return showNotification({
           title: "Hatalı dosya",
           message: "Lütfen geçerli bir excel dosyası seçiniz",
-          icon: <ErrorIcon />,
+          icon: <IconX />,
           color: "red",
         });
       }
-
-      await createBulkProductsMutation({ excel });
-    } catch {
-      showNotification({
-        title: "Ürün oluşturulamadı",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
+      await createBulkProductsMutation({ excel }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Ürünler oluşturuldu",
-        icon: <CircleCheckIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
       closeModal("createProduct");
+    } catch {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isSuccess]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onCreateBulkProductSubmit)} encType="multipart/form-data">

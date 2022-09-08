@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useCreateBulkPriceListProductsFromExcelMutation } from "@services/priceListProductApi";
@@ -15,7 +15,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import ExcelFormatExampleImage from "@assets/create-bulk-price-list-products-excel-format-example.png";
 
 // Icons
-import { CircleCheck as CircleCheckIcon, X as ErrorIcon } from "tabler-icons-react";
+import { IconCircleCheck, IconX } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
@@ -28,7 +28,7 @@ type ExcelCreateProps = {
 
 export const ExcelCreate: React.FC<ExcelCreateProps> = ({ priceListId }) => {
   // Mutations
-  const [createBulkPriceListProductsMutation, { isSuccess, isLoading }] =
+  const [createBulkPriceListProductsMutation, { isLoading }] =
     useCreateBulkPriceListProductsFromExcelMutation();
 
   // Form utils
@@ -44,33 +44,22 @@ export const ExcelCreate: React.FC<ExcelCreateProps> = ({ priceListId }) => {
         return showNotification({
           title: "Hatalı dosya",
           message: "Lütfen geçerli bir excel dosyası seçiniz",
-          icon: <ErrorIcon />,
+          icon: <IconX />,
           color: "red",
         });
       }
-
-      await createBulkPriceListProductsMutation({ excel, priceListId });
-    } catch {
-      showNotification({
-        title: "Ürün oluşturulamadı",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
+      await createBulkPriceListProductsMutation({ excel, priceListId }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Ürünler oluşturuldu",
-        icon: <CircleCheckIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
       closeModal("createPriceListProduct");
+    } catch {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isSuccess]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onCreateBulkProductSubmit)} encType="multipart/form-data">

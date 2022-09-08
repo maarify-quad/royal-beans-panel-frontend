@@ -21,7 +21,7 @@ import {
 } from "@mantine/core";
 
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Components
 import { ProductsTab } from "./ProductsTab";
@@ -49,16 +49,18 @@ export const OrderDetailsView = () => {
   const { orderNumber } = useParams();
   const { classes } = useStyles();
 
+  const { data, isLoading, error } = useGetOrderByOrderNumberQuery(parseInt(orderNumber!), {
+    skip: orderNumber ? isNaN(parseInt(orderNumber)) : true,
+  });
+
   if (!orderNumber) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  const { data, isLoading, error } = useGetOrderByOrderNumberQuery(parseInt(orderNumber));
-
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Siparişe ulaşılamadı"
         variant="filled"
@@ -95,7 +97,7 @@ export const OrderDetailsView = () => {
         {data?.order && <Actions order={data?.order} />}
       </Group>
       {data?.order && data.order.isCancelled && (
-        <Alert mt="md" color="red" variant="filled" icon={<AlertCircleIcon />}>
+        <Alert mt="md" color="red" variant="filled" icon={<IconInfoCircle />}>
           <Text weight={700}>Bu sipariş iptal edilmiştir</Text>
         </Alert>
       )}

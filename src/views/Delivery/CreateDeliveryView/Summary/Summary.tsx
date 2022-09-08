@@ -7,7 +7,7 @@ import { ActionIcon, Alert, Button, Card, Group, Stack, Text } from "@mantine/co
 import { UseFormReturnType } from "@mantine/form";
 
 // Icons
-import { Trash as TrashIcon, InfoCircle as InfoCircleIcon } from "tabler-icons-react";
+import { IconTrash, IconInfoCircle } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "../Form/validation/Inputs";
@@ -45,7 +45,7 @@ export const Summary: React.FC<SummaryProps> = ({ form }) => {
                   </Text>
                 </div>
                 <ActionIcon color="red" onClick={handleRemoveProduct(index)}>
-                  <TrashIcon size={16} />
+                  <IconTrash size={16} />
                 </ActionIcon>
               </Group>
             </Card.Section>
@@ -57,7 +57,7 @@ export const Summary: React.FC<SummaryProps> = ({ form }) => {
           Sevkiyat oluştur
         </Button>
       ) : (
-        <Alert icon={<InfoCircleIcon />} color="cyan">
+        <Alert icon={<IconInfoCircle />} color="cyan">
           Sepette ürün bulunmamaktadır
         </Alert>
       )}

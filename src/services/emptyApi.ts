@@ -63,8 +63,6 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
       // Get the new access token from the response
       const refreshTokenData = await refreshTokenResponse.json();
 
-      console.log(refreshTokenData.accessToken);
-
       // Set the new access token in store
       api.dispatch(
         setAuthentication({

@@ -1,13 +1,13 @@
 import React from "react";
 
 // Services
-import { useGetAllSuppliersQuery } from "@services/supplierApi";
+import { useGetSuppliersQuery } from "@services/supplierApi";
 
 // UI Components
 import { Container, Loader, Alert } from "@mantine/core";
 
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Components
 import { ResultsTable } from "@components/ResultsTable";
@@ -20,7 +20,7 @@ export const Results = () => {
   const [page, setPage] = React.useState(1);
 
   // Queries
-  const { data, isLoading, error } = useGetAllSuppliersQuery(page);
+  const { data, isLoading, error } = useGetSuppliersQuery(page);
 
   const supplierRows: RowDef[][] = React.useMemo(
     () =>
@@ -39,7 +39,7 @@ export const Results = () => {
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Tedarikçilere ulaşılamadı"
         variant="filled"
@@ -52,7 +52,7 @@ export const Results = () => {
 
   if (data?.suppliers.length === 0) {
     return (
-      <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
+      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
         Tedarikçi bulunmamaktadır
       </Alert>
     );
@@ -61,11 +61,7 @@ export const Results = () => {
   return (
     <Container fluid mt="md" p={0}>
       <ResultsTable
-        headers={[
-          { value: "Tedarikçi" },
-          { value: "Tedarikçi Kodu" },
-          { value: "Toplam Hacim" },
-        ]}
+        headers={[{ value: "Tedarikçi" }, { value: "Tedarikçi Kodu" }, { value: "Toplam Hacim" }]}
         rows={supplierRows}
         pagination={{
           totalPage: data?.totalPage || 0,

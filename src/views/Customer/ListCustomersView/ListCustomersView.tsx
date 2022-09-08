@@ -18,17 +18,10 @@ import {
 import { openModal } from "@mantine/modals";
 
 // Icons
-import { UserPlus as UserPlusIcon } from "tabler-icons-react";
+import { IconUserPlus } from "@tabler/icons";
 
 // Components
 import { Results } from "./Results";
-
-// Lazy Components
-const CreateCustomer = React.lazy(() =>
-  import("../../../components/Customer/CreateCustomer").then((module) => ({
-    default: module.CreateCustomer,
-  }))
-);
 
 // Styles
 const useStyles = createStyles((theme) => ({
@@ -40,10 +33,17 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+// Lazy Imports
+const CreateCustomer = React.lazy(() =>
+  import("../../../components/Customer/CreateCustomer").then((module) => ({
+    default: module.CreateCustomer,
+  }))
+);
+
 export const ListCustomersView = () => {
   const { classes } = useStyles();
 
-  const onCreateCustomerClick = () => {
+  const openCreateCustomer = () => {
     openModal({
       key: "createCustomer",
       title: "Müşteri Oluştur",
@@ -69,7 +69,7 @@ export const ListCustomersView = () => {
         <Title order={2} className={classes.rootTitle}>
           Müşteriler
         </Title>
-        <Button leftIcon={<UserPlusIcon />} onClick={onCreateCustomerClick}>
+        <Button leftIcon={<IconUserPlus />} onClick={openCreateCustomer}>
           Yeni Müşteri
         </Button>
       </Group>

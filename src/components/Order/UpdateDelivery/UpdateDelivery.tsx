@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useUpdateOrderMutation } from "@services/orderApi";
@@ -11,7 +11,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as SuccessIcon } from "tabler-icons-react";
+import { IconX, IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
@@ -27,7 +27,7 @@ type UpdateDeliveryProps = {
 };
 
 export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
-  const [updateOrder, { isLoading: isUpdating, isSuccess: isUpdated }] = useUpdateOrderMutation();
+  const [updateOrder, { isLoading: isUpdating }] = useUpdateOrderMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -43,28 +43,18 @@ export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
       await updateOrder({
         orderNumber: order.orderNumber,
         ...values,
-      });
-    } catch (error) {
-      showNotification({
-        title: "Sipariş kargolanamdı",
-        message: "Beklenmedik bir hata oluştu",
-        color: "red",
-        icon: <ErrorIcon />,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isUpdated) {
+      }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Sipariş kargolandı",
         color: "green",
-        icon: <SuccessIcon />,
+        icon: <IconCircleCheck />,
       });
       closeModal("updateDelivery");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isUpdated]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onUpdateDeliverySubmit)}>

@@ -1,13 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useGetProfileQuery } from "@services/authApi";
-
-// UI Utils
-import { showNotification } from "@mantine/notifications";
-
-// Icons
-import { AlertTriangle as AlertTriangleIcon } from "tabler-icons-react";
 
 // Components
 import { LoadingScreen } from "@components/LoadingScreen";
@@ -18,18 +12,7 @@ type AuthInitialiserProps = {
 };
 
 export const AuthInitialiser: React.FC<AuthInitialiserProps> = ({ children }) => {
-  const { isLoading, error } = useGetProfileQuery();
-
-  useEffect(() => {
-    if ((error as any)?.message && (error as any)?.message === "tokenExpired") {
-      showNotification({
-        title: "Oturumunuz sona erdi",
-        message: "Lütfen tekrar giriş yapın",
-        color: "orange",
-        icon: <AlertTriangleIcon />,
-      });
-    }
-  }, [(error as any)?.message]);
+  const { isLoading } = useGetProfileQuery();
 
   if (isLoading) {
     return <LoadingScreen />;

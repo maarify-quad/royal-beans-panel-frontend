@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useCreatePriceListMutation } from "@services/priceListApi";
@@ -12,15 +12,14 @@ import { showNotification } from "@mantine/notifications";
 import { closeModal } from "@mantine/modals";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as SuccessIcon } from "tabler-icons-react";
+import { IconX, IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
 export const CreatePriceList = () => {
-  const [createPriceList, { isLoading: isCreating, isSuccess: isCreated }] =
-    useCreatePriceListMutation();
+  const [createPriceList, { isLoading: isCreating }] = useCreatePriceListMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -33,28 +32,18 @@ export const CreatePriceList = () => {
 
   const onCreatePriceListSubmit = async (values: Inputs) => {
     try {
-      await createPriceList(values);
-    } catch (error) {
-      showNotification({
-        title: "Hata",
-        message: "Beklenmedik bir hata oluştu",
-        color: "red",
-        icon: <ErrorIcon />,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isCreated) {
+      await createPriceList(values).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Fiyat listesi oluşturuldu",
         color: "green",
-        icon: <SuccessIcon />,
+        icon: <IconCircleCheck />,
       });
       closeModal("createPriceList");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isCreated]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onCreatePriceListSubmit)}>
@@ -70,7 +59,7 @@ export const CreatePriceList = () => {
         mt="md"
         {...form.getInputProps("description")}
       />
-      <Button type="submit" mt="md">
+      <Button type="submit" mt="lg" loading={isCreating}>
         Oluştur
       </Button>
     </form>

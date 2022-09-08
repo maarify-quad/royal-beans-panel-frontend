@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useUpdatePriceListProductMutation } from "@services/priceListProductApi";
@@ -12,7 +12,7 @@ import { showNotification } from "@mantine/notifications";
 import { closeModal } from "@mantine/modals";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as SuccessIcon } from "tabler-icons-react";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
@@ -27,8 +27,7 @@ type EditPriceListProductProps = {
 };
 
 export const EditPriceListProduct: React.FC<EditPriceListProductProps> = ({ priceListProduct }) => {
-  const [updatePriceListProduct, { isLoading: isUpdating, isSuccess: isUpdated }] =
-    useUpdatePriceListProductMutation();
+  const [updatePriceListProduct, { isLoading: isUpdating }] = useUpdatePriceListProductMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -50,28 +49,18 @@ export const EditPriceListProduct: React.FC<EditPriceListProductProps> = ({ pric
           ...priceListProduct.product,
           name: values.name,
         },
-      });
-    } catch (error) {
-      showNotification({
-        title: "Ürün güncellenemedi",
-        message: "Beklenmedik bir hata oluştu",
-        color: "red",
-        icon: <ErrorIcon />,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isUpdated) {
+      }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Ürün güncellendi",
-        icon: <SuccessIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
       closeModal("updatePriceListProduct");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isUpdated]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onEditPriceListProductSubmit)}>

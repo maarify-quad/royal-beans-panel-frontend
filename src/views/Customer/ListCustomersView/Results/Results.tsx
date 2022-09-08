@@ -7,7 +7,7 @@ import { useGetCustomersQuery } from "@services/customerApi";
 import { Container, Loader, Alert } from "@mantine/core";
 
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Components
 import { ResultsTable } from "@components/ResultsTable";
@@ -38,7 +38,7 @@ export const Results = () => {
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Müşterilere ulaşılamadı"
         variant="filled"
@@ -51,7 +51,7 @@ export const Results = () => {
 
   if (data?.customers.length === 0) {
     return (
-      <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
+      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
         Müşteri bulunmamaktadır
       </Alert>
     );

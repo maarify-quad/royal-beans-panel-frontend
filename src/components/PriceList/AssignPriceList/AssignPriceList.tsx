@@ -12,11 +12,7 @@ import { showNotification } from "@mantine/notifications";
 import { closeModal } from "@mantine/modals";
 
 // Icons
-import {
-  AlertCircle as AlertCircleIcon,
-  X as ErrorIcon,
-  CircleCheck as CircleCheckIcon,
-} from "tabler-icons-react";
+import { IconAlertCircle, IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs, initialValues } from "./validation/Inputs";
@@ -38,10 +34,7 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
   const { data, isLoading: isCustomersLoading } = useGetCustomersQuery();
 
   // Mutations
-  const [
-    updateCustomer,
-    { isLoading: isUpdateCustomerLoading, isSuccess: isUpdateCustomerSuccess },
-  ] = useUpdateCustomerMutation();
+  const [updateCustomer, { isLoading: isUpdateCustomerLoading }] = useUpdateCustomerMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -66,14 +59,16 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
       await updateCustomer({
         id: values.customerId,
         priceListId,
-      });
-    } catch (error) {
+      }).unwrap();
       showNotification({
-        title: "Fiyat listesi atanamadı",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
+        title: "Başarılı",
+        message: "Fiyat listesi başarıyla atandı",
+        icon: <IconCircleCheck />,
+        color: "green",
       });
+      closeModal("assignPriceList");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
   };
 
@@ -81,18 +76,6 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
   useEffect(() => {
     setSelectedCustomer(data?.customers.find((customer) => customer.id === form.values.customerId));
   }, [form.values.customerId]);
-
-  useEffect(() => {
-    if (isUpdateCustomerSuccess) {
-      showNotification({
-        title: "Başarılı",
-        message: "Fiyat listesi başarıyla atandı",
-        icon: <CircleCheckIcon />,
-        color: "green",
-      });
-      closeModal("assignPriceList");
-    }
-  }, [isUpdateCustomerSuccess]);
 
   return (
     <form onSubmit={form.onSubmit(onAssignPriceListSubmit)}>
@@ -104,7 +87,7 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
         {...form.getInputProps("customerId")}
       />
       {selectedCustomer?.priceList ? (
-        <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
+        <Alert color="cyan" mt="md" icon={<IconAlertCircle />}>
           Bu müşteri "{selectedCustomer.priceList.name}" fiyat listesinde kayıtlıdır. Yeni fiyat
           listesi üzerine yazılacaktır
         </Alert>

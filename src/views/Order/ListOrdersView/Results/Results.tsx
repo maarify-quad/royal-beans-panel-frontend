@@ -11,11 +11,7 @@ import { useGetOrdersQuery } from "@services/orderApi";
 import { Container, Loader, Alert, ThemeIcon, Group } from "@mantine/core";
 
 // Icons
-import {
-  AlertCircle as AlertCircleIcon,
-  CircleCheck as CircleCheckIcon,
-  X as XIcon,
-} from "tabler-icons-react";
+import { IconInfoCircle, IconCircleCheck, IconX } from "@tabler/icons";
 
 // Components
 import { ResultsTable } from "@components/ResultsTable";
@@ -45,11 +41,11 @@ export const Results = () => {
         {
           value: order.isParasutVerified ? (
             <ThemeIcon color="green" radius="xl">
-              <CircleCheckIcon />
+              <IconCircleCheck />
             </ThemeIcon>
           ) : (
             <ThemeIcon color="red" radius="xl">
-              <XIcon />
+              <IconX />
             </ThemeIcon>
           ),
         },
@@ -72,7 +68,7 @@ export const Results = () => {
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Siparişlere ulaşılamadı"
         variant="filled"
@@ -85,7 +81,7 @@ export const Results = () => {
 
   if (data?.orders.length === 0) {
     return (
-      <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
+      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
         Sipariş bulunmamaktadır
       </Alert>
     );

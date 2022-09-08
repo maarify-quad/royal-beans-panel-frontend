@@ -19,7 +19,7 @@ import {
 } from "@mantine/core";
 
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Components
 import { Results } from "./Results";
@@ -45,16 +45,18 @@ export const DeliveryDetailsView = () => {
   const { id } = useParams();
   const { classes } = useStyles();
 
+  const { data, isLoading, error } = useGetDeliveryByIdQuery(id!, {
+    skip: !id,
+  });
+
   if (!id) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  const { data, isLoading, error } = useGetDeliveryByIdQuery(id);
-
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Tedarikçiye ulaşılamadı"
         variant="filled"

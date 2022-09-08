@@ -4,7 +4,7 @@ import React from "react";
 import { Table, Container, Alert } from "@mantine/core";
 
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Interfaces
 import { Customer } from "@interfaces/customer";
@@ -17,7 +17,7 @@ type CustomersResultProps = {
 export const CustomersResult: React.FC<CustomersResultProps> = ({ customers }) => {
   if (customers?.length === 0) {
     return (
-      <Alert icon={<AlertCircleIcon />} color="cyan">
+      <Alert icon={<IconInfoCircle />} color="cyan">
         Bu fiyat listesinde müşteri bulunmamaktadır.
       </Alert>
     );

@@ -6,7 +6,7 @@ import { Product } from "@interfaces/product";
 
 export const roastApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllRoasts: builder.query<GetAllRoastsResponse, number | void>({
+    getRoasts: builder.query<GetAllRoastsResponse, number | void>({
       query: (page) => (page ? `/roasts?page=${page}` : "/roasts"),
       providesTags: ["Roast"],
     }),
@@ -24,7 +24,7 @@ export const roastApi = emptyApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllRoastsQuery, useGetRoastByIdQuery, useCreateRoastMutation } = roastApi;
+export const { useGetRoastsQuery, useGetRoastByIdQuery, useCreateRoastMutation } = roastApi;
 
 export interface GetAllRoastsResponse {
   roasts: Roast[];

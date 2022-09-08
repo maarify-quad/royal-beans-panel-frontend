@@ -20,11 +20,7 @@ import {
 } from "@mantine/core";
 
 // Icons
-import {
-  AlertCircle as AlertCircleIcon,
-  TruckDelivery as TruckDeliveryIcon,
-  ListDetails as ListDetailsIcon,
-} from "tabler-icons-react";
+import { IconInfoCircle, IconTruckDelivery, IconListDetails } from "@tabler/icons";
 
 // Components
 import { DetailsTab } from "./DetailsTab";
@@ -44,16 +40,18 @@ export const SupplierDetailsView = () => {
   const { id } = useParams();
   const { classes } = useStyles();
 
+  const { data, isLoading, error } = useGetSupplierByIdQuery(id!, {
+    skip: !id,
+  });
+
   if (!id) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  const { data, isLoading, error } = useGetSupplierByIdQuery(id);
-
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Tedarikçiye ulaşılamadı"
         variant="filled"
@@ -88,10 +86,10 @@ export const SupplierDetailsView = () => {
       </Title>
       <Tabs defaultValue="details" mt="md">
         <Tabs.List>
-          <Tabs.Tab value="details" icon={<ListDetailsIcon />}>
+          <Tabs.Tab value="details" icon={<IconListDetails />}>
             Detaylar
           </Tabs.Tab>
-          <Tabs.Tab value="deliveries" icon={<TruckDeliveryIcon />}>
+          <Tabs.Tab value="deliveries" icon={<IconTruckDelivery />}>
             Sevkiyatlar
           </Tabs.Tab>
         </Tabs.List>

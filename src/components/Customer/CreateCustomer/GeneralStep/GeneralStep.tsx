@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useGetPriceListsQuery } from "@services/priceListApi";

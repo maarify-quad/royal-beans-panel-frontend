@@ -35,4 +35,5 @@ interface GetPriceListsResponse {
 interface CreatePriceListParams {
   name: string;
   description?: string;
+  cloneDefaultPriceList?: boolean;
 }

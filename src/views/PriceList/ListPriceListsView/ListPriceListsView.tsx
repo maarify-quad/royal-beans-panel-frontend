@@ -18,7 +18,7 @@ import {
 import { openModal } from "@mantine/modals";
 
 // Icons
-import { Plus as PlusIcon } from "tabler-icons-react";
+import { IconPlus } from "@tabler/icons";
 
 // Components
 import { Results } from "./Results";
@@ -69,7 +69,7 @@ export const ListPriceListsView = () => {
         <Title order={2} className={classes.rootTitle}>
           Fiyat Listeleri
         </Title>
-        <Button leftIcon={<PlusIcon />} onClick={openCreatePriceList}>
+        <Button leftIcon={<IconPlus />} onClick={openCreatePriceList}>
           Yeni Fiyat Listesi
         </Button>
       </Group>

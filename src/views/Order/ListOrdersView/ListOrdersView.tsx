@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { createStyles, Title, Group, Button, Breadcrumbs, Anchor } from "@mantine/core";
 
 // Icons
-import { ShoppingCartPlus as ShoppingCartPlusIcon } from "tabler-icons-react";
+import { IconShoppingCartPlus } from "@tabler/icons";
 
 // Components
 import { Results } from "./Results";
@@ -39,7 +39,7 @@ export const ListOrdersView = () => {
         <Title order={2} className={classes.rootTitle}>
           Siparişler
         </Title>
-        <Button leftIcon={<ShoppingCartPlusIcon />} component={Link} to="/dashboard/orders/create">
+        <Button leftIcon={<IconShoppingCartPlus />} component={Link} to="/dashboard/orders/create">
           Yeni Sipariş
         </Button>
       </Group>

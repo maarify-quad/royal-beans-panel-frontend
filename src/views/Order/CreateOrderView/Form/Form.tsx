@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Routing
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as CircleCheckIcon } from "tabler-icons-react";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs, initialValues } from "./validation/Inputs";
@@ -45,8 +45,7 @@ export const Form = () => {
     });
 
   // Mutations
-  const [createOrder, { isLoading: isCreatingOrder, isSuccess: isCreateOrderSuccess }] =
-    useCreateOrderMutation();
+  const [createOrder, { isLoading: isCreatingOrder }] = useCreateOrderMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -80,37 +79,37 @@ export const Form = () => {
   const onCreateOrderSubmit = async (values: Inputs) => {
     try {
       // Destructure form values
-      const { customerId, deliveryDate, deliveryType, specialNote, orderProducts } = values;
+      const {
+        customerId,
+        deliveryDate,
+        deliveryAddressId,
+        deliveryType,
+        specialNote,
+        orderProducts,
+      } = values;
 
       // Create order
       await createOrder({
         customerId,
         deliveryDate,
+        deliveryAddressId,
         deliveryType,
         specialNote,
         orderProducts,
-      });
-    } catch (error) {
-      showNotification({
-        title: "Sipariş oluşturma başarısız",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  };
+      }).unwrap();
 
-  useEffect(() => {
-    if (isCreateOrderSuccess) {
       showNotification({
         title: "Başarılı",
         message: "Sipariş oluşturuldu",
-        icon: <CircleCheckIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
+
       navigate("/dashboard/orders");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isCreateOrderSuccess]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onCreateOrderSubmit)}>

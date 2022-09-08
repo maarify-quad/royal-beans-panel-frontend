@@ -21,7 +21,7 @@ import {
 } from "@mantine/core";
 
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Components
 import { RoastedCoffees } from "./RoastedCoffees";
@@ -41,16 +41,18 @@ export const RoastDetailsView = () => {
   const { id } = useParams();
   const { classes } = useStyles();
 
+  const { data, isLoading, error } = useGetRoastByIdQuery(id!, {
+    skip: !id,
+  });
+
   if (!id) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  const { data, isLoading, error } = useGetRoastByIdQuery(id);
-
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Tedarikçiye ulaşılamadı"
         variant="filled"

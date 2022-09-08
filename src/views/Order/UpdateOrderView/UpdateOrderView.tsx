@@ -15,7 +15,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as SuccessIcon } from "tabler-icons-react";
+import { IconX, IconCircleCheck } from "@tabler/icons";
 
 // Components
 import { Form, Summary, Inputs, schema, initialValues } from "@components/Order/CartForm";
@@ -54,7 +54,7 @@ export const UpdateOrderView = () => {
   const { data, isLoading: isOrderLoading } = useGetOrderByOrderNumberQuery(
     parseInt(orderNumber!),
     {
-      skip: !orderNumber,
+      skip: orderNumber ? isNaN(parseInt(orderNumber)) : true,
     }
   );
   const { data: priceListProducts, isLoading: isPriceListProductsLoading } =
@@ -63,36 +63,25 @@ export const UpdateOrderView = () => {
     });
 
   // Mutations
-  const [updateOrderProducts, { isLoading: isUpdating, isSuccess: isUpdated }] =
-    useUpdateOrderProductsMutation();
+  const [updateOrderProducts, { isLoading: isUpdating }] = useUpdateOrderProductsMutation();
 
   const onUpdateOrderSubmit = async (values: Inputs) => {
     try {
       await updateOrderProducts({
         orderNumber: parseInt(orderNumber!),
         orderProducts: values.orderProducts,
-      });
-    } catch (error) {
-      showNotification({
-        title: "Hata",
-        message: "Beklenmedik bir hata oluştu",
-        color: "red",
-        icon: <ErrorIcon />,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isUpdated) {
+      }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Sipariş güncellendi",
         color: "green",
-        icon: <SuccessIcon />,
+        icon: <IconCircleCheck />,
       });
       navigate(`/dashboard/orders/${orderNumber}`);
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isUpdated]);
+  };
 
   if (isOrderLoading || isPriceListProductsLoading) {
     return <Loader />;

@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { authApi } from "@services/authApi";
 
 // Interfaces & Types
-import { AuthState, User } from "@interfaces/auth";
+import { AuthState } from "@interfaces/auth";
 import type { RootState } from "@app/store";
 
 const initialState: AuthState = {

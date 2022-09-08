@@ -47,6 +47,7 @@ export const orderApi = emptyApi.injectEndpoints({
         url: `/orders/cancel/${orderNumber}`,
         method: "POST",
       }),
+      invalidatesTags: (_result, _error, orderNumber) => [{ type: "Order", id: orderNumber }],
     }),
   }),
 });
@@ -75,6 +76,7 @@ interface CreateOrderParams {
   customerId: string;
   deliveryDate: Date;
   specialNote: string;
+  deliveryAddressId: number;
   deliveryType: string;
   orderProducts: CreateOrderProductParams[];
 }

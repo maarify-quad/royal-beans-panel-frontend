@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useUpdateCustomerMutation } from "@services/customerApi";
@@ -16,7 +16,7 @@ import { showNotification } from "@mantine/notifications";
 import { closeModal } from "@mantine/modals";
 
 // Icons
-import { X as ErrorIcon, CircleCheck as SuccessIcon } from "tabler-icons-react";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Interfaces
 import { Customer } from "@interfaces/customer";
@@ -31,8 +31,7 @@ type EditCustomerProps = {
 };
 
 export const EditCustomer: React.FC<EditCustomerProps> = ({ fields, customer }) => {
-  const [updateCustomer, { isLoading: isUpdating, isSuccess: isUpdated }] =
-    useUpdateCustomerMutation();
+  const [updateCustomer, { isLoading: isUpdating }] = useUpdateCustomerMutation();
 
   // Form utils
   const form = useForm({
@@ -49,28 +48,18 @@ export const EditCustomer: React.FC<EditCustomerProps> = ({ fields, customer }) 
       await updateCustomer({
         id: customer.id,
         ...pickBy(values, (value) => value !== ""),
-      });
-    } catch (error) {
-      showNotification({
-        title: "Müşteri Güncellenemedi",
-        message: "Beklenmedik bir hata oluştur",
-        color: "red",
-        icon: <ErrorIcon />,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isUpdated) {
+      }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Müşteri güncellendi",
         color: "green",
-        icon: <SuccessIcon />,
+        icon: <IconCircleCheck />,
       });
       closeModal("editCustomer");
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isUpdated]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onUpdateCustomerSubmit)}>

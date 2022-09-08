@@ -5,7 +5,7 @@ import { Delivery, CreateDeliveryDetail } from "@interfaces/delivery";
 
 export const deliveryApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllDeliveries: builder.query<GetAllDeliveriesResponse, number | void>({
+    getDeliveries: builder.query<GetAllDeliveriesResponse, number | void>({
       query: (page) => (page ? `/deliveries?page=${page}` : "/deliveries"),
       providesTags: ["Delivery"],
     }),
@@ -24,7 +24,7 @@ export const deliveryApi = emptyApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllDeliveriesQuery, useGetDeliveryByIdQuery, useCreateDeliveryMutation } =
+export const { useGetDeliveriesQuery, useGetDeliveryByIdQuery, useCreateDeliveryMutation } =
   deliveryApi;
 
 interface GetAllDeliveriesResponse {

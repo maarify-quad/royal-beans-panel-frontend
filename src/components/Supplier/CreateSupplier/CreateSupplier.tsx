@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import { useCreateSupplierMutation } from "@services/supplierApi";
@@ -12,14 +12,14 @@ import { closeModal } from "@mantine/modals";
 import { useForm, zodResolver } from "@mantine/form";
 
 // Icons
-import { CircleCheck as CircleCheckIcon, X as ErrorIcon } from "tabler-icons-react";
+import { IconCircleCheck, IconX } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
 import { schema, initialValues } from "./validation/schema";
 
 export const CreateSupplier = () => {
-  const [createSupplier, { data, isSuccess, isLoading }] = useCreateSupplierMutation();
+  const [createSupplier, { data, isLoading }] = useCreateSupplierMutation();
   const form = useForm<Inputs>({
     initialValues,
     validate: zodResolver(schema),
@@ -29,28 +29,18 @@ export const CreateSupplier = () => {
 
   const onCreateSupplierSubmit = async (inputs: Inputs) => {
     try {
-      await createSupplier(inputs);
-    } catch {
-      showNotification({
-        title: "Tedarikçi oluşturulamadı",
-        message: "Beklenmedik bir hata oluştu",
-        icon: <ErrorIcon />,
-        color: "red",
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
+      await createSupplier(inputs).unwrap();
       showNotification({
         title: "Başarılı",
         message: data?.id ? `${data.id} koduyla tedarikçi oluşturuldu` : "Tedarikçi oluşturuldu",
-        icon: <CircleCheckIcon />,
+        icon: <IconCircleCheck />,
         color: "green",
       });
       closeModal("createSupplier");
+    } catch {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
-  }, [isSuccess]);
+  };
 
   return (
     <form onSubmit={form.onSubmit(onCreateSupplierSubmit)}>

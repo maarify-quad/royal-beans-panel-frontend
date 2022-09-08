@@ -2,13 +2,13 @@ import React from "react";
 import dayjs from "dayjs";
 
 // Services
-import { useGetAllDeliveriesQuery } from "@services/deliveryApi";
+import { useGetDeliveriesQuery } from "@services/deliveryApi";
 
 // UI Components
 import { Container, Loader, Alert } from "@mantine/core";
 
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Components
 import { ResultsTable } from "@components/ResultsTable";
@@ -21,7 +21,7 @@ export const Results = () => {
   const [page, setPage] = React.useState(1);
 
   // Queries
-  const { data, isLoading, error } = useGetAllDeliveriesQuery(page);
+  const { data, isLoading, error } = useGetDeliveriesQuery(page);
 
   const deliveryRows: RowDef[][] = React.useMemo(
     () =>
@@ -41,7 +41,7 @@ export const Results = () => {
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Tedarikçilere ulaşılamadı"
         variant="filled"
@@ -54,7 +54,7 @@ export const Results = () => {
 
   if (data?.deliveries.length === 0) {
     return (
-      <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
+      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
         Sevkiyat bulunmamaktadır
       </Alert>
     );

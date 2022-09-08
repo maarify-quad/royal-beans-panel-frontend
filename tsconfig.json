@@ -20,6 +20,7 @@
       "@components/*": ["./src/components/*"],
       "@assets/*": ["./src/assets/*"],
       "@app/*": ["./src/app/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@slices/*": ["./src/slices/*"],
       "@services/*": ["./src/services/*"],
       "@interfaces/*": ["./src/interfaces/*"]

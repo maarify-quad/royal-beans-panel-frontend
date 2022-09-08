@@ -25,11 +25,7 @@ import {
 import { openModal } from "@mantine/modals";
 
 // Icons
-import {
-  AlertCircle as AlertCircleIcon,
-  Plus as PlusIcon,
-  UserPlus as UserPlusIcon,
-} from "tabler-icons-react";
+import { IconInfoCircle, IconPlus, IconUserPlus } from "@tabler/icons";
 
 // Components
 import { ProductsResult } from "./ProductsResult";
@@ -70,11 +66,13 @@ export const PriceListDetailsView = () => {
   const { id } = useParams();
   const { classes } = useStyles();
 
+  const { data, isLoading, error } = useGetPriceListByIdQuery(id!, {
+    skip: !id,
+  });
+
   if (!id) {
     return <Navigate to="/dashboard" replace />;
   }
-
-  const { data, isLoading, error } = useGetPriceListByIdQuery(id);
 
   const onAddProductClick = () => {
     openModal({
@@ -106,7 +104,7 @@ export const PriceListDetailsView = () => {
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Fiyat listesine ulaşılamadı"
         variant="filled"
@@ -141,10 +139,10 @@ export const PriceListDetailsView = () => {
           {data?.name}
         </Title>
         <Group>
-          <Button leftIcon={<PlusIcon />} onClick={onAddProductClick}>
+          <Button leftIcon={<IconPlus />} onClick={onAddProductClick}>
             Ürün Ekle
           </Button>
-          <Button variant="default" leftIcon={<UserPlusIcon />} onClick={onAssignPriceListClick}>
+          <Button variant="default" leftIcon={<IconUserPlus />} onClick={onAssignPriceListClick}>
             Müşteri Ekle
           </Button>
         </Group>

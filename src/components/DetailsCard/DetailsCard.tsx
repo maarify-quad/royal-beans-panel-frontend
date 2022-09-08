@@ -4,7 +4,7 @@ import React, { ReactNode } from "react";
 import { Button, Card, Group, Text } from "@mantine/core";
 
 // Icons
-import { Edit as EditIcon } from "tabler-icons-react";
+import { IconEdit } from "@tabler/icons";
 
 // Props
 type DetailsCardProps = {
@@ -30,7 +30,7 @@ export const DetailsCard: React.FC<DetailsCardProps> = ({ title, value, editActi
         </Text>
         {editAction && (
           <Button px={4} size="xs" variant="subtle" color="gray" onClick={editAction}>
-            <EditIcon size={18} />
+            <IconEdit size={18} />
           </Button>
         )}
       </Group>

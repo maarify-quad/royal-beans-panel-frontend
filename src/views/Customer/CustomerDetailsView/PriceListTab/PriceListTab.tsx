@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Services
 import {
   useGetPriceListProductsQuery,
   useDeletePriceListProductMutation,
 } from "@services/priceListProductApi";
+import { useCreatePriceListMutation } from "@services/priceListApi";
+import { useUpdateCustomerMutation } from "@services/customerApi";
 
 // UI Components
 import { Alert, Button, Container, Group, Loader, LoadingOverlay, Text } from "@mantine/core";
@@ -13,11 +15,7 @@ import { Alert, Button, Container, Group, Loader, LoadingOverlay, Text } from "@
 import { openConfirmModal, openModal } from "@mantine/modals";
 
 // Icons
-import {
-  AlertCircle as AlertCircleIcon,
-  Edit as EditIcon,
-  Trash as TrashIcon,
-} from "tabler-icons-react";
+import { IconInfoCircle, IconTrash, IconEdit } from "@tabler/icons";
 
 // Components
 import { ResultsTable } from "@components/ResultsTable";
@@ -40,11 +38,17 @@ type PriceListTabProps = {
 };
 
 export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
+  // Queries
   const { data, isLoading, error } = useGetPriceListProductsQuery(customer.priceListId!, {
-    skip: !customer.priceListId,
+    skip: !customer.priceListId || customer.priceList?.name === "Baz",
   });
-  const [deletePriceListProduct, { isLoading: isDeleting }] = useDeletePriceListProductMutation();
 
+  // Mutations
+  const [deletePriceListProduct, { isLoading: isDeleting }] = useDeletePriceListProductMutation();
+  const [createPriceList, { isLoading: isCreating }] = useCreatePriceListMutation();
+  const [updateCustomer, { isLoading: isUpdating }] = useUpdateCustomerMutation();
+
+  // Handlers
   const openEditPriceListProduct = (priceListProduct: PriceListProduct) => () => {
     openModal({
       key: "updatePriceListProduct",
@@ -72,6 +76,22 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
     });
   };
 
+  const handleCreateCustomPriceList = async () => {
+    try {
+      const priceList = await createPriceList({
+        name: `Özel-${customer.name}`,
+        cloneDefaultPriceList: true,
+      }).unwrap();
+      await updateCustomer({
+        id: customer.id,
+        priceListId: priceList.id,
+      });
+    } catch (error) {
+      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
+    }
+  };
+
+  // Table rows
   const priceListProducts: RowDef[][] = React.useMemo(
     () =>
       data?.map((priceListProduct) => [
@@ -89,7 +109,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
                 color="gray"
                 onClick={openEditPriceListProduct(priceListProduct)}
               >
-                <EditIcon size={18} />
+                <IconEdit size={18} />
               </Button>
               <Button
                 px={4}
@@ -101,7 +121,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
                   priceListProduct.priceListId
                 )}
               >
-                <TrashIcon size={18} />
+                <IconTrash size={18} />
               </Button>
             </Group>
           ),
@@ -110,14 +130,14 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
     [data]
   );
 
-  if (isLoading) {
+  if (isLoading || isCreating || isUpdating) {
     return <Loader />;
   }
 
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Fiyat listesine ulaşılamadı"
         variant="filled"
@@ -130,8 +150,23 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
 
   if (data?.length === 0) {
     return (
-      <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
+      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
         Fiyat listesinde ürün bulunmamaktadır
+      </Alert>
+    );
+  }
+
+  if (customer.priceList?.name === "Baz") {
+    return (
+      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
+        Bu müşteri <strong>Baz</strong> fiyat listesini kullanmaktadır. Özel fiyat listesi
+        oluşturmak için{" "}
+        <strong
+          style={{ textDecoration: "underline", cursor: "pointer" }}
+          onClick={handleCreateCustomPriceList}
+        >
+          tıklayınız
+        </strong>
       </Alert>
     );
   }

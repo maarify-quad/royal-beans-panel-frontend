@@ -1,13 +1,13 @@
 import React from "react";
 
 // UI Components
-import { Card, Group, Text, ActionIcon, Stack, Button, Alert } from "@mantine/core";
+import { Card, Group, Text, ActionIcon, Stack, Button } from "@mantine/core";
 
 // UI Utils
 import { UseFormReturnType } from "@mantine/form";
 
 // Icons
-import { Trash as TrashIcon, InfoCircle as InfoCircleIcon } from "tabler-icons-react";
+import { IconTrash } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "../Form/validation/Inputs";
@@ -37,7 +37,7 @@ export const Rounds: React.FC<RoundsProps> = ({ form }) => {
                   <Text weight={700}>{roastDetail.product.name}</Text>
                 </div>
                 <ActionIcon color="red" onClick={handleRemoveProduct(index)}>
-                  <TrashIcon size={16} />
+                  <IconTrash size={16} />
                 </ActionIcon>
               </Group>
               <div>

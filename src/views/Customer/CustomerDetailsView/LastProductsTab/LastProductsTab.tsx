@@ -7,7 +7,7 @@ import { useGetLatestOrderProductsByCustomerQuery } from "@services/orderProduct
 import { Alert, Loader } from "@mantine/core";
 
 // Icons
-import { AlertCircle as AlertCircleIcon } from "tabler-icons-react";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Components
 import { ResultsTable } from "@components/ResultsTable";
@@ -28,7 +28,7 @@ export const LastProductsTab: React.FC<LastProductsTabProps> = ({ customer }) =>
   if (error) {
     return (
       <Alert
-        icon={<AlertCircleIcon />}
+        icon={<IconInfoCircle />}
         color="red"
         title="Ürünlere ulaşılamadı"
         variant="filled"
@@ -41,7 +41,7 @@ export const LastProductsTab: React.FC<LastProductsTabProps> = ({ customer }) =>
 
   if (data?.orderProducts.length === 0) {
     return (
-      <Alert color="cyan" mt="md" icon={<AlertCircleIcon />}>
+      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
         Ürün bulunmamaktadır
       </Alert>
     );
