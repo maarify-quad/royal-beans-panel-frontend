@@ -77,30 +77,30 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const navLinks = [
-  {
-    label: "Tedarikçiler",
-    icon: IconUsers,
-    match: "/suppliers",
-    link: "/dashboard/suppliers",
-  },
-  {
-    label: "Sevkiyatlar",
-    icon: IconTruckDelivery,
-    match: "/deliveries",
-    link: "/dashboard/deliveries",
-  },
-  {
-    label: "Depo",
-    icon: IconPackage,
-    match: "storage",
-    link: "/dashboard/storage",
-  },
-  {
-    label: "Kavrum",
-    icon: IconCoffee,
-    match: "roasts",
-    link: "/dashboard/roasts",
-  },
+  // {
+  //   label: "Tedarikçiler",
+  //   icon: IconUsers,
+  //   match: "/suppliers",
+  //   link: "/dashboard/suppliers",
+  // },
+  // {
+  //   label: "Sevkiyatlar",
+  //   icon: IconTruckDelivery,
+  //   match: "/deliveries",
+  //   link: "/dashboard/deliveries",
+  // },
+  // {
+  //   label: "Depo",
+  //   icon: IconPackage,
+  //   match: "storage",
+  //   link: "/dashboard/storage",
+  // },
+  // {
+  //   label: "Kavrum",
+  //   icon: IconCoffee,
+  //   match: "roasts",
+  //   link: "/dashboard/roasts",
+  // },
   {
     label: "Siparişler",
     icon: IconShoppingCart,
