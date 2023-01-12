@@ -1,13 +1,13 @@
 import React from "react";
 
 // Routing
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 // UI Components
-import { createStyles, Title, Group, Button, Breadcrumbs, Anchor } from "@mantine/core";
+import { createStyles, Title, Group, Button, Breadcrumbs, Anchor, Tabs } from "@mantine/core";
 
 // Icons
-import { IconShoppingCartPlus } from "@tabler/icons";
+import { IconPaperBag, IconShoppingCartPlus } from "@tabler/icons";
 
 // Components
 import { Results } from "./Results";
@@ -24,6 +24,7 @@ const useStyles = createStyles((theme) => ({
 
 export const ListOrdersView = () => {
   const { classes } = useStyles();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return (
     <div className={classes.root}>
@@ -39,11 +40,39 @@ export const ListOrdersView = () => {
         <Title order={2} className={classes.rootTitle}>
           Siparişler
         </Title>
-        <Button leftIcon={<IconShoppingCartPlus />} component={Link} to="/dashboard/orders/create">
-          Yeni Sipariş
-        </Button>
+        <Group>
+          <Button
+            leftIcon={<IconShoppingCartPlus />}
+            component={Link}
+            to="/dashboard/orders/create"
+          >
+            Yeni Sipariş
+          </Button>
+          <Button leftIcon={<IconPaperBag />} component={Link} to="/dashboard/orders/manual/create">
+            Yeni Gönderi
+          </Button>
+        </Group>
       </Group>
-      <Results />
+      <Tabs
+        mt="md"
+        value={searchParams.get("type") || "ALL"}
+        onTabChange={(type: string) => setSearchParams({ type })}
+      >
+        <Tabs.List>
+          <Tabs.Tab value="ALL">Tüm Siparişler</Tabs.Tab>
+          <Tabs.Tab value="BULK">Toplu Siparişler</Tabs.Tab>
+          <Tabs.Tab value="MANUAL">Manuel Gönderiler</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel mt="md" value="ALL">
+          <Results />
+        </Tabs.Panel>
+        <Tabs.Panel mt="md" value="BULK">
+          <Results type="BULK" />
+        </Tabs.Panel>
+        <Tabs.Panel mt="md" value="MANUAL">
+          <Results type="MANUAL" />
+        </Tabs.Panel>
+      </Tabs>
     </div>
   );
 };

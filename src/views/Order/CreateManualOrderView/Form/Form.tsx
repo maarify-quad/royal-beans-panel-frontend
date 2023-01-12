@@ -4,8 +4,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 // Services
-import { useGetPriceListProductsQuery } from "@services/priceListProductApi";
-import { useCreateOrderMutation } from "@services/orderApi";
+import { useGetProductsByStorageTypeQuery } from "@services/productApi";
+import { useCreateManualOrderMutation } from "@services/orderApi";
 
 // UI Components
 import { Button, Group, LoadingOverlay, Stepper } from "@mantine/core";
@@ -25,27 +25,20 @@ import { schema } from "./validation/schema";
 import { StepOne } from "./StepOne";
 import { StepTwo } from "./StepTwo";
 
-// Interfaces
-import { Customer } from "@interfaces/customer";
-
 export const Form = () => {
   const navigate = useNavigate();
 
   // Internal state
-  const [selectedCustomer, setSelectedCustomer] = React.useState<Customer>();
   const [step, setStep] = React.useState(0);
 
   const nextStep = () => setStep((current) => (current < 1 ? current + 1 : current));
   const prevStep = () => setStep((current) => (current > 0 ? current - 1 : current));
 
   // Queries
-  const { data: priceListProducts, isLoading: isPriceListProductsLoading } =
-    useGetPriceListProductsQuery(selectedCustomer?.priceListId || 0, {
-      skip: !selectedCustomer,
-    });
+  const { data: products, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery("FN");
 
   // Mutations
-  const [createOrder, { isLoading: isCreatingOrder }] = useCreateOrderMutation();
+  const [createManualOrder, { isLoading: isCreatingOrder }] = useCreateManualOrderMutation();
 
   // Form utils
   const form = useForm<Inputs>({
@@ -55,18 +48,15 @@ export const Form = () => {
 
   const handleAddProduct = () => {
     // Destructure form values
-    const { priceListProductId, grindType, unitPrice, quantity, taxRate, subTotal, total } =
-      form.values;
+    const { productId, grindType, unitPrice, quantity, taxRate, subTotal, total } = form.values;
 
-    // Find price list product
-    const priceListProduct = priceListProducts?.find(
-      (priceListProduct) => priceListProduct.id === priceListProductId
-    );
+    // Find product
+    const product = products?.find((product) => product.id === productId);
 
     // Add product to order
     form.insertListItem("orderProducts", {
-      priceListProduct,
-      priceListProductId,
+      productId,
+      product,
       grindType,
       unitPrice,
       quantity,
@@ -80,27 +70,33 @@ export const Form = () => {
     try {
       // Destructure form values
       const {
-        customerId,
-        deliveryDate,
-        deliveryAddressId,
-        deliveryType,
+        receiver,
+        receiverNeighborhood,
+        receiverAddress,
+        receiverCity,
+        receiverProvince,
+        receiverPhone,
+        manualInvoiceStatus,
         specialNote,
         orderProducts,
       } = values;
 
       // Create order
-      await createOrder({
-        customerId,
-        deliveryDate,
-        deliveryAddressId,
-        deliveryType,
+      await createManualOrder({
+        receiver,
+        receiverNeighborhood,
+        receiverAddress,
+        receiverCity,
+        receiverProvince,
+        receiverPhone,
+        manualInvoiceStatus,
         specialNote,
         orderProducts,
       }).unwrap();
 
       showNotification({
         title: "Başarılı",
-        message: "Sipariş oluşturuldu",
+        message: "Manuel gönderi oluşturuldu",
         icon: <IconCircleCheck />,
         color: "green",
       });
@@ -113,17 +109,13 @@ export const Form = () => {
 
   return (
     <form onSubmit={form.onSubmit(onCreateOrderSubmit)}>
-      <LoadingOverlay visible={isCreatingOrder || isPriceListProductsLoading} />
+      <LoadingOverlay visible={isCreatingOrder || isProductsLoading} />
       <Stepper active={step} mt="md">
         <Stepper.Step>
-          <StepOne
-            form={form}
-            selectedCustomer={selectedCustomer}
-            setSelectedCustomer={setSelectedCustomer}
-          />
+          <StepOne form={form} />
         </Stepper.Step>
-        <Stepper.Step loading={isPriceListProductsLoading}>
-          <StepTwo form={form} priceListProducts={priceListProducts} />
+        <Stepper.Step loading={isProductsLoading}>
+          <StepTwo products={products} form={form} />
         </Stepper.Step>
       </Stepper>
       <Group mt="lg">
@@ -131,13 +123,11 @@ export const Form = () => {
           Geri
         </Button>
         {step === 1 ? (
-          <Button disabled={!form.values.priceListProductId} onClick={handleAddProduct}>
+          <Button disabled={!form.values.productId} onClick={handleAddProduct}>
             Ürün ekle
           </Button>
         ) : (
-          <Button disabled={!selectedCustomer} onClick={nextStep}>
-            İleri
-          </Button>
+          <Button onClick={nextStep}>İleri</Button>
         )}
       </Group>
     </form>

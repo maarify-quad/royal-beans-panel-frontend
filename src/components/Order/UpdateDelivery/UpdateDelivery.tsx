@@ -41,7 +41,7 @@ export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
   const onUpdateDeliverySubmit = async (values: Inputs) => {
     try {
       await updateOrder({
-        orderNumber: order.orderNumber,
+        orderId: order.orderId,
         ...values,
       }).unwrap();
       showNotification({

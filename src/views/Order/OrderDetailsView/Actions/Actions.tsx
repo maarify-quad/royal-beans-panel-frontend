@@ -16,16 +16,16 @@ import { useCancelOrder } from "@hooks/order/useCancelOrder";
 import { IconTrash, IconTruckDelivery, IconBasket } from "@tabler/icons";
 
 // Interfaces
-import { OrderWithAll } from "@interfaces/order";
+import { Order } from "@interfaces/order";
 
 // Props
 type ActionsProps = {
-  order: OrderWithAll;
+  order: Order;
 };
 
 // Lazy Imports
 const UpdateDelivery = React.lazy(() =>
-  import("../../../../components/Order/UpdateDelivery").then((module) => ({
+  import("@components/Order/UpdateDelivery").then((module) => ({
     default: module.UpdateDelivery,
   }))
 );
@@ -58,7 +58,7 @@ export const Actions: React.FC<ActionsProps> = ({ order }) => {
         color="orange"
         leftIcon={<IconBasket />}
         component={Link}
-        to={`/dashboard/orders/update/${order.orderNumber}`}
+        to={`/dashboard/orders${order.type === "MANUAL" ? "/manual" : ""}/update/${order.orderId}`}
       >
         Güncelle
       </Button>
@@ -67,7 +67,7 @@ export const Actions: React.FC<ActionsProps> = ({ order }) => {
         variant="subtle"
         leftIcon={<IconTrash />}
         onClick={() => {
-          openCancelOrder(order.orderNumber);
+          openCancelOrder(order.orderId);
         }}
       >
         İptal Et

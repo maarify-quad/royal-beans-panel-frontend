@@ -4,7 +4,7 @@ import React from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 
 // Services
-import { useGetOrderByOrderNumberQuery } from "@services/orderApi";
+import { useGetOrderByOrderIdQuery } from "@services/orderApi";
 
 // UI Components
 import {
@@ -46,14 +46,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export const OrderDetailsView = () => {
-  const { orderNumber } = useParams();
+  const { orderId } = useParams();
   const { classes } = useStyles();
 
-  const { data, isLoading, error } = useGetOrderByOrderNumberQuery(parseInt(orderNumber!), {
-    skip: orderNumber ? isNaN(parseInt(orderNumber)) : true,
+  const { data, isLoading, error } = useGetOrderByOrderIdQuery(orderId || "", {
+    skip: !orderId,
   });
 
-  if (!orderNumber) {
+  if (!orderId) {
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -86,13 +86,13 @@ export const OrderDetailsView = () => {
         <Anchor component={Link} to="/dashboard/orders">
           Siparişler
         </Anchor>
-        <Anchor component={Link} to={`/dashboard/orders/${orderNumber}`}>
-          {orderNumber}
+        <Anchor component={Link} to={`/dashboard/orders/${orderId}`}>
+          #{orderId}
         </Anchor>
       </Breadcrumbs>
       <Group position="apart">
         <Title order={2} className={classes.rootTitle}>
-          #{data?.order.orderNumber} - {data?.order.customer.name}
+          #{orderId} - {data?.order.customer?.name || data?.order.receiver}
         </Title>
         {data?.order && <Actions order={data?.order} />}
       </Group>

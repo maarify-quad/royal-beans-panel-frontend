@@ -19,35 +19,59 @@ import { StatusBadge } from "@components/Order/StatusBadge";
 
 // Interfaces
 import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
+import { OrderType } from "@interfaces/order";
 
-export const Results = () => {
+// Props
+type ResultsProps = {
+  type?: OrderType;
+};
+
+const currencyFormatter = Intl.NumberFormat("tr-TR", {
+  style: "currency",
+  currency: "TRY",
+});
+
+export const Results = ({ type }: ResultsProps) => {
   // Internal state
-  const [page, setPage] = React.useState(1);
+  const [filters, setFilters] = React.useState({
+    page: 1,
+    limit: 50,
+  });
 
   // Routing
   const navigate = useNavigate();
 
   // Queries
-  const { data, isLoading, error } = useGetOrdersQuery(page);
+  const { data, isLoading, isFetching, error } = useGetOrdersQuery({ ...filters, type });
 
   const orderRows: RowDef[][] = React.useMemo(
     () =>
       data?.orders.map((order) => [
-        { value: order.orderNumber, renderCell: () => `#${order.orderNumber}` },
+        { value: order.orderId, renderCell: () => `#${order.orderId}` },
         { value: dayjs(order.createdAt).format("DD MMM YYYY") },
-        { value: order.customer.name },
-        { value: `${order.total.toFixed(2)} ₺` },
-        { value: `${order.customerBalanceAfterOrder.toFixed(2)} ₺` },
+        { value: order.type === "BULK" ? order.customer.name : order.receiver },
+        { value: currencyFormatter.format(order.total) },
         {
-          value: order.isParasutVerified ? (
-            <ThemeIcon color="green" radius="xl">
-              <IconCircleCheck />
-            </ThemeIcon>
-          ) : (
-            <ThemeIcon color="red" radius="xl">
-              <IconX />
-            </ThemeIcon>
-          ),
+          value:
+            order.type === "BULK" ? currencyFormatter.format(order.customerBalanceAfterOrder) : "-",
+        },
+        {
+          value:
+            order.type === "BULK" ? (
+              <>
+                {order.isParasutVerified ? (
+                  <ThemeIcon color="green" radius="xl">
+                    <IconCircleCheck />
+                  </ThemeIcon>
+                ) : (
+                  <ThemeIcon color="red" radius="xl">
+                    <IconX />
+                  </ThemeIcon>
+                )}
+              </>
+            ) : (
+              order.manualInvoiceStatus
+            ),
         },
         {
           value: (
@@ -67,13 +91,7 @@ export const Results = () => {
 
   if (error) {
     return (
-      <Alert
-        icon={<IconInfoCircle />}
-        color="red"
-        title="Siparişlere ulaşılamadı"
-        variant="filled"
-        mt="md"
-      >
+      <Alert icon={<IconInfoCircle />} color="red" title="Siparişlere ulaşılamadı" variant="filled">
         {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
       </Alert>
     );
@@ -81,14 +99,14 @@ export const Results = () => {
 
   if (data?.orders.length === 0) {
     return (
-      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
+      <Alert color="cyan" icon={<IconInfoCircle />}>
         Sipariş bulunmamaktadır
       </Alert>
     );
   }
 
   return (
-    <Container fluid mt="md" p={0}>
+    <Container fluid p={0}>
       <ResultsTable
         headers={[
           { value: "Sipariş No" },
@@ -102,16 +120,18 @@ export const Results = () => {
         rows={orderRows}
         pagination={{
           totalPage: data?.totalPage || 0,
-          currentPage: page,
-          onPageChange: (page) => setPage(page),
+          currentPage: filters.page,
+          onPageChange: (page) => setFilters({ ...filters, page }),
+          onPageSizeChange: (limit) => setFilters({ ...filters, limit }),
         }}
         onRowClick={(row, i) => {
-          const orderNumber = row[0].value;
-          navigate(`/dashboard/orders/${orderNumber}`);
+          const orderId = row[0].value;
+          navigate(`/dashboard/orders/${orderId}`);
         }}
         rowStyles={{
           cursor: "pointer",
         }}
+        isLoading={isFetching}
       />
     </Container>
   );

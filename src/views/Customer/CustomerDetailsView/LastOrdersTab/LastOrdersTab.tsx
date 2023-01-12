@@ -57,7 +57,7 @@ export const LastOrdersTab: React.FC<LastOrdersTabProps> = ({ customer }) => {
         headers={[{ value: "Sipariş No" }, { value: "Tarih" }, { value: "Tutar" }]}
         rows={
           data?.orders.map((order) => [
-            { value: `#${order.orderNumber}`, link: `/dashboard/orders/${order.orderNumber}` },
+            { value: `#${order.orderId}`, link: `/dashboard/orders/${order.orderId}` },
             { value: `${dayjs(order.createdAt).format("DD MMM YYYY")}` },
             { value: `${order.total.toFixed(2)} ₺` },
           ]) || []

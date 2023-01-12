@@ -1,18 +1,26 @@
 import { emptyApi } from "./emptyApi";
 
 // Interfaces
-import { Order, OrderWithAll, OrderWithCustomer } from "@interfaces/order";
-import { CreateOrderProductParams } from "@interfaces/orderProduct";
+import { Order, OrderType } from "@interfaces/order";
+import { CreateManualOrderProductParams, CreateOrderProductParams } from "@interfaces/orderProduct";
 
 export const orderApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getOrders: builder.query<GetOrdersResponse, number | void>({
-      query: (page) => (page ? `/orders?page=${page}` : "/orders"),
+    getOrders: builder.query<GetOrdersResponse, GetordersRequest | void>({
+      query: (params) => {
+        const url = new URL("/orders", import.meta.env.VITE_API_BASE_URL);
+        url.searchParams.set("page", params?.page?.toString() || "1");
+        url.searchParams.set("limit", params?.limit?.toString() || "50");
+        if (params?.type) {
+          url.searchParams.set("type", params.type);
+        }
+        return url.toString();
+      },
       providesTags: ["Order"],
     }),
-    getOrderByOrderNumber: builder.query<{ order: OrderWithAll }, number>({
-      query: (orderNumber) => `/orders/orderNumber/${orderNumber}`,
-      providesTags: (_result, _error, orderNumber) => [{ type: "Order", id: orderNumber }],
+    getOrderByOrderId: builder.query<{ order: Order }, string>({
+      query: (orderId) => `/orders/orderId/${orderId}`,
+      providesTags: (_result, _error, orderId) => [{ type: "Order", id: orderId }],
     }),
     getOrdersByCustomer: builder.query<GetOrdersResponse, GetOrdersByCustomerParams>({
       query: (params) => `/orders/customer/${params.customer}?page=${params.page}`,
@@ -26,13 +34,21 @@ export const orderApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: ["Order"],
     }),
+    createManualOrder: builder.mutation<Order, CreateManualOrderParams>({
+      query: (body) => ({
+        url: "/orders/manual",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Order"],
+    }),
     updateOrder: builder.mutation<Order, UpdateOrderParams>({
       query: (body) => ({
         url: `/orders`,
         method: "PATCH",
         body,
       }),
-      invalidatesTags: (_result, _error, params) => [{ type: "Order", id: params.orderNumber }],
+      invalidatesTags: (_result, _error, params) => [{ type: "Order", id: params.orderId }],
     }),
     updateOrderProducts: builder.mutation<Order, UpdateOrderProductsParams>({
       query: (body) => ({
@@ -40,30 +56,46 @@ export const orderApi = emptyApi.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: (_result, _error, params) => [{ type: "Order", id: params.orderNumber }],
+      invalidatesTags: (_result, _error, params) => [{ type: "Order", id: params.orderId }],
     }),
-    cancelOrder: builder.mutation<any, number>({
-      query: (orderNumber) => ({
-        url: `/orders/cancel/${orderNumber}`,
+    updateManualOrderProducts: builder.mutation<Order, UpdateManualOrderProductsParams>({
+      query: (body) => ({
+        url: `/orders/manual/order_products`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: (_result, _error, params) => [{ type: "Order", id: params.orderId }],
+    }),
+    cancelOrder: builder.mutation<any, string>({
+      query: (orderId) => ({
+        url: `/orders/cancel/${orderId}`,
         method: "POST",
       }),
-      invalidatesTags: (_result, _error, orderNumber) => [{ type: "Order", id: orderNumber }],
+      invalidatesTags: (_result, _error, orderId) => [{ type: "Order", id: orderId }],
     }),
   }),
 });
 
 export const {
   useGetOrdersQuery,
-  useGetOrderByOrderNumberQuery,
+  useGetOrderByOrderIdQuery,
   useGetOrdersByCustomerQuery,
   useCreateOrderMutation,
+  useCreateManualOrderMutation,
   useUpdateOrderMutation,
   useUpdateOrderProductsMutation,
+  useUpdateManualOrderProductsMutation,
   useCancelOrderMutation,
 } = orderApi;
 
+interface GetordersRequest {
+  page: number;
+  limit?: number;
+  type?: OrderType;
+}
+
 interface GetOrdersResponse {
-  orders: OrderWithCustomer[];
+  orders: Order[];
   totalPage?: number;
 }
 
@@ -81,11 +113,26 @@ interface CreateOrderParams {
   orderProducts: CreateOrderProductParams[];
 }
 
-interface UpdateOrderParams extends Partial<OrderWithAll> {
-  orderNumber: number;
+interface CreateManualOrderParams {
+  receiver: string;
+  receiverNeighborhood: string;
+  receiverAddress: string;
+  receiverCity: string;
+  receiverProvince: string;
+  receiverPhone: string;
+  manualInvoiceStatus: string;
+  specialNote: string;
+  orderProducts: CreateManualOrderProductParams[];
 }
 
+type UpdateOrderParams = Partial<Order> & { orderId: string };
+
 interface UpdateOrderProductsParams {
-  orderNumber: number;
+  orderId: string;
   orderProducts: CreateOrderProductParams[];
+}
+
+interface UpdateManualOrderProductsParams {
+  orderId: string;
+  orderProducts: CreateManualOrderProductParams[];
 }

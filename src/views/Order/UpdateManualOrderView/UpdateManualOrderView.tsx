@@ -4,8 +4,11 @@ import React from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 // Services
-import { useGetPriceListProductsQuery } from "@services/priceListProductApi";
-import { useGetOrderByOrderIdQuery, useUpdateOrderProductsMutation } from "@services/orderApi";
+import { useGetProductsByStorageTypeQuery } from "@services/productApi";
+import {
+  useGetOrderByOrderIdQuery,
+  useUpdateManualOrderProductsMutation,
+} from "@services/orderApi";
 
 // UI Components
 import { Breadcrumbs, createStyles, Loader, Title, Anchor, Grid } from "@mantine/core";
@@ -18,7 +21,7 @@ import { showNotification } from "@mantine/notifications";
 import { IconCircleCheck } from "@tabler/icons";
 
 // Components
-import { Form, Summary, Inputs, schema, initialValues } from "@components/Order/CartForm";
+import { Form, Summary, Inputs, schema, initialValues } from "./Form";
 
 // Styles
 const useStyles = createStyles((theme) => ({
@@ -37,7 +40,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const UpdateOrderView = () => {
+export const UpdateManualOrderView = () => {
   const { classes } = useStyles();
 
   // Routing
@@ -54,13 +57,10 @@ export const UpdateOrderView = () => {
   const { data, isLoading: isOrderLoading } = useGetOrderByOrderIdQuery(orderId!, {
     skip: !orderId,
   });
-  const { data: priceListProducts, isLoading: isPriceListProductsLoading } =
-    useGetPriceListProductsQuery(data?.order.customer?.priceListId!, {
-      skip: orderId?.startsWith("MG") || !data?.order || !data?.order.customer?.priceListId,
-    });
+  const { data: products, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery("FN");
 
   // Mutations
-  const [updateOrderProducts, { isLoading: isUpdating }] = useUpdateOrderProductsMutation();
+  const [updateOrderProducts, { isLoading: isUpdating }] = useUpdateManualOrderProductsMutation();
 
   const onUpdateOrderSubmit = async (values: Inputs) => {
     try {
@@ -73,7 +73,7 @@ export const UpdateOrderView = () => {
 
       showNotification({
         title: "Başarılı",
-        message: "Sipariş güncellendi",
+        message: "Gönderi güncellendi",
         color: "green",
         icon: <IconCircleCheck />,
       });
@@ -84,7 +84,7 @@ export const UpdateOrderView = () => {
     }
   };
 
-  if (isOrderLoading || isPriceListProductsLoading) {
+  if (isOrderLoading || isProductsLoading) {
     return <Loader />;
   }
 
@@ -97,20 +97,20 @@ export const UpdateOrderView = () => {
         <Anchor component={Link} to="/dashboard/orders">
           Siparişler
         </Anchor>
-        <Anchor component={Link} to={`/dashboard/orders/update/${orderId}`}>
+        <Anchor component={Link} to={`/dashboard/orders/manual/update/${orderId}`}>
           Güncelle
         </Anchor>
       </Breadcrumbs>
       <Title order={2} className={classes.rootTitle} mb="md">
-        #{orderId} - Sipariş Güncelle
+        #{orderId} - Manuel Gönderi Güncelle
       </Title>
       <form onSubmit={form.onSubmit(onUpdateOrderSubmit)}>
         <Grid>
           <Grid.Col lg={6}>
-            <Form form={form} priceListProducts={priceListProducts} />
+            <Form form={form} products={products} />
           </Grid.Col>
           <Grid.Col lg={6}>
-            <Summary form={form} submitProps={{ text: "Siparişi Güncelle", loading: isUpdating }} />
+            <Summary form={form} submitProps={{ text: "Gönderi Güncelle", loading: isUpdating }} />
           </Grid.Col>
         </Grid>
       </form>
