@@ -34,7 +34,7 @@ export const StepOne: React.FC<StepOneProps> = ({
   const customerSelectOptions = React.useMemo(
     () =>
       customerData?.customers.map((customer) => ({
-        value: customer.id,
+        value: customer.id.toString(),
         label: customer.name,
       })) || [],
     [customerData]
@@ -87,7 +87,7 @@ export const StepOne: React.FC<StepOneProps> = ({
         data={
           selectedCustomer?.deliveryAddresses.map((address) => ({
             label: address.title,
-            value: address.id,
+            value: address.id.toString(),
           })) || []
         }
         {...form.getInputProps("deliveryAddressId")}

@@ -60,13 +60,13 @@ export const Form = () => {
 
     // Find price list product
     const priceListProduct = priceListProducts?.find(
-      (priceListProduct) => priceListProduct.id === priceListProductId
+      (priceListProduct) => priceListProduct.id.toString() === priceListProductId
     );
 
     // Add product to order
     form.insertListItem("orderProducts", {
       priceListProduct,
-      priceListProductId,
+      priceListProductId: +priceListProductId,
       grindType,
       unitPrice,
       quantity,

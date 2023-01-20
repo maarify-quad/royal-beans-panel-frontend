@@ -55,6 +55,7 @@ export const ListOrdersView = () => {
       </Group>
       <Tabs
         mt="md"
+        keepMounted={false}
         value={searchParams.get("type") || "ALL"}
         onTabChange={(type: string) => setSearchParams({ type })}
       >

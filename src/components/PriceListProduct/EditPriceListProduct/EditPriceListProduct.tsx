@@ -77,10 +77,10 @@ export const EditPriceListProduct: React.FC<EditPriceListProductProps> = ({ pric
       <Select
         label="Vergi oranı"
         data={[
-          { label: "0", value: 0 },
-          { label: "1", value: 1 },
-          { label: "8", value: 8 },
-          { label: "18", value: 18 },
+          { label: "0", value: "0" },
+          { label: "1", value: "1" },
+          { label: "8", value: "8" },
+          { label: "18", value: "18" },
         ]}
         icon={<span>%</span>}
         mt="md"

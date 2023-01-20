@@ -22,8 +22,8 @@ export const Form = ({ form, products }: FormProps) => {
   const productSelectOptions = React.useMemo(
     () =>
       products?.map((product) => ({
+        value: product.id.toString(),
         label: product.name,
-        value: product.id,
       })) || [],
     [products]
   );
@@ -33,12 +33,12 @@ export const Form = ({ form, products }: FormProps) => {
     const { productId, grindType, unitPrice, quantity, taxRate, subTotal, total } = form.values;
 
     // Find price list product
-    const product = products?.find((product) => product.id === productId);
+    const product = products?.find((product) => product.id.toString() === productId);
 
     // Add product to order
     form.insertListItem("orderProducts", {
       product,
-      productId,
+      productId: +productId,
       grindType,
       unitPrice,
       quantity,

@@ -23,10 +23,12 @@ type StepTwoProps = {
 
 export const StepTwo: React.FC<StepTwoProps> = ({ form, products }) => {
   const productSelectOptions = useMemo(() => {
-    return products?.map((product) => ({
-      label: product.name,
-      value: product.id,
-    }));
+    return (
+      products?.map((product) => ({
+        value: product.id.toString(),
+        label: product.name,
+      })) || []
+    );
   }, [products]);
 
   useEffect(() => {

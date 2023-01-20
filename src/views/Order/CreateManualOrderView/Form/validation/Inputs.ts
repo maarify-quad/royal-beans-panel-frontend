@@ -1,7 +1,7 @@
 import { Product } from "@interfaces/product";
 
 export type Inputs = {
-  productId: number;
+  productId: string;
   receiver: string;
   receiverNeighborhood: string;
   receiverAddress: string;
@@ -29,7 +29,7 @@ export type Inputs = {
 };
 
 export const initialValues: Inputs = {
-  productId: 0,
+  productId: "0",
   receiver: "",
   receiverNeighborhood: "",
   receiverAddress: "",

@@ -47,7 +47,7 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
       products
         ?.filter((product) => !priceListProducts?.find((p) => p.productId === product.id))
         .map((product) => ({
-          value: product.id,
+          value: product.id.toString(),
           label: product.name,
         })) || [],
     [products?.length]
@@ -85,7 +85,7 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
         getCreateLabel={(query) => `+ ${query} oluştur`}
         onCreate={(query) => {
           const value = -Math.random();
-          const item = { value, label: query };
+          const item = { value: value.toString(), label: query };
           productSelectOptions.push(item);
           form.setFieldValue("productId", value);
           form.setFieldValue("newProductName", query);
@@ -98,7 +98,6 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
         <TextInput
           label="Birim"
           placeholder="Miktar birimi giriniz"
-          precision={2}
           mt="md"
           required
           {...form.getInputProps("unit")}
@@ -122,10 +121,10 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
         required
         icon={<span>%</span>}
         data={[
-          { label: "0", value: 0 },
-          { label: "1", value: 1 },
-          { label: "8", value: 8 },
-          { label: "18", value: 18 },
+          { label: "0", value: "0" },
+          { label: "1", value: "1" },
+          { label: "8", value: "8" },
+          { label: "18", value: "18" },
         ]}
         {...form.getInputProps("taxRate")}
       />

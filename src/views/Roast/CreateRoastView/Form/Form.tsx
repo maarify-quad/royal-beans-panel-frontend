@@ -25,10 +25,11 @@ export const Form: React.FC<FormProps> = ({ form }) => {
     const { roastDetails, ...item } = form.values;
 
     // Check if product already exists
-    const product = products?.find((p) => p.id === item.productId);
+    const product = products?.find((p) => p.id.toString() === item.productId);
     if (product) {
       form.insertListItem(`roastDetails`, {
         ...item,
+        productId: +item.productId,
         product,
       });
     }
@@ -36,7 +37,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
 
   useEffect(() => {
     if (products && products.length > 0) {
-      form.setFieldValue("productId", products[0].id);
+      form.setFieldValue("productId", products[0].id.toString());
     }
   }, [products?.length]);
 
@@ -51,8 +52,8 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         dropdownComponent="div"
         data={
           products?.map((product) => ({
+            value: product.id.toString(),
             label: product.name,
-            value: product.id,
           })) || []
         }
         {...form.getInputProps("productId")}

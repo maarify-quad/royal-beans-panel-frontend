@@ -2,7 +2,7 @@ import { Product } from "@interfaces/product";
 
 export type Inputs = {
   roundId: number;
-  productId: number;
+  productId: string;
   inputAmount: number;
   outputAmount: number;
   roastDetails: {

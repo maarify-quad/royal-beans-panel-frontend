@@ -29,7 +29,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
   const productSelectOptions = React.useMemo(
     () =>
       products?.map((product) => ({
-        value: product.id,
+        value: product.id.toString(),
         label: product.name,
       })) || [],
     [products?.length]
@@ -38,7 +38,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
   const supplierSelectOptions = React.useMemo(
     () =>
       suppliersData?.suppliers.map((supplier) => ({
-        value: supplier.id,
+        value: supplier.id.toString(),
         label: supplier.name,
       })) || [],
     [suppliersData?.suppliers.length]
@@ -58,7 +58,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
     }
 
     // Get product from select options
-    const newProduct = productSelectOptions.find((p) => p.value === item.productId);
+    const newProduct = productSelectOptions.find((p) => p.value === item.productId.toString());
     if (newProduct) {
       return form.insertListItem("deliveryDetails", {
         ...item,
@@ -151,7 +151,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         getCreateLabel={(query) => `+ ${query} oluştur`}
         onCreate={(query) => {
           const value = -Math.random();
-          const item = { value, label: query };
+          const item = { value: value.toString(), label: query };
           productSelectOptions.push(item);
           form.setFieldValue("productId", value);
           return item;
@@ -179,7 +179,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         mt="md"
         {...form.getInputProps("quantity")}
       />
-      <TextInput label="Birim" precision={2} mt="md" {...form.getInputProps("unit")} />
+      <TextInput label="Birim" mt="md" {...form.getInputProps("unit")} />
       <NumberInput
         label="Birim fiyat"
         precision={2}
@@ -195,10 +195,10 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         dropdownComponent="div"
         icon={<span>%</span>}
         data={[
-          { label: "0", value: 0 },
-          { label: "1", value: 1 },
-          { label: "8", value: 8 },
-          { label: "18", value: 18 },
+          { label: "0", value: "0" },
+          { label: "1", value: "1" },
+          { label: "8", value: "8" },
+          { label: "18", value: "18" },
         ]}
         {...form.getInputProps("taxRate")}
       />

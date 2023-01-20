@@ -51,11 +51,11 @@ export const Form = () => {
     const { productId, grindType, unitPrice, quantity, taxRate, subTotal, total } = form.values;
 
     // Find product
-    const product = products?.find((product) => product.id === productId);
+    const product = products?.find((product) => product.id.toString() === productId);
 
     // Add product to order
     form.insertListItem("orderProducts", {
-      productId,
+      productId: +productId,
       product,
       grindType,
       unitPrice,

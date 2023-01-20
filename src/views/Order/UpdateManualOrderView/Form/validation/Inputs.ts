@@ -1,7 +1,7 @@
 import { Product } from "@interfaces/product";
 
 export type Inputs = {
-  productId: number;
+  productId: string;
   grindType: string;
   quantity: number;
   unitPrice: number;
@@ -21,7 +21,7 @@ export type Inputs = {
 };
 
 export const initialValues: Inputs = {
-  productId: 0,
+  productId: "0",
   grindType: "Çekirdek",
   quantity: 1,
   unitPrice: 0,
