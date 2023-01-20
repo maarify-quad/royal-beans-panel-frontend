@@ -1,1 +1,1 @@
-export { CreateDeliveryView } from "./CreateDeliveryView";
+export { CreateDeliveryView as default } from "./CreateDeliveryView";

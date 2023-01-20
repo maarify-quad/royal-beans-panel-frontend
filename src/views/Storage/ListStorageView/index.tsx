@@ -1,1 +1,1 @@
-export { ListStorageView } from "./ListStorageView";
+export { ListStorageView as default } from "./ListStorageView";

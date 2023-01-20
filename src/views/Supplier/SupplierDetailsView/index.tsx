@@ -1,1 +1,1 @@
-export { SupplierDetailsView } from "./SupplierDetailsView";
+export { SupplierDetailsView as default } from "./SupplierDetailsView";

@@ -26,7 +26,7 @@ import { StorageProducts } from "./StorageProducts";
 
 // Lazy Components
 const CreateProduct = React.lazy(() =>
-  import("../../../components/Product/CreateProduct").then((module) => ({
+  import("@components/Product/CreateProduct").then((module) => ({
     default: module.CreateProduct,
   }))
 );

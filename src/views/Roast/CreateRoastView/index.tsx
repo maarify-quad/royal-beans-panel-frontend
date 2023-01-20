@@ -1,1 +1,1 @@
-export { CreateRoastView } from "./CreateRoastView";
+export { CreateRoastView as default } from "./CreateRoastView";

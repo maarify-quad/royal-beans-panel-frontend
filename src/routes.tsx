@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 // Routing
-import { Navigate, RouteObject, useRoutes } from "react-router-dom";
+import { Navigate, useRoutes } from "react-router-dom";
+
+// Redux
+import { useReduxSelector } from "@app/hook";
+import { selectRoles } from "@slices/authSlice";
 
 // Guards
 import { AuthGuard } from "@components/AuthGuard";
@@ -14,118 +18,60 @@ import { DashboardLayout } from "./layouts/DashboardLayout";
 import { LoadingScreen } from "@components/LoadingScreen";
 
 // Auth Views
-const LoginView = React.lazy(() =>
-  import("./views/Auth/LoginView").then((module) => ({ default: module.LoginView }))
-);
+const LoginView = React.lazy(() => import("./views/Auth/LoginView"));
 
 // Supplier Views
-const ListSuppliersView = React.lazy(() =>
-  import("./views/Supplier/ListSuppliersView").then((module) => ({
-    default: module.ListSuppliersView,
-  }))
-);
-const SupplierDetailsView = React.lazy(() =>
-  import("./views/Supplier/SupplierDetailsView").then((module) => ({
-    default: module.SupplierDetailsView,
-  }))
-);
+const ListSuppliersView = React.lazy(() => import("./views/Supplier/ListSuppliersView"));
+const SupplierDetailsView = React.lazy(() => import("./views/Supplier/SupplierDetailsView"));
 
 // Delivery Views
-const ListDeliveriesView = React.lazy(() =>
-  import("./views/Delivery/ListDeliveriesView").then((module) => ({
-    default: module.ListDeliveriesView,
-  }))
-);
-const DeliveryDetailsView = React.lazy(() =>
-  import("./views/Delivery/DeliveryDetailsView").then((module) => ({
-    default: module.DeliveryDetailsView,
-  }))
-);
-const CreateDeliveryView = React.lazy(() =>
-  import("./views/Delivery/CreateDeliveryView").then((module) => ({
-    default: module.CreateDeliveryView,
-  }))
-);
+const ListDeliveriesView = React.lazy(() => import("./views/Delivery/ListDeliveriesView"));
+const DeliveryDetailsView = React.lazy(() => import("./views/Delivery/DeliveryDetailsView"));
+const CreateDeliveryView = React.lazy(() => import("./views/Delivery/CreateDeliveryView"));
 
 // Storage Views
-const ListStorageView = React.lazy(() =>
-  import("./views/Storage/ListStorageView").then((module) => ({
-    default: module.ListStorageView,
-  }))
-);
+const ListStorageView = React.lazy(() => import("./views/Storage/ListStorageView"));
 
 // Roast Views
-const ListRoastsView = React.lazy(() =>
-  import("./views/Roast/ListRoastsView").then((module) => ({
-    default: module.ListRoastsView,
-  }))
-);
-const RoastDetailsView = React.lazy(() =>
-  import("./views/Roast/RoastDetailsView").then((module) => ({
-    default: module.RoastDetailsView,
-  }))
-);
-const CreateRoastView = React.lazy(() =>
-  import("./views/Roast/CreateRoastView").then((module) => ({
-    default: module.CreateRoastView,
-  }))
-);
+const ListRoastsView = React.lazy(() => import("./views/Roast/ListRoastsView"));
+const RoastDetailsView = React.lazy(() => import("./views/Roast/RoastDetailsView"));
+const CreateRoastView = React.lazy(() => import("./views/Roast/CreateRoastView"));
 
 // Customer Views
-const ListCustomersView = React.lazy(() =>
-  import("./views/Customer/ListCustomersView").then((module) => ({
-    default: module.ListCustomersView,
-  }))
-);
-const CustomerDetailsView = React.lazy(() =>
-  import("./views/Customer/CustomerDetailsView").then((module) => ({
-    default: module.CustomerDetailsView,
-  }))
-);
+const ListCustomersView = React.lazy(() => import("./views/Customer/ListCustomersView"));
+const CustomerDetailsView = React.lazy(() => import("./views/Customer/CustomerDetailsView"));
 
 // PriceList Views
-const ListPriceListsView = React.lazy(() =>
-  import("./views/PriceList/ListPriceListsView").then((module) => ({
-    default: module.ListPriceListsView,
-  }))
-);
-const PriceListDetailsView = React.lazy(() =>
-  import("./views/PriceList/PriceListDetailsView").then((module) => ({
-    default: module.PriceListDetailsView,
-  }))
-);
+const ListPriceListsView = React.lazy(() => import("./views/PriceList/ListPriceListsView"));
+const PriceListDetailsView = React.lazy(() => import("./views/PriceList/PriceListDetailsView"));
 
 // Order Views
-const ListOrdersView = React.lazy(() =>
-  import("./views/Order/ListOrdersView").then((module) => ({
-    default: module.ListOrdersView,
-  }))
-);
-const OrderDetailsView = React.lazy(() =>
-  import("./views/Order/OrderDetailsView").then((module) => ({
-    default: module.OrderDetailsView,
-  }))
-);
-const CreateOrderView = React.lazy(() =>
-  import("./views/Order/CreateOrderView").then((module) => ({
-    default: module.CreateOrderView,
-  }))
-);
+const ListOrdersView = React.lazy(() => import("./views/Order/ListOrdersView"));
+const OrderDetailsView = React.lazy(() => import("./views/Order/OrderDetailsView"));
+const CreateOrderView = React.lazy(() => import("./views/Order/CreateOrderView"));
 const CreateManualOrderView = React.lazy(() => import("./views/Order/CreateManualOrderView"));
-const UpdateOrderView = React.lazy(() =>
-  import("./views/Order/UpdateOrderView").then((module) => ({
-    default: module.UpdateOrderView,
-  }))
-);
+const UpdateOrderView = React.lazy(() => import("./views/Order/UpdateOrderView"));
 const UpdateManualOrderView = React.lazy(() => import("./views/Order/UpdateManualOrderView"));
 
+// Stock Admin View
+const StockAdminView = React.lazy(() => import("./views/StockAdmin/StockAdminView"));
+
 // Error Views
-const NotFoundView = React.lazy(() =>
-  import("./views/Error/NotFoundView").then((module) => ({ default: module.NotFoundView }))
-);
+const NotFoundView = React.lazy(() => import("./views/Error/NotFoundView"));
+
+type AppRoute = {
+  caseSensitive?: boolean;
+  children?: AppRoute[];
+  element?: React.ReactNode;
+  index?: boolean;
+  path?: string;
+  roles?: string[];
+};
 
 export const AppRoutes = () => {
-  const routes: RouteObject[] = [
+  const roles = useReduxSelector(selectRoles);
+
+  const routes: AppRoute[] = [
     {
       path: "/",
       element: <Navigate to="/auth/login" replace />,
@@ -218,6 +164,11 @@ export const AppRoutes = () => {
           path: "/dashboard/orders/manual/update/:orderId",
           element: <UpdateManualOrderView />,
         },
+        {
+          path: "/dashboard/stock-admin",
+          element: <StockAdminView />,
+          roles: ["admin"],
+        },
       ],
     },
     {
@@ -236,5 +187,26 @@ export const AppRoutes = () => {
     },
   ];
 
-  return <React.Suspense fallback={<LoadingScreen />}>{useRoutes(routes)}</React.Suspense>;
+  const filterRoutes = (routes: AppRoute[]): AppRoute[] => {
+    return routes
+      .map((route) => {
+        if (route.children) {
+          return {
+            ...route,
+            children: filterRoutes(route.children),
+          };
+        }
+        return route;
+      })
+      .filter((route) => {
+        if (route.roles) {
+          return route.roles.some((role) => roles.includes(role));
+        }
+        return true;
+      });
+  };
+
+  const filteredRoutes = useMemo(() => filterRoutes(routes), [roles]);
+
+  return <React.Suspense fallback={<LoadingScreen />}>{useRoutes(filteredRoutes)}</React.Suspense>;
 };

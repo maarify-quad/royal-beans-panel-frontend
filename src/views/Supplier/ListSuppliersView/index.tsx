@@ -1,1 +1,1 @@
-export { ListSuppliersView } from "./ListSuppliersView";
+export { ListSuppliersView as default } from "./ListSuppliersView";

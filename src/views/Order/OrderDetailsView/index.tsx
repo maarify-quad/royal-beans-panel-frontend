@@ -1,1 +1,1 @@
-export { OrderDetailsView } from "./OrderDetailsView";
+export { OrderDetailsView as default } from "./OrderDetailsView";
