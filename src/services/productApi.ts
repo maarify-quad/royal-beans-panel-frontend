@@ -5,8 +5,17 @@ import { Product } from "@interfaces/product";
 
 export const productApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getProducts: builder.query<Product[], void>({
-      query: () => "/products",
+    getProducts: builder.query<GetProductsResponse, GetProductsRequest | void>({
+      query: (params) => {
+        const url = new URL("/products", import.meta.env.VITE_API_BASE_URL);
+
+        if (params) {
+          url.searchParams.append("page", params.page.toString());
+          url.searchParams.append("limit", params.limit.toString());
+        }
+
+        return url.toString();
+      },
       providesTags: ["Product"],
       keepUnusedDataFor: 15,
     }),
@@ -50,6 +59,17 @@ export const {
   useCreateProductMutation,
   useCreateBulkProductsFromExcelMutation,
 } = productApi;
+
+interface GetProductsResponse {
+  products: Product[];
+  totalPages: number;
+  totalCount: number;
+}
+
+interface GetProductsRequest {
+  page: number;
+  limit: number;
+}
 
 interface CreateProductParams {
   name: string;

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useGetProductsQuery } from "@services/productApi";
 
 // UI Components
-import { ActionIcon, Alert, Button, Group, NumberInput, Paper } from "@mantine/core";
+import { ActionIcon, Alert, Button, Group, NumberInput, Paper, Select } from "@mantine/core";
 
 // Icons
 import { IconInfoCircle, IconX } from "@tabler/icons";
@@ -17,11 +17,15 @@ import { Product } from "@interfaces/product";
 
 export const BulkUpdateStock = () => {
   // State
+  const [query, setQuery] = useState({
+    page: 1,
+    limit: 25,
+  });
   const [editedRowIndexes, setEditedRowIndexes] = useState<number[]>([]);
   const [editedProducts, setEditedProducts] = useState<{ [key: number]: Product }>({});
 
   // Queries
-  const { data: products, isLoading, isFetching, error } = useGetProductsQuery();
+  const { data, isLoading, isFetching, error } = useGetProductsQuery(query);
 
   // Handlers
   const handleBulkUpdate = () => {
@@ -89,7 +93,7 @@ export const BulkUpdateStock = () => {
         },
       },
     ],
-    [products, editedRowIndexes, editedProducts]
+    [data, editedRowIndexes, editedProducts]
   );
 
   if (error) {
@@ -115,15 +119,15 @@ export const BulkUpdateStock = () => {
       <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
         <DataTable
           highlightOnHover
-          records={products}
+          records={data?.products}
           columns={columns}
           fetching={isLoading || isFetching}
           noRecordsText="Kayıt bulunamadı"
           loadingText="Yükleniyor"
-          recordsPerPage={25}
-          totalRecords={products?.length}
-          page={1}
-          onPageChange={() => {}}
+          recordsPerPage={query.limit}
+          totalRecords={data?.totalCount}
+          page={query.page}
+          onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
           onCellClick={(row) => {
             if (row.column.accessor === "amount" && !editedRowIndexes.includes(row.recordIndex)) {
               setEditedRowIndexes((prev) => [...prev, row.recordIndex]);
@@ -131,6 +135,22 @@ export const BulkUpdateStock = () => {
             }
           }}
         />
+        <Group position="right">
+          <Select
+            value={query.limit.toString()}
+            onChange={(limit) => {
+              if (limit) {
+                setQuery({ page: 1, limit: +limit });
+              }
+            }}
+            data={[
+              { label: "25", value: "25" },
+              { label: "50", value: "50" },
+              { label: "100", value: "100" },
+            ]}
+            style={{ width: 100 }}
+          />
+        </Group>
       </Paper>
     </>
   );
