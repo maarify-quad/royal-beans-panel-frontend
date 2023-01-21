@@ -50,6 +50,14 @@ export const productApi = emptyApi.injectEndpoints({
         multipart: true,
       },
     }),
+    bulkUpdateProducts: builder.mutation<Product, BulkUpdateProductsRequest>({
+      query: (body) => ({
+        url: "/products/bulk",
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 
@@ -58,6 +66,7 @@ export const {
   useGetProductsByStorageTypeQuery,
   useCreateProductMutation,
   useCreateBulkProductsFromExcelMutation,
+  useBulkUpdateProductsMutation,
 } = productApi;
 
 interface GetProductsResponse {
@@ -80,4 +89,8 @@ interface CreateProductParams {
 
 interface CreateBulkProductsFromExcelParams {
   excel: File;
+}
+
+interface BulkUpdateProductsRequest {
+  products: { id: number; name: string; storageType: string; amount: number; amountUnit: string }[];
 }

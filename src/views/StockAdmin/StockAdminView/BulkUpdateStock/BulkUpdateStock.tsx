@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 
 // Services
-import { useGetProductsQuery } from "@services/productApi";
+import { useGetProductsQuery, useBulkUpdateProductsMutation } from "@services/productApi";
 
 // UI Components
 import { ActionIcon, Alert, Button, Group, NumberInput, Paper, Select } from "@mantine/core";
+
+// UI Utils
+import { showNotification } from "@mantine/notifications";
 
 // Icons
 import { IconInfoCircle, IconX } from "@tabler/icons";
@@ -27,9 +30,23 @@ export const BulkUpdateStock = () => {
   // Queries
   const { data, isLoading, isFetching, error } = useGetProductsQuery(query);
 
+  // Mutations
+  const [bulkUpdateProducts, { isLoading: isUpdating }] = useBulkUpdateProductsMutation();
+
   // Handlers
-  const handleBulkUpdate = () => {
-    // TODO: Bulk update
+  const handleBulkUpdate = async () => {
+    try {
+      await bulkUpdateProducts({
+        products: Object.values(editedProducts),
+      });
+      setEditedRowIndexes([]);
+      setEditedProducts({});
+      showNotification({
+        title: "Başarılı",
+        message: "Ürünler başarıyla güncellendi",
+        color: "green",
+      });
+    } catch {}
   };
 
   const handleEditRow = (row: Product, index: number) => {
@@ -121,7 +138,7 @@ export const BulkUpdateStock = () => {
           highlightOnHover
           records={data?.products}
           columns={columns}
-          fetching={isLoading || isFetching}
+          fetching={isLoading || isFetching || isUpdating}
           noRecordsText="Kayıt bulunamadı"
           loadingText="Yükleniyor"
           recordsPerPage={query.limit}
