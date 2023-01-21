@@ -30,7 +30,7 @@ type ManualCreateProps = {
 
 export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceListProducts }) => {
   // Queries
-  const { data: products, isLoading: isProductsLoading } = useGetProductsQuery();
+  const { data, isLoading: isProductsLoading } = useGetProductsQuery();
 
   // Mutations
   const [createPriceListProduct, { isLoading: isCreateProductLoading }] =
@@ -44,13 +44,13 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
 
   const productSelectOptions = React.useMemo(
     () =>
-      products
+      data?.products
         ?.filter((product) => !priceListProducts?.find((p) => p.productId === product.id))
         .map((product) => ({
           value: product.id.toString(),
           label: product.name,
         })) || [],
-    [products?.length]
+    [data]
   );
 
   const onAddProductSubmit = async (values: Inputs) => {

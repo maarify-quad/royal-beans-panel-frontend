@@ -21,10 +21,20 @@ type FormProps = {
 
 export const Form: React.FC<FormProps> = ({ form }) => {
   // Get latest suppliers
-  const { data: suppliersData, isLoading: isSuppliersLoading } = useGetSuppliersQuery();
+  const { suppliers, isLoading: isSuppliersLoading } = useGetSuppliersQuery(undefined, {
+    selectFromResult: ({ data, ...rest }) => ({
+      ...rest,
+      suppliers: data?.suppliers,
+    }),
+  });
 
   // Get latest products
-  const { data: products, isLoading: isProductsLoading } = useGetProductsQuery();
+  const { products, isLoading: isProductsLoading } = useGetProductsQuery(undefined, {
+    selectFromResult: ({ data, ...rest }) => ({
+      ...rest,
+      products: data?.products,
+    }),
+  });
 
   const productSelectOptions = React.useMemo(
     () =>
@@ -32,16 +42,16 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         value: product.id.toString(),
         label: product.name,
       })) || [],
-    [products?.length]
+    [products]
   );
 
   const supplierSelectOptions = React.useMemo(
     () =>
-      suppliersData?.suppliers.map((supplier) => ({
+      suppliers?.map((supplier) => ({
         value: supplier.id.toString(),
         label: supplier.name,
       })) || [],
-    [suppliersData?.suppliers.length]
+    [suppliers]
   );
 
   const handleAddProduct = () => {
@@ -74,14 +84,14 @@ export const Form: React.FC<FormProps> = ({ form }) => {
   };
 
   useEffect(() => {
-    if (suppliersData && suppliersData.suppliers.length > 0) {
-      form.setFieldValue("supplierId", suppliersData.suppliers[0].id);
+    if (suppliers && suppliers.length > 0) {
+      form.setFieldValue("supplierId", suppliers[0].id);
     }
 
     if (products && products.length > 0) {
       form.setFieldValue("productId", products[0].id);
     }
-  }, [suppliersData?.suppliers.length, products?.length]);
+  }, [suppliers?.length, products?.length]);
 
   useEffect(() => {
     if (form.values.productId) {
