@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useGetProductsQuery, useBulkUpdateProductsMutation } from "@services/productApi";
 
 // UI Components
-import { ActionIcon, Alert, Button, Group, NumberInput, Paper, Select } from "@mantine/core";
+import { ActionIcon, Alert, Button, Group, NumberInput, Paper, Select, Text } from "@mantine/core";
 
 // UI Utils
 import { showNotification } from "@mantine/notifications";
@@ -152,7 +152,8 @@ export const BulkUpdateStock = () => {
             }
           }}
         />
-        <Group position="right">
+        <Group>
+          <Text size="sm">Sayfa başı satır</Text>
           <Select
             value={query.limit.toString()}
             onChange={(limit) => {
@@ -165,7 +166,8 @@ export const BulkUpdateStock = () => {
               { label: "50", value: "50" },
               { label: "100", value: "100" },
             ]}
-            style={{ width: 100 }}
+            style={{ width: 60 }}
+            size="xs"
           />
         </Group>
       </Paper>

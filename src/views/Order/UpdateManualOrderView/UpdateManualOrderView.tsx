@@ -57,7 +57,17 @@ export const UpdateManualOrderView = () => {
   const { data, isLoading: isOrderLoading } = useGetOrderByOrderIdQuery(orderId!, {
     skip: !orderId,
   });
-  const { data: products, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery("FN");
+  const { products, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery(
+    {
+      storageType: "FN",
+    },
+    {
+      selectFromResult: ({ data, ...rest }) => ({
+        ...rest,
+        products: data?.products,
+      }),
+    }
+  );
 
   // Mutations
   const [updateOrderProducts, { isLoading: isUpdating }] = useUpdateManualOrderProductsMutation();

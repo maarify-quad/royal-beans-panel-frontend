@@ -19,7 +19,17 @@ type FormProps = {
 
 export const Form: React.FC<FormProps> = ({ form }) => {
   // Queries
-  const { data: products, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery("YM");
+  const { products, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery(
+    {
+      storageType: "YM",
+    },
+    {
+      selectFromResult: ({ data, ...rest }) => ({
+        ...rest,
+        products: data?.products,
+      }),
+    }
+  );
 
   const handleAddProduct = () => {
     const { roastDetails, ...item } = form.values;

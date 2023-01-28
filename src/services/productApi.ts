@@ -8,8 +8,11 @@ export const productApi = emptyApi.injectEndpoints({
     getProducts: builder.query<GetProductsResponse, GetProductsRequest | void>({
       query: (params) => {
         const url = new URL("/products", import.meta.env.VITE_API_BASE_URL);
-        url.searchParams.append("page", params?.page.toString() || "1");
-        url.searchParams.append("limit", params?.limit.toString() || "25");
+        if (params) {
+          const { page, limit } = params;
+          url.searchParams.append("page", page.toString());
+          url.searchParams.append("limit", limit.toString());
+        }
         return url.toString();
       },
       providesTags: ["Product"],
@@ -28,13 +31,27 @@ export const productApi = emptyApi.injectEndpoints({
       providesTags: ["Product"],
       keepUnusedDataFor: 15,
     }),
-    getProductsByStorageType: builder.query<Product[], string>({
-      query: (storageType) => `/products/storageType/${storageType}`,
+    getProductsByStorageType: builder.query<
+      GetProductsByStorageTypeResponse,
+      GetProductsByStorageTypeRequest
+    >({
+      query: (params) => {
+        const url = new URL(
+          `/products/storageType/${params.storageType}`,
+          import.meta.env.VITE_API_BASE_URL
+        );
+        if (params) {
+          const { page, limit } = params;
+          url.searchParams.append("page", page?.toString() || "1");
+          url.searchParams.append("limit", limit?.toString() || "25");
+        }
+        return url.toString();
+      },
       keepUnusedDataFor: 15,
-      providesTags: (result, _error, storageType) =>
-        result ? [{ type: "Product" as const, id: storageType }] : ["Product"],
+      providesTags: (result, _error, params) =>
+        result ? [{ type: "Product" as const, id: params.storageType }] : ["Product"],
     }),
-    createProduct: builder.mutation<Product, CreateProductParams>({
+    createProduct: builder.mutation<Product, CreateProductRequest>({
       query: (body) => ({
         url: "/products",
         method: "POST",
@@ -91,12 +108,24 @@ interface GetProductsWithIngredientsResponse {
   totalCount: number;
 }
 
+interface GetProductsByStorageTypeResponse {
+  products: Product[];
+  totalPages: number;
+  totalCount: number;
+}
+
 interface GetProductsRequest {
   page: number;
   limit: number;
 }
 
-interface CreateProductParams {
+interface GetProductsByStorageTypeRequest {
+  storageType: string;
+  page?: number;
+  limit?: number;
+}
+
+interface CreateProductRequest {
   name: string;
   storageType: string;
   amount: number;

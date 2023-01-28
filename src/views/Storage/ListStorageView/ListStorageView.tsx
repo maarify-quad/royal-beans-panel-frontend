@@ -74,7 +74,7 @@ export const ListStorageView = () => {
           Yeni Ürün
         </Button>
       </Group>
-      <Tabs defaultValue="HM" mt="md">
+      <Tabs keepMounted={false} defaultValue="HM" mt="md">
         <Tabs.List>
           <Tabs.Tab value="HM">Hammadde</Tabs.Tab>
           <Tabs.Tab value="YM">Yarı Mamül</Tabs.Tab>

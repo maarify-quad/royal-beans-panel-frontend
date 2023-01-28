@@ -21,17 +21,27 @@ type StorageProductsProps = {
 };
 
 export const StorageProducts: React.FC<StorageProductsProps> = ({ storageType }) => {
-  const { data, isLoading, error } = useGetProductsByStorageTypeQuery(storageType);
+  const { products, isLoading, error } = useGetProductsByStorageTypeQuery(
+    {
+      storageType,
+    },
+    {
+      selectFromResult: ({ data, ...rest }) => ({
+        ...rest,
+        products: data?.products,
+      }),
+    }
+  );
 
   const productsRow: RowDef[][] = React.useMemo(
     () =>
-      data?.map((product) => [
+      products?.map((product) => [
         { value: product.name },
         { value: product.stockCode || "-" },
         { value: product.amount },
         { value: product.amountUnit },
       ]) || [],
-    [data]
+    [products]
   );
 
   if (isLoading) {
@@ -46,7 +56,7 @@ export const StorageProducts: React.FC<StorageProductsProps> = ({ storageType })
     );
   }
 
-  if (data?.length === 0) {
+  if (products?.length === 0) {
     return (
       <Alert color="cyan" icon={<IconInfoCircle />}>
         Bu kategoriye ait ürün bulunmamaktadır

@@ -35,7 +35,15 @@ export const Form = () => {
   const prevStep = () => setStep((current) => (current > 0 ? current - 1 : current));
 
   // Queries
-  const { data: products, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery("FN");
+  const { products, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery(
+    { storageType: "FN" },
+    {
+      selectFromResult: ({ data, ...rest }) => ({
+        ...rest,
+        products: data?.products,
+      }),
+    }
+  );
 
   // Mutations
   const [createManualOrder, { isLoading: isCreatingOrder }] = useCreateManualOrderMutation();
