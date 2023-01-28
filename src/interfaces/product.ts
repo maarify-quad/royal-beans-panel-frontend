@@ -9,3 +9,16 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ProductWithIngredients extends Product {
+  ingredients: Ingredient[];
+}
+
+export interface Ingredient {
+  id: number;
+  productId: number;
+  ingredientProductId: number;
+  ratio: number;
+  product: Product;
+  ingredientProduct: Product;
+}

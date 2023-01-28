@@ -6,6 +6,7 @@ import { createStyles, Title, Breadcrumbs, Anchor, Tabs } from "@mantine/core";
 
 // Components
 import BulkUpdateStock from "./BulkUpdateStock";
+import FnUpdateIngredients from "./FnUpdateIngredients";
 
 // Styles
 const useStyles = createStyles((theme) => ({
@@ -48,7 +49,7 @@ export const StockAdminView = () => {
           <BulkUpdateStock />
         </Tabs.Panel>
         <Tabs.Panel mt="md" value="fn-update">
-          FN İçerik Güncelle
+          <FnUpdateIngredients />
         </Tabs.Panel>
       </Tabs>
     </div>
