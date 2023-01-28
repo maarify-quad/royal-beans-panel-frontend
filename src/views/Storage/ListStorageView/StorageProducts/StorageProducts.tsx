@@ -1,19 +1,17 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 
 // Services
 import { useGetProductsByStorageTypeQuery } from "@services/productApi";
 
 // UI Components
-import { Alert, Container, Loader, ScrollArea } from "@mantine/core";
+import { Alert, Group, Paper, Select, Text } from "@mantine/core";
+import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
 import { IconInfoCircle } from "@tabler/icons";
 
-// Components
-import { ResultsTable } from "@components/ResultsTable";
-
 // Interfaces
-import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
+import { Product } from "@interfaces/product";
 
 // Props
 type StorageProductsProps = {
@@ -21,32 +19,34 @@ type StorageProductsProps = {
 };
 
 export const StorageProducts: React.FC<StorageProductsProps> = ({ storageType }) => {
-  const { products, isLoading, error } = useGetProductsByStorageTypeQuery(
+  const [query, setQuery] = useState({
+    page: 1,
+    limit: 25,
+  });
+  const { products, totalCount, isTableLoading, error } = useGetProductsByStorageTypeQuery(
     {
       storageType,
     },
     {
-      selectFromResult: ({ data, ...rest }) => ({
+      selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
         ...rest,
         products: data?.products,
+        totalPages: data?.totalPages,
+        totalCount: data?.totalCount,
+        isTableLoading: isLoading || isFetching,
       }),
     }
   );
 
-  const productsRow: RowDef[][] = React.useMemo(
-    () =>
-      products?.map((product) => [
-        { value: product.name },
-        { value: product.stockCode || "-" },
-        { value: product.amount },
-        { value: product.amountUnit },
-      ]) || [],
+  const columns: DataTableColumn<Product>[] = useMemo(
+    () => [
+      { accessor: "name", title: "Ürün" },
+      { accessor: "stockCode", title: "Stok Kodu" },
+      { accessor: "amount", title: "Miktar" },
+      { accessor: "amountUnit", title: "Miktar Birimi" },
+    ],
     [products]
   );
-
-  if (isLoading) {
-    return <Loader />;
-  }
 
   if (error) {
     return (
@@ -65,18 +65,37 @@ export const StorageProducts: React.FC<StorageProductsProps> = ({ storageType })
   }
 
   return (
-    <Container fluid p={0}>
-      <ScrollArea>
-        <ResultsTable
-          headers={[
-            { value: "Ürün" },
-            { value: "Stok Kodu" },
-            { value: "Miktar" },
-            { value: "Miktar Birimi" },
+    <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
+      <DataTable
+        highlightOnHover
+        records={products}
+        columns={columns}
+        fetching={isTableLoading}
+        noRecordsText="Kayıt bulunamadı"
+        loadingText="Yükleniyor"
+        recordsPerPage={query.limit}
+        totalRecords={totalCount}
+        page={query.page}
+        onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
+      />
+      <Group>
+        <Text size="sm">Sayfa başı satır</Text>
+        <Select
+          value={query.limit.toString()}
+          onChange={(limit) => {
+            if (limit) {
+              setQuery({ page: 1, limit: +limit });
+            }
+          }}
+          data={[
+            { label: "25", value: "25" },
+            { label: "50", value: "50" },
+            { label: "100", value: "100" },
           ]}
-          rows={productsRow}
+          style={{ width: 60 }}
+          size="xs"
         />
-      </ScrollArea>
-    </Container>
+      </Group>
+    </Paper>
   );
 };

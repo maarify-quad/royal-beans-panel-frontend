@@ -6,8 +6,16 @@ import { Product } from "@interfaces/product";
 
 export const roastApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getRoasts: builder.query<GetAllRoastsResponse, number | void>({
-      query: (page) => (page ? `/roasts?page=${page}` : "/roasts"),
+    getRoasts: builder.query<GetRoastsResponse, GetRoastsRequest | void>({
+      query: (params) => {
+        const url = new URL("/roasts", import.meta.env.VITE_API_BASE_URL);
+        if (params) {
+          const { page, limit } = params;
+          url.searchParams.append("page", page.toString());
+          url.searchParams.append("limit", limit.toString());
+        }
+        return url.toString();
+      },
       providesTags: ["Roast"],
     }),
     getRoastById: builder.query<GetRoastResponse, string>({
@@ -26,9 +34,15 @@ export const roastApi = emptyApi.injectEndpoints({
 
 export const { useGetRoastsQuery, useGetRoastByIdQuery, useCreateRoastMutation } = roastApi;
 
-export interface GetAllRoastsResponse {
+export interface GetRoastsResponse {
   roasts: Roast[];
-  totalPage?: number;
+  totalPages: number;
+  totalCount: number;
+}
+
+export interface GetRoastsRequest {
+  page: number;
+  limit: number;
 }
 
 export interface GetRoastResponse {

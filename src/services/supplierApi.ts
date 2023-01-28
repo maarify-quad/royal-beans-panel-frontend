@@ -8,12 +8,17 @@ import { Supplier } from "@interfaces/supplier";
 
 export const supplierApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getSuppliers: builder.query<GetAllSuppliersResponse, number | void>({
-      query: (page) => (page ? `/suppliers?page=${page}` : "/suppliers"),
-      providesTags: ["Supplier"],
-      extraOptions: {
-        multipart: true,
+    getSuppliers: builder.query<GetSuppliersResponse, GetSuppliersRequest | void>({
+      query: (params) => {
+        const url = new URL("/suppliers", import.meta.env.VITE_API_BASE_URL);
+        if (params) {
+          const { page, limit } = params;
+          url.searchParams.append("page", page.toString());
+          url.searchParams.append("limit", limit.toString());
+        }
+        return url.toString();
       },
+      providesTags: ["Supplier"],
     }),
     getSupplierById: builder.query<Supplier, string>({
       query: (id) => `/suppliers/${id}`,
@@ -33,9 +38,15 @@ export const supplierApi = emptyApi.injectEndpoints({
 export const { useGetSuppliersQuery, useGetSupplierByIdQuery, useCreateSupplierMutation } =
   supplierApi;
 
-interface GetAllSuppliersResponse {
+interface GetSuppliersResponse {
   suppliers: Supplier[];
-  totalPage?: number;
+  totalPages: number;
+  totalCount: number;
+}
+
+interface GetSuppliersRequest {
+  page: number;
+  limit: number;
 }
 
 interface CreateSupplierParams {

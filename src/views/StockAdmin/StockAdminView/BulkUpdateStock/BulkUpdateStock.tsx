@@ -1,19 +1,17 @@
-import React, { useState } from "react";
+import { useMemo, useState } from "react";
 
 // Services
 import { useGetProductsQuery, useBulkUpdateProductsMutation } from "@services/productApi";
 
 // UI Components
 import { ActionIcon, Alert, Button, Group, NumberInput, Paper, Select, Text } from "@mantine/core";
+import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // UI Utils
 import { showNotification } from "@mantine/notifications";
 
 // Icons
 import { IconInfoCircle, IconX } from "@tabler/icons";
-
-// Components
-import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Interfaces
 import { Product } from "@interfaces/product";
@@ -28,7 +26,15 @@ export const BulkUpdateStock = () => {
   const [editedProducts, setEditedProducts] = useState<{ [key: number]: Product }>({});
 
   // Queries
-  const { data, isLoading, isFetching, error } = useGetProductsQuery(query);
+  const { products, totalCount, isTableLoading, error } = useGetProductsQuery(query, {
+    selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
+      ...rest,
+      products: data?.products,
+      totalPages: data?.totalPages,
+      totalCount: data?.totalCount,
+      isTableLoading: isLoading || isFetching,
+    }),
+  });
 
   // Mutations
   const [bulkUpdateProducts, { isLoading: isUpdating }] = useBulkUpdateProductsMutation();
@@ -62,7 +68,7 @@ export const BulkUpdateStock = () => {
     setEditedProducts({});
   };
 
-  const columns: DataTableColumn<Product>[] = React.useMemo(
+  const columns: DataTableColumn<Product>[] = useMemo(
     () => [
       { accessor: "name", title: "Ürün", cellsStyle: { cursor: "default" } },
       {
@@ -110,7 +116,7 @@ export const BulkUpdateStock = () => {
         },
       },
     ],
-    [data, editedRowIndexes, editedProducts]
+    [products, editedRowIndexes, editedProducts]
   );
 
   if (error) {
@@ -136,13 +142,13 @@ export const BulkUpdateStock = () => {
       <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
         <DataTable
           highlightOnHover
-          records={data?.products}
+          records={products}
           columns={columns}
-          fetching={isLoading || isFetching || isUpdating}
+          fetching={isTableLoading || isUpdating}
           noRecordsText="Kayıt bulunamadı"
           loadingText="Yükleniyor"
           recordsPerPage={query.limit}
-          totalRecords={data?.totalCount}
+          totalRecords={totalCount}
           page={query.page}
           onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
           onCellClick={(row) => {

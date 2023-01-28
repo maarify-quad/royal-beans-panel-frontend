@@ -4,7 +4,7 @@ export interface Roast {
   id: string;
   date: string;
   totalInputAmount: number;
-  totalOutpıtAmount: number;
+  totalOutputAmount: number;
   totalDifferenceAmount: number;
   roastDetails: RoastDetail[];
 }

@@ -1,39 +1,61 @@
-import React from "react";
+import React, { useMemo } from "react";
+
+// Routing
+import { Link } from "react-router-dom";
 
 // Services
 import { useGetCustomersQuery } from "@services/customerApi";
 
 // UI Components
-import { Container, Loader, Alert } from "@mantine/core";
+import { Alert, Anchor, Group, Paper, Select, Text } from "@mantine/core";
+import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
 import { IconInfoCircle } from "@tabler/icons";
 
-// Components
-import { ResultsTable } from "@components/ResultsTable";
-
 // Interfaces
-import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
+import { Customer } from "@interfaces/customer";
 
 export const Results = () => {
   // Internal state
-  const [page, setPage] = React.useState(1);
+  const [query, setQuery] = React.useState({
+    page: 1,
+    limit: 25,
+  });
 
   // Queries
-  const { data, isLoading, error } = useGetCustomersQuery(page);
+  const { customers, totalCount, isTableLoading, error } = useGetCustomersQuery(query, {
+    selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
+      ...rest,
+      customers: data?.customers,
+      totalPages: data?.totalPages,
+      totalCount: data?.totalCount,
+      isTableLoading: isLoading || isFetching,
+    }),
+  });
 
-  const customerRows: RowDef[][] = React.useMemo(
-    () =>
-      data?.customers.map((customer) => [
-        { value: customer.name, link: `/dashboard/customers/${customer.id}` },
-        { value: `${customer.currentBalance.toFixed(2)} ₺` },
-      ]) || [],
-    [data]
+  const columns: DataTableColumn<Customer>[] = useMemo(
+    () => [
+      {
+        accessor: "name",
+        title: "Müşteri",
+        render: (customer) => (
+          <Anchor component={Link} to={`/dashboard/customers/${customer.id}`}>
+            {customer.name}
+          </Anchor>
+        ),
+      },
+      {
+        accessor: "currentBalance",
+        title: "Bakiye",
+        render: (customer) =>
+          Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(
+            customer.currentBalance
+          ),
+      },
+    ],
+    [customers]
   );
-
-  if (isLoading) {
-    return <Loader />;
-  }
 
   if (error) {
     return (
@@ -49,7 +71,7 @@ export const Results = () => {
     );
   }
 
-  if (data?.customers.length === 0) {
+  if (customers?.length === 0) {
     return (
       <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
         Müşteri bulunmamaktadır
@@ -58,16 +80,37 @@ export const Results = () => {
   }
 
   return (
-    <Container fluid mt="md" p={0}>
-      <ResultsTable
-        headers={[{ value: "Müşteri" }, { value: "Bakiye" }]}
-        rows={customerRows}
-        pagination={{
-          totalPage: data?.totalPage || 0,
-          currentPage: page,
-          onPageChange: (page) => setPage(page),
-        }}
+    <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
+      <DataTable
+        highlightOnHover
+        records={customers}
+        columns={columns}
+        fetching={isTableLoading}
+        noRecordsText="Kayıt bulunamadı"
+        loadingText="Yükleniyor"
+        recordsPerPage={query.limit}
+        totalRecords={totalCount}
+        page={query.page}
+        onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
       />
-    </Container>
+      <Group>
+        <Text size="sm">Sayfa başı satır</Text>
+        <Select
+          value={query.limit.toString()}
+          onChange={(limit) => {
+            if (limit) {
+              setQuery({ page: 1, limit: +limit });
+            }
+          }}
+          data={[
+            { label: "25", value: "25" },
+            { label: "50", value: "50" },
+            { label: "100", value: "100" },
+          ]}
+          style={{ width: 60 }}
+          size="xs"
+        />
+      </Group>
+    </Paper>
   );
 };
