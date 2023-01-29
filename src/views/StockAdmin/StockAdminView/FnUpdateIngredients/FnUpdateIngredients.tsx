@@ -28,7 +28,9 @@ export const FnUpdateIngredients = () => {
               <Text size="xs" color="dimmed">
                 {product.stockCode || "Stok Kodu Yok"}
               </Text>
-              <Text size="xl">{product.name}</Text>
+              <Text weight="bold" size="xl">
+                {product.name}
+              </Text>
             </Flex>
             <Flex align="start" rowGap="xs" direction="column">
               <Text size="xl" weight="bold">

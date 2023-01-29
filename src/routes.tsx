@@ -55,6 +55,7 @@ const UpdateManualOrderView = React.lazy(() => import("./views/Order/UpdateManua
 
 // Stock Admin View
 const StockAdminView = React.lazy(() => import("./views/StockAdmin/StockAdminView"));
+const FnUpdateView = React.lazy(() => import("./views/StockAdmin/FnUpdateView"));
 
 // Error Views
 const NotFoundView = React.lazy(() => import("./views/Error/NotFoundView"));
@@ -167,6 +168,11 @@ export const AppRoutes = () => {
         {
           path: "/dashboard/stock-admin",
           element: <StockAdminView />,
+          roles: ["admin"],
+        },
+        {
+          path: "/dashboard/stock-admin/fn-update/:stockCode",
+          element: <FnUpdateView />,
           roles: ["admin"],
         },
       ],

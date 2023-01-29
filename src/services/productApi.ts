@@ -51,6 +51,11 @@ export const productApi = emptyApi.injectEndpoints({
       providesTags: (result, _error, params) =>
         result ? [{ type: "Product" as const, id: params.storageType }] : ["Product"],
     }),
+    getProductWithIngredients: builder.query<ProductWithIngredients, string>({
+      query: (stockCode) => `/products/${stockCode}/ingredients`,
+      providesTags: (result, _error, stockCode) =>
+        result ? [{ type: "Ingredient" as const, id: stockCode }] : ["Product"],
+    }),
     createProduct: builder.mutation<Product, CreateProductRequest>({
       query: (body) => ({
         url: "/products",
@@ -91,6 +96,7 @@ export const {
   useGetProductsQuery,
   useGetProductsWithIngredientsQuery,
   useGetProductsByStorageTypeQuery,
+  useGetProductWithIngredientsQuery,
   useCreateProductMutation,
   useCreateBulkProductsFromExcelMutation,
   useBulkUpdateProductsMutation,

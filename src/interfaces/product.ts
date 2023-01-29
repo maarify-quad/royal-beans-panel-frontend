@@ -1,7 +1,7 @@
 export interface Product {
   id: number;
   name: string;
-  stockCode: string | null;
+  stockCode: string;
   storageType: string;
   amount: number;
   amountUnit: string;
