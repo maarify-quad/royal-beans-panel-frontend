@@ -3,13 +3,17 @@ import React, { useEffect } from "react";
 // UI Components
 import { Grid, NumberInput, Select } from "@mantine/core";
 
+// UI Utils
+import { UseFormReturnType } from "@mantine/form";
+
+// Components
+import { Summary } from "./Summary";
+
 // Validation
 import { Inputs } from "../validation/Inputs";
 
 // Interfaces
 import { PriceListProduct } from "@interfaces/priceListProduct";
-import { UseFormReturnType } from "@mantine/form";
-import { Summary } from "./Summary";
 
 // Props
 type StepTwoProps = {

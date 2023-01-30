@@ -13,6 +13,9 @@ import { DataTable, DataTableColumn } from "mantine-datatable";
 // Icons
 import { IconInfoCircle } from "@tabler/icons";
 
+// Utils
+import { formatCurrency } from "@utils/localization";
+
 // Interfaces
 import { Supplier } from "@interfaces/supplier";
 
@@ -48,11 +51,7 @@ export const Results = () => {
       {
         accessor: "totalVolume",
         title: "Toplam Hacim",
-        render: (supplier) =>
-          Intl.NumberFormat("tr-TR", {
-            style: "currency",
-            currency: "TRY",
-          }).format(supplier.totalVolume),
+        render: (supplier) => formatCurrency(supplier.totalVolume),
       },
     ],
     [suppliers]

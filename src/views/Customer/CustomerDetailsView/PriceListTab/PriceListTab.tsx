@@ -20,6 +20,9 @@ import { IconInfoCircle, IconTrash, IconEdit } from "@tabler/icons";
 // Components
 import { ResultsTable } from "@components/ResultsTable";
 
+// Utils
+import { formatCurrency } from "@utils/localization";
+
 // Interfaces
 import { Customer } from "@interfaces/customer";
 import { PriceListProduct } from "@interfaces/priceListProduct";
@@ -96,7 +99,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
     () =>
       data?.map((priceListProduct) => [
         { value: priceListProduct.product.name },
-        { value: `${priceListProduct.unitPrice.toFixed(2)} ₺` },
+        { value: formatCurrency(priceListProduct.unitPrice) },
         { value: `${priceListProduct.taxRate} %` },
         {
           value: "actions",

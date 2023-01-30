@@ -13,6 +13,9 @@ import { IconInfoCircle } from "@tabler/icons";
 // Components
 import { ResultsTable } from "@components/ResultsTable";
 
+// Utils
+import { formatCurrency } from "@utils/localization";
+
 // Props
 type LastOrdersTabProps = {
   customer: string;
@@ -59,7 +62,7 @@ export const LastOrdersTab: React.FC<LastOrdersTabProps> = ({ customer }) => {
           data?.orders.map((order) => [
             { value: `#${order.orderId}`, link: `/dashboard/orders/${order.orderId}` },
             { value: `${dayjs(order.createdAt).format("DD MMM YYYY")}` },
-            { value: `${order.total.toFixed(2)} ₺` },
+            { value: formatCurrency(order.total) },
           ]) || []
         }
         pagination={{

@@ -66,6 +66,7 @@ export const Form = ({ productId, stockCode }: FormProps) => {
         stockCode,
       };
       await createIngredient(params).unwrap();
+      form.reset();
       showNotification({
         title: "Başarılı",
         message: "İçerikler başarıyla eklendi",

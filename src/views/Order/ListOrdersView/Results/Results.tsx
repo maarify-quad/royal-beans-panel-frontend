@@ -17,6 +17,9 @@ import { IconInfoCircle, IconCircleCheck, IconX } from "@tabler/icons";
 import { ResultsTable } from "@components/ResultsTable";
 import { StatusBadge } from "@components/Order/StatusBadge";
 
+// Utils
+import { formatCurrency } from "@utils/localization";
+
 // Interfaces
 import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
 import { OrderType } from "@interfaces/order";
@@ -25,11 +28,6 @@ import { OrderType } from "@interfaces/order";
 type ResultsProps = {
   type?: OrderType;
 };
-
-const currencyFormatter = Intl.NumberFormat("tr-TR", {
-  style: "currency",
-  currency: "TRY",
-});
 
 export const Results = ({ type }: ResultsProps) => {
   // Internal state
@@ -50,10 +48,9 @@ export const Results = ({ type }: ResultsProps) => {
         { value: order.orderId, renderCell: () => `#${order.orderId}` },
         { value: dayjs(order.createdAt).format("DD MMM YYYY") },
         { value: order.type === "BULK" ? order.customer.name : order.receiver },
-        { value: currencyFormatter.format(order.total) },
+        { value: formatCurrency(order.total) },
         {
-          value:
-            order.type === "BULK" ? currencyFormatter.format(order.customerBalanceAfterOrder) : "-",
+          value: order.type === "BULK" ? formatCurrency(order.customerBalanceAfterOrder) : "-",
         },
         {
           value:

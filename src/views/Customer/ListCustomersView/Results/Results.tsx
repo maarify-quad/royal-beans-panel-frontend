@@ -13,6 +13,9 @@ import { DataTable, DataTableColumn } from "mantine-datatable";
 // Icons
 import { IconInfoCircle } from "@tabler/icons";
 
+// Utils
+import { formatCurrency } from "@utils/localization";
+
 // Interfaces
 import { Customer } from "@interfaces/customer";
 
@@ -48,10 +51,7 @@ export const Results = () => {
       {
         accessor: "currentBalance",
         title: "Bakiye",
-        render: (customer) =>
-          Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(
-            customer.currentBalance
-          ),
+        render: (customer) => formatCurrency(customer.currentBalance),
       },
     ],
     [customers]

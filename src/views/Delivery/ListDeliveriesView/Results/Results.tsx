@@ -14,6 +14,9 @@ import { DataTable, DataTableColumn } from "mantine-datatable";
 // Icons
 import { IconInfoCircle } from "@tabler/icons";
 
+// Utils
+import { formatCurrency } from "@utils/localization";
+
 // Interfaces
 import { Delivery } from "@interfaces/delivery";
 
@@ -55,8 +58,7 @@ export const Results = () => {
       {
         accessor: "total",
         title: "Tutar",
-        render: (delivery) =>
-          Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(delivery.total),
+        render: (delivery) => formatCurrency(delivery.total),
       },
     ],
     [deliveries]

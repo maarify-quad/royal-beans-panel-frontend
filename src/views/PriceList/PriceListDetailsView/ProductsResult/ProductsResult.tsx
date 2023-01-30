@@ -6,6 +6,9 @@ import { Table, Container, Alert } from "@mantine/core";
 // Icons
 import { IconInfoCircle } from "@tabler/icons";
 
+// Utils
+import { formatCurrency } from "@utils/localization";
+
 // Interfaces
 import { PriceListProduct } from "@interfaces/priceListProduct";
 
@@ -37,7 +40,7 @@ export const ProductsResult: React.FC<ProductsResultProps> = ({ priceListProduct
           {priceListProducts?.map((priceListProduct, i) => (
             <tr key={i}>
               <td>{priceListProduct.product.name}</td>
-              <td>{priceListProduct.unitPrice.toFixed(2)} ₺</td>
+              <td>{formatCurrency(priceListProduct.unitPrice)}</td>
               <td>{priceListProduct.taxRate} %</td>
             </tr>
           ))}

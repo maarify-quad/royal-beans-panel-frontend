@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 // UI Components
 import { Table, ScrollArea, Container } from "@mantine/core";
 
+// Utils
+import { formatCurrency } from "@utils/localization";
+
 // Interfaces
 import { Delivery } from "@interfaces/delivery";
 
@@ -45,7 +48,7 @@ export const DeliveriesTab: React.FC<DeliveriesTabProps> = ({ deliveries }) => {
               >
                 <td>{dayjs(delivery.deliveryDate).format("DD MMM YYYY")}</td>
                 <td>{delivery.id}</td>
-                <td>{delivery.total} ₺</td>
+                <td>{formatCurrency(delivery.total)}</td>
               </tr>
             ))}
           </tbody>

@@ -131,7 +131,7 @@ export const Form = () => {
           Geri
         </Button>
         {step === 1 ? (
-          <Button disabled={!form.values.productId} onClick={handleAddProduct}>
+          <Button disabled={form.values.productId === "0"} onClick={handleAddProduct}>
             Ürün ekle
           </Button>
         ) : (
