@@ -15,12 +15,25 @@ export const ingredientApi = emptyApi.injectEndpoints({
         { type: "Ingredient" as const, id: arg.stockCode },
       ],
     }),
+    deleteById: build.mutation<any, DeleteIngredientRequest>({
+      query: (params) => ({
+        url: `/ingredients/${params.id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (_result, _error, params) =>
+        params.stockCode ? [{ type: "Ingredient" as const, id: params.stockCode }] : [],
+    }),
   }),
 });
 
-export const { useCreateIngredientMutation } = ingredientApi;
+export const { useCreateIngredientMutation, useDeleteByIdMutation } = ingredientApi;
 
-export interface CreateIngredientRequest {
+interface CreateIngredientRequest {
   ingredients: Pick<Ingredient, "ingredientProductId" | "productId" | "ratio">[];
   stockCode: string;
+}
+
+interface DeleteIngredientRequest {
+  id: number;
+  stockCode?: string;
 }

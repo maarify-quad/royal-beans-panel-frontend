@@ -1,15 +1,23 @@
+// Services
+import { useDeleteByIdMutation } from "@services/ingredientApi";
+
 // UI Components
 import {
-  createStyles,
-  Title,
-  Breadcrumbs,
-  Anchor,
   Card,
   SimpleGrid,
   Flex,
   Paper,
   Text,
+  ActionIcon,
+  Group,
+  LoadingOverlay,
 } from "@mantine/core";
+
+// UI Utils
+import { openConfirmModal } from "@mantine/modals";
+
+// Icons
+import { IconTrash } from "@tabler/icons";
 
 // Interfaces
 import { ProductWithIngredients } from "@interfaces/product";
@@ -20,8 +28,24 @@ type ProductDetailsProps = {
 };
 
 export const ProductDetails = ({ product }: ProductDetailsProps) => {
+  const [deleteIngredient, { isLoading: isDeleting }] = useDeleteByIdMutation();
+
+  const handleDeleteIngredient = (id: number) => {
+    openConfirmModal({
+      title: "İçeriği silmek istediğinize emin misiniz?",
+      labels: { cancel: "İptal", confirm: "Sil" },
+      confirmProps: { color: "red" },
+      onConfirm: async () => {
+        try {
+          await deleteIngredient({ id, stockCode: product.stockCode }).unwrap();
+        } catch {}
+      },
+    });
+  };
+
   return (
     <Card my="md" withBorder shadow="sm" radius="md" key={product.id}>
+      <LoadingOverlay visible={isDeleting} />
       <SimpleGrid
         breakpoints={[
           { minWidth: "sm", cols: 1 },
@@ -42,12 +66,17 @@ export const ProductDetails = ({ product }: ProductDetailsProps) => {
           </Text>
           {product.ingredients.map((ingredient) => (
             <Paper p="xs" radius="md" withBorder key={ingredient.id}>
-              <Text size="sm" key={ingredient.id}>
-                {ingredient.ingredientProduct.stockCode &&
-                  `${ingredient.ingredientProduct.stockCode} -`}{" "}
-                {ingredient.ingredientProduct.name} * {ingredient.ratio}{" "}
-                {ingredient.ingredientProduct.amountUnit}
-              </Text>
+              <Group spacing="sm">
+                <Text size="sm" key={ingredient.id}>
+                  {ingredient.ingredientProduct.stockCode &&
+                    `${ingredient.ingredientProduct.stockCode} -`}{" "}
+                  {ingredient.ingredientProduct.name} * {ingredient.ratio}{" "}
+                  {ingredient.ingredientProduct.amountUnit}
+                </Text>
+                <ActionIcon color="red" onClick={() => handleDeleteIngredient(ingredient.id)}>
+                  <IconTrash size={16} />
+                </ActionIcon>
+              </Group>
             </Paper>
           ))}
         </Flex>
