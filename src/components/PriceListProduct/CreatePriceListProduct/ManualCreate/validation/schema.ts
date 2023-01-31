@@ -2,11 +2,11 @@ import { z } from "zod";
 
 export const schema = z
   .object({
-    productId: z.number(),
+    productId: z.number().or(z.string()),
     newProductName: z.string(),
     unitPrice: z.number(),
     unit: z.string(),
-    taxRate: z.number(),
+    taxRate: z.number().or(z.string()),
   })
   .refine(
     (args) => {

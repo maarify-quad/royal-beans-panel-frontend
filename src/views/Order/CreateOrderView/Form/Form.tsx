@@ -92,7 +92,7 @@ export const Form = () => {
       await createOrder({
         customerId,
         deliveryDate,
-        deliveryAddressId,
+        deliveryAddressId: +deliveryAddressId,
         deliveryType,
         specialNote,
         orderProducts,
@@ -112,7 +112,7 @@ export const Form = () => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(onCreateOrderSubmit)}>
+    <form onSubmit={form.onSubmit(onCreateOrderSubmit, console.log)}>
       <LoadingOverlay visible={isCreatingOrder || isPriceListProductsLoading} />
       <Stepper active={step} mt="md">
         <Stepper.Step>

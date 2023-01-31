@@ -57,6 +57,8 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
     try {
       await createPriceListProduct({
         ...values,
+        productId: +values.productId,
+        taxRate: +values.taxRate,
         priceListId,
       }).unwrap();
       showNotification({
