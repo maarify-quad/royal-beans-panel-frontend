@@ -96,7 +96,8 @@ interface GetordersRequest {
 
 interface GetOrdersResponse {
   orders: Order[];
-  totalPage?: number;
+  totalPages: number;
+  totalCount: number;
 }
 
 interface GetOrdersByCustomerParams {

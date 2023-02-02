@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import dayjs from "dayjs";
 
 // Routing
@@ -8,21 +8,20 @@ import { useNavigate } from "react-router-dom";
 import { useGetOrdersQuery } from "@services/orderApi";
 
 // UI Components
-import { Container, Loader, Alert, ThemeIcon, Group } from "@mantine/core";
+import { Text, Alert, ThemeIcon, Group, Paper, Select } from "@mantine/core";
+import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
 import { IconInfoCircle, IconCircleCheck, IconX } from "@tabler/icons";
 
 // Components
-import { ResultsTable } from "@components/ResultsTable";
 import { StatusBadge } from "@components/Order/StatusBadge";
 
 // Utils
 import { formatCurrency } from "@utils/localization";
 
 // Interfaces
-import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
-import { OrderType } from "@interfaces/order";
+import { Order, OrderType } from "@interfaces/order";
 
 // Props
 type ResultsProps = {
@@ -31,60 +30,81 @@ type ResultsProps = {
 
 export const Results = ({ type }: ResultsProps) => {
   // Internal state
-  const [filters, setFilters] = React.useState({
+  const [query, setQuery] = React.useState({
     page: 1,
-    limit: 50,
+    limit: 25,
   });
 
   // Routing
   const navigate = useNavigate();
 
   // Queries
-  const { data, isLoading, isFetching, error } = useGetOrdersQuery({ ...filters, type });
-
-  const orderRows: RowDef[][] = React.useMemo(
-    () =>
-      data?.orders.map((order) => [
-        { value: order.orderId, renderCell: () => `#${order.orderId}` },
-        { value: dayjs(order.createdAt).format("DD MMM YYYY") },
-        { value: order.type === "BULK" ? order.customer.name : order.receiver },
-        { value: formatCurrency(order.total) },
-        {
-          value: order.type === "BULK" ? formatCurrency(order.customerBalanceAfterOrder) : "-",
-        },
-        {
-          value:
-            order.type === "BULK" ? (
-              <>
-                {order.isParasutVerified ? (
-                  <ThemeIcon color="green" radius="xl">
-                    <IconCircleCheck />
-                  </ThemeIcon>
-                ) : (
-                  <ThemeIcon color="red" radius="xl">
-                    <IconX />
-                  </ThemeIcon>
-                )}
-              </>
-            ) : (
-              order.manualInvoiceStatus
-            ),
-        },
-        {
-          value: (
-            <Group>
-              <StatusBadge status={order.status} deliveryType={order.deliveryType} />
-              {order.isCancelled && <StatusBadge status={"İPTAL"} />}
-            </Group>
-          ),
-        },
-      ]) || [],
-    [data]
+  const { orders, isTableLoading, totalCount, error } = useGetOrdersQuery(
+    { ...query, type },
+    {
+      selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
+        ...rest,
+        orders: data?.orders,
+        totalPages: data?.totalPages,
+        totalCount: data?.totalCount,
+        isTableLoading: isLoading || isFetching,
+      }),
+    }
   );
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  const columns = useMemo<DataTableColumn<Order>[]>(
+    () => [
+      { accessor: "orderId", title: "Sipariş No", render: (order) => `#${order.orderId}` },
+      {
+        accessor: "createdAt",
+        title: "Tarih",
+        render: (order) => dayjs(order.createdAt).format("DD MMM YYYY"),
+      },
+      {
+        accessor: "customer",
+        title: "Müşteri",
+        render: (order) => (order.type === "BULK" ? order.customer.name : order.receiver),
+      },
+      { accessor: "total", title: "Tutar", render: (order) => formatCurrency(order.total) },
+      {
+        accessor: "customerBalanceAfterOrder",
+        title: "Bakiye",
+        render: (order) =>
+          order.type === "BULK" ? formatCurrency(order.customerBalanceAfterOrder) : "-",
+      },
+      {
+        accessor: "invoiceStatus",
+        title: "Fatura",
+        render: (order) =>
+          order.type === "BULK" ? (
+            <>
+              {order.isParasutVerified ? (
+                <ThemeIcon color="green" radius="xl">
+                  <IconCircleCheck />
+                </ThemeIcon>
+              ) : (
+                <ThemeIcon color="red" radius="xl">
+                  <IconX />
+                </ThemeIcon>
+              )}
+            </>
+          ) : (
+            order.manualInvoiceStatus
+          ),
+      },
+      {
+        accessor: "status",
+        title: "Durum",
+        render: (order) => (
+          <Group>
+            <StatusBadge status={order.status} deliveryType={order.deliveryType} />
+            {order.isCancelled && <StatusBadge status={"İPTAL"} />}
+          </Group>
+        ),
+      },
+    ],
+    [orders]
+  );
 
   if (error) {
     return (
@@ -94,7 +114,7 @@ export const Results = ({ type }: ResultsProps) => {
     );
   }
 
-  if (data?.orders.length === 0) {
+  if (orders?.length === 0) {
     return (
       <Alert color="cyan" icon={<IconInfoCircle />}>
         Sipariş bulunmamaktadır
@@ -103,33 +123,38 @@ export const Results = ({ type }: ResultsProps) => {
   }
 
   return (
-    <Container fluid p={0}>
-      <ResultsTable
-        headers={[
-          { value: "Sipariş No" },
-          { value: "Tarih" },
-          { value: "Müşteri" },
-          { value: "Tutar" },
-          { value: "Bakiye" },
-          { value: "Fatura" },
-          { value: "Durum" },
-        ]}
-        rows={orderRows}
-        pagination={{
-          totalPage: data?.totalPage || 0,
-          currentPage: filters.page,
-          onPageChange: (page) => setFilters({ ...filters, page }),
-          onPageSizeChange: (limit) => setFilters({ ...filters, limit }),
-        }}
-        onRowClick={(row, i) => {
-          const orderId = row[0].value;
-          navigate(`/dashboard/orders/${orderId}`);
-        }}
-        rowStyles={{
-          cursor: "pointer",
-        }}
-        isLoading={isFetching}
+    <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
+      <DataTable
+        highlightOnHover
+        records={orders}
+        columns={columns}
+        fetching={isTableLoading}
+        noRecordsText="Kayıt bulunamadı"
+        loadingText="Yükleniyor"
+        recordsPerPage={query.limit}
+        totalRecords={totalCount}
+        page={query.page}
+        onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
+        onRowClick={(order) => navigate(`/dashboard/orders/${order.orderId}`)}
       />
-    </Container>
+      <Group>
+        <Text size="sm">Sayfa başı satır</Text>
+        <Select
+          value={query.limit.toString()}
+          onChange={(limit) => {
+            if (limit) {
+              setQuery({ page: 1, limit: +limit });
+            }
+          }}
+          data={[
+            { label: "25", value: "25" },
+            { label: "50", value: "50" },
+            { label: "100", value: "100" },
+          ]}
+          style={{ width: 60 }}
+          size="xs"
+        />
+      </Group>
+    </Paper>
   );
 };
