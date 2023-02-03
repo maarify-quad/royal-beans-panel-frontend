@@ -1,7 +1,7 @@
 import { emptyApi } from "./emptyApi";
 
 // Interfaces
-import { Product, ProductWithIngredients } from "@interfaces/product";
+import { Product, ProductWithDeliveryDetails, ProductWithIngredients } from "@interfaces/product";
 
 export const productApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -17,6 +17,11 @@ export const productApi = emptyApi.injectEndpoints({
       },
       providesTags: ["Product"],
       keepUnusedDataFor: 15,
+    }),
+    getProductByStockCode: builder.query<Product, string>({
+      query: (stockCode) => `/products/${stockCode}`,
+      providesTags: (result, _error, stockCode) =>
+        result ? [{ type: "Product" as const, id: stockCode }] : ["Product"],
     }),
     getProductsWithIngredients: builder.query<
       GetProductsWithIngredientsResponse,
@@ -94,6 +99,7 @@ export const productApi = emptyApi.injectEndpoints({
 
 export const {
   useGetProductsQuery,
+  useGetProductByStockCodeQuery,
   useGetProductsWithIngredientsQuery,
   useGetProductsByStorageTypeQuery,
   useGetProductWithIngredientsQuery,

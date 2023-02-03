@@ -1,10 +1,13 @@
 import React, { useMemo, useState } from "react";
 
+// Routing
+import { Link } from "react-router-dom";
+
 // Services
 import { useGetProductsByStorageTypeQuery } from "@services/productApi";
 
 // UI Components
-import { Alert, Group, Paper, Select, Text } from "@mantine/core";
+import { Alert, Anchor, Group, Paper, Select, Text } from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
@@ -38,9 +41,17 @@ export const StorageProducts: React.FC<StorageProductsProps> = ({ storageType })
     }
   );
 
-  const columns: DataTableColumn<Product>[] = useMemo(
+  const columns = useMemo<DataTableColumn<Product>[]>(
     () => [
-      { accessor: "name", title: "Ürün" },
+      {
+        accessor: "name",
+        title: "Ürün",
+        render: (product) => (
+          <Anchor component={Link} to={`/dashboard/storage/${product.stockCode}`}>
+            {product.name}
+          </Anchor>
+        ),
+      },
       { accessor: "stockCode", title: "Stok Kodu" },
       { accessor: "amount", title: "Miktar" },
       { accessor: "amountUnit", title: "Miktar Birimi" },

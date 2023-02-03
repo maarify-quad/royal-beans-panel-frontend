@@ -56,19 +56,22 @@ export const Form: React.FC<FormProps> = ({ form }) => {
 
   const handleAddProduct = () => {
     // Destructuring form values
-    const { deliveryDetails, supplierId, deliveryDate, invoiceDate, ...item } = form.values;
+    const { deliveryDetails, supplierId, deliveryDate, invoiceDate, productId, taxRate, ...item } =
+      form.values;
 
     // Check if product already exists
-    const product = products?.find((p) => p.id === item.productId);
+    const product = products?.find((p) => p.id === parseInt(productId, 10));
     if (product) {
       return form.insertListItem("deliveryDetails", {
         ...item,
+        productId: +productId,
+        taxRate: +taxRate,
         product,
       });
     }
 
     // Get product from select options
-    const newProduct = productSelectOptions.find((p) => p.value === item.productId.toString());
+    const newProduct = productSelectOptions.find((p) => p.value === productId.toString());
     if (newProduct) {
       return form.insertListItem("deliveryDetails", {
         ...item,
@@ -89,7 +92,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
     }
 
     if (products && products.length > 0) {
-      form.setFieldValue("productId", products[0].id);
+      form.setFieldValue("productId", products[0].id.toString());
     }
   }, [suppliers?.length, products?.length]);
 
@@ -100,13 +103,13 @@ export const Form: React.FC<FormProps> = ({ form }) => {
       form.setFieldValue("subTotal", subtotal);
 
       // Calculate total and set it in form
-      const tax = form.values.taxRate !== 0 ? (subtotal * form.values.taxRate) / 100 : 0;
+      const tax = form.values.taxRate !== "0" ? (subtotal * +form.values.taxRate) / 100 : 0;
       form.setFieldValue("total", subtotal + tax);
     }
   }, [form.values.quantity, form.values.unitPriceTRY, form.values.taxRate]);
 
   useEffect(() => {
-    const product = products?.find((p) => p.id === form.values.productId);
+    const product = products?.find((p) => p.id === parseInt(form.values.productId, 10));
     if (product) {
       form.setFieldValue("storageType", product.storageType);
     }
@@ -163,7 +166,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
           const value = -Math.random();
           const item = { value: value.toString(), label: query };
           productSelectOptions.push(item);
-          form.setFieldValue("productId", value);
+          form.setFieldValue("productId", value as any);
           return item;
         }}
         data={productSelectOptions}
