@@ -56,21 +56,21 @@ export const ListOrdersView = () => {
       <Tabs
         mt="md"
         keepMounted={false}
-        value={searchParams.get("type") || "ALL"}
-        onTabChange={(type: string) => setSearchParams({ type })}
+        value={searchParams.get("tab") || "all"}
+        onTabChange={(tab: string) => setSearchParams({ tab })}
       >
         <Tabs.List>
-          <Tabs.Tab value="ALL">Tüm Siparişler</Tabs.Tab>
-          <Tabs.Tab value="BULK">Toplu Siparişler</Tabs.Tab>
-          <Tabs.Tab value="MANUAL">Manuel Gönderiler</Tabs.Tab>
+          <Tabs.Tab value="all">Tüm Siparişler</Tabs.Tab>
+          <Tabs.Tab value="bulk">Toplu Siparişler</Tabs.Tab>
+          <Tabs.Tab value="manual">Manuel Gönderiler</Tabs.Tab>
         </Tabs.List>
-        <Tabs.Panel mt="md" value="ALL">
+        <Tabs.Panel mt="md" value="all">
           <Results />
         </Tabs.Panel>
-        <Tabs.Panel mt="md" value="BULK">
+        <Tabs.Panel mt="md" value="bulk">
           <Results type="BULK" />
         </Tabs.Panel>
-        <Tabs.Panel mt="md" value="MANUAL">
+        <Tabs.Panel mt="md" value="manual">
           <Results type="MANUAL" />
         </Tabs.Panel>
       </Tabs>

@@ -1,7 +1,7 @@
 import React from "react";
 
 // Services
-import { useGetProductsQuery } from "@services/productApi";
+import { useGetProductsByStorageTypeQuery } from "@services/productApi";
 import { useCreatePriceListProductMutation } from "@services/priceListProductApi";
 
 // UI Components
@@ -10,7 +10,7 @@ import { Button, LoadingOverlay, NumberInput, Select, TextInput } from "@mantine
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import { closeModal } from "@mantine/modals";
+import { closeAllModals } from "@mantine/modals";
 
 // Icons
 import { IconCircleCheck } from "@tabler/icons";
@@ -30,7 +30,9 @@ type ManualCreateProps = {
 
 export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceListProducts }) => {
   // Queries
-  const { data, isLoading: isProductsLoading } = useGetProductsQuery();
+  const { data, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery({
+    storageType: "FN",
+  });
 
   // Mutations
   const [createPriceListProduct, { isLoading: isCreateProductLoading }] =
@@ -67,7 +69,7 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
         icon: <IconCircleCheck />,
         color: "green",
       });
-      closeModal("createPriceListProduct");
+      closeAllModals();
     } catch (error) {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }

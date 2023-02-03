@@ -1,40 +1,59 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 // Services
 import { useGetPriceListsQuery } from "@services/priceListApi";
 
 // UI Components
-import { Container, Loader, Alert } from "@mantine/core";
+import { Text, Alert, Paper, Group, Select, Anchor } from "@mantine/core";
+import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
 import { IconInfoCircle } from "@tabler/icons";
 
-// Components
-import { ResultsTable } from "@components/ResultsTable";
-
 // Interfaces
-import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
+import { PriceList } from "@interfaces/priceList";
+import { Link } from "react-router-dom";
 
 export const Results = () => {
   // Internal state
-  const [page, setPage] = React.useState(1);
+  const [query, setQuery] = React.useState({
+    page: 1,
+    limit: 25,
+  });
 
   // Queries
-  const { data, isLoading, error } = useGetPriceListsQuery(page);
+  const { priceLists, error, totalCount, isTableLoading } = useGetPriceListsQuery(query, {
+    selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
+      ...rest,
+      priceLists: data?.priceLists || [],
+      totalPages: data?.totalPages,
+      totalCount: data?.totalCount,
+      isTableLoading: isLoading || isFetching,
+    }),
+  });
 
-  const priceListRows: RowDef[][] = React.useMemo(
-    () =>
-      data?.priceLists.map((priceList) => [
-        { value: priceList.name, link: `/dashboard/price-lists/${priceList.id}` },
-        { value: priceList.description || "-" },
-        { value: priceList.customers?.length || 0 },
-      ]) || [],
-    [data]
+  const columns = useMemo<DataTableColumn<PriceList>[]>(
+    () => [
+      {
+        accessor: "name",
+        title: "Fiyat Listesi",
+        render: ({ id, name }) => (
+          <Anchor component={Link} to={`/dashboard/price-lists/${id}`}>
+            {name}
+          </Anchor>
+        ),
+      },
+      {
+        accessor: "description",
+        title: "Açıklama",
+      },
+      {
+        accessor: "customers.length",
+        title: "Müşteri Sayısı",
+      },
+    ],
+    [priceLists]
   );
-
-  if (isLoading) {
-    return <Loader />;
-  }
 
   if (error) {
     return (
@@ -50,25 +69,38 @@ export const Results = () => {
     );
   }
 
-  if (data?.priceLists.length === 0) {
-    return (
-      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
-        Fiyat listesi bulunmamaktadır
-      </Alert>
-    );
-  }
-
   return (
-    <Container fluid mt="md" p={0}>
-      <ResultsTable
-        headers={[{ value: "Fiyat Listesi" }, { value: "Açıklama" }, { value: "Müşteri Sayısı" }]}
-        rows={priceListRows}
-        pagination={{
-          totalPage: data?.totalPage || 0,
-          currentPage: page,
-          onPageChange: (page) => setPage(page),
-        }}
+    <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
+      <DataTable
+        highlightOnHover
+        records={priceLists}
+        columns={columns}
+        fetching={isTableLoading}
+        noRecordsText="Kayıt bulunamadı"
+        loadingText="Yükleniyor"
+        recordsPerPage={query.limit}
+        totalRecords={totalCount}
+        page={query.page}
+        onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
       />
-    </Container>
+      <Group>
+        <Text size="sm">Sayfa başı satır</Text>
+        <Select
+          value={query.limit.toString()}
+          onChange={(limit) => {
+            if (limit) {
+              setQuery({ page: 1, limit: +limit });
+            }
+          }}
+          data={[
+            { label: "25", value: "25" },
+            { label: "50", value: "50" },
+            { label: "100", value: "100" },
+          ]}
+          style={{ width: 60 }}
+          size="xs"
+        />
+      </Group>
+    </Paper>
   );
 };

@@ -6,7 +6,9 @@ export const schema = z
     newProductName: z.string(),
     unitPrice: z.number(),
     unit: z.string(),
-    taxRate: z.number().or(z.string()),
+    taxRate: z
+      .number()
+      .or(z.union([z.literal("0"), z.literal("1"), z.literal("8"), z.literal("18")])),
   })
   .refine(
     (args) => {

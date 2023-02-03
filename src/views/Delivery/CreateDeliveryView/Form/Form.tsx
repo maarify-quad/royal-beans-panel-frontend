@@ -60,7 +60,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
       form.values;
 
     // Check if product already exists
-    const product = products?.find((p) => p.id === parseInt(productId, 10));
+    const product = products?.find((p) => p.id === +productId);
     if (product) {
       return form.insertListItem("deliveryDetails", {
         ...item,
@@ -75,6 +75,8 @@ export const Form: React.FC<FormProps> = ({ form }) => {
     if (newProduct) {
       return form.insertListItem("deliveryDetails", {
         ...item,
+        productId: +productId,
+        taxRate: +taxRate,
         product: {
           id: newProduct.value,
           name: newProduct.label,
@@ -109,7 +111,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
   }, [form.values.quantity, form.values.unitPriceTRY, form.values.taxRate]);
 
   useEffect(() => {
-    const product = products?.find((p) => p.id === parseInt(form.values.productId, 10));
+    const product = products?.find((p) => p.id === +form.values.productId);
     if (product) {
       form.setFieldValue("storageType", product.storageType);
     }
@@ -163,10 +165,10 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         dropdownComponent="div"
         getCreateLabel={(query) => `+ ${query} oluştur`}
         onCreate={(query) => {
-          const value = -Math.random();
+          const value = Math.random();
           const item = { value: value.toString(), label: query };
           productSelectOptions.push(item);
-          form.setFieldValue("productId", value as any);
+          form.setFieldValue("productId", value.toString());
           return item;
         }}
         data={productSelectOptions}

@@ -5,8 +5,16 @@ import { PriceList } from "@interfaces/priceList";
 
 export const priceListApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getPriceLists: builder.query<GetPriceListsResponse, number | void>({
-      query: (page) => (page ? `/price_lists?page=${page}` : "/price_lists"),
+    getPriceLists: builder.query<GetPriceListsResponse, GetPriceListsRequest | void>({
+      query: (params) => {
+        const url = new URL("/price_lists", import.meta.env.VITE_API_BASE_URL);
+        if (params) {
+          const { page, limit } = params;
+          url.searchParams.append("page", page.toString());
+          url.searchParams.append("limit", limit.toString());
+        }
+        return url.toString();
+      },
       providesTags: ["PriceList"],
     }),
     getPriceListById: builder.query<PriceList, string>({
@@ -27,9 +35,15 @@ export const priceListApi = emptyApi.injectEndpoints({
 export const { useGetPriceListsQuery, useGetPriceListByIdQuery, useCreatePriceListMutation } =
   priceListApi;
 
+interface GetPriceListsRequest {
+  page: number;
+  limit: number;
+}
+
 interface GetPriceListsResponse {
   priceLists: PriceList[];
-  totalPage?: number;
+  totalPages: number;
+  totalCount: number;
 }
 
 interface CreatePriceListParams {

@@ -33,14 +33,14 @@ import { CustomersResult } from "./CustomersResult";
 
 // Lazy Components
 const CreatePriceListProduct = React.lazy(() =>
-  import("../../../components/PriceListProduct/CreatePriceListProduct").then(
+  import("@components/PriceListProduct/CreatePriceListProduct").then(
     ({ CreatePriceListProduct }) => ({
       default: CreatePriceListProduct,
     })
   )
 );
 const AssignPriceList = React.lazy(() =>
-  import("../../../components/PriceList/AssignPriceList").then(({ AssignPriceList }) => ({
+  import("@components/PriceList/AssignPriceList").then(({ AssignPriceList }) => ({
     default: AssignPriceList,
   }))
 );
