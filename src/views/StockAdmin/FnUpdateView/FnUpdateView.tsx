@@ -1,31 +1,20 @@
-import React from "react";
-
 // Routing
-import { Link, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
 // Services
 import { useGetProductWithIngredientsQuery } from "@services/productApi";
 
 // UI Components
-import { createStyles, Title, Breadcrumbs, Anchor, Loader, LoadingOverlay } from "@mantine/core";
+import { Loader, LoadingOverlay } from "@mantine/core";
 
 // Components
 import { ProductDetails } from "./ProductDetails";
 import { Form } from "./Form";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-}));
+// Layouts
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const FnUpdateView = () => {
-  const { classes } = useStyles();
-
   // Routing
   const { stockCode } = useParams();
 
@@ -39,25 +28,27 @@ export const FnUpdateView = () => {
   });
 
   if (!stockCode) {
-    return null;
+    return <Navigate to="/dashboard/stock-admin" replace />;
   }
 
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/stock-admin">
-          Stok Admin
-        </Anchor>
-        <Anchor component={Link} to={`/dashboard/stock-admin/fn-update/${stockCode}`}>
-          FN İçerik Güncelle / {product?.name}
-        </Anchor>
-      </Breadcrumbs>
-      <Title order={2} className={classes.rootTitle}>
-        Stok Admin
-      </Title>
+    <PageLayout
+      title="Stok Admin"
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Stok Admin",
+          href: "/dashboard/stock-admin",
+        },
+        {
+          label: `FN İçerik Güncelle / ${product?.name}`,
+          href: `/dashboard/stock-admin/fn-update/${stockCode}`,
+        },
+      ]}
+    >
       <div style={{ position: "relative" }}>
         <LoadingOverlay visible={isFetching} />
         {isLoading ? (
@@ -69,6 +60,6 @@ export const FnUpdateView = () => {
           </>
         )}
       </div>
-    </div>
+    </PageLayout>
   );
 };

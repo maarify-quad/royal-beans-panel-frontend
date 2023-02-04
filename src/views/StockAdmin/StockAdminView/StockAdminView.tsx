@@ -1,40 +1,33 @@
 // Routing
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 // UI Components
-import { createStyles, Title, Breadcrumbs, Anchor, Tabs } from "@mantine/core";
+import { Tabs } from "@mantine/core";
 
 // Components
 import BulkUpdateStock from "./BulkUpdateStock";
 import FnUpdateIngredients from "./FnUpdateIngredients";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-}));
+// Layouts
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const StockAdminView = () => {
-  const { classes } = useStyles();
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/stock-admin">
-          Stok Admin
-        </Anchor>
-      </Breadcrumbs>
-      <Title order={2} className={classes.rootTitle}>
-        Stok Admin
-      </Title>
+    <PageLayout
+      title="Stok Admin"
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Stok Admin",
+          href: "/dashboard/stock-admin",
+        },
+      ]}
+    >
       <Tabs
         mt="md"
         keepMounted={false}
@@ -52,6 +45,6 @@ export const StockAdminView = () => {
           <FnUpdateIngredients />
         </Tabs.Panel>
       </Tabs>
-    </div>
+    </PageLayout>
   );
 };

@@ -1,49 +1,25 @@
 import React from "react";
 
 // Routing
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
 // Services
 import { useGetDeliveryByIdQuery } from "@services/deliveryApi";
 
 // UI Components
-import {
-  createStyles,
-  Title,
-  Breadcrumbs,
-  Anchor,
-  Alert,
-  Center,
-  Loader,
-  Box,
-} from "@mantine/core";
+import { Alert, Loader, Box } from "@mantine/core";
 
 // Icons
-import { IconInfoCircle } from "@tabler/icons";
+import { IconAlertCircle } from "@tabler/icons";
 
 // Components
 import { Results } from "./Results";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-  titleLink: {
-    textDecoration: "none",
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-    "&:hover": {
-      textDecoration: "underline",
-    },
-  },
-}));
+// Layouts
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const DeliveryDetailsView = () => {
   const { id } = useParams();
-  const { classes } = useStyles();
 
   const { data, isLoading, error } = useGetDeliveryByIdQuery(id!, {
     skip: !id,
@@ -56,7 +32,7 @@ export const DeliveryDetailsView = () => {
   if (error) {
     return (
       <Alert
-        icon={<IconInfoCircle />}
+        icon={<IconAlertCircle />}
         color="red"
         title="Tedarikçiye ulaşılamadı"
         variant="filled"
@@ -68,30 +44,28 @@ export const DeliveryDetailsView = () => {
   }
 
   if (isLoading) {
-    <Center style={{ height: "100%" }}>
-      <Loader />
-    </Center>;
+    return <Loader />;
   }
 
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/deliveries">
-          Sevkiyatlar
-        </Anchor>
-        <Anchor component={Link} to={`/dashboard/deliveries/${id}`}>
-          {id}
-        </Anchor>
-      </Breadcrumbs>
-      <Link className={classes.titleLink} to={`/dashboard/suppliers/${data?.supplier.id}`}>
-        <Title order={2} className={classes.rootTitle}>
-          {data?.supplier.name}
-        </Title>
-      </Link>
+    <PageLayout
+      title={data?.supplier.name}
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Sevkiyatlar",
+          href: "/dashboard/deliveries",
+        },
+        {
+          label: id,
+          href: `/dashboard/deliveries/${id}`,
+        },
+      ]}
+    >
       <Box mt="md">{data && <Results delivery={data} />}</Box>
-    </div>
+    </PageLayout>
   );
 };

@@ -1,13 +1,11 @@
-import React from "react";
-
 // Routing
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Services
 import { useCreateRoastMutation } from "@services/roastApi";
 
 // UI Components
-import { createStyles, Title, Breadcrumbs, Anchor, Grid, LoadingOverlay } from "@mantine/core";
+import { Grid, LoadingOverlay } from "@mantine/core";
 
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
@@ -24,19 +22,10 @@ import { IconCircleCheck } from "@tabler/icons";
 import { Form } from "./Form";
 import { Rounds } from "./Rounds";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-    position: "relative",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-}));
+// Layouts
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const CreateRoastView = () => {
-  const { classes } = useStyles();
   const navigate = useNavigate();
 
   // Services
@@ -67,23 +56,25 @@ export const CreateRoastView = () => {
   };
 
   return (
-    <div className={classes.root}>
-      <LoadingOverlay visible={isLoading} />
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/roasts">
-          Kavrumlar
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/roasts/create">
-          Yeni Kavrum
-        </Anchor>
-      </Breadcrumbs>
-      <Title order={2} className={classes.rootTitle}>
-        Kavrum Oluştur
-      </Title>
+    <PageLayout
+      title="Kavrum Oluştur"
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Kavrumlar",
+          href: "/dashboard/roasts",
+        },
+        {
+          label: "Yeni Kavrum",
+          href: "/dashboard/roasts/create",
+        },
+      ]}
+    >
       <form onSubmit={form.onSubmit(onCreateRoastSubmit)}>
+        <LoadingOverlay visible={isLoading} />
         <Grid gutter="xl" mt="md">
           <Grid.Col lg={6}>
             <Form form={form} />
@@ -93,6 +84,6 @@ export const CreateRoastView = () => {
           </Grid.Col>
         </Grid>
       </form>
-    </div>
+    </PageLayout>
   );
 };

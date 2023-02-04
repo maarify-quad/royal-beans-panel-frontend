@@ -19,7 +19,7 @@ export const deliveryApi = emptyApi.injectEndpoints({
     }),
     getDeliveryById: builder.query<Delivery, string>({
       query: (id) => `/deliveries/${id}`,
-      providesTags: (_result, _error, id) => [{ type: "Delivery", id }],
+      providesTags: (_result, _error, id) => [{ type: "Delivery" as const, id }],
     }),
     getProductDeliveries: builder.query<GetProductDeliveriesResponse, GetProductDeliveriesRequest>({
       query: (params) => {
@@ -32,7 +32,17 @@ export const deliveryApi = emptyApi.injectEndpoints({
         return url.toString();
       },
       providesTags: (result, _error, params) =>
-        result ? [{ type: "Product" as const, id: `DELIVERIES_${params.stockCode}` }] : ["Product"],
+        result
+          ? [{ type: "Product" as const, id: `ProductDeliveries_${params.stockCode}` }]
+          : ["Product"],
+    }),
+    getSupplierDeliveries: builder.query<GetDeliveriesResponse, GetSupplierDeliveriesRequest>({
+      query: (params) => {
+        const url = new URL(`/deliveries/supplier/${params.id}`, import.meta.env.VITE_API_BASE_URL);
+        url.searchParams.append("page", params.page.toString());
+        url.searchParams.append("limit", params.limit.toString());
+        return url.toString();
+      },
     }),
     createDelivery: builder.mutation<Delivery, CreateDeliveryPayload>({
       query: (body) => ({
@@ -49,6 +59,7 @@ export const {
   useGetDeliveriesQuery,
   useGetDeliveryByIdQuery,
   useGetProductDeliveriesQuery,
+  useGetSupplierDeliveriesQuery,
   useCreateDeliveryMutation,
 } = deliveryApi;
 
@@ -71,6 +82,12 @@ interface GetProductDeliveriesResponse {
 
 interface GetProductDeliveriesRequest {
   stockCode: string;
+  page: number;
+  limit: number;
+}
+
+interface GetSupplierDeliveriesRequest {
+  id: string;
   page: number;
   limit: number;
 }

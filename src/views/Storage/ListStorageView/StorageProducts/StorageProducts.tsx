@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 // Routing
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ import { Alert, Anchor, Group, Paper, Select, Text } from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
-import { IconInfoCircle } from "@tabler/icons";
+import { IconAlertCircle } from "@tabler/icons";
 
 // Interfaces
 import { Product } from "@interfaces/product";
@@ -21,7 +21,7 @@ type StorageProductsProps = {
   storageType: string;
 };
 
-export const StorageProducts: React.FC<StorageProductsProps> = ({ storageType }) => {
+export const StorageProducts = ({ storageType }: StorageProductsProps) => {
   const [query, setQuery] = useState({
     page: 1,
     limit: 25,
@@ -61,16 +61,8 @@ export const StorageProducts: React.FC<StorageProductsProps> = ({ storageType })
 
   if (error) {
     return (
-      <Alert icon={<IconInfoCircle />} color="red" title="Ürünlere ulaşılamadı" variant="filled">
+      <Alert icon={<IconAlertCircle />} color="red" title="Ürünlere ulaşılamadı" variant="filled">
         {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
-      </Alert>
-    );
-  }
-
-  if (products?.length === 0) {
-    return (
-      <Alert color="cyan" icon={<IconInfoCircle />}>
-        Bu kategoriye ait ürün bulunmamaktadır
       </Alert>
     );
   }

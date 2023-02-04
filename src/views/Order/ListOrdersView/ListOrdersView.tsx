@@ -1,10 +1,8 @@
-import React from "react";
-
 // Routing
 import { Link, useSearchParams } from "react-router-dom";
 
 // UI Components
-import { createStyles, Title, Group, Button, Breadcrumbs, Anchor, Tabs } from "@mantine/core";
+import { Group, Button, Tabs } from "@mantine/core";
 
 // Icons
 import { IconPaperBag, IconShoppingCartPlus } from "@tabler/icons";
@@ -12,34 +10,26 @@ import { IconPaperBag, IconShoppingCartPlus } from "@tabler/icons";
 // Components
 import { Results } from "./Results";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-}));
+// Layouts
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const ListOrdersView = () => {
-  const { classes } = useStyles();
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/orders">
-          Siparişler
-        </Anchor>
-      </Breadcrumbs>
-      <Group align="center" position="apart">
-        <Title order={2} className={classes.rootTitle}>
-          Siparişler
-        </Title>
+    <PageLayout
+      title="Siparişler"
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Siparişler",
+          href: "/dashboard/orders",
+        },
+      ]}
+      actions={
         <Group>
           <Button
             leftIcon={<IconShoppingCartPlus />}
@@ -52,7 +42,8 @@ export const ListOrdersView = () => {
             Yeni Gönderi
           </Button>
         </Group>
-      </Group>
+      }
+    >
       <Tabs
         mt="md"
         keepMounted={false}
@@ -74,6 +65,6 @@ export const ListOrdersView = () => {
           <Results type="MANUAL" />
         </Tabs.Panel>
       </Tabs>
-    </div>
+    </PageLayout>
   );
 };

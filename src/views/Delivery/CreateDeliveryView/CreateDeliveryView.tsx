@@ -1,13 +1,11 @@
-import React from "react";
-
 // Routing
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Services
 import { useCreateDeliveryMutation } from "@services/deliveryApi";
 
 // UI Components
-import { createStyles, Title, Breadcrumbs, Anchor, Grid, LoadingOverlay } from "@mantine/core";
+import { Grid, LoadingOverlay } from "@mantine/core";
 
 // UI Utils
 import { showNotification } from "@mantine/notifications";
@@ -24,19 +22,10 @@ import { schema, initialValues } from "./Form/validation/schema";
 import { Form } from "./Form";
 import { Summary } from "./Summary";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-    position: "relative",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-}));
+// Layouts
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const CreateDeliveryView = () => {
-  const { classes } = useStyles();
   const navigate = useNavigate();
 
   // Services
@@ -70,23 +59,25 @@ export const CreateDeliveryView = () => {
   };
 
   return (
-    <div className={classes.root}>
-      <LoadingOverlay visible={isLoading} />
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/deliveries">
-          Sevkiyatlar
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/deliveries/create">
-          Yeni Sevkiyat
-        </Anchor>
-      </Breadcrumbs>
-      <Title order={2} className={classes.rootTitle}>
-        Sevkiyat Oluştur
-      </Title>
-      <form onSubmit={form.onSubmit(onCreateDeliverySubmit, console.log)}>
+    <PageLayout
+      title="Sevkiyat Oluştur"
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Sevkiyatlar",
+          href: "/dashboard/deliveries",
+        },
+        {
+          label: "Yeni Sevkiyat",
+          href: "/dashboard/deliveries/create",
+        },
+      ]}
+    >
+      <form onSubmit={form.onSubmit(onCreateDeliverySubmit)}>
+        <LoadingOverlay visible={isLoading} />
         <Grid mt="md">
           <Grid.Col lg={6}>
             <Form form={form} />
@@ -96,6 +87,6 @@ export const CreateDeliveryView = () => {
           </Grid.Col>
         </Grid>
       </form>
-    </div>
+    </PageLayout>
   );
 };

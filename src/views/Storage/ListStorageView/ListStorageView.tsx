@@ -4,16 +4,7 @@ import React from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 // UI Components
-import {
-  createStyles,
-  Title,
-  Breadcrumbs,
-  Tabs,
-  Anchor,
-  Group,
-  Button,
-  LoadingOverlay,
-} from "@mantine/core";
+import { Tabs, Button, LoadingOverlay } from "@mantine/core";
 
 // UI Utils
 import { openModal } from "@mantine/modals";
@@ -24,26 +15,14 @@ import { IconPlus } from "@tabler/icons";
 // Components
 import { StorageProducts } from "./StorageProducts";
 
-// Lazy Components
-const CreateProduct = React.lazy(() =>
-  import("@components/Product/CreateProduct").then((module) => ({
-    default: module.CreateProduct,
-  }))
-);
+// Layouts
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-}));
+// Lazy Components
+const CreateProduct = React.lazy(() => import("@components/Product/CreateProduct"));
 
 export const ListStorageView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { classes } = useStyles();
 
   const onCreateProductClick = () => {
     openModal({
@@ -58,23 +37,24 @@ export const ListStorageView = () => {
   };
 
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/storage">
-          Depo
-        </Anchor>
-      </Breadcrumbs>
-      <Group position="apart">
-        <Title order={2} className={classes.rootTitle}>
-          Depo
-        </Title>
+    <PageLayout
+      title="Depo"
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Depo",
+          href: "/dashboard/storage",
+        },
+      ]}
+      actions={
         <Button leftIcon={<IconPlus />} onClick={onCreateProductClick}>
           Yeni Ürün
         </Button>
-      </Group>
+      }
+    >
       <Tabs
         keepMounted={false}
         defaultValue={searchParams.get("tab") || "HM"}
@@ -101,6 +81,6 @@ export const ListStorageView = () => {
           <StorageProducts storageType="Other" />
         </Tabs.Panel>
       </Tabs>
-    </div>
+    </PageLayout>
   );
 };

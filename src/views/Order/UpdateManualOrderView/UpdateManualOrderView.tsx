@@ -1,7 +1,5 @@
-import React from "react";
-
 // Routing
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 // Services
 import { useGetProductsByStorageTypeQuery } from "@services/productApi";
@@ -11,7 +9,7 @@ import {
 } from "@services/orderApi";
 
 // UI Components
-import { Breadcrumbs, createStyles, Loader, Title, Anchor, Grid } from "@mantine/core";
+import { Loader, Grid } from "@mantine/core";
 
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
@@ -23,26 +21,10 @@ import { IconCircleCheck } from "@tabler/icons";
 // Components
 import { Form, Summary, Inputs, schema, initialValues } from "./Form";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-  titleLink: {
-    textDecoration: "none",
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-    "&:hover": {
-      textDecoration: "underline",
-    },
-  },
-}));
+// Layouts
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const UpdateManualOrderView = () => {
-  const { classes } = useStyles();
-
   // Routing
   const { orderId } = useParams();
   const navigate = useNavigate();
@@ -99,21 +81,23 @@ export const UpdateManualOrderView = () => {
   }
 
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/orders">
-          Siparişler
-        </Anchor>
-        <Anchor component={Link} to={`/dashboard/orders/manual/update/${orderId}`}>
-          Güncelle
-        </Anchor>
-      </Breadcrumbs>
-      <Title order={2} className={classes.rootTitle} mb="md">
-        #{orderId} - Manuel Gönderi Güncelle
-      </Title>
+    <PageLayout
+      title={`#${orderId} - Gönderi Güncelle`}
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Siparişler",
+          href: "/dashboard/orders",
+        },
+        {
+          label: `Güncelle`,
+          href: `/dashboard/orders/manual/update/${orderId}`,
+        },
+      ]}
+    >
       <form onSubmit={form.onSubmit(onUpdateOrderSubmit)}>
         <Grid>
           <Grid.Col lg={6}>
@@ -124,6 +108,6 @@ export const UpdateManualOrderView = () => {
           </Grid.Col>
         </Grid>
       </form>
-    </div>
+    </PageLayout>
   );
 };

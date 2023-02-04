@@ -1,45 +1,26 @@
-import React from "react";
 import dayjs from "dayjs";
 
 // Routing
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
 // Services
 import { useGetRoastByIdQuery } from "@services/roastApi";
 
 // UI Components
-import {
-  createStyles,
-  Title,
-  Breadcrumbs,
-  Anchor,
-  Alert,
-  Loader,
-  Center,
-  Text,
-  Stack,
-} from "@mantine/core";
+import { Alert, Loader, Text, Stack } from "@mantine/core";
 
 // Icons
-import { IconInfoCircle } from "@tabler/icons";
+import { IconAlertCircle } from "@tabler/icons";
 
 // Components
 import { RoastedCoffees } from "./RoastedCoffees";
 import { RoundsTable } from "./RoundsTable";
 
 // Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-}));
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const RoastDetailsView = () => {
   const { id } = useParams();
-  const { classes } = useStyles();
 
   const { data, isLoading, error } = useGetRoastByIdQuery(id!, {
     skip: !id,
@@ -52,7 +33,7 @@ export const RoastDetailsView = () => {
   if (error) {
     return (
       <Alert
-        icon={<IconInfoCircle />}
+        icon={<IconAlertCircle />}
         color="red"
         title="Tedarikçiye ulaşılamadı"
         variant="filled"
@@ -64,32 +45,32 @@ export const RoastDetailsView = () => {
   }
 
   if (isLoading) {
-    <Center style={{ height: "100%" }}>
-      <Loader />
-    </Center>;
+    return <Loader />;
   }
 
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/roasts">
-          Kavrumlar
-        </Anchor>
-        <Anchor component={Link} to={`/dashboard/roasts/${id}`}>
-          {id}
-        </Anchor>
-      </Breadcrumbs>
-      <Title order={2} className={classes.rootTitle}>
-        {data?.roast.id}
-      </Title>
+    <PageLayout
+      title={data?.roast.id}
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Kavrumlar",
+          href: "/dashboard/roasts",
+        },
+        {
+          label: id,
+          href: `/dashboard/roasts/${id}`,
+        },
+      ]}
+    >
       <Text color="dimmed">{dayjs(data?.roast.date).format("DD MMM YYYY")}</Text>
       <Stack spacing="lg" mt="md">
         <RoastedCoffees roastDetails={data?.roast.roastDetails} />
         <RoundsTable roastDetails={data?.roast.roastDetails} />
       </Stack>
-    </div>
+    </PageLayout>
   );
 };

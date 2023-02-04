@@ -1,42 +1,25 @@
 // Routing
-import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
+import { Navigate, useParams, useSearchParams } from "react-router-dom";
 
 // Services
 import { useGetProductByStockCodeQuery } from "@services/productApi";
 
 // UI Components
-import {
-  createStyles,
-  Title,
-  Breadcrumbs,
-  Tabs,
-  Anchor,
-  Group,
-  Loader,
-  Alert,
-} from "@mantine/core";
+import { Tabs, Loader, Alert } from "@mantine/core";
 
 // Icons
-import { IconInfoCircle } from "@tabler/icons";
+import { IconAlertCircle } from "@tabler/icons";
 
 // Components
 import { SummaryTab } from "./SummaryTab";
 import { DeliveriesTab } from "./DeliveriesTab";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-}));
+// Layout
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const ProductDetailsView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { stockCode } = useParams();
-  const { classes } = useStyles();
 
   // Queries
   const {
@@ -55,35 +38,38 @@ export const ProductDetailsView = () => {
     return <Loader />;
   }
 
+  if (error) {
+    return (
+      <Alert
+        icon={<IconAlertCircle />}
+        color="red"
+        title="Ürüne ulaşılamadı"
+        variant="filled"
+        mt="md"
+      >
+        {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
+      </Alert>
+    );
+  }
+
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb="md">
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/storage">
-          Depo
-        </Anchor>
-        <Anchor component={Link} to={`/dashboard/storage/${stockCode}`}>
-          {product?.name}
-        </Anchor>
-      </Breadcrumbs>
-      <Group position="apart">
-        <Title order={2} className={classes.rootTitle}>
-          {product?.name}
-        </Title>
-      </Group>
-      {error && (
-        <Alert
-          icon={<IconInfoCircle />}
-          color="red"
-          title="Ürüne ulaşılamadı"
-          variant="filled"
-          mt="md"
-        >
-          {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
-        </Alert>
-      )}
+    <PageLayout
+      title={product?.name}
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Depo",
+          href: "/dashboard/storage",
+        },
+        {
+          label: product?.name,
+          href: `/dashboard/storage/${stockCode}`,
+        },
+      ]}
+    >
       {product && (
         <Tabs
           keepMounted={false}
@@ -103,6 +89,6 @@ export const ProductDetailsView = () => {
           </Tabs.Panel>
         </Tabs>
       )}
-    </div>
+    </PageLayout>
   );
 };
