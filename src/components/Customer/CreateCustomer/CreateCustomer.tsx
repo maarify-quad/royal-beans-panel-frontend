@@ -8,11 +8,11 @@ import { Button, Group, LoadingOverlay, Stepper } from "@mantine/core";
 
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
-import { closeModal } from "@mantine/modals";
+import { closeAllModals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { IconCircleCheck, IconX } from "@tabler/icons";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Components
 import { GeneralStep } from "./GeneralStep";
@@ -44,14 +44,17 @@ export const CreateCustomer = () => {
 
   const onCreateCustomerSubmit = async (values: Inputs) => {
     try {
-      await createCustomer(values).unwrap();
+      await createCustomer({
+        ...values,
+        priceListId: values.priceListId ? +values.priceListId : undefined,
+      }).unwrap();
       showNotification({
         title: "Başarılı",
         message: "Müşteri oluşturuldu",
         icon: <IconCircleCheck />,
         color: "green",
       });
-      closeModal("createCustomer");
+      closeAllModals();
     } catch (error) {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }

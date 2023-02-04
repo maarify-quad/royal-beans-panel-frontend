@@ -8,7 +8,7 @@ import { Box, Button, FileInput, Text } from "@mantine/core";
 
 // UI Utils
 import { showNotification } from "@mantine/notifications";
-import { closeModal } from "@mantine/modals";
+import { closeAllModals } from "@mantine/modals";
 import { useForm, zodResolver } from "@mantine/form";
 
 // Assets
@@ -55,7 +55,7 @@ export const ExcelCreate: React.FC<ExcelCreateProps> = ({ priceListId }) => {
         icon: <IconCircleCheck />,
         color: "green",
       });
-      closeModal("createPriceListProduct");
+      closeAllModals();
     } catch {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }

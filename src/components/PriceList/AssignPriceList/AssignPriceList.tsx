@@ -9,7 +9,7 @@ import { Alert, Button, LoadingOverlay, Select } from "@mantine/core";
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import { closeModal } from "@mantine/modals";
+import { closeAllModals } from "@mantine/modals";
 
 // Icons
 import { IconAlertCircle, IconCircleCheck } from "@tabler/icons";
@@ -66,7 +66,7 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
         icon: <IconCircleCheck />,
         color: "green",
       });
-      closeModal("assignPriceList");
+      closeAllModals();
     } catch (error) {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }

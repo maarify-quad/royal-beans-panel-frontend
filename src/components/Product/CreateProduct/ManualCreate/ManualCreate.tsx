@@ -8,7 +8,7 @@ import { Button, LoadingOverlay, NumberInput, Select, TextInput } from "@mantine
 
 // UI Utils
 import { showNotification } from "@mantine/notifications";
-import { closeModal } from "@mantine/modals";
+import { closeAllModals } from "@mantine/modals";
 import { useForm, zodResolver } from "@mantine/form";
 
 // Icons
@@ -39,7 +39,7 @@ export const ManualCreate = () => {
         icon: <IconCircleCheck />,
         color: "green",
       });
-      closeModal("createProduct");
+      closeAllModals();
     } catch {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
