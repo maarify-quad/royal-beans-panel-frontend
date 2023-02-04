@@ -1,1 +1,1 @@
-export { EditPriceListProduct } from "./EditPriceListProduct";
+export { EditPriceListProduct as default } from "./EditPriceListProduct";

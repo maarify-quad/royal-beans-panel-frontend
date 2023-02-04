@@ -36,10 +36,18 @@ export const UpdateOrderView = () => {
   const { data, isLoading: isOrderLoading } = useGetOrderByOrderIdQuery(orderId!, {
     skip: !orderId,
   });
-  const { data: priceListProducts, isLoading: isPriceListProductsLoading } =
-    useGetPriceListProductsQuery(data?.order.customer?.priceListId!, {
+  const { priceListProducts, isLoading: isPriceListProductsLoading } = useGetPriceListProductsQuery(
+    {
+      priceListId: data?.order.customer?.priceListId!,
+    },
+    {
       skip: orderId?.startsWith("MG") || !data?.order || !data?.order.customer?.priceListId,
-    });
+      selectFromResult: ({ data, ...rest }) => ({
+        priceListProducts: data?.priceListProducts,
+        ...rest,
+      }),
+    }
+  );
 
   // Mutations
   const [updateOrderProducts, { isLoading: isUpdating }] = useUpdateOrderProductsMutation();
