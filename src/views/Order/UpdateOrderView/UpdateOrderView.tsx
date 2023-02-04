@@ -21,6 +21,9 @@ import { Form, Summary, Inputs, schema, initialValues } from "@components/Order/
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 export const UpdateOrderView = () => {
   // Routing
   const { orderId } = useParams();
@@ -96,7 +99,7 @@ export const UpdateOrderView = () => {
         },
       ]}
     >
-      <form onSubmit={form.onSubmit(onUpdateOrderSubmit)}>
+      <form onSubmit={form.onSubmit(onUpdateOrderSubmit, handleFormError)}>
         <Grid>
           <Grid.Col lg={6}>
             <Form form={form} priceListProducts={priceListProducts} />

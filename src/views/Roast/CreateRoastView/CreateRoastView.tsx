@@ -25,6 +25,9 @@ import { Rounds } from "./Rounds";
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 export const CreateRoastView = () => {
   const navigate = useNavigate();
 
@@ -73,7 +76,7 @@ export const CreateRoastView = () => {
         },
       ]}
     >
-      <form onSubmit={form.onSubmit(onCreateRoastSubmit)}>
+      <form onSubmit={form.onSubmit(onCreateRoastSubmit, handleFormError)}>
         <LoadingOverlay visible={isLoading} />
         <Grid gutter="xl" mt="md">
           <Grid.Col lg={6}>

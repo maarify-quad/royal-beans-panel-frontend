@@ -27,7 +27,9 @@ export const LoginForm = () => {
   });
 
   const onLoginSubmit = async (inputs: typeof form.values) => {
-    await login(inputs);
+    try {
+      await login(inputs).unwrap();
+    } catch (error) {}
   };
 
   return (

@@ -25,6 +25,9 @@ import { Summary } from "./Summary";
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 export const CreateDeliveryView = () => {
   const navigate = useNavigate();
 
@@ -76,7 +79,7 @@ export const CreateDeliveryView = () => {
         },
       ]}
     >
-      <form onSubmit={form.onSubmit(onCreateDeliverySubmit)}>
+      <form onSubmit={form.onSubmit(onCreateDeliverySubmit, handleFormError)}>
         <LoadingOverlay visible={isLoading} />
         <Grid mt="md">
           <Grid.Col lg={6}>

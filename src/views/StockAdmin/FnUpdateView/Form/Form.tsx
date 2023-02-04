@@ -21,13 +21,16 @@ import {
 
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
 
 // Icons
 import { IconCircleCheck, IconTrash } from "@tabler/icons";
 
 // Validation
 import { FnUpdateValues, fnUpdateInitialValues, fnUpdateSchema } from "./fnUpdateValidation";
-import { showNotification } from "@mantine/notifications";
+
+// Utils
+import { handleFormError } from "@utils/form";
 
 // Props
 type FormProps = {
@@ -90,13 +93,15 @@ export const Form = ({ productId, stockCode }: FormProps) => {
   }
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
+    <form onSubmit={form.onSubmit(handleSubmit, handleFormError)}>
       <SimpleGrid cols={2} breakpoints={[{ maxWidth: "md", cols: 1 }]}>
         <div>
           <Select
             label="Ürünler"
             placeholder="İçerik ürünü seçiniz"
             data={productSelections}
+            nothingFound="Ürün bulunamadı"
+            searchable
             dropdownComponent="div"
             {...form.getInputProps("ingredientProductId")}
             onChange={(value) => {

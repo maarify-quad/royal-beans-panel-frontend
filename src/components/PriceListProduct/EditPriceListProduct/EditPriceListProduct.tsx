@@ -18,6 +18,9 @@ import { IconCircleCheck } from "@tabler/icons";
 import { Inputs } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 // Interfaces
 import { PriceListProduct } from "@interfaces/priceListProduct";
 
@@ -64,7 +67,7 @@ export const EditPriceListProduct: React.FC<EditPriceListProductProps> = ({ pric
   };
 
   return (
-    <form onSubmit={form.onSubmit(onEditPriceListProductSubmit)}>
+    <form onSubmit={form.onSubmit(onEditPriceListProductSubmit, handleFormError)}>
       <LoadingOverlay visible={isUpdating} />
       <TextInput label="Ürün adı" required {...form.getInputProps("name")} />
       <NumberInput

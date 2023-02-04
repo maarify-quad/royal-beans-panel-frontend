@@ -3,9 +3,6 @@ import React from "react";
 // Services
 import { useUpdateCustomerMutation } from "@services/customerApi";
 
-// Utils
-import mapValues from "lodash/mapValues";
-
 // UI Components
 import { Button, TextInput } from "@mantine/core";
 
@@ -16,6 +13,10 @@ import { closeAllModals } from "@mantine/modals";
 
 // Icons
 import { IconCircleCheck } from "@tabler/icons";
+
+// Utils
+import mapValues from "lodash/mapValues";
+import { handleFormError } from "@utils/form";
 
 // Interfaces
 import { Customer } from "@interfaces/customer";
@@ -72,7 +73,7 @@ export const EditCustomer: React.FC<EditCustomerProps> = ({ fields, customer }) 
   };
 
   return (
-    <form onSubmit={form.onSubmit(onUpdateCustomerSubmit)}>
+    <form onSubmit={form.onSubmit(onUpdateCustomerSubmit, handleFormError)}>
       {fields.map((field, i) => (
         <TextInput
           label={field.label}
