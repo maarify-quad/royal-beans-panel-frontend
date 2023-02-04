@@ -7,7 +7,7 @@ import { useGetPriceListByIdQuery } from "@services/priceListApi";
 import { Navigate, useParams } from "react-router-dom";
 
 // UI Components
-import { Alert, Center, Loader, Grid, Group, Button, LoadingOverlay } from "@mantine/core";
+import { Alert, Loader, Grid, Group, Button, LoadingOverlay } from "@mantine/core";
 
 // UI Utils
 import { openModal } from "@mantine/modals";
@@ -81,9 +81,7 @@ export const PriceListDetailsView = () => {
   }
 
   if (isLoading) {
-    <Center style={{ height: "100%" }}>
-      <Loader />
-    </Center>;
+    return <Loader />;
   }
 
   return (

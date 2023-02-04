@@ -19,6 +19,9 @@ import { IconCircleCheck } from "@tabler/icons";
 import { Inputs, initialValues } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 // Interfaces
 import { PriceListProduct } from "@interfaces/priceListProduct";
 
@@ -76,7 +79,7 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
   };
 
   return (
-    <form onSubmit={form.onSubmit(onAddProductSubmit)}>
+    <form onSubmit={form.onSubmit(onAddProductSubmit, handleFormError)}>
       <LoadingOverlay visible={isProductsLoading || isCreateProductLoading} />
       <Select
         label="Ürün"

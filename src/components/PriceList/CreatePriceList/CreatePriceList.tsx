@@ -18,6 +18,9 @@ import { IconCircleCheck } from "@tabler/icons";
 import { Inputs } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 export const CreatePriceList = () => {
   const [createPriceList, { isLoading: isCreating }] = useCreatePriceListMutation();
 
@@ -46,7 +49,7 @@ export const CreatePriceList = () => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(onCreatePriceListSubmit)}>
+    <form onSubmit={form.onSubmit(onCreatePriceListSubmit, handleFormError)}>
       <TextInput
         label="Fiyat Listesi Adı"
         placeholder="Fiyat listesi adı giriniz"

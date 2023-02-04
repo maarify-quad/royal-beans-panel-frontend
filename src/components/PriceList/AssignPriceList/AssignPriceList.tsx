@@ -18,6 +18,9 @@ import { IconAlertCircle, IconCircleCheck } from "@tabler/icons";
 import { Inputs, initialValues } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 // Interfaces
 import { Customer } from "@interfaces/customer";
 
@@ -78,11 +81,14 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
   }, [form.values.customerId]);
 
   return (
-    <form onSubmit={form.onSubmit(onAssignPriceListSubmit)}>
+    <form onSubmit={form.onSubmit(onAssignPriceListSubmit, handleFormError)}>
       <LoadingOverlay visible={isCustomersLoading || isUpdateCustomerLoading} />
       <Select
         label="Müşteri"
         placeholder="Müşteri seçiniz"
+        nothingFound="Müşteri bulunamadı"
+        searchable
+        withAsterisk
         data={customerSelectOptions}
         {...form.getInputProps("customerId")}
       />

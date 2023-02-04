@@ -44,7 +44,7 @@ export const FnUpdateView = () => {
           href: "/dashboard/stock-admin",
         },
         {
-          label: `FN İçerik Güncelle / ${product?.name}`,
+          label: `FN İçerik Güncelle - ${product?.name}`,
           href: `/dashboard/stock-admin/fn-update/${stockCode}`,
         },
       ]}

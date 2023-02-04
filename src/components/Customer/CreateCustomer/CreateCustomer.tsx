@@ -24,6 +24,9 @@ import { ExtraStep } from "./ExtraStep";
 import { Inputs, initialValues } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 export const CreateCustomer = () => {
   // Internal state
   const [step, setStep] = React.useState(0);
@@ -61,7 +64,7 @@ export const CreateCustomer = () => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(onCreateCustomerSubmit)}>
+    <form onSubmit={form.onSubmit(onCreateCustomerSubmit, handleFormError)}>
       <LoadingOverlay visible={isCreating} />
       <Stepper active={step}>
         <Stepper.Step>

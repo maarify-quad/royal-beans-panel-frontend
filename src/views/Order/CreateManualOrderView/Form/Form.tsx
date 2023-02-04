@@ -25,6 +25,9 @@ import { schema } from "./validation/schema";
 import { StepOne } from "./StepOne";
 import { StepTwo } from "./StepTwo";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 export const Form = () => {
   const navigate = useNavigate();
 
@@ -116,7 +119,7 @@ export const Form = () => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(onCreateOrderSubmit)}>
+    <form onSubmit={form.onSubmit(onCreateOrderSubmit, handleFormError)}>
       <LoadingOverlay visible={isCreatingOrder || isProductsLoading} />
       <Stepper active={step} mt="md">
         <Stepper.Step>

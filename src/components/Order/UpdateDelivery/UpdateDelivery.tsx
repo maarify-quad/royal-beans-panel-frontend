@@ -18,6 +18,9 @@ import { IconCircleCheck } from "@tabler/icons";
 import { Inputs } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 // Interfaces
 import { Order } from "@interfaces/order";
 
@@ -57,7 +60,7 @@ export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(onUpdateDeliverySubmit)}>
+    <form onSubmit={form.onSubmit(onUpdateDeliverySubmit, handleFormError)}>
       <Select
         label="Kargo Tipi"
         data={[

@@ -18,6 +18,9 @@ import { IconCircleCheck } from "@tabler/icons";
 import { Inputs } from "./validation/Inputs";
 import { schema, initialValues } from "./validation/schema";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 export const ManualCreate = () => {
   // Mutations
   const [createProductMutation, { isLoading: isCreating }] = useCreateProductMutation();
@@ -46,7 +49,7 @@ export const ManualCreate = () => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(onCreateProductSubmit)}>
+    <form onSubmit={form.onSubmit(onCreateProductSubmit, handleFormError)}>
       <LoadingOverlay visible={isCreating} />
       <TextInput
         label="Ürün adı"

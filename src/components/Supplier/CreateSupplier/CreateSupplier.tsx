@@ -18,6 +18,9 @@ import { IconCircleCheck } from "@tabler/icons";
 import { Inputs } from "./validation/Inputs";
 import { schema, initialValues } from "./validation/schema";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 export const CreateSupplier = () => {
   const [createSupplier, { data, isLoading }] = useCreateSupplierMutation();
   const form = useForm<Inputs>({
@@ -43,7 +46,7 @@ export const CreateSupplier = () => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(onCreateSupplierSubmit)}>
+    <form onSubmit={form.onSubmit(onCreateSupplierSubmit, handleFormError)}>
       <LoadingOverlay visible={isLoading} />
       <TextInput
         label="Ad"

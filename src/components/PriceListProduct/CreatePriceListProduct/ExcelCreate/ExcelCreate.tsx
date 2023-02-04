@@ -21,6 +21,9 @@ import { IconCircleCheck, IconX } from "@tabler/icons";
 import { Inputs } from "./validation/Inputs";
 import { schema, initialValues } from "./validation/schema";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 // Props
 type ExcelCreateProps = {
   priceListId: number;
@@ -62,7 +65,10 @@ export const ExcelCreate: React.FC<ExcelCreateProps> = ({ priceListId }) => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(onCreateBulkProductSubmit)} encType="multipart/form-data">
+    <form
+      onSubmit={form.onSubmit(onCreateBulkProductSubmit, handleFormError)}
+      encType="multipart/form-data"
+    >
       <FileInput
         label="Excel dosyası"
         placeholder="Excel dosyası seçiniz"

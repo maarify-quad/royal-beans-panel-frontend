@@ -18,6 +18,9 @@ import { Inputs, initialValues } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 import { closeAllModals } from "@mantine/modals";
 
+// Utils
+import { handleFormError } from "@utils/form";
+
 // Props
 type CreateDeliveryAddressProps = {
   customerId: string;
@@ -51,7 +54,7 @@ export const CreateDeliveryAddress: React.FC<CreateDeliveryAddressProps> = ({ cu
   };
 
   return (
-    <form onSubmit={form.onSubmit(onCreateDelieryAddressSubmit)}>
+    <form onSubmit={form.onSubmit(onCreateDelieryAddressSubmit, handleFormError)}>
       <LoadingOverlay visible={isCreating} />
       <TextInput
         label="Adres başlığı"
