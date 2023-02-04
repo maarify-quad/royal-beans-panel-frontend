@@ -1,53 +1,24 @@
-import React from "react";
-
 // Routing
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams, useSearchParams } from "react-router-dom";
 
 // Services
 import { useGetOrderByOrderIdQuery } from "@services/orderApi";
 
 // UI Components
-import {
-  createStyles,
-  Title,
-  Breadcrumbs,
-  Anchor,
-  Alert,
-  Center,
-  Loader,
-  Tabs,
-  Group,
-  Text,
-} from "@mantine/core";
+import { Alert, Loader, Tabs, Text } from "@mantine/core";
 
 // Icons
-import { IconInfoCircle } from "@tabler/icons";
+import { IconAlertCircle, IconInfoCircle } from "@tabler/icons";
 
 // Components
 import { ProductsTab } from "./ProductsTab";
 import { DetailsTab } from "./DetailsTab";
 import { Actions } from "./Actions";
-
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-  titleLink: {
-    textDecoration: "none",
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-    "&:hover": {
-      textDecoration: "underline",
-    },
-  },
-}));
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const OrderDetailsView = () => {
   const { orderId } = useParams();
-  const { classes } = useStyles();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const { data, isLoading, error } = useGetOrderByOrderIdQuery(orderId || "", {
     skip: !orderId,
@@ -60,7 +31,7 @@ export const OrderDetailsView = () => {
   if (error) {
     return (
       <Alert
-        icon={<IconInfoCircle />}
+        icon={<IconAlertCircle />}
         color="red"
         title="Siparişe ulaşılamadı"
         variant="filled"
@@ -72,37 +43,40 @@ export const OrderDetailsView = () => {
   }
 
   if (isLoading) {
-    <Center style={{ height: "100%" }}>
-      <Loader />
-    </Center>;
+    return <Loader />;
   }
 
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/orders">
-          Siparişler
-        </Anchor>
-        <Anchor component={Link} to={`/dashboard/orders/${orderId}`}>
-          #{orderId}
-        </Anchor>
-      </Breadcrumbs>
-      <Group position="apart">
-        <Title order={2} className={classes.rootTitle}>
-          #{orderId} - {data?.order.customer?.name || data?.order.receiver}
-        </Title>
-        {data?.order && <Actions order={data?.order} />}
-      </Group>
+    <PageLayout
+      title={`#${orderId}  - ${data?.order.customer?.name || data?.order.receiver}`}
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Siparişler",
+          href: "/dashboard/orders",
+        },
+        {
+          label: orderId,
+          href: `/dashboard/orders/${orderId}`,
+        },
+      ]}
+      actions={data?.order && <Actions order={data?.order} />}
+    >
       {data?.order && data.order.isCancelled && (
         <Alert mt="md" color="red" variant="filled" icon={<IconInfoCircle />}>
           <Text weight={700}>Bu sipariş iptal edilmiştir</Text>
         </Alert>
       )}
       {data && (
-        <Tabs defaultValue="products" mt="md">
+        <Tabs
+          keepMounted={false}
+          defaultValue={searchParams.get("tab") || "products"}
+          onTabChange={(tab: string) => setSearchParams({ tab })}
+          mt="md"
+        >
           <Tabs.List>
             <Tabs.Tab value="products">Ürünler</Tabs.Tab>
             <Tabs.Tab value="details">Detaylar</Tabs.Tab>
@@ -116,6 +90,6 @@ export const OrderDetailsView = () => {
           </Tabs.Panel>
         </Tabs>
       )}
-    </div>
+    </PageLayout>
   );
 };

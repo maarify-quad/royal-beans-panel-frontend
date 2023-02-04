@@ -1,7 +1,7 @@
 import React from "react";
 
 // UI Components
-import { Table, ScrollArea, Container, Text, Card, Group } from "@mantine/core";
+import { Table, ScrollArea, Text, Card, Group, Paper } from "@mantine/core";
 
 // Utils
 import { formatCurrency } from "@utils/localization";
@@ -16,36 +16,38 @@ type ResultsProps = {
 
 export const Results: React.FC<ResultsProps> = ({ delivery }) => {
   return (
-    <Container fluid p={0}>
-      <ScrollArea>
-        <Table highlightOnHover verticalSpacing="sm">
-          <thead>
-            <tr>
-              <th>Ürün</th>
-              <th>Miktar</th>
-              <th>Birim Fiyat</th>
-              <th>KDV</th>
-              <th>Toplam</th>
-            </tr>
-          </thead>
-          <tbody>
-            {delivery.deliveryDetails?.map((deliveryDetail, i) => (
-              <tr key={i}>
-                <td>{deliveryDetail.product.name}</td>
-                <td>
-                  {deliveryDetail.quantity} {deliveryDetail.unit}
-                </td>
-                <td>{formatCurrency(deliveryDetail.unitPriceTRY)}</td>
-                <td>
-                  {deliveryDetail.taxTotal} ₺ &nbsp;
-                  <span style={{ color: "#868E96" }}>(%{deliveryDetail.taxRate})</span>
-                </td>
-                <td>{deliveryDetail.total} ₺</td>
+    <>
+      <Paper p="md" radius="md" shadow="sm" withBorder>
+        <ScrollArea>
+          <Table highlightOnHover verticalSpacing="sm">
+            <thead>
+              <tr>
+                <th>Ürün</th>
+                <th>Miktar</th>
+                <th>Birim Fiyat</th>
+                <th>KDV</th>
+                <th>Toplam</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      </ScrollArea>
+            </thead>
+            <tbody>
+              {delivery.deliveryDetails?.map((deliveryDetail, i) => (
+                <tr key={i}>
+                  <td>{deliveryDetail.product.name}</td>
+                  <td>
+                    {deliveryDetail.quantity} {deliveryDetail.unit}
+                  </td>
+                  <td>{formatCurrency(deliveryDetail.unitPriceTRY)}</td>
+                  <td>
+                    {deliveryDetail.taxTotal} ₺ &nbsp;
+                    <span style={{ color: "#868E96" }}>(%{deliveryDetail.taxRate})</span>
+                  </td>
+                  <td>{deliveryDetail.total} ₺</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </ScrollArea>
+      </Paper>
       <Card withBorder shadow="xs" mt="md" style={{ minWidth: 320, width: "max-content" }}>
         <Group position="apart">
           <Text>Ara Toplam</Text>
@@ -66,6 +68,6 @@ export const Results: React.FC<ResultsProps> = ({ delivery }) => {
           </Text>
         </Group>
       </Card>
-    </Container>
+    </>
   );
 };

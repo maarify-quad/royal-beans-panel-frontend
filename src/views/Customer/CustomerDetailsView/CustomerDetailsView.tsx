@@ -1,30 +1,17 @@
-import React from "react";
-
 // Routing
-import { Navigate, Link, useParams, useSearchParams } from "react-router-dom";
+import { Navigate, useParams, useSearchParams } from "react-router-dom";
 
 // Services
 import { useGetCustomerByIdQuery } from "@services/customerApi";
 
 // UI Components
-import {
-  createStyles,
-  Title,
-  Breadcrumbs,
-  Anchor,
-  Alert,
-  Loader,
-  Center,
-  Tabs,
-  Group,
-  Button,
-} from "@mantine/core";
+import { Alert, Loader, Tabs, Button } from "@mantine/core";
 
 // Hooks
 import { useCreateDeliveryAddress } from "@hooks/delivery-address/useCreateDeliveryAddress";
 
 // Icons
-import { IconPlus, IconInfoCircle } from "@tabler/icons";
+import { IconPlus, IconAlertCircle } from "@tabler/icons";
 
 // Components
 import { DetailsTab } from "./DetailsTab";
@@ -32,19 +19,11 @@ import { LastOrdersTab } from "./LastOrdersTab";
 import { LastProductsTab } from "./LastProductsTab";
 import { PriceListTab } from "./PriceListTab";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-}));
+// Layouts
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const CustomerDetailsView = () => {
   const { id } = useParams();
-  const { classes } = useStyles();
   const [searchParams, setSearchParams] = useSearchParams();
   const { openCreateDeliveryAddress } = useCreateDeliveryAddress();
 
@@ -60,7 +39,7 @@ export const CustomerDetailsView = () => {
   if (error) {
     return (
       <Alert
-        icon={<IconInfoCircle />}
+        icon={<IconAlertCircle />}
         color="red"
         title="Tedarikçiye ulaşılamadı"
         variant="filled"
@@ -72,28 +51,27 @@ export const CustomerDetailsView = () => {
   }
 
   if (isLoading) {
-    <Center style={{ height: "100%" }}>
-      <Loader />
-    </Center>;
+    return <Loader />;
   }
 
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/customers">
-          Müşteriler
-        </Anchor>
-        <Anchor component={Link} to={`/dashboard/customers/${id}`}>
-          {id}
-        </Anchor>
-      </Breadcrumbs>
-      <Group position="apart">
-        <Title order={2} className={classes.rootTitle}>
-          {data?.name}
-        </Title>
+    <PageLayout
+      title={data?.name}
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Müşteriler",
+          href: "/dashboard/customers",
+        },
+        {
+          label: data?.name,
+          href: `/dashboard/customers/${id}`,
+        },
+      ]}
+      actions={
         <Button
           leftIcon={<IconPlus />}
           onClick={() => {
@@ -102,7 +80,8 @@ export const CustomerDetailsView = () => {
         >
           Yeni Teslimat Adresi
         </Button>
-      </Group>
+      }
+    >
       {data && (
         <Tabs
           defaultValue={searchParams.get("tab") || "details"}
@@ -130,6 +109,6 @@ export const CustomerDetailsView = () => {
           </Tabs.Panel>
         </Tabs>
       )}
-    </div>
+    </PageLayout>
   );
 };

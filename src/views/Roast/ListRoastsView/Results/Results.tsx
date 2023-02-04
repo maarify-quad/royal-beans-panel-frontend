@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useState, useMemo } from "react";
 import dayjs from "dayjs";
 
 // Routing
@@ -12,14 +12,14 @@ import { Alert, Anchor, Paper, Group, Select, Text } from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
-import { IconInfoCircle } from "@tabler/icons";
+import { IconAlertCircle } from "@tabler/icons";
 
 // Interfaces
 import { Roast } from "@interfaces/roast";
 
 export const Results = () => {
   // Internal state
-  const [query, setQuery] = React.useState({
+  const [query, setQuery] = useState({
     page: 1,
     limit: 25,
   });
@@ -63,21 +63,13 @@ export const Results = () => {
   if (error) {
     return (
       <Alert
-        icon={<IconInfoCircle />}
+        icon={<IconAlertCircle />}
         color="red"
         title="Kavrumlara ulaşılamadı"
         variant="filled"
         mt="md"
       >
         {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
-      </Alert>
-    );
-  }
-
-  if (roasts?.length === 0) {
-    return (
-      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
-        Kavrum bulunmamaktadır
       </Alert>
     );
   }

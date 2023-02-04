@@ -4,7 +4,7 @@ import React from "react";
 import { useCreateCustomerMutation } from "@services/customerApi";
 
 // UI Components
-import { Button, Group, LoadingOverlay, Stepper } from "@mantine/core";
+import { Autocomplete, Button, Group, LoadingOverlay, Stepper } from "@mantine/core";
 
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
@@ -46,7 +46,7 @@ export const CreateCustomer = () => {
     try {
       await createCustomer({
         ...values,
-        priceListId: values.priceListId ? +values.priceListId : undefined,
+        priceListId: values.priceListId !== "0" ? +values.priceListId : undefined,
       }).unwrap();
       showNotification({
         title: "Başarılı",

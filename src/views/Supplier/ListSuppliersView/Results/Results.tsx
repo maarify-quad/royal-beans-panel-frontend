@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 // Routing
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ import { Alert, Anchor, Group, Paper, Select, Text } from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
-import { IconInfoCircle } from "@tabler/icons";
+import { IconAlertCircle } from "@tabler/icons";
 
 // Utils
 import { formatCurrency } from "@utils/localization";
@@ -21,7 +21,7 @@ import { Supplier } from "@interfaces/supplier";
 
 export const Results = () => {
   // Internal state
-  const [query, setQuery] = React.useState({
+  const [query, setQuery] = useState({
     page: 1,
     limit: 25,
   });
@@ -60,21 +60,13 @@ export const Results = () => {
   if (error) {
     return (
       <Alert
-        icon={<IconInfoCircle />}
+        icon={<IconAlertCircle />}
         color="red"
         title="Tedarikçilere ulaşılamadı"
         variant="filled"
         mt="md"
       >
         {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
-      </Alert>
-    );
-  }
-
-  if (suppliers?.length === 0) {
-    return (
-      <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
-        Tedarikçi bulunmamaktadır
       </Alert>
     );
   }

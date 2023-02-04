@@ -1,18 +1,7 @@
 import React from "react";
 
-// Routing
-import { Link } from "react-router-dom";
-
 // UI Components
-import {
-  createStyles,
-  Title,
-  Group,
-  Button,
-  Breadcrumbs,
-  Anchor,
-  LoadingOverlay,
-} from "@mantine/core";
+import { Button, LoadingOverlay } from "@mantine/core";
 
 // UI Utils
 import { openModal } from "@mantine/modals";
@@ -23,26 +12,13 @@ import { IconUserPlus } from "@tabler/icons";
 // Components
 import { Results } from "./Results";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-}));
+// Layouts
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 // Lazy Imports
-const CreateCustomer = React.lazy(() =>
-  import("../../../components/Customer/CreateCustomer").then((module) => ({
-    default: module.CreateCustomer,
-  }))
-);
+const CreateCustomer = React.lazy(() => import("@components/Customer/CreateCustomer"));
 
 export const ListCustomersView = () => {
-  const { classes } = useStyles();
-
   const openCreateCustomer = () => {
     openModal({
       key: "createCustomer",
@@ -56,24 +32,25 @@ export const ListCustomersView = () => {
   };
 
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/customers">
-          Müşteriler
-        </Anchor>
-      </Breadcrumbs>
-      <Group align="center" position="apart">
-        <Title order={2} className={classes.rootTitle}>
-          Müşteriler
-        </Title>
+    <PageLayout
+      title="Müşteriler"
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Müşteriler",
+          href: "/dashboard/customers",
+        },
+      ]}
+      actions={
         <Button leftIcon={<IconUserPlus />} onClick={openCreateCustomer}>
           Yeni Müşteri
         </Button>
-      </Group>
+      }
+    >
       <Results />
-    </div>
+    </PageLayout>
   );
 };

@@ -119,7 +119,7 @@ export const Form = ({ form, products }: FormProps) => {
         mt="md"
         {...form.getInputProps("total")}
       />
-      <Button disabled={!form.values.productId} mt="lg" onClick={handleAddProduct}>
+      <Button disabled={form.values.productId === "0"} mt="lg" onClick={handleAddProduct}>
         Ürün ekle
       </Button>
     </>

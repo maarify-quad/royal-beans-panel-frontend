@@ -21,7 +21,7 @@ import { Supplier } from "@interfaces/supplier";
 
 // Props
 type DetailsTabProps = {
-  supplier?: Supplier;
+  supplier: Omit<Supplier, "deliveries">;
 };
 
 export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
@@ -42,7 +42,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
             <IconMapPin />
           </Group>
         }
-        value={supplier?.address || "-"}
+        value={supplier.address || "-"}
       />
       <DetailsCard
         title={
@@ -53,7 +53,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
             <IconReceiptTax />
           </Group>
         }
-        value={`${supplier?.taxNo || "-"} / ${supplier?.taxOffice || "-"}`}
+        value={`${supplier.taxNo || "-"} / ${supplier.taxOffice || "-"}`}
       />
       <DetailsCard
         title={
@@ -67,18 +67,18 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
         value={
           <>
             <Text mt="md">
-              {supplier?.contactName || "-"} / {supplier?.contactPosition || "-"}
+              {supplier.contactName || "-"} / {supplier.contactPosition || "-"}
             </Text>
             <Group mt="sm">
               <IconPhone size={16} />
               <Text size="sm" color="dimmed">
-                {supplier?.contactPhone || "-"}
+                {supplier.contactPhone || "-"}
               </Text>
             </Group>
             <Group>
               <IconMail size={16} />
               <Text size="sm" color="dimmed">
-                {supplier?.contactEmail || "-"}
+                {supplier.contactEmail || "-"}
               </Text>
             </Group>
           </>

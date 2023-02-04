@@ -1,10 +1,8 @@
-import React from "react";
-
 // Routing
 import { Link } from "react-router-dom";
 
 // UI Components
-import { createStyles, Title, Group, Button, Breadcrumbs, Anchor } from "@mantine/core";
+import { Group, Button } from "@mantine/core";
 
 // Icons
 import { IconCoffee, IconPlus } from "@tabler/icons";
@@ -12,43 +10,35 @@ import { IconCoffee, IconPlus } from "@tabler/icons";
 // Components
 import { Results } from "./Results";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-}));
+// Layouts
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const ListRoastsView = () => {
-  const { classes } = useStyles();
-
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/roasts">
-          Kavrumlar
-        </Anchor>
-      </Breadcrumbs>
-      <Group align="center" position="apart">
-        <Title order={2} className={classes.rootTitle}>
-          Kavrumlar
-        </Title>
+    <PageLayout
+      title="Kavrumlar"
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Kavrumlar",
+          href: "/dashboard/roasts",
+        },
+      ]}
+      actions={
         <Group>
           <Button leftIcon={<IconCoffee />} component={Link} to="/dashboard/roasts/create">
             Yeni Kavrum
           </Button>
-          <Button leftIcon={<IconPlus />} component={Link} to="/dashboard/roasts/create">
+          <Button leftIcon={<IconPlus />} onClick={() => window.alert("TODO")}>
             Yeni Kavrum İçeriği
           </Button>
         </Group>
-      </Group>
+      }
+    >
       <Results />
-    </div>
+    </PageLayout>
   );
 };

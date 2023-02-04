@@ -1,1 +1,1 @@
-export { CreatePriceList } from "./CreatePriceList";
+export { CreatePriceList as default } from "./CreatePriceList";

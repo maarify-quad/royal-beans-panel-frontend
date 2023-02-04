@@ -1,1 +1,1 @@
-export { AssignPriceList } from "./AssignPriceList";
+export { AssignPriceList as default } from "./AssignPriceList";

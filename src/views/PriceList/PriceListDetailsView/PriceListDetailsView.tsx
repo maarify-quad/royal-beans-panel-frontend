@@ -4,67 +4,32 @@ import React from "react";
 import { useGetPriceListByIdQuery } from "@services/priceListApi";
 
 // Routing
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
 // UI Components
-import {
-  createStyles,
-  Title,
-  Breadcrumbs,
-  Anchor,
-  Alert,
-  Center,
-  Loader,
-  Grid,
-  Group,
-  Button,
-  LoadingOverlay,
-} from "@mantine/core";
+import { Alert, Center, Loader, Grid, Group, Button, LoadingOverlay } from "@mantine/core";
 
 // UI Utils
 import { openModal } from "@mantine/modals";
 
 // Icons
-import { IconInfoCircle, IconPlus, IconUserPlus } from "@tabler/icons";
+import { IconAlertCircle, IconPlus, IconUserPlus } from "@tabler/icons";
 
 // Components
 import { ProductsResult } from "./ProductsResult";
 import { CustomersResult } from "./CustomersResult";
 
-// Lazy Components
-const CreatePriceListProduct = React.lazy(() =>
-  import("@components/PriceListProduct/CreatePriceListProduct").then(
-    ({ CreatePriceListProduct }) => ({
-      default: CreatePriceListProduct,
-    })
-  )
-);
-const AssignPriceList = React.lazy(() =>
-  import("@components/PriceList/AssignPriceList").then(({ AssignPriceList }) => ({
-    default: AssignPriceList,
-  }))
-);
+// Layouts
+import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
-// Styles
-const useStyles = createStyles((theme) => ({
-  root: {
-    height: "100%",
-  },
-  rootTitle: {
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-  },
-  titleLink: {
-    textDecoration: "none",
-    color: theme.colorScheme === "dark" ? theme.colors.gray[4] : theme.black,
-    "&:hover": {
-      textDecoration: "underline",
-    },
-  },
-}));
+// Lazy Components
+const CreatePriceListProduct = React.lazy(
+  () => import("@components/PriceListProduct/CreatePriceListProduct")
+);
+const AssignPriceList = React.lazy(() => import("@components/PriceList/AssignPriceList"));
 
 export const PriceListDetailsView = () => {
   const { id } = useParams();
-  const { classes } = useStyles();
 
   const { data, isLoading, error } = useGetPriceListByIdQuery(id!, {
     skip: !id,
@@ -104,7 +69,7 @@ export const PriceListDetailsView = () => {
   if (error) {
     return (
       <Alert
-        icon={<IconInfoCircle />}
+        icon={<IconAlertCircle />}
         color="red"
         title="Fiyat listesine ulaşılamadı"
         variant="filled"
@@ -122,22 +87,23 @@ export const PriceListDetailsView = () => {
   }
 
   return (
-    <div className={classes.root}>
-      <Breadcrumbs mb={16}>
-        <Anchor component={Link} to="/dashboard">
-          Panel
-        </Anchor>
-        <Anchor component={Link} to="/dashboard/price-lists">
-          Fiyat Listeleri
-        </Anchor>
-        <Anchor component={Link} to={`/dashboard/price-lists/${id}`}>
-          {data?.name}
-        </Anchor>
-      </Breadcrumbs>
-      <Group position="apart">
-        <Title order={2} className={classes.rootTitle}>
-          {data?.name}
-        </Title>
+    <PageLayout
+      title={data?.name}
+      breadcrumbs={[
+        {
+          label: "Panel",
+          href: "/dashboard",
+        },
+        {
+          label: "Fiyat Listeleri",
+          href: "/dashboard/price-lists",
+        },
+        {
+          label: data?.name,
+          href: `/dashboard/price-lists/${id}`,
+        },
+      ]}
+      actions={
         <Group>
           <Button leftIcon={<IconPlus />} onClick={onAddProductClick}>
             Ürün Ekle
@@ -146,7 +112,8 @@ export const PriceListDetailsView = () => {
             Müşteri Ekle
           </Button>
         </Group>
-      </Group>
+      }
+    >
       <Grid mt="md">
         <Grid.Col lg={8}>
           <ProductsResult priceListProducts={data?.priceListProducts} />
@@ -155,6 +122,6 @@ export const PriceListDetailsView = () => {
           <CustomersResult customers={data?.customers} />
         </Grid.Col>
       </Grid>
-    </div>
+    </PageLayout>
   );
 };

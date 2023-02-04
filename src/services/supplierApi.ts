@@ -20,7 +20,7 @@ export const supplierApi = emptyApi.injectEndpoints({
       },
       providesTags: ["Supplier"],
     }),
-    getSupplierById: builder.query<Supplier, string>({
+    getSupplierById: builder.query<Omit<Supplier, "deliveries">, string>({
       query: (id) => `/suppliers/${id}`,
       providesTags: (_result, _error, id) => [{ type: "Supplier", id }],
     }),
