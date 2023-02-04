@@ -29,7 +29,7 @@ export const initialValues: Inputs = {
   contactTitle: "",
   secondContactName: "",
   secondContactTitle: "",
-  priceListId: "0",
+  priceListId: "1",
   email: "",
   phone: "",
   address: "",

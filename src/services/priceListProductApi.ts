@@ -5,10 +5,21 @@ import { PriceListProduct } from "@interfaces/priceListProduct";
 
 export const priceListProductApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getPriceListProducts: builder.query<PriceListProduct[], number>({
-      query: (priceListId) => `/price_list_products/${priceListId}`,
-      providesTags: (_result, _error, priceListId) => [
-        { type: "PriceListProduct" as const, id: priceListId },
+    getPriceListProducts: builder.query<GetPriceListProductsResponse, GetPriceListProductsRequest>({
+      query: (params) => {
+        const url = new URL(
+          `/price_list_products/${params.priceListId}`,
+          import.meta.env.VITE_API_BASE_URL
+        );
+        if (params.query) {
+          const { page, limit } = params.query;
+          url.searchParams.append("page", page.toString());
+          url.searchParams.append("limit", limit.toString());
+        }
+        return url.toString();
+      },
+      providesTags: (_result, _error, params) => [
+        { type: "PriceListProduct" as const, id: params.priceListId },
       ],
     }),
     createPriceListProduct: builder.mutation<PriceListProduct, CreatePriceListProductParams>({
@@ -73,6 +84,20 @@ export const {
   useUpdatePriceListProductMutation,
   useDeletePriceListProductMutation,
 } = priceListProductApi;
+
+interface GetPriceListProductsResponse {
+  priceListProducts: PriceListProduct[];
+  totalPages: number;
+  totalCount: number;
+}
+
+interface GetPriceListProductsRequest {
+  priceListId: number;
+  query?: {
+    page: number;
+    limit: number;
+  };
+}
 
 interface CreatePriceListProductParams {
   productId: number;

@@ -39,10 +39,18 @@ export const Form = () => {
   const prevStep = () => setStep((current) => (current > 0 ? current - 1 : current));
 
   // Queries
-  const { data: priceListProducts, isLoading: isPriceListProductsLoading } =
-    useGetPriceListProductsQuery(selectedCustomer?.priceListId || 0, {
+  const { priceListProducts, isLoading: isPriceListProductsLoading } = useGetPriceListProductsQuery(
+    {
+      priceListId: selectedCustomer?.priceListId || 0,
+    },
+    {
       skip: !selectedCustomer,
-    });
+      selectFromResult: ({ data, ...rest }) => ({
+        priceListProducts: data?.priceListProducts,
+        ...rest,
+      }),
+    }
+  );
 
   // Mutations
   const [createOrder, { isLoading: isCreatingOrder }] = useCreateOrderMutation();

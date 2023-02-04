@@ -5,7 +5,6 @@ import { useUpdateCustomerMutation } from "@services/customerApi";
 
 // Utils
 import mapValues from "lodash/mapValues";
-import pickBy from "lodash/pickBy";
 
 // UI Components
 import { Button, TextInput } from "@mantine/core";
@@ -23,7 +22,10 @@ import { Customer } from "@interfaces/customer";
 
 // Props
 type EditCustomerProps = {
-  customer: Customer;
+  customer: Omit<
+    Customer,
+    "priceList" | "deliveryAddresses" | "priceListId" | "startBalance" | "currentBalance"
+  >;
   fields: {
     label: string;
     key: string;
@@ -45,9 +47,17 @@ export const EditCustomer: React.FC<EditCustomerProps> = ({ fields, customer }) 
 
   const onUpdateCustomerSubmit = async (values: any) => {
     try {
+      // Get touched fields
+      const touchedFields = Object.entries(customer).reduce((acc, [key, value]) => {
+        if (form.isTouched(key)) {
+          return { ...acc, [key]: values[key] };
+        }
+        return acc;
+      }, []);
+
       await updateCustomer({
         id: customer.id,
-        ...pickBy(values, (value) => value !== ""),
+        ...touchedFields,
       }).unwrap();
       showNotification({
         title: "Başarılı",
