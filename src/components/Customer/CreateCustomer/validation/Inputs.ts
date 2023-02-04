@@ -5,7 +5,7 @@ export type Inputs = {
   contactTitle: string;
   secondContactName: string;
   secondContactTitle: string;
-  priceListId: number;
+  priceListId: string;
   email: string;
   phone: string;
   address: string;
@@ -29,7 +29,7 @@ export const initialValues: Inputs = {
   contactTitle: "",
   secondContactName: "",
   secondContactTitle: "",
-  priceListId: 0,
+  priceListId: "0",
   email: "",
   phone: "",
   address: "",

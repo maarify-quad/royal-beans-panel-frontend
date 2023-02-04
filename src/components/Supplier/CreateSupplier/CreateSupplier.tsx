@@ -8,11 +8,11 @@ import { Button, LoadingOverlay, TextInput } from "@mantine/core";
 
 // UI Utils
 import { showNotification } from "@mantine/notifications";
-import { closeModal } from "@mantine/modals";
+import { closeAllModals } from "@mantine/modals";
 import { useForm, zodResolver } from "@mantine/form";
 
 // Icons
-import { IconCircleCheck, IconX } from "@tabler/icons";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
@@ -36,7 +36,7 @@ export const CreateSupplier = () => {
         icon: <IconCircleCheck />,
         color: "green",
       });
-      closeModal("createSupplier");
+      closeAllModals();
     } catch {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }

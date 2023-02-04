@@ -16,7 +16,7 @@ import { IconCircleCheck } from "@tabler/icons";
 // Validation
 import { Inputs, initialValues } from "./validation/Inputs";
 import { schema } from "./validation/schema";
-import { closeModal } from "@mantine/modals";
+import { closeAllModals } from "@mantine/modals";
 
 // Props
 type CreateDeliveryAddressProps = {
@@ -44,7 +44,7 @@ export const CreateDeliveryAddress: React.FC<CreateDeliveryAddressProps> = ({ cu
         color: "green",
         icon: <IconCircleCheck />,
       });
-      closeModal("createDeliveryAddress");
+      closeAllModals();
     } catch (error) {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }

@@ -9,7 +9,7 @@ import { Button, Select, TextInput } from "@mantine/core";
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import { closeModal } from "@mantine/modals";
+import { closeAllModals } from "@mantine/modals";
 
 // Icons
 import { IconCircleCheck } from "@tabler/icons";
@@ -50,7 +50,7 @@ export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
         color: "green",
         icon: <IconCircleCheck />,
       });
-      closeModal("updateDelivery");
+      closeAllModals();
     } catch (error) {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }

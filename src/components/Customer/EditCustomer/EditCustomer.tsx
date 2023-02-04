@@ -13,7 +13,7 @@ import { Button, TextInput } from "@mantine/core";
 // UI Utils
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import { closeModal } from "@mantine/modals";
+import { closeAllModals } from "@mantine/modals";
 
 // Icons
 import { IconCircleCheck } from "@tabler/icons";
@@ -55,7 +55,7 @@ export const EditCustomer: React.FC<EditCustomerProps> = ({ fields, customer }) 
         color: "green",
         icon: <IconCircleCheck />,
       });
-      closeModal("editCustomer");
+      closeAllModals();
     } catch (error) {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
