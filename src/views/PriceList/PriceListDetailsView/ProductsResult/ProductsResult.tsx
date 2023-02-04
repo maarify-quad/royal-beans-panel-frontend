@@ -1,7 +1,7 @@
 import React from "react";
 
 // UI Components
-import { Table, Container, Alert } from "@mantine/core";
+import { Table, Alert, Paper } from "@mantine/core";
 
 // Icons
 import { IconInfoCircle } from "@tabler/icons";
@@ -27,7 +27,7 @@ export const ProductsResult: React.FC<ProductsResultProps> = ({ priceListProduct
   }
 
   return (
-    <Container fluid p={0}>
+    <Paper p="sm" radius="md" shadow="sm" withBorder>
       <Table highlightOnHover verticalSpacing="sm">
         <thead>
           <tr>
@@ -46,6 +46,6 @@ export const ProductsResult: React.FC<ProductsResultProps> = ({ priceListProduct
           ))}
         </tbody>
       </Table>
-    </Container>
+    </Paper>
   );
 };

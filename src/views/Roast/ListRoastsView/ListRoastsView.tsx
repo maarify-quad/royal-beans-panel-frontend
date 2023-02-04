@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { createStyles, Title, Group, Button, Breadcrumbs, Anchor } from "@mantine/core";
 
 // Icons
-import { IconPlus } from "@tabler/icons";
+import { IconCoffee, IconPlus } from "@tabler/icons";
 
 // Components
 import { Results } from "./Results";
@@ -39,9 +39,14 @@ export const ListRoastsView = () => {
         <Title order={2} className={classes.rootTitle}>
           Kavrumlar
         </Title>
-        <Button leftIcon={<IconPlus />} component={Link} to="/dashboard/roasts/create">
-          Yeni Kavrum
-        </Button>
+        <Group>
+          <Button leftIcon={<IconCoffee />} component={Link} to="/dashboard/roasts/create">
+            Yeni Kavrum
+          </Button>
+          <Button leftIcon={<IconPlus />} component={Link} to="/dashboard/roasts/create">
+            Yeni Kavrum İçeriği
+          </Button>
+        </Group>
       </Group>
       <Results />
     </div>
