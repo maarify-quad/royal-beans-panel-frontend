@@ -9,6 +9,9 @@ import { openModal } from "@mantine/modals";
 // Components
 import { DetailsCard } from "@components/DetailsCard";
 
+// Utils
+import { formatCurrency } from "@utils/localization";
+
 // Interfaces
 import { Customer } from "@interfaces/customer";
 
@@ -19,7 +22,7 @@ type DetailsTabProps = {
 
 // Lazy Imports
 const EditCustomer = React.lazy(() =>
-  import("../../../../components/Customer/EditCustomer").then((module) => ({
+  import("@components/Customer/EditCustomer").then((module) => ({
     default: module.EditCustomer,
   }))
 );
@@ -51,7 +54,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
       ]}
       style={{ alignItems: "stretch" }}
     >
-      <DetailsCard title="Bakiye" value={`${customer.currentBalance.toFixed(2)} ₺`} />
+      <DetailsCard title="Bakiye" value={formatCurrency(customer.currentBalance)} />
       <DetailsCard title="Fiyat Listesi" value={customer.priceList?.name || "-"} />
       <DetailsCard
         title="Çalışma Prensibi"

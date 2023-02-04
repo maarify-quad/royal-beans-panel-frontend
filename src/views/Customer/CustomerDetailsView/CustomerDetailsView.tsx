@@ -1,7 +1,7 @@
 import React from "react";
 
 // Routing
-import { Navigate, Link, useParams } from "react-router-dom";
+import { Navigate, Link, useParams, useSearchParams } from "react-router-dom";
 
 // Services
 import { useGetCustomerByIdQuery } from "@services/customerApi";
@@ -45,6 +45,7 @@ const useStyles = createStyles((theme) => ({
 export const CustomerDetailsView = () => {
   const { id } = useParams();
   const { classes } = useStyles();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { openCreateDeliveryAddress } = useCreateDeliveryAddress();
 
   // Queries
@@ -103,7 +104,11 @@ export const CustomerDetailsView = () => {
         </Button>
       </Group>
       {data && (
-        <Tabs defaultValue="details" mt="md">
+        <Tabs
+          defaultValue={searchParams.get("tab") || "details"}
+          onTabChange={(tab: string) => setSearchParams({ tab })}
+          mt="md"
+        >
           <Tabs.List>
             <Tabs.Tab value="details">Detaylar</Tabs.Tab>
             <Tabs.Tab value="lastOrders">Son Siparişler</Tabs.Tab>

@@ -1,1 +1,1 @@
-export { UpdateOrderView } from "./UpdateOrderView";
+export { UpdateOrderView as default } from "./UpdateOrderView";

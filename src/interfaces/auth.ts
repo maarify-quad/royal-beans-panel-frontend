@@ -11,6 +11,15 @@ export interface User {
   username: string;
   email: string;
   password: string;
-  createdAt: Date;
-  updatedAt: Date;
+  roles: Role[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Role {
+  id: number;
+  name: string;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
 }

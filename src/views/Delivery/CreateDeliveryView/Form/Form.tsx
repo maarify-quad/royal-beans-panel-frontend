@@ -21,47 +21,62 @@ type FormProps = {
 
 export const Form: React.FC<FormProps> = ({ form }) => {
   // Get latest suppliers
-  const { data: suppliersData, isLoading: isSuppliersLoading } = useGetSuppliersQuery();
+  const { suppliers, isLoading: isSuppliersLoading } = useGetSuppliersQuery(undefined, {
+    selectFromResult: ({ data, ...rest }) => ({
+      ...rest,
+      suppliers: data?.suppliers,
+    }),
+  });
 
   // Get latest products
-  const { data: products, isLoading: isProductsLoading } = useGetProductsQuery();
+  const { products, isLoading: isProductsLoading } = useGetProductsQuery(undefined, {
+    selectFromResult: ({ data, ...rest }) => ({
+      ...rest,
+      products: data?.products,
+    }),
+  });
 
   const productSelectOptions = React.useMemo(
     () =>
       products?.map((product) => ({
-        value: product.id,
+        value: product.id.toString(),
         label: product.name,
       })) || [],
-    [products?.length]
+    [products]
   );
 
   const supplierSelectOptions = React.useMemo(
     () =>
-      suppliersData?.suppliers.map((supplier) => ({
-        value: supplier.id,
+      suppliers?.map((supplier) => ({
+        value: supplier.id.toString(),
         label: supplier.name,
       })) || [],
-    [suppliersData?.suppliers.length]
+    [suppliers]
   );
 
   const handleAddProduct = () => {
     // Destructuring form values
-    const { deliveryDetails, supplierId, deliveryDate, invoiceDate, ...item } = form.values;
+    const { deliveryDetails, supplierId, deliveryDate, invoiceDate, productId, taxRate, ...item } =
+      form.values;
 
     // Check if product already exists
-    const product = products?.find((p) => p.id === item.productId);
+    const product = products?.find((p) => p.id === +productId);
     if (product) {
       return form.insertListItem("deliveryDetails", {
         ...item,
+        productId: +productId,
+        taxRate: +taxRate,
         product,
       });
     }
 
     // Get product from select options
-    const newProduct = productSelectOptions.find((p) => p.value === item.productId);
+    const newProduct = productSelectOptions.find((p) => p.value === productId.toString());
     if (newProduct) {
       return form.insertListItem("deliveryDetails", {
         ...item,
+        productId: +productId,
+        taxRate: +taxRate,
         product: {
           id: newProduct.value,
           name: newProduct.label,
@@ -74,14 +89,14 @@ export const Form: React.FC<FormProps> = ({ form }) => {
   };
 
   useEffect(() => {
-    if (suppliersData && suppliersData.suppliers.length > 0) {
-      form.setFieldValue("supplierId", suppliersData.suppliers[0].id);
+    if (suppliers && suppliers.length > 0) {
+      form.setFieldValue("supplierId", suppliers[0].id);
     }
 
     if (products && products.length > 0) {
-      form.setFieldValue("productId", products[0].id);
+      form.setFieldValue("productId", products[0].id.toString());
     }
-  }, [suppliersData?.suppliers.length, products?.length]);
+  }, [suppliers?.length, products?.length]);
 
   useEffect(() => {
     if (form.values.productId) {
@@ -90,13 +105,13 @@ export const Form: React.FC<FormProps> = ({ form }) => {
       form.setFieldValue("subTotal", subtotal);
 
       // Calculate total and set it in form
-      const tax = form.values.taxRate !== 0 ? (subtotal * form.values.taxRate) / 100 : 0;
+      const tax = form.values.taxRate !== "0" ? (subtotal * +form.values.taxRate) / 100 : 0;
       form.setFieldValue("total", subtotal + tax);
     }
   }, [form.values.quantity, form.values.unitPriceTRY, form.values.taxRate]);
 
   useEffect(() => {
-    const product = products?.find((p) => p.id === form.values.productId);
+    const product = products?.find((p) => p.id === +form.values.productId);
     if (product) {
       form.setFieldValue("storageType", product.storageType);
     }
@@ -150,10 +165,10 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         dropdownComponent="div"
         getCreateLabel={(query) => `+ ${query} oluştur`}
         onCreate={(query) => {
-          const value = -Math.random();
-          const item = { value, label: query };
+          const value = Math.random();
+          const item = { value: value.toString(), label: query };
           productSelectOptions.push(item);
-          form.setFieldValue("productId", value);
+          form.setFieldValue("productId", value.toString());
           return item;
         }}
         data={productSelectOptions}
@@ -179,7 +194,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         mt="md"
         {...form.getInputProps("quantity")}
       />
-      <TextInput label="Birim" precision={2} mt="md" {...form.getInputProps("unit")} />
+      <TextInput label="Birim" mt="md" {...form.getInputProps("unit")} />
       <NumberInput
         label="Birim fiyat"
         precision={2}
@@ -195,10 +210,10 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         dropdownComponent="div"
         icon={<span>%</span>}
         data={[
-          { label: "0", value: 0 },
-          { label: "1", value: 1 },
-          { label: "8", value: 8 },
-          { label: "18", value: 18 },
+          { label: "0", value: "0" },
+          { label: "1", value: "1" },
+          { label: "8", value: "8" },
+          { label: "18", value: "18" },
         ]}
         {...form.getInputProps("taxRate")}
       />

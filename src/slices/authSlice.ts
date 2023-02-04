@@ -46,5 +46,7 @@ export const { setAuthentication } = authSlice.actions;
 
 export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated;
 export const selectUser = (state: RootState) => state.auth.user;
+export const selectRoles = (state: RootState) =>
+  state.auth.user?.roles.map((role) => role.name) || [];
 
 export default authSlice.reducer;

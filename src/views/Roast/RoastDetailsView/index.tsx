@@ -1,1 +1,1 @@
-export { RoastDetailsView } from "./RoastDetailsView";
+export { RoastDetailsView as default } from "./RoastDetailsView";

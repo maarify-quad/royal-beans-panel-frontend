@@ -9,9 +9,10 @@ import { Button, Select, TextInput } from "@mantine/core";
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
+import { closeModal } from "@mantine/modals";
 
 // Icons
-import { IconX, IconCircleCheck } from "@tabler/icons";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
 import { Inputs } from "./validation/Inputs";
@@ -19,7 +20,6 @@ import { schema } from "./validation/schema";
 
 // Interfaces
 import { Order } from "@interfaces/order";
-import { closeModal } from "@mantine/modals";
 
 // Props
 type UpdateDeliveryProps = {
@@ -41,7 +41,7 @@ export const UpdateDelivery: React.FC<UpdateDeliveryProps> = ({ order }) => {
   const onUpdateDeliverySubmit = async (values: Inputs) => {
     try {
       await updateOrder({
-        orderNumber: order.orderNumber,
+        orderId: order.orderId,
         ...values,
       }).unwrap();
       showNotification({

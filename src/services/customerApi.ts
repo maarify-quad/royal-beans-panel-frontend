@@ -8,8 +8,16 @@ import { Customer } from "@interfaces/customer";
 
 export const customerApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getCustomers: builder.query<GetCustomersResponse, number | void>({
-      query: (page) => (page ? `/customers?page=${page}` : "/customers"),
+    getCustomers: builder.query<GetCustomersResponse, GetCustomersRequest | void>({
+      query: (params) => {
+        const url = new URL("/customers", import.meta.env.VITE_API_BASE_URL);
+        if (params) {
+          const { page, limit } = params;
+          url.searchParams.append("page", page.toString());
+          url.searchParams.append("limit", limit.toString());
+        }
+        return url.toString();
+      },
       providesTags: ["Customer"],
     }),
     getCustomerById: builder.query<Customer, string>({
@@ -47,7 +55,13 @@ export const {
 
 interface GetCustomersResponse {
   customers: Customer[];
-  totalPage?: number;
+  totalPages: number;
+  totalCount: number;
+}
+
+interface GetCustomersRequest {
+  page: number;
+  limit: number;
 }
 
 interface CreateCustomerParams {

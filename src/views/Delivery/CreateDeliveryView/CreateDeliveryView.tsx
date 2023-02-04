@@ -86,7 +86,7 @@ export const CreateDeliveryView = () => {
       <Title order={2} className={classes.rootTitle}>
         Sevkiyat Oluştur
       </Title>
-      <form onSubmit={form.onSubmit(onCreateDeliverySubmit)}>
+      <form onSubmit={form.onSubmit(onCreateDeliverySubmit, console.log)}>
         <Grid mt="md">
           <Grid.Col lg={6}>
             <Form form={form} />

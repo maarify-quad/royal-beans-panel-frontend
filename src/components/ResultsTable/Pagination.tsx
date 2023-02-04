@@ -12,7 +12,7 @@ type PaginationProps = {
 
 export const Pagination: React.FC<PaginationProps> = ({ page, total, onPageChange }) => {
   return (
-    <Group position="center" mt={16}>
+    <Group position="center">
       <MantinePagination onChange={onPageChange} total={total} page={page} />
     </Group>
   );

@@ -60,13 +60,13 @@ export const Form = () => {
 
     // Find price list product
     const priceListProduct = priceListProducts?.find(
-      (priceListProduct) => priceListProduct.id === priceListProductId
+      (priceListProduct) => priceListProduct.id.toString() === priceListProductId
     );
 
     // Add product to order
     form.insertListItem("orderProducts", {
       priceListProduct,
-      priceListProductId,
+      priceListProductId: +priceListProductId,
       grindType,
       unitPrice,
       quantity,
@@ -92,7 +92,7 @@ export const Form = () => {
       await createOrder({
         customerId,
         deliveryDate,
-        deliveryAddressId,
+        deliveryAddressId: +deliveryAddressId,
         deliveryType,
         specialNote,
         orderProducts,
@@ -106,13 +106,13 @@ export const Form = () => {
       });
 
       navigate("/dashboard/orders");
-    } catch (error) {
+    } catch {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
   };
 
   return (
-    <form onSubmit={form.onSubmit(onCreateOrderSubmit)}>
+    <form onSubmit={form.onSubmit(onCreateOrderSubmit, console.log)}>
       <LoadingOverlay visible={isCreatingOrder || isPriceListProductsLoading} />
       <Stepper active={step} mt="md">
         <Stepper.Step>
@@ -131,7 +131,7 @@ export const Form = () => {
           Geri
         </Button>
         {step === 1 ? (
-          <Button disabled={!form.values.priceListProductId} onClick={handleAddProduct}>
+          <Button disabled={form.values.priceListProductId === "0"} onClick={handleAddProduct}>
             Ürün ekle
           </Button>
         ) : (

@@ -1,7 +1,7 @@
 import React from "react";
 
 // Services
-import { useGetProductsQuery } from "@services/productApi";
+import { useGetProductsByStorageTypeQuery } from "@services/productApi";
 import { useCreatePriceListProductMutation } from "@services/priceListProductApi";
 
 // UI Components
@@ -10,7 +10,7 @@ import { Button, LoadingOverlay, NumberInput, Select, TextInput } from "@mantine
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import { closeModal } from "@mantine/modals";
+import { closeAllModals } from "@mantine/modals";
 
 // Icons
 import { IconCircleCheck } from "@tabler/icons";
@@ -30,7 +30,9 @@ type ManualCreateProps = {
 
 export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceListProducts }) => {
   // Queries
-  const { data: products, isLoading: isProductsLoading } = useGetProductsQuery();
+  const { data, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery({
+    storageType: "FN",
+  });
 
   // Mutations
   const [createPriceListProduct, { isLoading: isCreateProductLoading }] =
@@ -44,19 +46,21 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
 
   const productSelectOptions = React.useMemo(
     () =>
-      products
+      data?.products
         ?.filter((product) => !priceListProducts?.find((p) => p.productId === product.id))
         .map((product) => ({
-          value: product.id,
+          value: product.id.toString(),
           label: product.name,
         })) || [],
-    [products?.length]
+    [data]
   );
 
   const onAddProductSubmit = async (values: Inputs) => {
     try {
       await createPriceListProduct({
         ...values,
+        productId: +values.productId,
+        taxRate: +values.taxRate,
         priceListId,
       }).unwrap();
       showNotification({
@@ -65,7 +69,7 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
         icon: <IconCircleCheck />,
         color: "green",
       });
-      closeModal("createPriceListProduct");
+      closeAllModals();
     } catch (error) {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
@@ -85,7 +89,7 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
         getCreateLabel={(query) => `+ ${query} oluştur`}
         onCreate={(query) => {
           const value = -Math.random();
-          const item = { value, label: query };
+          const item = { value: value.toString(), label: query };
           productSelectOptions.push(item);
           form.setFieldValue("productId", value);
           form.setFieldValue("newProductName", query);
@@ -98,7 +102,6 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
         <TextInput
           label="Birim"
           placeholder="Miktar birimi giriniz"
-          precision={2}
           mt="md"
           required
           {...form.getInputProps("unit")}
@@ -122,10 +125,10 @@ export const ManualCreate: React.FC<ManualCreateProps> = ({ priceListId, priceLi
         required
         icon={<span>%</span>}
         data={[
-          { label: "0", value: 0 },
-          { label: "1", value: 1 },
-          { label: "8", value: 8 },
-          { label: "18", value: 18 },
+          { label: "0", value: "0" },
+          { label: "1", value: "1" },
+          { label: "8", value: "8" },
+          { label: "18", value: "18" },
         ]}
         {...form.getInputProps("taxRate")}
       />

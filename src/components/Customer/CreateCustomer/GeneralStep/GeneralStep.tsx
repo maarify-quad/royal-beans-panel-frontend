@@ -23,7 +23,7 @@ export const GeneralStep: React.FC<GeneralStepProps> = ({ form }) => {
   const priceListSelectOptions = React.useMemo(
     () =>
       data?.priceLists.map((product) => ({
-        value: product.id,
+        value: product.id.toString(),
         label: product.name,
       })) || [],
     [data?.priceLists.length]

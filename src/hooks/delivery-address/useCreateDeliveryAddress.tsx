@@ -5,10 +5,8 @@ import { LoadingOverlay } from "@mantine/core";
 import { openModal } from "@mantine/modals";
 
 // Lazy Imports
-const CreateDeliveryAddress = React.lazy(() =>
-  import("../../components/DeliveryAddress/CreateDeliveryAddress").then((module) => ({
-    default: module.CreateDeliveryAddress,
-  }))
+const CreateDeliveryAddress = React.lazy(
+  () => import("@components/DeliveryAddress/CreateDeliveryAddress")
 );
 
 export const useCreateDeliveryAddress = () => {

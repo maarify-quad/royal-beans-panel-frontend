@@ -1,1 +1,1 @@
-export { ListCustomersView } from "./ListCustomersView";
+export { ListCustomersView as default } from "./ListCustomersView";

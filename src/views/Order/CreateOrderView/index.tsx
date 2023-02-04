@@ -1,1 +1,1 @@
-export { CreateOrderView } from "./CreateOrderView";
+export { CreateOrderView as default } from "./CreateOrderView";

@@ -10,8 +10,8 @@ import { toggleDrawer, selectIsDrawerOpen } from "@slices/layoutSlice";
 // UI Components
 import { createStyles, Drawer as MantineDrawer, Stack } from "@mantine/core";
 
-// Icons
-import { IconTruckDelivery, IconUsers, IconPackage, IconCoffee } from "@tabler/icons";
+// Hooks
+import { useNavLinks } from "@hooks/layout/useNavLinks";
 
 // Styles
 const useStyles = createStyles((theme, _params, getRef) => {
@@ -56,38 +56,12 @@ const useStyles = createStyles((theme, _params, getRef) => {
   };
 });
 
-const navLinks = [
-  {
-    label: "Tedarikçiler",
-    icon: IconUsers,
-    match: "/suppliers",
-    link: "/dashboard/suppliers",
-  },
-  {
-    label: "Sevkiyatlar",
-    icon: IconTruckDelivery,
-    match: "/deliveries",
-    link: "/dashboard/deliveries",
-  },
-  {
-    label: "Depo",
-    icon: IconPackage,
-    match: "storage",
-    link: "/dashboard/storage",
-  },
-  {
-    label: "Kavrum",
-    icon: IconCoffee,
-    match: "roasts",
-    link: "/dashboard/roasts",
-  },
-];
-
 export const Drawer = () => {
   const { classes, cx } = useStyles();
   const dispatch = useReduxDispatch();
   const isDrawerOpen = useReduxSelector(selectIsDrawerOpen);
   const match = useMatch(window.location.pathname);
+  const { navLinks } = useNavLinks();
 
   const onDrawerClose = () => {
     dispatch(toggleDrawer());

@@ -22,8 +22,8 @@ export const Form: React.FC<FormProps> = ({ form, priceListProducts }) => {
   const priceListProductsSelectOptions = React.useMemo(
     () =>
       priceListProducts?.map((priceListProduct) => ({
+        value: priceListProduct.id.toString(),
         label: priceListProduct.product.name,
-        value: priceListProduct.id,
       })) || [],
     [priceListProducts?.length]
   );
@@ -35,13 +35,13 @@ export const Form: React.FC<FormProps> = ({ form, priceListProducts }) => {
 
     // Find price list product
     const priceListProduct = priceListProducts?.find(
-      (priceListProduct) => priceListProduct.id === priceListProductId
+      (priceListProduct) => priceListProduct.id.toString() === priceListProductId
     );
 
     // Add product to order
     form.insertListItem("orderProducts", {
       priceListProduct,
-      priceListProductId,
+      priceListProductId: +priceListProductId,
       grindType,
       unitPrice,
       quantity,
@@ -53,7 +53,7 @@ export const Form: React.FC<FormProps> = ({ form, priceListProducts }) => {
 
   useEffect(() => {
     const priceListProduct = priceListProducts?.find(
-      (priceListProduct) => priceListProduct.id === form.values.priceListProductId
+      (priceListProduct) => priceListProduct.id.toString() === form.values.priceListProductId
     );
 
     if (priceListProduct) {

@@ -32,7 +32,7 @@ export const schema = z.object({
 
 export const initialValues: Inputs = {
   roundId: 1,
-  productId: 0,
+  productId: "0",
   inputAmount: 0,
   outputAmount: 0,
   roastDetails: [],

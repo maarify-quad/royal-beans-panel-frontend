@@ -23,7 +23,9 @@
       "@hooks/*": ["./src/hooks/*"],
       "@slices/*": ["./src/slices/*"],
       "@services/*": ["./src/services/*"],
-      "@interfaces/*": ["./src/interfaces/*"]
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["src"],

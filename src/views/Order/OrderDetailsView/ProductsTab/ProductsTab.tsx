@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 // UI Components
 import { Card, Group, Text } from "@mantine/core";
@@ -7,14 +7,42 @@ import { Card, Group, Text } from "@mantine/core";
 import { ResultsTable } from "@components/ResultsTable";
 
 // Interfaces
-import { OrderWithAll } from "@interfaces/order";
+import { Order } from "@interfaces/order";
 
 // Props
 type ProductsTabProps = {
-  order: OrderWithAll;
+  order: Order;
 };
 
+const currencyFormatter = Intl.NumberFormat("tr-TR", {
+  style: "currency",
+  currency: "TRY",
+});
+
 export const ProductsTab: React.FC<ProductsTabProps> = ({ order }) => {
+  const rows = useMemo(() => {
+    if (order.type === "BULK") {
+      return order.orderProducts.map((orderProduct) => {
+        return [
+          { value: orderProduct.priceListProduct.product.name },
+          { value: orderProduct.grindType },
+          { value: orderProduct.quantity },
+          { value: currencyFormatter.format(orderProduct.unitPrice) },
+          { value: currencyFormatter.format(orderProduct.subTotal) },
+        ];
+      });
+    }
+    return order.orderProducts.map((orderProduct) => {
+      return [
+        { value: orderProduct.product.name },
+        { value: orderProduct.grindType },
+        { value: orderProduct.quantity },
+        { value: currencyFormatter.format(orderProduct.unitPrice) },
+        { value: currencyFormatter.format(orderProduct.subTotal) },
+      ];
+    });
+  }, [order]);
+
   return (
     <div>
       <ResultsTable
@@ -25,32 +53,26 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ order }) => {
           { value: "Birim Fiyat" },
           { value: "Ara Toplam" },
         ]}
-        rows={order.orderProducts.map((orderProduct) => [
-          { value: orderProduct.priceListProduct.product.name },
-          { value: orderProduct.grindType },
-          { value: orderProduct.quantity },
-          { value: `${orderProduct.unitPrice.toFixed(2)} ₺` },
-          { value: `${orderProduct.subTotal.toFixed(2)} ₺` },
-        ])}
+        rows={rows}
       />
       <Group>
         <Card withBorder shadow="xs" mt="md" style={{ minWidth: 320, width: "max-content" }}>
           <Group position="apart">
             <Text>Ara Toplam</Text>
             <Text size="lg" weight="bold">
-              {order.subTotal.toFixed(2)} ₺
+              {currencyFormatter.format(order.subTotal)}
             </Text>
           </Group>
           <Group position="apart">
             <Text>KDV Toplam</Text>
             <Text size="lg" weight="bold">
-              {order.taxTotal.toFixed(2)} ₺
+              {currencyFormatter.format(order.taxTotal)}
             </Text>
           </Group>
           <Group position="apart">
             <Text>Toplam</Text>
             <Text size="lg" weight="bold">
-              {order.total.toFixed(2)} ₺
+              {currencyFormatter.format(order.total)}
             </Text>
           </Group>
         </Card>

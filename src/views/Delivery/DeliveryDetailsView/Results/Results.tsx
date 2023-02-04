@@ -3,6 +3,9 @@ import React from "react";
 // UI Components
 import { Table, ScrollArea, Container, Text, Card, Group } from "@mantine/core";
 
+// Utils
+import { formatCurrency } from "@utils/localization";
+
 // Interfaces
 import { Delivery } from "@interfaces/delivery";
 
@@ -32,7 +35,7 @@ export const Results: React.FC<ResultsProps> = ({ delivery }) => {
                 <td>
                   {deliveryDetail.quantity} {deliveryDetail.unit}
                 </td>
-                <td>{deliveryDetail.unitPriceTRY} ₺</td>
+                <td>{formatCurrency(deliveryDetail.unitPriceTRY)}</td>
                 <td>
                   {deliveryDetail.taxTotal} ₺ &nbsp;
                   <span style={{ color: "#868E96" }}>(%{deliveryDetail.taxRate})</span>
@@ -47,19 +50,19 @@ export const Results: React.FC<ResultsProps> = ({ delivery }) => {
         <Group position="apart">
           <Text>Ara Toplam</Text>
           <Text size="lg" weight="bold">
-            {delivery.subTotal} ₺
+            {formatCurrency(delivery.subTotal)}
           </Text>
         </Group>
         <Group position="apart">
           <Text>KDV Toplam</Text>
           <Text size="lg" weight="bold">
-            {delivery.taxTotal} ₺
+            {formatCurrency(delivery.taxTotal)}
           </Text>
         </Group>
         <Group position="apart">
           <Text>Toplam</Text>
           <Text size="lg" weight="bold">
-            {delivery.total} ₺
+            {formatCurrency(delivery.total)}
           </Text>
         </Group>
       </Card>

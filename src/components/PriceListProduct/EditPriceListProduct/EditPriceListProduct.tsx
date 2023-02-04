@@ -9,7 +9,7 @@ import { Button, LoadingOverlay, NumberInput, Select, TextInput } from "@mantine
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import { closeModal } from "@mantine/modals";
+import { closeAllModals } from "@mantine/modals";
 
 // Icons
 import { IconCircleCheck } from "@tabler/icons";
@@ -32,8 +32,9 @@ export const EditPriceListProduct: React.FC<EditPriceListProductProps> = ({ pric
   // Form utils
   const form = useForm<Inputs>({
     initialValues: {
-      name: priceListProduct.product.name,
       ...priceListProduct,
+      name: priceListProduct.product.name,
+      taxRate: priceListProduct.taxRate.toString(),
     },
     validate: zodResolver(schema),
   });
@@ -44,7 +45,7 @@ export const EditPriceListProduct: React.FC<EditPriceListProductProps> = ({ pric
         id: priceListProduct.id,
         priceListId: priceListProduct.priceListId,
         unitPrice: values.unitPrice,
-        taxRate: values.taxRate,
+        taxRate: +values.taxRate,
         product: {
           ...priceListProduct.product,
           name: values.name,
@@ -56,7 +57,7 @@ export const EditPriceListProduct: React.FC<EditPriceListProductProps> = ({ pric
         icon: <IconCircleCheck />,
         color: "green",
       });
-      closeModal("updatePriceListProduct");
+      closeAllModals();
     } catch (error) {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
@@ -77,10 +78,10 @@ export const EditPriceListProduct: React.FC<EditPriceListProductProps> = ({ pric
       <Select
         label="Vergi oranı"
         data={[
-          { label: "0", value: 0 },
-          { label: "1", value: 1 },
-          { label: "8", value: 8 },
-          { label: "18", value: 18 },
+          { label: "0", value: "0" },
+          { label: "1", value: "1" },
+          { label: "8", value: "8" },
+          { label: "18", value: "18" },
         ]}
         icon={<span>%</span>}
         mt="md"

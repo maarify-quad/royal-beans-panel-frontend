@@ -1,7 +1,7 @@
 import React from "react";
 
 // Routing
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 // UI Components
 import {
@@ -26,7 +26,7 @@ import { StorageProducts } from "./StorageProducts";
 
 // Lazy Components
 const CreateProduct = React.lazy(() =>
-  import("../../../components/Product/CreateProduct").then((module) => ({
+  import("@components/Product/CreateProduct").then((module) => ({
     default: module.CreateProduct,
   }))
 );
@@ -42,6 +42,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export const ListStorageView = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { classes } = useStyles();
 
   const onCreateProductClick = () => {
@@ -74,7 +75,12 @@ export const ListStorageView = () => {
           Yeni Ürün
         </Button>
       </Group>
-      <Tabs defaultValue="HM" mt="md">
+      <Tabs
+        keepMounted={false}
+        defaultValue={searchParams.get("tab") || "HM"}
+        onTabChange={(value) => setSearchParams({ tab: value as string })}
+        mt="md"
+      >
         <Tabs.List>
           <Tabs.Tab value="HM">Hammadde</Tabs.Tab>
           <Tabs.Tab value="YM">Yarı Mamül</Tabs.Tab>

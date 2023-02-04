@@ -9,7 +9,16 @@ import { useCreatePriceListMutation } from "@services/priceListApi";
 import { useUpdateCustomerMutation } from "@services/customerApi";
 
 // UI Components
-import { Alert, Button, Container, Group, Loader, LoadingOverlay, Text } from "@mantine/core";
+import {
+  Alert,
+  Anchor,
+  Button,
+  Container,
+  Group,
+  Loader,
+  LoadingOverlay,
+  Text,
+} from "@mantine/core";
 
 // UI Utils
 import { openConfirmModal, openModal } from "@mantine/modals";
@@ -20,10 +29,14 @@ import { IconInfoCircle, IconTrash, IconEdit } from "@tabler/icons";
 // Components
 import { ResultsTable } from "@components/ResultsTable";
 
+// Utils
+import { formatCurrency } from "@utils/localization";
+
 // Interfaces
 import { Customer } from "@interfaces/customer";
 import { PriceListProduct } from "@interfaces/priceListProduct";
 import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
+import { Link } from "react-router-dom";
 
 // Lazy Imports
 const EditPriceListProduct = React.lazy(() =>
@@ -71,7 +84,9 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
       labels: { confirm: "Sil", cancel: "Vazgeç" },
       confirmProps: { color: "red" },
       onConfirm: async () => {
-        await deletePriceListProduct({ id, priceListId });
+        try {
+          await deletePriceListProduct({ id, priceListId }).unwrap();
+        } catch (error) {}
       },
     });
   };
@@ -85,7 +100,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
       await updateCustomer({
         id: customer.id,
         priceListId: priceList.id,
-      });
+      }).unwrap();
     } catch (error) {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
@@ -96,7 +111,7 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
     () =>
       data?.map((priceListProduct) => [
         { value: priceListProduct.product.name },
-        { value: `${priceListProduct.unitPrice.toFixed(2)} ₺` },
+        { value: formatCurrency(priceListProduct.unitPrice) },
         { value: `${priceListProduct.taxRate} %` },
         {
           value: "actions",
@@ -151,7 +166,16 @@ export const PriceListTab: React.FC<PriceListTabProps> = ({ customer }) => {
   if (data?.length === 0) {
     return (
       <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
-        Fiyat listesinde ürün bulunmamaktadır
+        {customer.priceList ? (
+          <>
+            <Anchor component={Link} to={`/dashboard/price-lists/${customer.priceListId}`}>
+              {customer.priceList.name}
+            </Anchor>{" "}
+            fiyat listesinde ürün bulunmamaktadır
+          </>
+        ) : (
+          "Fiyat listesinde ürün bulunmamaktadır"
+        )}
       </Alert>
     );
   }

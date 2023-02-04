@@ -1,43 +1,64 @@
-import React from "react";
+import React, { useMemo } from "react";
 import dayjs from "dayjs";
+
+// Routing
+import { Link } from "react-router-dom";
 
 // Services
 import { useGetRoastsQuery } from "@services/roastApi";
 
 // UI Components
-import { Container, Loader, Alert } from "@mantine/core";
+import { Alert, Anchor, Paper, Group, Select, Text } from "@mantine/core";
+import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
 import { IconInfoCircle } from "@tabler/icons";
 
-// Components
-import { ResultsTable } from "@components/ResultsTable";
-
 // Interfaces
-import { RowDef } from "@components/ResultsTable/interfaces/RowDef";
+import { Roast } from "@interfaces/roast";
 
 export const Results = () => {
   // Internal state
-  const [page, setPage] = React.useState(1);
+  const [query, setQuery] = React.useState({
+    page: 1,
+    limit: 25,
+  });
 
   // Queries
-  const { data, isLoading, error } = useGetRoastsQuery(page);
+  const { roasts, totalCount, isTableLoading, error } = useGetRoastsQuery(query, {
+    selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
+      ...rest,
+      roasts: data?.roasts,
+      totalPages: data?.totalPages,
+      totalCount: data?.totalCount,
+      isTableLoading: isLoading || isFetching,
+    }),
+  });
 
-  const roastRows: RowDef[][] = React.useMemo(
-    () =>
-      data?.roasts.map((roast) => [
-        { value: roast.id, link: `/dashboard/roasts/${roast.id}` },
-        {
-          value: dayjs(roast.date).format("DD MMM YYYY"),
-        },
-        { value: `${roast.totalInputAmount} kg` },
-      ]) || [],
-    [data]
+  const columns: DataTableColumn<Roast>[] = useMemo(
+    () => [
+      {
+        accessor: "id",
+        title: "Kavrum Kodu",
+        render: (roast) => (
+          <Anchor component={Link} to={`/dashboard/roasts/${roast.id}`}>
+            {roast.id}
+          </Anchor>
+        ),
+      },
+      {
+        accessor: "date",
+        title: "Tarih",
+        render: (roast) => dayjs(roast.date).format("DD MMM YYYY"),
+      },
+      {
+        accessor: "totalInputAmount",
+        title: "Toplam Miktar",
+        render: (roast) => `${roast.totalInputAmount} kg`,
+      },
+    ],
+    [roasts]
   );
-
-  if (isLoading) {
-    return <Loader />;
-  }
 
   if (error) {
     return (
@@ -53,7 +74,7 @@ export const Results = () => {
     );
   }
 
-  if (data?.roasts.length === 0) {
+  if (roasts?.length === 0) {
     return (
       <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
         Kavrum bulunmamaktadır
@@ -62,16 +83,37 @@ export const Results = () => {
   }
 
   return (
-    <Container fluid mt="md" p={0}>
-      <ResultsTable
-        headers={[{ value: "Kavrum Kodu" }, { value: "Tarih" }, { value: "Toplam Miktar" }]}
-        rows={roastRows}
-        pagination={{
-          totalPage: data?.totalPage || 0,
-          currentPage: page,
-          onPageChange: (page) => setPage(page),
-        }}
+    <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
+      <DataTable
+        highlightOnHover
+        records={roasts}
+        columns={columns}
+        fetching={isTableLoading}
+        noRecordsText="Kayıt bulunamadı"
+        loadingText="Yükleniyor"
+        recordsPerPage={query.limit}
+        totalRecords={totalCount}
+        page={query.page}
+        onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
       />
-    </Container>
+      <Group>
+        <Text size="sm">Sayfa başı satır</Text>
+        <Select
+          value={query.limit.toString()}
+          onChange={(limit) => {
+            if (limit) {
+              setQuery({ page: 1, limit: +limit });
+            }
+          }}
+          data={[
+            { label: "25", value: "25" },
+            { label: "50", value: "50" },
+            { label: "100", value: "100" },
+          ]}
+          style={{ width: 60 }}
+          size="xs"
+        />
+      </Group>
+    </Paper>
   );
 };

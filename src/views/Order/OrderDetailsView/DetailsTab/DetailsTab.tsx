@@ -14,12 +14,17 @@ import { DetailsCard } from "@components/DetailsCard";
 import { IconCircleCheck, IconX } from "@tabler/icons";
 
 // Interfaces
-import { OrderWithAll } from "@interfaces/order";
+import { Order } from "@interfaces/order";
 
 // Props
 type DetailsTabProps = {
-  order: OrderWithAll;
+  order: Order;
 };
+
+const currencyFormatter = Intl.NumberFormat("tr-TR", {
+  style: "currency",
+  currency: "TRY",
+});
 
 export const DetailsTab: React.FC<DetailsTabProps> = ({ order }) => {
   return (
@@ -30,37 +35,55 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ order }) => {
       ]}
       style={{ alignItems: "stretch" }}
     >
-      <Link to={`/dashboard/customers/${order.customer.id}`} style={{ textDecoration: "none" }}>
-        <DetailsCard title="Müşteri" value={order.customer.name} />
-      </Link>
-      <DetailsCard
-        title="Müşteri Bakiye (Sipariş Sonrası)"
-        value={`${order.customerBalanceAfterOrder.toFixed(2)} ₺`}
-      />
-      <DetailsCard title="Tutar" value={`${order.total.toFixed(2)} ₺`} />
+      {order.type === "BULK" ? (
+        <Link to={`/dashboard/customers/${order.customer.id}`} style={{ textDecoration: "none" }}>
+          <DetailsCard title="Müşteri" value={order.customer.name} />
+        </Link>
+      ) : (
+        <DetailsCard title="Müşteri" value={order.receiver} />
+      )}
+      {order.type === "BULK" && (
+        <DetailsCard
+          title="Müşteri Bakiye (Sipariş Sonrası)"
+          value={currencyFormatter.format(order.customerBalanceAfterOrder)}
+        />
+      )}
+      <DetailsCard title="Tutar" value={currencyFormatter.format(order.total)} />
       <DetailsCard title="Özel Not" value={order.specialNote || "-"} />
       <DetailsCard
-        title="Faturalandırma"
+        title={order.type === "BULK" ? "Faturalandırma" : "Fatura Durumu"}
         value={
-          order.isParasutVerified ? (
-            <ThemeIcon color="green" radius="xl">
-              <IconCircleCheck />
-            </ThemeIcon>
+          order.type === "BULK" ? (
+            order.isParasutVerified ? (
+              <ThemeIcon color="green" radius="xl">
+                <IconCircleCheck />
+              </ThemeIcon>
+            ) : (
+              <ThemeIcon color="red" radius="xl">
+                <IconX />
+              </ThemeIcon>
+            )
           ) : (
-            <ThemeIcon color="red" radius="xl">
-              <IconX />
-            </ThemeIcon>
+            order.manualInvoiceStatus
           )
         }
       />
       <DetailsCard
         title="Gönderim Adresi"
         value={
-          <>
-            {order.customer.address || "-"}
-            <br />
-            {order.customer.city || "-"} / {order.customer.province || "-"}
-          </>
+          order.type === "BULK" ? (
+            <>
+              {order.customer.address || "-"}
+              <br />
+              {order.customer.city || "-"} / {order.customer.province || "-"}
+            </>
+          ) : (
+            <>
+              {order.receiverNeighborhood} {order.receiverAddress}
+              <br />
+              {order.receiverProvince} / {order.receiverCity}
+            </>
+          )
         }
       />
       <DetailsCard title="Gönderi Tipi" value={order.deliveryType} />

@@ -3,13 +3,17 @@ import React, { useEffect } from "react";
 // UI Components
 import { Grid, NumberInput, Select } from "@mantine/core";
 
+// UI Utils
+import { UseFormReturnType } from "@mantine/form";
+
+// Components
+import { Summary } from "./Summary";
+
 // Validation
 import { Inputs } from "../validation/Inputs";
 
 // Interfaces
 import { PriceListProduct } from "@interfaces/priceListProduct";
-import { UseFormReturnType } from "@mantine/form";
-import { Summary } from "./Summary";
 
 // Props
 type StepTwoProps = {
@@ -21,15 +25,15 @@ export const StepTwo: React.FC<StepTwoProps> = ({ form, priceListProducts }) => 
   const priceListProductsSelectOptions = React.useMemo(
     () =>
       priceListProducts?.map((priceListProduct) => ({
+        value: priceListProduct.id.toString(),
         label: priceListProduct.product.name,
-        value: priceListProduct.id,
       })) || [],
     [priceListProducts?.length]
   );
 
   useEffect(() => {
     const priceListProduct = priceListProducts?.find(
-      (priceListProduct) => priceListProduct.id === form.values.priceListProductId
+      (priceListProduct) => priceListProduct.id.toString() === form.values.priceListProductId
     );
 
     if (priceListProduct) {

@@ -12,6 +12,9 @@ import { IconInfoCircle } from "@tabler/icons";
 // Components
 import { ResultsTable } from "@components/ResultsTable";
 
+// Utils
+import { formatCurrency } from "@utils/localization";
+
 // Props
 type LastProductsTabProps = {
   customer: string;
@@ -61,7 +64,7 @@ export const LastProductsTab: React.FC<LastProductsTabProps> = ({ customer }) =>
             { value: orderProduct.priceListProduct.product.name },
             { value: orderProduct.quantity },
             { value: orderProduct.grindType },
-            { value: `${orderProduct.unitPrice.toFixed(2)} ₺` },
+            { value: formatCurrency(orderProduct.unitPrice) },
           ]) || []
         }
       />

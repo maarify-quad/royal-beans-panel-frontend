@@ -16,12 +16,10 @@ import { IconCircleCheck } from "@tabler/icons";
 export const useCancelOrder = () => {
   const [cancelOrder, { isSuccess: isCancelled }] = useCancelOrderMutation();
 
-  const openCancelOrder = (orderNumber: number) => {
+  const openCancelOrder = (orderId: string) => {
     openConfirmModal({
       title: "Sipariş İptal Et",
-      children: (
-        <Text size="sm">#{orderNumber} nolu siparişi iptal etmek istediğinize emin misiniz?</Text>
-      ),
+      children: <Text size="sm">#{orderId} siparişini iptal etmek istediğinize emin misiniz?</Text>,
       labels: { confirm: "İptal Et", cancel: "Vazgeç" },
       confirmProps: { color: "red" },
       onConfirm: async () => {
@@ -35,7 +33,7 @@ export const useCancelOrder = () => {
           autoClose: false,
         });
 
-        await cancelOrder(orderNumber);
+        await cancelOrder(orderId);
 
         hideNotification("cancelOrderLoading");
       },

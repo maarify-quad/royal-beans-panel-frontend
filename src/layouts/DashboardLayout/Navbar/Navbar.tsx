@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Routing
 import { Link, NavLink, useMatch } from "react-router-dom";
@@ -6,18 +6,11 @@ import { Link, NavLink, useMatch } from "react-router-dom";
 // UI Components
 import { Navbar as MantineNavbar, ScrollArea, createStyles, Menu } from "@mantine/core";
 
+// Hooks
+import { useNavLinks } from "@hooks/layout/useNavLinks";
+
 // Icons
-import {
-  IconTruckDelivery,
-  IconUsers,
-  IconShoppingCart,
-  IconUserCircle,
-  IconPackage,
-  IconCoffee,
-  IconSettings,
-  IconLogout,
-  IconTags,
-} from "@tabler/icons";
+import { IconSettings, IconLogout } from "@tabler/icons";
 
 // Components
 import { UserButton } from "./UserButton";
@@ -76,51 +69,6 @@ const useStyles = createStyles((theme, _params, getRef) => {
   };
 });
 
-const navLinks = [
-  {
-    label: "Tedarikçiler",
-    icon: IconUsers,
-    match: "/suppliers",
-    link: "/dashboard/suppliers",
-  },
-  {
-    label: "Sevkiyatlar",
-    icon: IconTruckDelivery,
-    match: "/deliveries",
-    link: "/dashboard/deliveries",
-  },
-  {
-    label: "Depo",
-    icon: IconPackage,
-    match: "storage",
-    link: "/dashboard/storage",
-  },
-  {
-    label: "Kavrum",
-    icon: IconCoffee,
-    match: "roasts",
-    link: "/dashboard/roasts",
-  },
-  {
-    label: "Siparişler",
-    icon: IconShoppingCart,
-    match: "orders",
-    link: "/dashboard/orders",
-  },
-  {
-    label: "Müşteriler",
-    icon: IconUserCircle,
-    match: "customers",
-    link: "/dashboard/customers",
-  },
-  {
-    label: "Fiyat Listeleri",
-    icon: IconTags,
-    match: "price-lists",
-    link: "/dashboard/price-lists",
-  },
-];
-
 // Props
 type NavbarProps = {
   onLogout: () => void;
@@ -129,6 +77,7 @@ type NavbarProps = {
 export const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   const { classes, cx } = useStyles();
   const match = useMatch(window.location.pathname);
+  const { navLinks } = useNavLinks();
 
   return (
     <MantineNavbar p="md" hiddenBreakpoint="sm" width={{ base: 240 }} className={classes.navbar}>

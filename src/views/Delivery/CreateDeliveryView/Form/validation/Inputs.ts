@@ -4,13 +4,13 @@ export type Inputs = {
   deliveryDate: Date;
   invoiceDate: Date;
   supplierId: string;
-  productId: number;
+  productId: string;
   storageType: string;
   quantity: number;
   unit: string;
   unitPriceUSD: number;
   unitPriceTRY: number;
-  taxRate: number;
+  taxRate: string;
   subTotal: number;
   total: number;
   deliveryDetails: {

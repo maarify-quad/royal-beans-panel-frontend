@@ -1,1 +1,1 @@
-export { CreateDeliveryAddress } from "./CreateDeliveryAddress";
+export { CreateDeliveryAddress as default } from "./CreateDeliveryAddress";

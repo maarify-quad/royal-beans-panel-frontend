@@ -1,1 +1,1 @@
-export { ListOrdersView } from "./ListOrdersView";
+export { ListOrdersView as default } from "./ListOrdersView";

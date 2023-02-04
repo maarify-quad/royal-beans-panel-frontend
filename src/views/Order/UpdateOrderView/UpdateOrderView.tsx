@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Routing
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 // Services
 import { useGetPriceListProductsQuery } from "@services/priceListProductApi";
-import { useGetOrderByOrderNumberQuery, useUpdateOrderProductsMutation } from "@services/orderApi";
+import { useGetOrderByOrderIdQuery, useUpdateOrderProductsMutation } from "@services/orderApi";
 
 // UI Components
 import { Breadcrumbs, createStyles, Loader, Title, Anchor, Grid } from "@mantine/core";
@@ -15,7 +15,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { IconX, IconCircleCheck } from "@tabler/icons";
+import { IconCircleCheck } from "@tabler/icons";
 
 // Components
 import { Form, Summary, Inputs, schema, initialValues } from "@components/Order/CartForm";
@@ -41,7 +41,7 @@ export const UpdateOrderView = () => {
   const { classes } = useStyles();
 
   // Routing
-  const { orderNumber } = useParams();
+  const { orderId } = useParams();
   const navigate = useNavigate();
 
   // Form utils
@@ -51,15 +51,12 @@ export const UpdateOrderView = () => {
   });
 
   // Queries
-  const { data, isLoading: isOrderLoading } = useGetOrderByOrderNumberQuery(
-    parseInt(orderNumber!),
-    {
-      skip: orderNumber ? isNaN(parseInt(orderNumber)) : true,
-    }
-  );
+  const { data, isLoading: isOrderLoading } = useGetOrderByOrderIdQuery(orderId!, {
+    skip: !orderId,
+  });
   const { data: priceListProducts, isLoading: isPriceListProductsLoading } =
-    useGetPriceListProductsQuery(data?.order.customer.priceListId!, {
-      skip: !data?.order,
+    useGetPriceListProductsQuery(data?.order.customer?.priceListId!, {
+      skip: orderId?.startsWith("MG") || !data?.order || !data?.order.customer?.priceListId,
     });
 
   // Mutations
@@ -67,18 +64,22 @@ export const UpdateOrderView = () => {
 
   const onUpdateOrderSubmit = async (values: Inputs) => {
     try {
+      if (!data?.order) return;
+
       await updateOrderProducts({
-        orderNumber: parseInt(orderNumber!),
+        orderId: data.order.orderId,
         orderProducts: values.orderProducts,
       }).unwrap();
+
       showNotification({
         title: "Başarılı",
         message: "Sipariş güncellendi",
         color: "green",
         icon: <IconCircleCheck />,
       });
-      navigate(`/dashboard/orders/${orderNumber}`);
-    } catch (error) {
+
+      navigate(`/dashboard/orders/${data.order.orderId}`);
+    } catch {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
   };
@@ -96,12 +97,12 @@ export const UpdateOrderView = () => {
         <Anchor component={Link} to="/dashboard/orders">
           Siparişler
         </Anchor>
-        <Anchor component={Link} to={`/dashboard/orders/update/${orderNumber}`}>
+        <Anchor component={Link} to={`/dashboard/orders/update/${orderId}`}>
           Güncelle
         </Anchor>
       </Breadcrumbs>
       <Title order={2} className={classes.rootTitle} mb="md">
-        #{data?.order.orderNumber} - Sipariş Güncelle
+        #{orderId} - Sipariş Güncelle
       </Title>
       <form onSubmit={form.onSubmit(onUpdateOrderSubmit)}>
         <Grid>
