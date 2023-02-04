@@ -23,7 +23,15 @@ export const orderApi = emptyApi.injectEndpoints({
       providesTags: (_result, _error, orderId) => [{ type: "Order", id: orderId }],
     }),
     getOrdersByCustomer: builder.query<GetOrdersResponse, GetOrdersByCustomerParams>({
-      query: (params) => `/orders/customer/${params.customer}?page=${params.page}`,
+      query: (params) => {
+        const url = new URL(
+          `/orders/customer/${params.customer}`,
+          import.meta.env.VITE_API_BASE_URL
+        );
+        url.searchParams.set("page", params.page.toString());
+        url.searchParams.set("limit", params.limit.toString());
+        return url.toString();
+      },
       providesTags: (_result, _error, params) => [{ type: "Order", id: params.customer }],
     }),
     createOrder: builder.mutation<Order, CreateOrderParams>({
@@ -103,6 +111,7 @@ interface GetOrdersResponse {
 interface GetOrdersByCustomerParams {
   customer: string;
   page: number;
+  limit: number;
 }
 
 interface CreateOrderParams {
