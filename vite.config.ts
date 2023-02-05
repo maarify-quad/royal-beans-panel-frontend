@@ -8,4 +8,11 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: { react: ["react", "react-dom"], emptyApi: ["./src/services/emptyApi"] },
+      },
+    },
+  },
 });
