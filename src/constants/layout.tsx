@@ -9,6 +9,7 @@ import {
   IconTags,
   TablerIcon,
   IconPackages,
+  IconTableExport,
 } from "@tabler/icons";
 
 export const NAV_LINKS: NavLink[] = [
@@ -60,6 +61,12 @@ export const NAV_LINKS: NavLink[] = [
     match: "stock-admin",
     link: "/dashboard/stock-admin",
     roles: ["admin"],
+  },
+  {
+    label: "Shoppar",
+    icon: IconTableExport,
+    match: "shoppar",
+    link: "/dashboard/shoppar",
   },
 ];
 

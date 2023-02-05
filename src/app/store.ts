@@ -17,6 +17,7 @@ import { priceListApi } from "@services/priceListApi";
 import { priceListProductApi } from "@services/priceListProductApi";
 import { orderApi } from "@services/orderApi";
 import { ingredientApi } from "@services/ingredientApi";
+import { shopparApi } from "@services/shopparApi";
 
 // Middlewares
 import { rtkQueryErrorLogger } from "./middlewares/rtkQueryErrorLogger";
@@ -37,9 +38,10 @@ const store = configureStore({
     [priceListProductApi.reducerPath]: priceListProductApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
     [ingredientApi.reducerPath]: ingredientApi.reducer,
+    [shopparApi.reducerPath]: shopparApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(emptyApi.middleware, rtkQueryErrorLogger),
+    getDefaultMiddleware().concat(emptyApi.middleware, shopparApi.middleware, rtkQueryErrorLogger),
   devTools: import.meta.env.DEV,
 });
 
