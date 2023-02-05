@@ -85,7 +85,7 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
         {navLinks.map((item) => (
           <NavLink
             className={cx(classes.link, {
-              [classes.linkActive]: match?.pathname.includes(item.match),
+              [classes.linkActive]: item.match.test(match?.pathname || ""),
             })}
             to={item.link}
             key={item.label}
