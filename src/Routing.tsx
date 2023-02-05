@@ -73,7 +73,7 @@ type AppRoute = {
   roles?: string[];
 };
 
-export const AppRoutes = () => {
+export const Routing = () => {
   const roles = useReduxSelector(selectRoles);
 
   const routes: AppRoute[] = [

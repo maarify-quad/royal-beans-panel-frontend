@@ -2,7 +2,7 @@ import React from "react";
 
 // Routing
 import { BrowserRouter } from "react-router-dom";
-import { AppRoutes } from "./routes";
+import { Routing } from "./Routing";
 
 // Providers
 import { MantineProvider, ColorSchemeProvider, ColorScheme } from "@mantine/core";
@@ -43,7 +43,7 @@ function App() {
               <ModalsProvider>
                 <ErrorProvider>
                   <AuthInitialiser>
-                    <AppRoutes />
+                    <Routing />
                   </AuthInitialiser>
                 </ErrorProvider>
               </ModalsProvider>

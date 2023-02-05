@@ -14,58 +14,63 @@ import {
 
 export const NAV_LINKS: NavLink[] = [
   {
+    label: "Stok",
+    icon: IconPackages,
+    match: /^\/dashboard\/(deliveries|storage|stock-admin)/,
+    link: "#",
+    subLinks: [
+      {
+        label: "Sevkiyatlar",
+        link: "/dashboard/deliveries",
+        match: /^\/dashboard\/deliveries/,
+      },
+      {
+        label: "Depo",
+        link: "/dashboard/storage",
+        match: /^\/dashboard\/storage/,
+      },
+      {
+        label: "Admin",
+        link: "/dashboard/stock-admin",
+        match: /^\/dashboard\/stock-admin/,
+        roles: ["admin"],
+      },
+    ],
+  },
+  {
     label: "Tedarikçiler",
     icon: IconUsers,
-    match: "/suppliers",
+    match: /suppliers/,
     link: "/dashboard/suppliers",
-  },
-  {
-    label: "Sevkiyatlar",
-    icon: IconTruckDelivery,
-    match: "/deliveries",
-    link: "/dashboard/deliveries",
-  },
-  {
-    label: "Depo",
-    icon: IconPackage,
-    match: "storage",
-    link: "/dashboard/storage",
   },
   {
     label: "Kavrum",
     icon: IconCoffee,
-    match: "roasts",
+    match: /roasts/,
     link: "/dashboard/roasts",
   },
   {
     label: "Siparişler",
     icon: IconShoppingCart,
-    match: "orders",
+    match: /orders/,
     link: "/dashboard/orders",
   },
   {
     label: "Müşteriler",
     icon: IconUserCircle,
-    match: "customers",
+    match: /customers/,
     link: "/dashboard/customers",
   },
   {
     label: "Fiyat Listeleri",
     icon: IconTags,
-    match: "price-lists",
+    match: /price-lists/,
     link: "/dashboard/price-lists",
-  },
-  {
-    label: "Stok Admin",
-    icon: IconPackages,
-    match: "stock-admin",
-    link: "/dashboard/stock-admin",
-    roles: ["admin"],
   },
   {
     label: "Shoppar",
     icon: IconTableExport,
-    match: "shoppar",
+    match: /shoppar/,
     link: "/dashboard/shoppar",
   },
 ];
@@ -73,7 +78,15 @@ export const NAV_LINKS: NavLink[] = [
 export type NavLink = {
   label: string;
   icon: TablerIcon;
-  match: string;
+  link: string;
+  match: RegExp;
+  roles?: string[];
+  subLinks?: SubNavLink[];
+};
+
+export type SubNavLink = {
+  label: string;
   link: string;
   roles?: string[];
+  match: RegExp;
 };
