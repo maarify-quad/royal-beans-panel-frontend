@@ -58,6 +58,9 @@ const UpdateManualOrderView = React.lazy(() => import("./views/Order/UpdateManua
 const StockAdminView = React.lazy(() => import("./views/StockAdmin/StockAdminView"));
 const FnUpdateView = React.lazy(() => import("./views/StockAdmin/FnUpdateView"));
 
+// Shoppar Views
+const ShopparView = React.lazy(() => import("./views/Shoppar/ShopparView"));
+
 // Error Views
 const NotFoundView = React.lazy(() => import("./views/Error/NotFoundView"));
 
@@ -70,7 +73,7 @@ type AppRoute = {
   roles?: string[];
 };
 
-export const AppRoutes = () => {
+export const Routing = () => {
   const roles = useReduxSelector(selectRoles);
 
   const routes: AppRoute[] = [
@@ -179,6 +182,10 @@ export const AppRoutes = () => {
           path: "/dashboard/stock-admin/fn-update/:stockCode",
           element: <FnUpdateView />,
           roles: ["admin"],
+        },
+        {
+          path: "/dashboard/shoppar",
+          element: <ShopparView />,
         },
       ],
     },

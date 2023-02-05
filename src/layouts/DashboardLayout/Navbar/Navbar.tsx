@@ -74,7 +74,7 @@ type NavbarProps = {
   onLogout: () => void;
 };
 
-export const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
+export const Navbar = ({ onLogout }: NavbarProps) => {
   const { classes, cx } = useStyles();
   const match = useMatch(window.location.pathname);
   const { navLinks } = useNavLinks();

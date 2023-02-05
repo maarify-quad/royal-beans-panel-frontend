@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Types
 import type { RootState } from "@app/store";
@@ -11,8 +11,8 @@ const layoutSlice = createSlice({
   name: "layout",
   initialState,
   reducers: {
-    toggleDrawer: (state) => {
-      state.isDrawerOpen = !state.isDrawerOpen;
+    toggleDrawer: (state, action: PayloadAction<boolean | undefined>) => {
+      state.isDrawerOpen = action.payload || !state.isDrawerOpen;
     },
   },
 });

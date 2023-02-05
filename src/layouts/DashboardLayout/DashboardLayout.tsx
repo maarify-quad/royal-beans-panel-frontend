@@ -6,40 +6,23 @@ import { useLazyLogoutQuery } from "@services/authApi";
 // Routing
 import { Outlet } from "react-router-dom";
 
-// Redux
-import { useReduxDispatch, useReduxSelector } from "@app/hook";
-import { toggleDrawer, selectIsDrawerOpen } from "@slices/layoutSlice";
-
 // UI Components
-import {
-  AppShell,
-  Burger,
-  Header,
-  useMantineTheme,
-  createStyles,
-  MediaQuery,
-  Group,
-  Title,
-  LoadingOverlay,
-} from "@mantine/core";
+import { AppShell, useMantineTheme, createStyles, LoadingOverlay } from "@mantine/core";
 
 // UI Utils
 import { showNotification } from "@mantine/notifications";
-import { useMediaQuery } from "@mantine/hooks";
+import { useLocalStorage, useMediaQuery } from "@mantine/hooks";
 
 // Icons
 import { IconX } from "@tabler/icons";
 
 // Components
-import { ColorSchemeToggler } from "@components/ColorSchemeToggler";
+import Header from "./Header";
+import ExpandedNavbar from "./ExpandedNavbar";
+import CollapsedNavbar from "./CollapsedNavbar";
 
 // Lazy Components
-const Navbar = React.lazy(() => import("./Navbar").then((module) => ({ default: module.Navbar })));
-const Drawer = React.lazy(() =>
-  import("./Drawer").then((module) => ({
-    default: module.Drawer,
-  }))
-);
+const Drawer = React.lazy(() => import("./Drawer"));
 
 // Styles
 const useStyles = createStyles((theme) => ({
@@ -59,66 +42,50 @@ type DashboardLayoutProps = {
 };
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const dispatch = useReduxDispatch();
-  const isDrawerOpen = useReduxSelector(selectIsDrawerOpen);
+  // Styles
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const isMediumScreen = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
-  const [logout, { isLoading: isLogoutLoading, error: logoutError }] = useLazyLogoutQuery();
+
+  // Queries
+  const [logout, { isLoading: isLogoutLoading }] = useLazyLogoutQuery();
+
+  // Persist navbar state in local storage
+  const [isNavbarExpanded, setIsNavbarExpanded] = useLocalStorage({
+    key: "isNavbarExpanded",
+    defaultValue: true,
+  });
 
   const handleLogout = async () => {
-    await logout();
-  };
-
-  useEffect(() => {
-    if (logoutError) {
+    try {
+      await logout().unwrap();
+    } catch (error) {
       showNotification({
         title: "Çıkış başarısız",
-        message: (logoutError as any)?.data?.message || "Beklenmedik bir hata oluştu",
+        message: (error as any)?.data?.message || "Beklenmedik bir hata oluştu",
         icon: <IconX />,
         color: "red",
       });
     }
-  }, [(logoutError as any)?.data?.message]);
-
-  const onBurgerClick = () => {
-    dispatch(toggleDrawer());
   };
 
   return (
     <AppShell
-      // navbarOffsetBreakpoint controls when navbar should no longer be offset with padding-left
       navbarOffsetBreakpoint="md"
       padding={16}
-      // fixed prop on AppShell will be automatically added to Header and Navbar
       className={classes.main}
       fixed
-      navbar={isMediumScreen ? <Drawer /> : <Navbar onLogout={handleLogout} />}
+      navbar={
+        isMediumScreen ? (
+          <Drawer onLogout={handleLogout} />
+        ) : isNavbarExpanded ? (
+          <ExpandedNavbar onLogout={handleLogout} />
+        ) : (
+          <CollapsedNavbar onLogout={handleLogout} />
+        )
+      }
       header={
-        <Header height={70} p="md">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              height: "100%",
-              width: "100%",
-            }}
-          >
-            <Group align="center">
-              <MediaQuery largerThan="md" styles={{ display: "none" }}>
-                <Burger
-                  opened={isDrawerOpen}
-                  onClick={onBurgerClick}
-                  size="sm"
-                  color={theme.colors.gray[6]}
-                />
-              </MediaQuery>
-              <Title className={classes.title}>Royal Beans</Title>
-            </Group>
-            <ColorSchemeToggler />
-          </div>
-        </Header>
+        <Header isNavbarExpanded={isNavbarExpanded} setIsNavbarExpanded={setIsNavbarExpanded} />
       }
     >
       <LoadingOverlay visible={isLogoutLoading} />
