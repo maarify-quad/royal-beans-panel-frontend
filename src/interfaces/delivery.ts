@@ -17,6 +17,7 @@ export interface Delivery {
   deliveryDetails: DeliveryDetail[];
   createdAt: string;
   updatedAt: string;
+  deletedAt: string | null;
 }
 
 export interface DeliveryDetail {

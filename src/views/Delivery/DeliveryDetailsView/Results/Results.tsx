@@ -38,10 +38,10 @@ export const Results: React.FC<ResultsProps> = ({ delivery }) => {
                   </td>
                   <td>{formatCurrency(deliveryDetail.unitPriceTRY)}</td>
                   <td>
-                    {deliveryDetail.taxTotal} ₺ &nbsp;
+                    {formatCurrency(deliveryDetail.taxTotal)}&nbsp;
                     <span style={{ color: "#868E96" }}>(%{deliveryDetail.taxRate})</span>
                   </td>
-                  <td>{deliveryDetail.total} ₺</td>
+                  <td>{formatCurrency(deliveryDetail.total)}</td>
                 </tr>
               ))}
             </tbody>

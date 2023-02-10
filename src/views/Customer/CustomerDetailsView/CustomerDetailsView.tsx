@@ -1,5 +1,5 @@
 // Routing
-import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Navigate, useParams, useSearchParams } from "react-router-dom";
 
 // Services
 import { useGetCustomerByIdQuery } from "@services/customerApi";
@@ -24,7 +24,6 @@ import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const CustomerDetailsView = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { openCreateDeliveryAddress } = useCreateDeliveryAddress();
 

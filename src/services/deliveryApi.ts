@@ -8,10 +8,13 @@ export const deliveryApi = emptyApi.injectEndpoints({
     getDeliveries: builder.query<GetDeliveriesResponse, GetDeliveriesRequest | void>({
       query: (params) => {
         const url = new URL("/deliveries", import.meta.env.VITE_API_BASE_URL);
-        if (params) {
-          const { page, limit } = params;
+        if (params?.pagination) {
+          const { page, limit } = params.pagination;
           url.searchParams.append("page", page.toString());
           url.searchParams.append("limit", limit.toString());
+        }
+        if (params?.withDeleted) {
+          url.searchParams.append("withDeleted", "true");
         }
         return url.toString();
       },
@@ -39,8 +42,12 @@ export const deliveryApi = emptyApi.injectEndpoints({
     getSupplierDeliveries: builder.query<GetDeliveriesResponse, GetSupplierDeliveriesRequest>({
       query: (params) => {
         const url = new URL(`/deliveries/supplier/${params.id}`, import.meta.env.VITE_API_BASE_URL);
-        url.searchParams.append("page", params.page.toString());
-        url.searchParams.append("limit", params.limit.toString());
+        const { page, limit } = params.pagination;
+        url.searchParams.append("page", page.toString());
+        url.searchParams.append("limit", limit.toString());
+        if (params.withDeleted) {
+          url.searchParams.append("withDeleted", "true");
+        }
         return url.toString();
       },
     }),
@@ -52,6 +59,13 @@ export const deliveryApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: ["Delivery", "Product"],
     }),
+    deleteDelivery: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/deliveries/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (_result, _error, id) => [{ type: "Delivery" as const, id }],
+    }),
   }),
 });
 
@@ -61,6 +75,7 @@ export const {
   useGetProductDeliveriesQuery,
   useGetSupplierDeliveriesQuery,
   useCreateDeliveryMutation,
+  useDeleteDeliveryMutation,
 } = deliveryApi;
 
 interface GetDeliveriesResponse {
@@ -70,8 +85,11 @@ interface GetDeliveriesResponse {
 }
 
 interface GetDeliveriesRequest {
-  page: number;
-  limit: number;
+  withDeleted?: boolean;
+  pagination?: {
+    page: number;
+    limit: number;
+  };
 }
 
 interface GetProductDeliveriesResponse {
@@ -88,8 +106,11 @@ interface GetProductDeliveriesRequest {
 
 interface GetSupplierDeliveriesRequest {
   id: string;
-  page: number;
-  limit: number;
+  withDeleted?: boolean;
+  pagination: {
+    page: number;
+    limit: number;
+  };
 }
 
 interface CreateDeliveryPayload {

@@ -23,7 +23,7 @@ type DeliveriesTabProps = {
 };
 
 export const DeliveriesTab: React.FC<DeliveriesTabProps> = ({ supplierId }) => {
-  const [query, setQuery] = useState({
+  const [pagination, setPagination] = useState({
     page: 1,
     limit: 25,
   });
@@ -33,7 +33,7 @@ export const DeliveriesTab: React.FC<DeliveriesTabProps> = ({ supplierId }) => {
 
   // Queries
   const { deliveries, totalCount, isTableLoading } = useGetSupplierDeliveriesQuery(
-    { id: supplierId, ...query },
+    { id: supplierId, pagination, withDeleted: true },
     {
       selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
         deliveries: data?.deliveries,
@@ -73,19 +73,19 @@ export const DeliveriesTab: React.FC<DeliveriesTabProps> = ({ supplierId }) => {
         fetching={isTableLoading}
         noRecordsText="Kayıt bulunamadı"
         loadingText="Yükleniyor"
-        recordsPerPage={query.limit}
+        recordsPerPage={pagination.limit}
         totalRecords={totalCount}
-        page={query.page}
-        onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
+        page={pagination.page}
+        onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
         onRowClick={({ id }) => navigate(`/dashboard/deliveries/${id}`)}
       />
       <Group>
         <Text size="sm">Sayfa başı satır</Text>
         <Select
-          value={query.limit.toString()}
+          value={pagination.limit.toString()}
           onChange={(limit) => {
             if (limit) {
-              setQuery({ page: 1, limit: +limit });
+              setPagination({ page: 1, limit: +limit });
             }
           }}
           data={[
