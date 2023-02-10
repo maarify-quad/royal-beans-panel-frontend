@@ -35,6 +35,7 @@ export const ProductDetails = ({ product }: ProductDetailsProps) => {
       title: "İçeriği silmek istediğinize emin misiniz?",
       labels: { cancel: "İptal", confirm: "Sil" },
       confirmProps: { color: "red" },
+      centered: true,
       onConfirm: async () => {
         try {
           await deleteIngredient({ id, stockCode: product.stockCode }).unwrap();

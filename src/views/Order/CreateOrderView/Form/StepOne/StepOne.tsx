@@ -29,19 +29,24 @@ export const StepOne: React.FC<StepOneProps> = ({
   setSelectedCustomer,
 }) => {
   // Get latest customers
-  const { data: customerData, isLoading: isCustomersLoading } = useGetCustomersQuery();
+  const { customers, isLoading: isCustomersLoading } = useGetCustomersQuery(undefined, {
+    selectFromResult: ({ data, ...rest }) => ({
+      customers: data?.customers,
+      ...rest,
+    }),
+  });
 
   const customerSelectOptions = React.useMemo(
     () =>
-      customerData?.customers.map((customer) => ({
+      customers?.map((customer) => ({
         value: customer.id.toString(),
         label: customer.name,
       })) || [],
-    [customerData]
+    [customers]
   );
 
   useEffect(() => {
-    const customer = customerData?.customers.find((c) => c.id === form.values.customerId);
+    const customer = customers?.find((c) => c.id === form.values.customerId);
     setSelectedCustomer(customer);
     form.setFieldValue("deliveryAddressId", customer?.deliveryAddresses[0]?.id || 0);
   }, [form.values.customerId]);
@@ -82,6 +87,7 @@ export const StepOne: React.FC<StepOneProps> = ({
       <Select
         label="Gönderim Adresi"
         placeholder="Gönderim adresi seçiniz"
+        disabled={!selectedCustomer}
         required
         mt="md"
         data={

@@ -11,10 +11,13 @@ export const customerApi = emptyApi.injectEndpoints({
     getCustomers: builder.query<GetCustomersResponse, GetCustomersRequest | void>({
       query: (params) => {
         const url = new URL("/customers", import.meta.env.VITE_API_BASE_URL);
-        if (params) {
-          const { page, limit } = params;
+        if (params?.pagination) {
+          const { page, limit } = params.pagination;
           url.searchParams.append("page", page.toString());
           url.searchParams.append("limit", limit.toString());
+        }
+        if (params?.withDeleted) {
+          url.searchParams.append("withDeleted", "true");
         }
         return url.toString();
       },
@@ -22,7 +25,7 @@ export const customerApi = emptyApi.injectEndpoints({
     }),
     getCustomerById: builder.query<Customer, string>({
       query: (id) => `/customers/${id}`,
-      providesTags: (_result, _error, id) => [{ type: "Customer" as const, id }],
+      providesTags: (result, _error, id) => (result ? [{ type: "Customer" as const, id }] : []),
     }),
     createCustomer: builder.mutation<Customer, CreateCustomerParams>({
       query: (body) => ({
@@ -43,6 +46,14 @@ export const customerApi = emptyApi.injectEndpoints({
         ...(params.priceListId ? [{ type: "PriceList" as const, id: params.priceListId }] : []),
       ],
     }),
+    deleteCustomer: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/customers/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, _error, id) =>
+        result ? [{ type: "Customer" as const }, { type: "Customer" as const, id }] : [],
+    }),
   }),
 });
 
@@ -51,6 +62,7 @@ export const {
   useGetCustomerByIdQuery,
   useCreateCustomerMutation,
   useUpdateCustomerMutation,
+  useDeleteCustomerMutation,
 } = customerApi;
 
 interface GetCustomersResponse {
@@ -60,8 +72,11 @@ interface GetCustomersResponse {
 }
 
 interface GetCustomersRequest {
-  page: number;
-  limit: number;
+  withDeleted?: boolean;
+  pagination?: {
+    page: number;
+    limit: number;
+  };
 }
 
 interface CreateCustomerParams {

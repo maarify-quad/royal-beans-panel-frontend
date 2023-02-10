@@ -29,11 +29,17 @@ const CreatePriceListProduct = React.lazy(
 const AssignPriceList = React.lazy(() => import("@components/PriceList/AssignPriceList"));
 
 export const PriceListDetailsView = () => {
-  const { id } = useParams();
+  const { id = "" } = useParams();
 
-  const { data, isLoading, error } = useGetPriceListByIdQuery(id!, {
-    skip: !id,
-  });
+  const { data, isLoading, error } = useGetPriceListByIdQuery(
+    {
+      id,
+      withDeleted: true,
+    },
+    {
+      skip: !id,
+    }
+  );
 
   if (!id) {
     return <Navigate to="/dashboard" replace />;

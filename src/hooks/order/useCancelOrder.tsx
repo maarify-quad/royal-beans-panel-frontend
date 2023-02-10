@@ -22,6 +22,7 @@ export const useCancelOrder = () => {
       children: <Text size="sm">#{orderId} siparişini iptal etmek istediğinize emin misiniz?</Text>,
       labels: { confirm: "İptal Et", cancel: "Vazgeç" },
       confirmProps: { color: "red" },
+      centered: true,
       onConfirm: async () => {
         showNotification({
           id: "cancelOrderLoading",
