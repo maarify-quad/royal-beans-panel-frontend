@@ -94,6 +94,14 @@ export const productApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: ["Product"],
     }),
+    deleteProductByStockCode: builder.mutation<any, string>({
+      query: (stockCode) => ({
+        url: `/products/${stockCode}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, _error, stockCode) =>
+        result ? [{ type: "Product" as const, id: stockCode }] : ["Product"],
+    }),
   }),
 });
 
@@ -106,6 +114,7 @@ export const {
   useCreateProductMutation,
   useCreateBulkProductsFromExcelMutation,
   useBulkUpdateProductsMutation,
+  useDeleteProductByStockCodeMutation,
 } = productApi;
 
 interface GetProductsResponse {

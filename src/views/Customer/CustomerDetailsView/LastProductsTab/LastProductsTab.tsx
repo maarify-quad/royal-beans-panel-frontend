@@ -1,19 +1,20 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 
 // Services
-import { useGetLatestOrderProductsByCustomerQuery } from "@services/orderProductApi";
+import { useGetOrderProductsByCustomerQuery } from "@services/orderProductApi";
 
 // UI Components
-import { Alert, Loader } from "@mantine/core";
+import { Alert, Group, Paper, Select, Text } from "@mantine/core";
+import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
-import { IconAlertCircle } from "@tabler/icons";
-
-// Components
-import { ResultsTable } from "@components/ResultsTable";
+import { IconAlertCircle, IconInfoCircle } from "@tabler/icons";
 
 // Utils
 import { formatCurrency } from "@utils/localization";
+
+// Interfaces
+import { OrderProduct } from "@interfaces/orderProduct";
 
 // Props
 type LastProductsTabProps = {
@@ -21,11 +22,44 @@ type LastProductsTabProps = {
 };
 
 export const LastProductsTab: React.FC<LastProductsTabProps> = ({ customer }) => {
-  // Queries
-  const { data, isLoading, error } = useGetLatestOrderProductsByCustomerQuery(customer);
+  // State
+  const [limit, setLimit] = useState(5);
 
-  if (isLoading) {
-    return <Loader />;
+  // Queries
+  const { data, isLoading, isFetching, error } = useGetOrderProductsByCustomerQuery({
+    customer,
+    limit,
+  });
+
+  const columns = useMemo<DataTableColumn<OrderProduct>[]>(
+    () => [
+      {
+        title: "Ürün",
+        accessor: "priceListProduct.product.name",
+      },
+      {
+        title: "Adet",
+        accessor: "quantity",
+      },
+      {
+        title: "Öğütüm",
+        accessor: "grindType",
+      },
+      {
+        title: "Birim Fiyat",
+        accessor: "unitPrice",
+        render: (orderProduct) => formatCurrency(orderProduct.unitPrice),
+      },
+    ],
+    [data]
+  );
+
+  if (data?.orderProducts.length === 0) {
+    return (
+      <Alert color="cyan" icon={<IconInfoCircle />}>
+        <Text size="sm">Bu müşteriye ait son ürün(ler) bulunmamaktadır</Text>
+      </Alert>
+    );
   }
 
   if (error) {
@@ -43,23 +77,32 @@ export const LastProductsTab: React.FC<LastProductsTabProps> = ({ customer }) =>
   }
 
   return (
-    <div>
-      <ResultsTable
-        headers={[
-          { value: "Ürün" },
-          { value: "Adet" },
-          { value: "Öğütüm" },
-          { value: "Birim Fiyat" },
-        ]}
-        rows={
-          data?.orderProducts.map((orderProduct) => [
-            { value: orderProduct.priceListProduct.product.name },
-            { value: orderProduct.quantity },
-            { value: orderProduct.grindType },
-            { value: formatCurrency(orderProduct.unitPrice) },
-          ]) || []
-        }
+    <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
+      <DataTable
+        records={data?.orderProducts}
+        columns={columns}
+        fetching={isLoading || isFetching}
+        style={{ height: "auto" }}
       />
-    </div>
+      <Group spacing="xs" mt="md">
+        <Text size="sm">Son</Text>
+        <Select
+          value={limit.toString()}
+          onChange={(limit) => {
+            if (limit) {
+              setLimit(+limit);
+            }
+          }}
+          data={[
+            { label: "5", value: "5" },
+            { label: "10", value: "10" },
+            { label: "15", value: "15" },
+          ]}
+          style={{ width: 60 }}
+          size="xs"
+        />
+        <Text size="sm">ürün</Text>
+      </Group>
+    </Paper>
   );
 };

@@ -10,6 +10,7 @@ export interface Product {
   reservedAmount: number;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string | null;
 }
 
 export interface ProductWithIngredients extends Product {

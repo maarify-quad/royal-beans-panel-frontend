@@ -4,7 +4,7 @@ import React from "react";
 import { useDeletePriceListProductMutation } from "@services/priceListProductApi";
 
 // UI Components
-import { Table, Alert, Paper, Group, Text, Button, LoadingOverlay } from "@mantine/core";
+import { Table, Alert, Paper, Group, Text, Button, LoadingOverlay, Badge } from "@mantine/core";
 
 // UI Utils
 import { openConfirmModal, openModal } from "@mantine/modals";
@@ -83,9 +83,16 @@ export const ProductsResult: React.FC<ProductsResultProps> = ({ priceListProduct
         <tbody>
           {priceListProducts?.map((priceListProduct, i) => (
             <tr key={i}>
-              <td>{priceListProduct.product.name}</td>
+              <td>
+                {priceListProduct.product.name}{" "}
+                {priceListProduct.product.deletedAt && (
+                  <Badge color="red" size="sm" ml={4}>
+                    İNAKTİF
+                  </Badge>
+                )}
+              </td>
               <td>{formatCurrency(priceListProduct.unitPrice)}</td>
-              <td>{priceListProduct.taxRate} %</td>
+              <td>%{priceListProduct.taxRate}</td>
               <td>
                 <Group spacing={4}>
                   <Button

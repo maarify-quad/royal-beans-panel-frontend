@@ -63,6 +63,7 @@ interface LinksGroupProps {
   icon: TablerIcon;
   label: string;
   link?: string;
+  match: RegExp;
   initiallyOpened?: boolean;
   subLinks?: { label: string; link: string; match: RegExp }[];
   onClick?: () => void;
@@ -72,19 +73,22 @@ export const LinksGroup = ({
   icon: Icon,
   label,
   link,
+  match,
   initiallyOpened,
   subLinks,
   onClick,
 }: LinksGroupProps) => {
   const { classes, cx } = useStyles();
   const hasLinks = Array.isArray(subLinks);
-  const match = useMatch(window.location.pathname);
+  const routeMatch = useMatch(window.location.pathname);
   const [opened, setOpened] = useState(initiallyOpened || false);
 
   const items = (hasLinks ? subLinks : []).map((link) => (
     <NavLink
       className={cx(classes.link, {
-        [classes.linkActive]: link.match ? link.match.test(match?.pathname || "/panel") : false,
+        [classes.linkActive]: link.match
+          ? link.match.test(routeMatch?.pathname || "/dashboard")
+          : false,
       })}
       onClick={onClick}
       to={link.link}
@@ -126,7 +130,7 @@ export const LinksGroup = ({
       to={link || "#"}
       onClick={onClick}
       className={cx(classes.control, {
-        [classes.linkActive]: link ? link === match?.pathname : false,
+        [classes.linkActive]: link ? match.test(routeMatch?.pathname || "/dashboard") : false,
       })}
     >
       <Group position="apart" spacing={0}>

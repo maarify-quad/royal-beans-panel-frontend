@@ -1,7 +1,7 @@
 import React from "react";
 
 // UI Components
-import { Table, ScrollArea, Text, Card, Group, Paper } from "@mantine/core";
+import { Table, ScrollArea, Text, Card, Group, Paper, Badge } from "@mantine/core";
 
 // Utils
 import { formatCurrency } from "@utils/localization";
@@ -32,7 +32,14 @@ export const Results: React.FC<ResultsProps> = ({ delivery }) => {
             <tbody>
               {delivery.deliveryDetails?.map((deliveryDetail, i) => (
                 <tr key={i}>
-                  <td>{deliveryDetail.product.name}</td>
+                  <td>
+                    {deliveryDetail.product.name}{" "}
+                    {deliveryDetail.product.deletedAt && (
+                      <Badge color="red" size="sm" ml={4}>
+                        İNAKTİF
+                      </Badge>
+                    )}
+                  </td>
                   <td>
                     {deliveryDetail.quantity} {deliveryDetail.unit}
                   </td>

@@ -5,7 +5,7 @@ import { Navigate, useParams, useSearchParams } from "react-router-dom";
 import { useGetCustomerByIdQuery } from "@services/customerApi";
 
 // UI Components
-import { Alert, Loader, Tabs, Button, Group, Text } from "@mantine/core";
+import { Alert, Loader, Tabs, Button, Text } from "@mantine/core";
 
 // Hooks
 import { useCreateDeliveryAddress } from "@hooks/delivery-address/useCreateDeliveryAddress";
@@ -82,14 +82,16 @@ export const CustomerDetailsView = () => {
           },
         ]}
         actions={
-          <Button
-            leftIcon={<IconPlus />}
-            onClick={() => {
-              openCreateDeliveryAddress(data!.id);
-            }}
-          >
-            Yeni Teslimat Adresi
-          </Button>
+          !isDeactivated && (
+            <Button
+              leftIcon={<IconPlus />}
+              onClick={() => {
+                openCreateDeliveryAddress(data!.id);
+              }}
+            >
+              Yeni Teslimat Adresi
+            </Button>
+          )
         }
       >
         {data && (

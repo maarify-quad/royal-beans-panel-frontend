@@ -17,17 +17,17 @@ export const NAV_LINKS: NavLink[] = [
     label: "Stok",
     icon: IconPackages,
     match: /^\/dashboard\/(deliveries|storage|stock-admin)/,
-    link: "#",
+    link: "/dashboard/storage",
     subLinks: [
-      {
-        label: "Sevkiyatlar",
-        link: "/dashboard/deliveries",
-        match: /^\/dashboard\/deliveries/,
-      },
       {
         label: "Depo",
         link: "/dashboard/storage",
         match: /^\/dashboard\/storage/,
+      },
+      {
+        label: "Sevkiyatlar",
+        link: "/dashboard/deliveries",
+        match: /^\/dashboard\/deliveries/,
       },
       {
         label: "Admin",

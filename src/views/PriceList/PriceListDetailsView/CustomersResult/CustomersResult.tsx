@@ -1,10 +1,10 @@
 import React from "react";
 
 // UI Components
-import { Table, Paper, Alert, ThemeIcon, Flex } from "@mantine/core";
+import { Table, Paper, Alert, Flex, Badge } from "@mantine/core";
 
 // Icons
-import { IconInfoCircle, IconUserOff } from "@tabler/icons";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Utils
 import { formatCurrency } from "@utils/localization";
@@ -42,9 +42,9 @@ export const CustomersResult: React.FC<CustomersResultProps> = ({ customers }) =
                 <Flex gap="xs">
                   {customer.name}
                   {customer.deletedAt && (
-                    <ThemeIcon variant="outline" size="sm" color="red">
-                      <IconUserOff />
-                    </ThemeIcon>
+                    <Badge color="red" size="sm">
+                      İNAKTİF
+                    </Badge>
                   )}
                 </Flex>
               </td>

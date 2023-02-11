@@ -2,13 +2,19 @@
 import { Navigate, useParams, useSearchParams } from "react-router-dom";
 
 // Services
-import { useGetProductByStockCodeQuery } from "@services/productApi";
+import {
+  useGetProductByStockCodeQuery,
+  useDeleteProductByStockCodeMutation,
+} from "@services/productApi";
 
 // UI Components
-import { Tabs, Loader, Alert } from "@mantine/core";
+import { Tabs, Button, Alert, Text } from "@mantine/core";
+
+// UI Utils
+import { openConfirmModal } from "@mantine/modals";
 
 // Icons
-import { IconAlertCircle } from "@tabler/icons";
+import { IconAlertCircle, IconTrash } from "@tabler/icons";
 
 // Components
 import { SummaryTab } from "./SummaryTab";
@@ -25,70 +31,92 @@ export const ProductDetailsView = () => {
   const {
     data: product,
     isLoading,
+    isFetching,
     error,
   } = useGetProductByStockCodeQuery(stockCode || "", {
     skip: !stockCode,
   });
 
+  // Mutations
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductByStockCodeMutation();
+
+  const handleDeleteProduct = () => {
+    openConfirmModal({
+      title: "Ürünü silmek istediğinize emin misiniz?",
+      confirmProps: { color: "red", loading: isDeleting },
+      labels: { cancel: "İptal", confirm: "Sil" },
+      centered: true,
+      onConfirm: async () => {
+        try {
+          if (!stockCode) return;
+          await deleteProduct(stockCode).unwrap();
+        } catch {}
+      },
+    });
+  };
+
   if (!stockCode) {
     return <Navigate to="/dashboard/storage" replace />;
   }
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (error) {
-    return (
-      <Alert
-        icon={<IconAlertCircle />}
-        color="red"
-        title="Ürüne ulaşılamadı"
-        variant="filled"
-        mt="md"
-      >
-        {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
-      </Alert>
-    );
-  }
-
   return (
-    <PageLayout
-      title={product?.name}
-      breadcrumbs={[
-        {
-          label: "Panel",
-          href: "/dashboard",
-        },
-        {
-          label: "Depo",
-          href: "/dashboard/storage",
-        },
-        {
-          label: product?.name,
-          href: `/dashboard/storage/${stockCode}`,
-        },
-      ]}
-    >
-      {product && (
-        <Tabs
-          keepMounted={false}
-          defaultValue={searchParams.get("tab") || "summary"}
-          onTabChange={(value) => setSearchParams({ tab: value as string })}
-          mt="md"
-        >
-          <Tabs.List>
-            <Tabs.Tab value="summary">Özet</Tabs.Tab>
-            <Tabs.Tab value="delivery">Sevkiyat</Tabs.Tab>
-          </Tabs.List>
-          <Tabs.Panel value="summary" mt="md">
-            <SummaryTab product={product} />
-          </Tabs.Panel>
-          <Tabs.Panel value="delivery" mt="md">
-            <DeliveriesTab stockCode={stockCode} />
-          </Tabs.Panel>
-        </Tabs>
+    <>
+      {product?.deletedAt && (
+        <Alert icon={<IconAlertCircle />} variant="filled" color="red" mb="md">
+          <Text weight="bold">Bu ürün devre dışı bırakılmıştır</Text>
+        </Alert>
       )}
-    </PageLayout>
+      <PageLayout
+        title={product?.name}
+        breadcrumbs={[
+          {
+            label: "Panel",
+            href: "/dashboard",
+          },
+          {
+            label: "Depo",
+            href: "/dashboard/storage",
+          },
+          {
+            label: product?.name,
+            href: `/dashboard/storage/${stockCode}`,
+          },
+        ]}
+        actions={
+          !product?.deletedAt && (
+            <Button
+              color="red"
+              variant="outline"
+              leftIcon={<IconTrash />}
+              onClick={handleDeleteProduct}
+            >
+              Ürünü Sil
+            </Button>
+          )
+        }
+        isLoading={isLoading || isFetching}
+        error={error}
+      >
+        {product && (
+          <Tabs
+            keepMounted={false}
+            defaultValue={searchParams.get("tab") || "summary"}
+            onTabChange={(value) => setSearchParams({ tab: value as string })}
+            mt="md"
+          >
+            <Tabs.List>
+              <Tabs.Tab value="summary">Özet</Tabs.Tab>
+              <Tabs.Tab value="delivery">Sevkiyat</Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Panel value="summary" mt="md">
+              <SummaryTab product={product} />
+            </Tabs.Panel>
+            <Tabs.Panel value="delivery" mt="md">
+              <DeliveriesTab stockCode={stockCode} />
+            </Tabs.Panel>
+          </Tabs>
+        )}
+      </PageLayout>
+    </>
   );
 };

@@ -1,5 +1,5 @@
 // Services
-import { useDeleteByIdMutation } from "@services/ingredientApi";
+import { useDeleteIngredientByIdMutation } from "@services/ingredientApi";
 
 // UI Components
 import {
@@ -28,7 +28,7 @@ type ProductDetailsProps = {
 };
 
 export const ProductDetails = ({ product }: ProductDetailsProps) => {
-  const [deleteIngredient, { isLoading: isDeleting }] = useDeleteByIdMutation();
+  const [deleteIngredient, { isLoading: isDeleting }] = useDeleteIngredientByIdMutation();
 
   const handleDeleteIngredient = (id: number) => {
     openConfirmModal({

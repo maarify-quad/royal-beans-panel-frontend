@@ -7,11 +7,11 @@ import { Link } from "react-router-dom";
 import { useGetCustomersQuery } from "@services/customerApi";
 
 // UI Components
-import { Alert, Anchor, Flex, Group, Paper, Select, Text, ThemeIcon } from "@mantine/core";
+import { Alert, Anchor, Badge, Flex, Group, Paper, Select, Text, ThemeIcon } from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
-import { IconInfoCircle, IconUserOff } from "@tabler/icons";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Utils
 import { formatCurrency } from "@utils/localization";
@@ -30,6 +30,7 @@ export const Results = () => {
   const { customers, totalCount, isTableLoading, error } = useGetCustomersQuery(
     {
       withDeleted: true,
+      pagination,
     },
     {
       selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
@@ -48,14 +49,14 @@ export const Results = () => {
         accessor: "name",
         title: "Müşteri",
         render: (customer) => (
-          <Flex gap="xs">
+          <Flex align="center" gap="xs">
             <Anchor component={Link} to={`/dashboard/customers/${customer.id}`}>
               {customer.name}
             </Anchor>
             {customer.deletedAt && (
-              <ThemeIcon variant="outline" size="sm" color="red">
-                <IconUserOff />
-              </ThemeIcon>
+              <Badge color="red" size="sm">
+                İNAKTİF
+              </Badge>
             )}
           </Flex>
         ),
