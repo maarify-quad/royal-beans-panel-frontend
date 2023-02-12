@@ -18,7 +18,7 @@ import { Product } from "@interfaces/product";
 
 export const BulkUpdateStock = () => {
   // State
-  const [query, setQuery] = useState({
+  const [pagination, setPagination] = useState({
     page: 1,
     limit: 100,
   });
@@ -26,15 +26,18 @@ export const BulkUpdateStock = () => {
   const [editedProducts, setEditedProducts] = useState<{ [key: number]: Product }>({});
 
   // Queries
-  const { products, totalCount, isTableLoading, error } = useGetProductsQuery(query, {
-    selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
-      ...rest,
-      products: data?.products,
-      totalPages: data?.totalPages,
-      totalCount: data?.totalCount,
-      isTableLoading: isLoading || isFetching,
-    }),
-  });
+  const { products, totalCount, isTableLoading, error } = useGetProductsQuery(
+    { pagination },
+    {
+      selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
+        ...rest,
+        products: data?.products,
+        totalPages: data?.totalPages,
+        totalCount: data?.totalCount,
+        isTableLoading: isLoading || isFetching,
+      }),
+    }
+  );
 
   // Mutations
   const [bulkUpdateProducts, { isLoading: isUpdating }] = useBulkUpdateProductsMutation();
@@ -147,10 +150,10 @@ export const BulkUpdateStock = () => {
           fetching={isTableLoading || isUpdating}
           noRecordsText="Kayıt bulunamadı"
           loadingText="Yükleniyor"
-          recordsPerPage={query.limit}
+          recordsPerPage={pagination.limit}
           totalRecords={totalCount}
-          page={query.page}
-          onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
+          page={pagination.page}
+          onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
           onCellClick={(row) => {
             if (row.column.accessor === "amount" && !editedRowIndexes.includes(row.recordIndex)) {
               setEditedRowIndexes((prev) => [...prev, row.recordIndex]);
@@ -161,10 +164,10 @@ export const BulkUpdateStock = () => {
         <Group>
           <Text size="sm">Sayfa başı satır</Text>
           <Select
-            value={query.limit.toString()}
+            value={pagination.limit.toString()}
             onChange={(limit) => {
               if (limit) {
-                setQuery({ page: 1, limit: +limit });
+                setPagination({ page: 1, limit: +limit });
               }
             }}
             data={[

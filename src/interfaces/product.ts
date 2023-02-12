@@ -30,3 +30,5 @@ export interface Ingredient {
   product: Product;
   ingredientProduct: Product;
 }
+
+export type ProductRelation = "ingredients" | "roastIngredients";

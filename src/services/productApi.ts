@@ -1,20 +1,20 @@
 import { emptyApi } from "./emptyApi";
 
+// Utils
+import { getPaginatedURL } from "@utils/service";
+
 // Interfaces
-import { Product, ProductWithIngredients, ProductWithRoastIngredients } from "@interfaces/product";
+import {
+  Product,
+  ProductRelation,
+  ProductWithIngredients,
+  ProductWithRoastIngredients,
+} from "@interfaces/product";
 
 export const productApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query<GetProductsResponse, GetProductsRequest | void>({
-      query: (params) => {
-        const url = new URL("/products", import.meta.env.VITE_API_BASE_URL);
-        if (params) {
-          const { page, limit } = params;
-          url.searchParams.append("page", page.toString());
-          url.searchParams.append("limit", limit.toString());
-        }
-        return url.toString();
-      },
+      query: (params) => getPaginatedURL("/products", params?.pagination),
       providesTags: ["Product"],
       keepUnusedDataFor: 15,
     }),
@@ -27,12 +27,7 @@ export const productApi = emptyApi.injectEndpoints({
       GetProductsWithIngredientsResponse,
       GetProductsRequest | void
     >({
-      query: (params) => {
-        const url = new URL("/products/ingredients", import.meta.env.VITE_API_BASE_URL);
-        url.searchParams.append("page", params?.page.toString() || "1");
-        url.searchParams.append("limit", params?.limit.toString() || "25");
-        return url.toString();
-      },
+      query: (params) => getPaginatedURL("/products/ingredients", params?.pagination),
       providesTags: ["Product"],
       keepUnusedDataFor: 15,
     }),
@@ -40,12 +35,7 @@ export const productApi = emptyApi.injectEndpoints({
       GetProductsWithRoastIngredientsResponse,
       GetProductsRequest | void
     >({
-      query: (params) => {
-        const url = new URL("/products/roast_ingredients", import.meta.env.VITE_API_BASE_URL);
-        url.searchParams.append("page", params?.page.toString() || "1");
-        url.searchParams.append("limit", params?.limit.toString() || "25");
-        return url.toString();
-      },
+      query: (params) => getPaginatedURL("/products/roast_ingredients", params?.pagination),
       providesTags: [{ type: "Product" as const, id: "roast_ingredients" }],
       keepUnusedDataFor: 15,
     }),
@@ -53,18 +43,8 @@ export const productApi = emptyApi.injectEndpoints({
       GetProductsByStorageTypeResponse,
       GetProductsByStorageTypeRequest
     >({
-      query: (params) => {
-        const url = new URL(
-          `/products/storageType/${params.storageType}`,
-          import.meta.env.VITE_API_BASE_URL
-        );
-        if (params) {
-          const { page, limit } = params;
-          url.searchParams.append("page", page?.toString() || "1");
-          url.searchParams.append("limit", limit?.toString() || "25");
-        }
-        return url.toString();
-      },
+      query: (params) =>
+        getPaginatedURL(`/products/storageType/${params.storageType}`, params?.pagination),
       keepUnusedDataFor: 15,
       providesTags: (result, _error, params) =>
         result ? [{ type: "Product" as const, id: params.storageType }] : ["Product"],
@@ -156,14 +136,13 @@ interface GetProductsByStorageTypeResponse {
 }
 
 interface GetProductsRequest {
-  page: number;
-  limit: number;
+  pagination?: { page: number; limit: number };
+  relations?: ProductRelation[];
 }
 
 interface GetProductsByStorageTypeRequest {
   storageType: string;
-  page?: number;
-  limit?: number;
+  pagination?: { page: number; limit: number };
 }
 
 interface CreateProductRequest {

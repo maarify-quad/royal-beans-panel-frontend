@@ -24,7 +24,7 @@ type StorageProductsProps = {
 
 export const StorageProducts = ({ storageType }: StorageProductsProps) => {
   // Query state
-  const [query, setQuery] = useState({
+  const [pagination, setPagination] = useState({
     page: 1,
     limit: 100,
   });
@@ -33,7 +33,7 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
   const { products, totalCount, isTableLoading, error } = useGetProductsByStorageTypeQuery(
     {
       storageType,
-      ...query,
+      pagination,
     },
     {
       selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
@@ -99,20 +99,20 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
         fetching={isTableLoading}
         noRecordsText="Kayıt bulunamadı"
         loadingText="Yükleniyor"
-        recordsPerPage={query.limit}
+        recordsPerPage={pagination.limit}
         totalRecords={totalCount}
-        page={query.page}
-        onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
+        page={pagination.page}
+        onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
         sortStatus={sortStatus}
         onSortStatusChange={setSortStatus}
       />
       <Group>
         <Text size="sm">Sayfa başı satır</Text>
         <Select
-          value={query.limit.toString()}
+          value={pagination.limit.toString()}
           onChange={(limit) => {
             if (limit) {
-              setQuery({ page: 1, limit: +limit });
+              setPagination({ page: 1, limit: +limit });
             }
           }}
           data={[
