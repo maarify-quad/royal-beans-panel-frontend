@@ -7,6 +7,7 @@ import { Tabs } from "@mantine/core";
 // Components
 import BulkUpdateStock from "./BulkUpdateStock";
 import FnUpdateIngredients from "./FnUpdateIngredients";
+import { ShopifyUpdateIngredients } from "./ShopifyUpdateIngredients";
 
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
@@ -37,12 +38,16 @@ export const StockAdminView = () => {
         <Tabs.List>
           <Tabs.Tab value="bulk-update">Toplu Stok Güncelle</Tabs.Tab>
           <Tabs.Tab value="fn-update">FN İçerik Güncelle</Tabs.Tab>
+          <Tabs.Tab value="shopify-update">Shopify İçerik Güncelle</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel mt="md" value="bulk-update">
           <BulkUpdateStock />
         </Tabs.Panel>
         <Tabs.Panel mt="md" value="fn-update">
           <FnUpdateIngredients />
+        </Tabs.Panel>
+        <Tabs.Panel mt="md" value="shopify-update">
+          <ShopifyUpdateIngredients />
         </Tabs.Panel>
       </Tabs>
     </PageLayout>

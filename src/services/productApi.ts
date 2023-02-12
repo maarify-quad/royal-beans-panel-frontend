@@ -9,36 +9,46 @@ import {
   ProductRelation,
   ProductWithIngredients,
   ProductWithRoastIngredients,
+  ProductWithShopifyIngredients,
 } from "@interfaces/product";
 
 export const productApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
+    // Get products
     getProducts: builder.query<GetProductsResponse, GetProductsRequest | void>({
       query: (params) => getPaginatedURL("/products", params?.pagination),
       providesTags: ["Product"],
       keepUnusedDataFor: 15,
     }),
-    getProductByStockCode: builder.query<Product, string>({
-      query: (stockCode) => `/products/${stockCode}`,
-      providesTags: (result, _error, stockCode) =>
-        result ? [{ type: "Product" as const, id: stockCode }] : ["Product"],
-    }),
+
+    // Get products with ingredients
     getProductsWithIngredients: builder.query<
       GetProductsWithIngredientsResponse,
       GetProductsRequest | void
     >({
       query: (params) => getPaginatedURL("/products/ingredients", params?.pagination),
-      providesTags: ["Product"],
-      keepUnusedDataFor: 15,
+      providesTags: [{ type: "Product" as const, id: "ingredients" }],
     }),
+
+    // Get products with roast ingredients
     getProductsWithRoastIngredients: builder.query<
       GetProductsWithRoastIngredientsResponse,
       GetProductsRequest | void
     >({
       query: (params) => getPaginatedURL("/products/roast_ingredients", params?.pagination),
       providesTags: [{ type: "Product" as const, id: "roast_ingredients" }],
-      keepUnusedDataFor: 15,
     }),
+
+    // Get products with Shopify ingredients
+    getProductsWithShopifyIngredients: builder.query<
+      GetProductsWithShopifyIngredientsResponse,
+      GetProductsRequest | void
+    >({
+      query: (params) => getPaginatedURL("/products/shopify_ingredients", params?.pagination),
+      providesTags: [{ type: "Product" as const, id: "shopify_ingredients" }],
+    }),
+
+    // Get products by storage type
     getProductsByStorageType: builder.query<
       GetProductsByStorageTypeResponse,
       GetProductsByStorageTypeRequest
@@ -49,11 +59,22 @@ export const productApi = emptyApi.injectEndpoints({
       providesTags: (result, _error, params) =>
         result ? [{ type: "Product" as const, id: params.storageType }] : ["Product"],
     }),
+
+    // Get product by stock code
+    getProductByStockCode: builder.query<Product, string>({
+      query: (stockCode) => `/products/${stockCode}`,
+      providesTags: (result, _error, stockCode) =>
+        result ? [{ type: "Product" as const, id: stockCode }] : ["Product"],
+    }),
+
+    // Get product with ingredients
     getProductWithIngredients: builder.query<ProductWithIngredients, string>({
       query: (stockCode) => `/products/${stockCode}/ingredients`,
       providesTags: (result, _error, stockCode) =>
         result ? [{ type: "Ingredient" as const, id: stockCode }] : ["Product"],
     }),
+
+    // Create product
     createProduct: builder.mutation<Product, CreateProductRequest>({
       query: (body) => ({
         url: "/products",
@@ -63,6 +84,8 @@ export const productApi = emptyApi.injectEndpoints({
       invalidatesTags: (result, _error, params) =>
         result ? [{ type: "Product" as const, id: params.storageType }] : ["Product"],
     }),
+
+    // Create bulk products from excel
     createBulkProductsFromExcel: builder.mutation<any, CreateBulkProductsFromExcelParams>({
       query: (body) => {
         const formData = new FormData();
@@ -79,6 +102,8 @@ export const productApi = emptyApi.injectEndpoints({
         multipart: true,
       },
     }),
+
+    // Bulk update products
     bulkUpdateProducts: builder.mutation<Product, BulkUpdateProductsRequest>({
       query: (body) => ({
         url: "/products/bulk",
@@ -87,6 +112,8 @@ export const productApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: ["Product"],
     }),
+
+    // Delete product by stock code
     deleteProductByStockCode: builder.mutation<any, string>({
       query: (stockCode) => ({
         url: `/products/${stockCode}`,
@@ -100,11 +127,12 @@ export const productApi = emptyApi.injectEndpoints({
 
 export const {
   useGetProductsQuery,
-  useGetProductByStockCodeQuery,
   useGetProductsWithIngredientsQuery,
+  useGetProductsWithRoastIngredientsQuery,
+  useGetProductsWithShopifyIngredientsQuery,
   useGetProductsByStorageTypeQuery,
   useGetProductWithIngredientsQuery,
-  useGetProductsWithRoastIngredientsQuery,
+  useGetProductByStockCodeQuery,
   useCreateProductMutation,
   useCreateBulkProductsFromExcelMutation,
   useBulkUpdateProductsMutation,
@@ -125,6 +153,12 @@ interface GetProductsWithIngredientsResponse {
 
 interface GetProductsWithRoastIngredientsResponse {
   products: ProductWithRoastIngredients[];
+  totalPages: number;
+  totalCount: number;
+}
+
+interface GetProductsWithShopifyIngredientsResponse {
+  products: ProductWithShopifyIngredients[];
   totalPages: number;
   totalCount: number;
 }

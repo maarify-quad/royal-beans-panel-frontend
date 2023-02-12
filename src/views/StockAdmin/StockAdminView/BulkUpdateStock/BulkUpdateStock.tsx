@@ -4,7 +4,17 @@ import { useMemo, useState } from "react";
 import { useGetProductsQuery, useBulkUpdateProductsMutation } from "@services/productApi";
 
 // UI Components
-import { ActionIcon, Alert, Button, Group, NumberInput, Paper, Select, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Affix,
+  Alert,
+  Button,
+  Group,
+  NumberInput,
+  Paper,
+  Select,
+  Text,
+} from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // UI Utils
@@ -133,14 +143,18 @@ export const BulkUpdateStock = () => {
   return (
     <>
       {Object.values(editedProducts).length > 0 && (
-        <Group align="center" position="right">
-          <Button size="sm" onClick={handleBulkUpdate}>
-            Toplu Güncelle ({editedRowIndexes.length} ürün)
-          </Button>
-          <Button color="red" size="sm" onClick={handleCancelEdit}>
-            Toplu Vazgeç
-          </Button>
-        </Group>
+        <Affix position={{ bottom: 5, left: "50%" }} style={{ transform: "translate(-50%, -50%)" }}>
+          <Paper withBorder p="md" radius="md" shadow="sm">
+            <Group align="center" position="right">
+              <Button size="sm" onClick={handleBulkUpdate}>
+                Toplu Güncelle ({editedRowIndexes.length} ürün)
+              </Button>
+              <Button color="red" size="sm" onClick={handleCancelEdit}>
+                Toplu Vazgeç
+              </Button>
+            </Group>
+          </Paper>
+        </Affix>
       )}
       <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
         <DataTable
