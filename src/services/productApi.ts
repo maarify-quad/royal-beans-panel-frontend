@@ -1,7 +1,7 @@
 import { emptyApi } from "./emptyApi";
 
 // Interfaces
-import { Product, ProductWithDeliveryDetails, ProductWithIngredients } from "@interfaces/product";
+import { Product, ProductWithIngredients, ProductWithRoastIngredients } from "@interfaces/product";
 
 export const productApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -34,6 +34,19 @@ export const productApi = emptyApi.injectEndpoints({
         return url.toString();
       },
       providesTags: ["Product"],
+      keepUnusedDataFor: 15,
+    }),
+    getProductsWithRoastIngredients: builder.query<
+      GetProductsWithRoastIngredientsResponse,
+      GetProductsRequest | void
+    >({
+      query: (params) => {
+        const url = new URL("/products/roast_ingredients", import.meta.env.VITE_API_BASE_URL);
+        url.searchParams.append("page", params?.page.toString() || "1");
+        url.searchParams.append("limit", params?.limit.toString() || "25");
+        return url.toString();
+      },
+      providesTags: [{ type: "Product" as const, id: "roast_ingredients" }],
       keepUnusedDataFor: 15,
     }),
     getProductsByStorageType: builder.query<
@@ -111,6 +124,7 @@ export const {
   useGetProductsWithIngredientsQuery,
   useGetProductsByStorageTypeQuery,
   useGetProductWithIngredientsQuery,
+  useGetProductsWithRoastIngredientsQuery,
   useCreateProductMutation,
   useCreateBulkProductsFromExcelMutation,
   useBulkUpdateProductsMutation,
@@ -125,6 +139,12 @@ interface GetProductsResponse {
 
 interface GetProductsWithIngredientsResponse {
   products: ProductWithIngredients[];
+  totalPages: number;
+  totalCount: number;
+}
+
+interface GetProductsWithRoastIngredientsResponse {
+  products: ProductWithRoastIngredients[];
   totalPages: number;
   totalCount: number;
 }

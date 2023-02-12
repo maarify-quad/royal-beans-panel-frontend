@@ -37,6 +37,9 @@ const ProductDetailsView = React.lazy(() => import("./views/Storage/ProductDetai
 const ListRoastsView = React.lazy(() => import("./views/Roast/ListRoastsView"));
 const RoastDetailsView = React.lazy(() => import("./views/Roast/RoastDetailsView"));
 const CreateRoastView = React.lazy(() => import("./views/Roast/CreateRoastView"));
+const CreateRoastIngredientView = React.lazy(
+  () => import("./views/RoastIngredient/CreateRoastIngredientView")
+);
 
 // Customer Views
 const ListCustomersView = React.lazy(() => import("./views/Customer/ListCustomersView"));
@@ -132,6 +135,10 @@ export const Routing = () => {
         {
           path: "/dashboard/roasts/create",
           element: <CreateRoastView />,
+        },
+        {
+          path: "/dashboard/roasts/ingredients/create",
+          element: <CreateRoastIngredientView />,
         },
         {
           path: "/dashboard/customers",

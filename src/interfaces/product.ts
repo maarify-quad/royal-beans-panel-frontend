@@ -1,4 +1,5 @@
 import { DeliveryDetail } from "./delivery";
+import { RoastIngredient } from "./roast";
 
 export interface Product {
   id: number;
@@ -17,8 +18,8 @@ export interface ProductWithIngredients extends Product {
   ingredients: Ingredient[];
 }
 
-export interface ProductWithDeliveryDetails extends Product {
-  deliveryDetails: DeliveryDetail[];
+export interface ProductWithRoastIngredients extends Product {
+  roastIngredients: RoastIngredient[];
 }
 
 export interface Ingredient {

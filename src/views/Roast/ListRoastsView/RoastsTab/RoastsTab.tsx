@@ -17,7 +17,7 @@ import { IconAlertCircle } from "@tabler/icons";
 // Interfaces
 import { Roast } from "@interfaces/roast";
 
-export const Results = () => {
+export const RoastsTab = () => {
   // Internal state
   const [query, setQuery] = useState({
     page: 1,
@@ -75,7 +75,7 @@ export const Results = () => {
   }
 
   return (
-    <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
+    <Paper radius="md" shadow="sm" p="md" withBorder>
       <DataTable
         highlightOnHover
         records={roasts}

@@ -20,3 +20,14 @@ export interface RoastDetail {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface RoastIngredient {
+  id: number;
+  productId: number;
+  ingredientId: number;
+  rate: number;
+  createdAt: string;
+  updatedAt: string;
+  product: Product;
+  ingredient: Product;
+}
