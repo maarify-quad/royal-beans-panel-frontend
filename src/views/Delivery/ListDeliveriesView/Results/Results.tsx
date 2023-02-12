@@ -22,21 +22,26 @@ import { Delivery } from "@interfaces/delivery";
 
 export const Results = () => {
   // Internal state
-  const [query, setQuery] = React.useState({
+  const [pagination, setPagination] = React.useState({
     page: 1,
     limit: 25,
   });
 
   // Queries
-  const { deliveries, totalCount, isTableLoading, error } = useGetDeliveriesQuery(query, {
-    selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
-      ...rest,
-      deliveries: data?.deliveries,
-      totalPages: data?.totalPages,
-      totalCount: data?.totalCount,
-      isTableLoading: isLoading || isFetching,
-    }),
-  });
+  const { deliveries, totalCount, isTableLoading, error } = useGetDeliveriesQuery(
+    {
+      pagination,
+    },
+    {
+      selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
+        ...rest,
+        deliveries: data?.deliveries,
+        totalPages: data?.totalPages,
+        totalCount: data?.totalCount,
+        isTableLoading: isLoading || isFetching,
+      }),
+    }
+  );
 
   const columns: DataTableColumn<Delivery>[] = useMemo(
     () => [
@@ -95,18 +100,18 @@ export const Results = () => {
         fetching={isTableLoading}
         noRecordsText="Kayıt bulunamadı"
         loadingText="Yükleniyor"
-        recordsPerPage={query.limit}
+        recordsPerPage={pagination.limit}
         totalRecords={totalCount}
-        page={query.page}
-        onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
+        page={pagination.page}
+        onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
       />
       <Group>
         <Text size="sm">Sayfa başı satır</Text>
         <Select
-          value={query.limit.toString()}
+          value={pagination.limit.toString()}
           onChange={(limit) => {
             if (limit) {
-              setQuery({ page: 1, limit: +limit });
+              setPagination({ page: 1, limit: +limit });
             }
           }}
           data={[

@@ -17,6 +17,7 @@ import { priceListApi } from "@services/priceListApi";
 import { priceListProductApi } from "@services/priceListProductApi";
 import { orderApi } from "@services/orderApi";
 import { ingredientApi } from "@services/ingredientApi";
+import { roastIngredientApi } from "@services/roastIngredientApi";
 import { shopparApi } from "@services/shopparApi";
 
 // Middlewares
@@ -38,6 +39,7 @@ const store = configureStore({
     [priceListProductApi.reducerPath]: priceListProductApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
     [ingredientApi.reducerPath]: ingredientApi.reducer,
+    [roastIngredientApi.reducerPath]: roastIngredientApi.reducer,
     [shopparApi.reducerPath]: shopparApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

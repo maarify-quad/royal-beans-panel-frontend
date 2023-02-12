@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import sortBy from "lodash/sortBy";
 
 // Routing
 import { Link } from "react-router-dom";
@@ -8,7 +9,7 @@ import { useGetProductsByStorageTypeQuery } from "@services/productApi";
 
 // UI Components
 import { Alert, Anchor, Group, Paper, Select, Text } from "@mantine/core";
-import { DataTable, DataTableColumn } from "mantine-datatable";
+import { DataTable, DataTableColumn, DataTableSortStatus } from "mantine-datatable";
 
 // Icons
 import { IconAlertCircle } from "@tabler/icons";
@@ -22,13 +23,17 @@ type StorageProductsProps = {
 };
 
 export const StorageProducts = ({ storageType }: StorageProductsProps) => {
+  // Query state
   const [query, setQuery] = useState({
     page: 1,
-    limit: 25,
+    limit: 100,
   });
+
+  // Queries
   const { products, totalCount, isTableLoading, error } = useGetProductsByStorageTypeQuery(
     {
       storageType,
+      ...query,
     },
     {
       selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
@@ -41,23 +46,41 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
     }
   );
 
+  // State
+  const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
+    columnAccessor: "name",
+    direction: "asc",
+  });
+  const [sortedProducts, setSortedProducts] = useState(products);
+
+  // Columns
   const columns = useMemo<DataTableColumn<Product>[]>(
     () => [
       {
         accessor: "name",
         title: "Ürün",
+        sortable: true,
         render: (product) => (
           <Anchor component={Link} to={`/dashboard/storage/${product.stockCode}`}>
             {product.name}
           </Anchor>
         ),
       },
-      { accessor: "stockCode", title: "Stok Kodu" },
-      { accessor: "amount", title: "Miktar" },
-      { accessor: "amountUnit", title: "Miktar Birimi" },
+      { accessor: "stockCode", title: "Stok Kodu", sortable: true },
+      { accessor: "amount", title: "Miktar", sortable: true },
+      { accessor: "amountUnit", title: "Miktar Birimi", sortable: true },
     ],
     [products]
   );
+
+  useEffect(() => {
+    const data = sortBy(products, sortStatus.columnAccessor);
+    setSortedProducts(sortStatus.direction === "desc" ? data.reverse() : data);
+  }, [sortStatus]);
+
+  useEffect(() => {
+    setSortedProducts(products);
+  }, [products]);
 
   if (error) {
     return (
@@ -71,7 +94,7 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
     <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
       <DataTable
         highlightOnHover
-        records={products}
+        records={sortedProducts}
         columns={columns}
         fetching={isTableLoading}
         noRecordsText="Kayıt bulunamadı"
@@ -80,6 +103,8 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
         totalRecords={totalCount}
         page={query.page}
         onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
+        sortStatus={sortStatus}
+        onSortStatusChange={setSortStatus}
       />
       <Group>
         <Text size="sm">Sayfa başı satır</Text>

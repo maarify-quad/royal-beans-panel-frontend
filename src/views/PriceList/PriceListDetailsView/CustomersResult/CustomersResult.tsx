@@ -1,10 +1,13 @@
 import React from "react";
 
 // UI Components
-import { Table, Paper, Alert } from "@mantine/core";
+import { Table, Paper, Alert, Flex, Badge } from "@mantine/core";
 
 // Icons
 import { IconInfoCircle } from "@tabler/icons";
+
+// Utils
+import { formatCurrency } from "@utils/localization";
 
 // Interfaces
 import { Customer } from "@interfaces/customer";
@@ -35,8 +38,17 @@ export const CustomersResult: React.FC<CustomersResultProps> = ({ customers }) =
         <tbody>
           {customers?.map((customer, i) => (
             <tr key={i}>
-              <td>{customer.name}</td>
-              <td>{customer.currentBalance.toFixed(2)} ₺</td>
+              <td>
+                <Flex gap="xs">
+                  {customer.name}
+                  {customer.deletedAt && (
+                    <Badge color="red" size="sm">
+                      İNAKTİF
+                    </Badge>
+                  )}
+                </Flex>
+              </td>
+              <td>{formatCurrency(customer.currentBalance)}</td>
             </tr>
           ))}
         </tbody>

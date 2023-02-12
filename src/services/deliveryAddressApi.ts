@@ -8,6 +8,8 @@ export const deliveryAddressApi = emptyApi.injectEndpoints({
         method: "POST",
         body,
       }),
+      invalidatesTags: (result, _error, params) =>
+        result ? ["Customer", { type: "Customer" as const, id: params.customerId }] : ["Customer"],
     }),
   }),
 });

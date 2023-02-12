@@ -76,9 +76,11 @@ export const Header = ({ isNavbarExpanded, setIsNavbarExpanded }: HeaderProps) =
             <Title className={classes.title}>Royal Beans</Title>
           </Group>
           <Group>
-            <Text color="dimmed" size="sm">
-              {dayjs().format("DD MMMM YYYY, dddd")}
-            </Text>
+            <MediaQuery smallerThan="md" styles={{ display: "none" }}>
+              <Text color="dimmed" size="sm">
+                {dayjs().format("DD MMMM YYYY, dddd")}
+              </Text>
+            </MediaQuery>
             <ColorSchemeToggler />
           </Group>
         </Group>

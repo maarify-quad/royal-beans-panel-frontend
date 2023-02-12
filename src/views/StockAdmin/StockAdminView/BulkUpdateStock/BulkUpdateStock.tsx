@@ -20,7 +20,7 @@ export const BulkUpdateStock = () => {
   // State
   const [query, setQuery] = useState({
     page: 1,
-    limit: 25,
+    limit: 100,
   });
   const [editedRowIndexes, setEditedRowIndexes] = useState<number[]>([]);
   const [editedProducts, setEditedProducts] = useState<{ [key: number]: Product }>({});

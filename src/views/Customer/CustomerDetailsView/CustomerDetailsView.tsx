@@ -5,7 +5,7 @@ import { Navigate, useParams, useSearchParams } from "react-router-dom";
 import { useGetCustomerByIdQuery } from "@services/customerApi";
 
 // UI Components
-import { Alert, Loader, Tabs, Button } from "@mantine/core";
+import { Alert, Loader, Tabs, Button, Text } from "@mantine/core";
 
 // Hooks
 import { useCreateDeliveryAddress } from "@hooks/delivery-address/useCreateDeliveryAddress";
@@ -28,8 +28,12 @@ export const CustomerDetailsView = () => {
   const { openCreateDeliveryAddress } = useCreateDeliveryAddress();
 
   // Queries
-  const { data, isLoading, error } = useGetCustomerByIdQuery(id!, {
+  const { data, isLoading, isDeactivated, error } = useGetCustomerByIdQuery(id!, {
     skip: !id,
+    selectFromResult: ({ ...rest }) => ({
+      ...rest,
+      isDeactivated: !!rest.data?.deletedAt,
+    }),
   });
 
   if (!id) {
@@ -55,60 +59,71 @@ export const CustomerDetailsView = () => {
   }
 
   return (
-    <PageLayout
-      title={data?.name}
-      breadcrumbs={[
-        {
-          label: "Panel",
-          href: "/dashboard",
-        },
-        {
-          label: "Müşteriler",
-          href: "/dashboard/customers",
-        },
-        {
-          label: data?.name,
-          href: `/dashboard/customers/${id}`,
-        },
-      ]}
-      actions={
-        <Button
-          leftIcon={<IconPlus />}
-          onClick={() => {
-            openCreateDeliveryAddress(data!.id);
-          }}
-        >
-          Yeni Teslimat Adresi
-        </Button>
-      }
-    >
-      {data && (
-        <Tabs
-          defaultValue={searchParams.get("tab") || "details"}
-          onTabChange={(tab: string) => setSearchParams({ tab })}
-          mt="md"
-        >
-          <Tabs.List>
-            <Tabs.Tab value="details">Detaylar</Tabs.Tab>
-            <Tabs.Tab value="lastOrders">Son Siparişler</Tabs.Tab>
-            <Tabs.Tab value="lastProducts">Son Ürünler</Tabs.Tab>
-            <Tabs.Tab value="priceList">Fiyat Listesi</Tabs.Tab>
-          </Tabs.List>
-
-          <Tabs.Panel value="details" mt="md">
-            <DetailsTab customer={data} />
-          </Tabs.Panel>
-          <Tabs.Panel value="lastOrders" mt="md">
-            <LastOrdersTab customer={data.name} />
-          </Tabs.Panel>
-          <Tabs.Panel value="lastProducts" mt="md">
-            <LastProductsTab customer={data.name} />
-          </Tabs.Panel>
-          <Tabs.Panel value="priceList" mt="md">
-            <PriceListTab customer={data} />
-          </Tabs.Panel>
-        </Tabs>
+    <>
+      {isDeactivated && (
+        <Alert icon={<IconAlertCircle />} variant="filled" color="red" mb="md">
+          <Text weight="bold">Bu müşteri devre dışı bırakılmıştır</Text>
+        </Alert>
       )}
-    </PageLayout>
+      <PageLayout
+        title={data?.name}
+        breadcrumbs={[
+          {
+            label: "Panel",
+            href: "/dashboard",
+          },
+          {
+            label: "Müşteriler",
+            href: "/dashboard/customers",
+          },
+          {
+            label: data?.name,
+            href: `/dashboard/customers/${id}`,
+          },
+        ]}
+        actions={
+          !isDeactivated && (
+            <Button
+              leftIcon={<IconPlus />}
+              onClick={() => {
+                openCreateDeliveryAddress(data!.id);
+              }}
+            >
+              Yeni Teslimat Adresi
+            </Button>
+          )
+        }
+      >
+        {data && (
+          <>
+            <Tabs
+              defaultValue={searchParams.get("tab") || "details"}
+              onTabChange={(tab: string) => setSearchParams({ tab })}
+              mt="md"
+            >
+              <Tabs.List>
+                <Tabs.Tab value="details">Detaylar</Tabs.Tab>
+                <Tabs.Tab value="lastOrders">Son Siparişler</Tabs.Tab>
+                <Tabs.Tab value="lastProducts">Son Ürünler</Tabs.Tab>
+                <Tabs.Tab value="priceList">Fiyat Listesi</Tabs.Tab>
+              </Tabs.List>
+
+              <Tabs.Panel value="details" mt="md">
+                <DetailsTab customer={data} />
+              </Tabs.Panel>
+              <Tabs.Panel value="lastOrders" mt="md">
+                <LastOrdersTab customer={data.name} />
+              </Tabs.Panel>
+              <Tabs.Panel value="lastProducts" mt="md">
+                <LastProductsTab customer={data.name} />
+              </Tabs.Panel>
+              <Tabs.Panel value="priceList" mt="md">
+                <PriceListTab customer={data} />
+              </Tabs.Panel>
+            </Tabs>
+          </>
+        )}
+      </PageLayout>
+    </>
   );
 };

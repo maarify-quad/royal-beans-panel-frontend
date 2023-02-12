@@ -29,4 +29,5 @@ export interface Customer {
   specialNote?: string;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string | null;
 }

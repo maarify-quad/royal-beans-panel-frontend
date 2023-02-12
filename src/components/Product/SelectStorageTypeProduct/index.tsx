@@ -1,0 +1,1 @@
+export { SelectStorageTypeProduct } from "./SelectStorageTypeProduct";

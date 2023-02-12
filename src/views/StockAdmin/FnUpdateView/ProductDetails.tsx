@@ -1,5 +1,5 @@
 // Services
-import { useDeleteByIdMutation } from "@services/ingredientApi";
+import { useDeleteIngredientByIdMutation } from "@services/ingredientApi";
 
 // UI Components
 import {
@@ -28,13 +28,14 @@ type ProductDetailsProps = {
 };
 
 export const ProductDetails = ({ product }: ProductDetailsProps) => {
-  const [deleteIngredient, { isLoading: isDeleting }] = useDeleteByIdMutation();
+  const [deleteIngredient, { isLoading: isDeleting }] = useDeleteIngredientByIdMutation();
 
   const handleDeleteIngredient = (id: number) => {
     openConfirmModal({
       title: "İçeriği silmek istediğinize emin misiniz?",
       labels: { cancel: "İptal", confirm: "Sil" },
       confirmProps: { color: "red" },
+      centered: true,
       onConfirm: async () => {
         try {
           await deleteIngredient({ id, stockCode: product.stockCode }).unwrap();

@@ -5,17 +5,22 @@ import { OrderProduct } from "@interfaces/orderProduct";
 
 export const orderProductApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getLatestOrderProductsByCustomer: builder.query<
-      GetLatestOrderProductsByCustomerResponse,
-      string
+    getOrderProductsByCustomer: builder.query<
+      GetOrderProductsByCustomerResponse,
+      GetOrderProductsByCustomerRequest
     >({
-      query: (customer) => `/order_products/latest/${customer}`,
+      query: (params) => `/order_products/customer/${params.customer}?limit=${params.limit}`,
     }),
   }),
 });
 
-export const { useGetLatestOrderProductsByCustomerQuery } = orderProductApi;
+export const { useGetOrderProductsByCustomerQuery } = orderProductApi;
 
-interface GetLatestOrderProductsByCustomerResponse {
+interface GetOrderProductsByCustomerRequest {
+  customer: string;
+  limit: number;
+}
+
+interface GetOrderProductsByCustomerResponse {
   orderProducts: OrderProduct[];
 }

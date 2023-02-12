@@ -64,7 +64,7 @@ interface LinksGroupProps {
 }
 
 export const LinksGroup = ({ icon: Icon, label, link, match, subLinks }: LinksGroupProps) => {
-  const { classes, cx } = useStyles();
+  const { classes, cx, theme } = useStyles();
   const hasLinks = Array.isArray(subLinks);
   const routeMatch = useMatch(window.location.pathname);
 
@@ -76,7 +76,9 @@ export const LinksGroup = ({ icon: Icon, label, link, match, subLinks }: LinksGr
             component={Link}
             to={link}
             className={cx(classes.link, {
-              [classes.linkActive]: match ? match.test(routeMatch?.pathname || "/panel") : false,
+              [classes.linkActive]: match
+                ? match.test(routeMatch?.pathname || "/dashboard")
+                : false,
             })}
           >
             <Icon size={20} />
@@ -91,7 +93,7 @@ export const LinksGroup = ({ icon: Icon, label, link, match, subLinks }: LinksGr
               to={link.link}
               className={cx({
                 [classes.subLinkActive]: link.match
-                  ? link.match.test(routeMatch?.pathname || "/panel")
+                  ? link.match.test(routeMatch?.pathname || "/dashboard")
                   : false,
               })}
             >
@@ -104,12 +106,12 @@ export const LinksGroup = ({ icon: Icon, label, link, match, subLinks }: LinksGr
   }
 
   return (
-    <Tooltip label={label} position="right" withArrow withinPortal>
+    <Tooltip label={label} position="right" color={theme.primaryColor} withArrow withinPortal>
       <UnstyledButton
         component={Link}
         to={link}
         className={cx(classes.link, {
-          [classes.linkActive]: link ? link === routeMatch?.pathname : false,
+          [classes.linkActive]: link ? match.test(routeMatch?.pathname || "/dashboard") : false,
         })}
       >
         <Icon size={20} />

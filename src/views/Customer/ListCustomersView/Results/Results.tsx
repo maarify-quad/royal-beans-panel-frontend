@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { useGetCustomersQuery } from "@services/customerApi";
 
 // UI Components
-import { Alert, Anchor, Group, Paper, Select, Text } from "@mantine/core";
+import { Alert, Anchor, Badge, Flex, Group, Paper, Select, Text, ThemeIcon } from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
@@ -21,21 +21,27 @@ import { Customer } from "@interfaces/customer";
 
 export const Results = () => {
   // Internal state
-  const [query, setQuery] = React.useState({
+  const [pagination, setPagination] = React.useState({
     page: 1,
     limit: 25,
   });
 
   // Queries
-  const { customers, totalCount, isTableLoading, error } = useGetCustomersQuery(query, {
-    selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
-      ...rest,
-      customers: data?.customers,
-      totalPages: data?.totalPages,
-      totalCount: data?.totalCount,
-      isTableLoading: isLoading || isFetching,
-    }),
-  });
+  const { customers, totalCount, isTableLoading, error } = useGetCustomersQuery(
+    {
+      withDeleted: true,
+      pagination,
+    },
+    {
+      selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
+        ...rest,
+        customers: data?.customers,
+        totalPages: data?.totalPages,
+        totalCount: data?.totalCount,
+        isTableLoading: isLoading || isFetching,
+      }),
+    }
+  );
 
   const columns: DataTableColumn<Customer>[] = useMemo(
     () => [
@@ -43,9 +49,16 @@ export const Results = () => {
         accessor: "name",
         title: "Müşteri",
         render: (customer) => (
-          <Anchor component={Link} to={`/dashboard/customers/${customer.id}`}>
-            {customer.name}
-          </Anchor>
+          <Flex align="center" gap="xs">
+            <Anchor component={Link} to={`/dashboard/customers/${customer.id}`}>
+              {customer.name}
+            </Anchor>
+            {customer.deletedAt && (
+              <Badge color="red" size="sm">
+                İNAKTİF
+              </Badge>
+            )}
+          </Flex>
         ),
       },
       {
@@ -88,18 +101,18 @@ export const Results = () => {
         fetching={isTableLoading}
         noRecordsText="Kayıt bulunamadı"
         loadingText="Yükleniyor"
-        recordsPerPage={query.limit}
+        recordsPerPage={pagination.limit}
         totalRecords={totalCount}
-        page={query.page}
-        onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
+        page={pagination.page}
+        onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
       />
       <Group>
         <Text size="sm">Sayfa başı satır</Text>
         <Select
-          value={query.limit.toString()}
+          value={pagination.limit.toString()}
           onChange={(limit) => {
             if (limit) {
-              setQuery({ page: 1, limit: +limit });
+              setPagination({ page: 1, limit: +limit });
             }
           }}
           data={[

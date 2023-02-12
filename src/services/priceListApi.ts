@@ -17,9 +17,16 @@ export const priceListApi = emptyApi.injectEndpoints({
       },
       providesTags: ["PriceList"],
     }),
-    getPriceListById: builder.query<PriceList, string>({
-      query: (id) => `/price_lists/${id}`,
-      providesTags: (_result, _error, id) => [{ type: "PriceList" as const, id }],
+    getPriceListById: builder.query<PriceList, GetPriceListByIdRequest>({
+      query: (params) => {
+        const url = new URL(`/price_lists/${params.id}`, import.meta.env.VITE_API_BASE_URL);
+        if (params.withDeleted) {
+          url.searchParams.append("withDeleted", "true");
+        }
+        return url.toString();
+      },
+      providesTags: (result, _error, params) =>
+        result ? [{ type: "PriceList" as const, id: params.id }] : [],
     }),
     createPriceList: builder.mutation<PriceList, CreatePriceListParams>({
       query: (body) => ({
@@ -44,6 +51,11 @@ interface GetPriceListsResponse {
   priceLists: PriceList[];
   totalPages: number;
   totalCount: number;
+}
+
+interface GetPriceListByIdRequest {
+  id: string;
+  withDeleted?: boolean;
 }
 
 interface CreatePriceListParams {
