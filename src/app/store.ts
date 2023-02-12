@@ -22,6 +22,7 @@ import { shopparApi } from "@services/shopparApi";
 
 // Middlewares
 import { rtkQueryErrorLogger } from "./middlewares/rtkQueryErrorLogger";
+import { shopifyIngredientApi } from "@services/shopifyIngredientApi";
 
 const store = configureStore({
   reducer: {
@@ -40,6 +41,7 @@ const store = configureStore({
     [orderApi.reducerPath]: orderApi.reducer,
     [ingredientApi.reducerPath]: ingredientApi.reducer,
     [roastIngredientApi.reducerPath]: roastIngredientApi.reducer,
+    [shopifyIngredientApi.reducerPath]: shopifyIngredientApi.reducer,
     [shopparApi.reducerPath]: shopparApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

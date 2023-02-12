@@ -1,18 +1,19 @@
-import { memo, useMemo, useState } from "react";
-
-// Routing
-import { Link } from "react-router-dom";
+import { lazy, memo, Suspense, useMemo, useState } from "react";
 
 // Services
-import { useGetProductsWithIngredientsQuery } from "@services/productApi";
+import { useGetProductsWithShopifyIngredientsQuery } from "@services/productApi";
+import { useDeleteShopifyIngredientMutation } from "@services/shopifyIngredientApi";
 
 // UI Components
 import {
+  ActionIcon,
   Button,
   Card,
+  Divider,
   Flex,
   Group,
   Loader,
+  LoadingOverlay,
   Pagination,
   Paper,
   Select,
@@ -24,11 +25,20 @@ import {
 
 // UI Utils
 import { useDebouncedValue } from "@mantine/hooks";
+import { openConfirmModal, openModal } from "@mantine/modals";
+
+// Icons
+import { IconTrash } from "@tabler/icons";
 
 // Interfaces
-import { ProductWithIngredients } from "@interfaces/product";
+import { ProductWithShopifyIngredients } from "@interfaces/product";
 
-export const FnUpdateIngredients = () => {
+// Lazy Components
+const AddShopifyIngredient = lazy(
+  () => import("@components/ShopifyIngredient/AddShopifyIngredient")
+);
+
+export const ShopifyUpdateIngredients = () => {
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 100,
@@ -37,7 +47,7 @@ export const FnUpdateIngredients = () => {
   const [debouncedSearch] = useDebouncedValue(search, 500);
 
   // Queries
-  const { data, isLoading, isFetching } = useGetProductsWithIngredientsQuery({ pagination });
+  const { data, isLoading, isFetching } = useGetProductsWithShopifyIngredientsQuery({ pagination });
 
   const products = useMemo(() => {
     if (!data) {
@@ -100,11 +110,39 @@ export const FnUpdateIngredients = () => {
   );
 };
 
-const ProductList = memo(({ products }: { products: ProductWithIngredients[] }) => {
+const ProductList = memo(({ products }: { products: ProductWithShopifyIngredients[] }) => {
+  const [deleteShopifyIngredient, { isLoading }] = useDeleteShopifyIngredientMutation();
+
+  const handleUpdate = (product: ProductWithShopifyIngredients) => {
+    openModal({
+      title: `${product.name} - Shopify İçerik Güncelle`,
+      children: (
+        <Suspense fallback={<LoadingOverlay visible />}>
+          <AddShopifyIngredient productId={product.id} />
+        </Suspense>
+      ),
+    });
+  };
+
+  const handleDelete = (id: number) => {
+    openConfirmModal({
+      title: "Bu içeriği silmek istediğinize emin misiniz?",
+      confirmProps: { color: "red" },
+      labels: { cancel: "İptal", confirm: "Sil" },
+      centered: true,
+      onConfirm: async () => {
+        try {
+          await deleteShopifyIngredient(id).unwrap();
+        } catch {}
+      },
+    });
+  };
+
   return (
     <>
       {products.map((product) => (
         <Card withBorder shadow="sm" radius="md" key={product.id}>
+          <LoadingOverlay visible={isLoading} />
           <SimpleGrid
             breakpoints={[
               { minWidth: "sm", cols: 1 },
@@ -123,21 +161,36 @@ const ProductList = memo(({ products }: { products: ProductWithIngredients[] }) 
               <Text size="xl" weight="bold">
                 İçerikler:
               </Text>
-              {product.ingredients.map((ingredient) => (
+              {product.shopifyIngredients.map((ingredient) => (
                 <Paper p="xs" radius="md" withBorder key={ingredient.id}>
-                  <Text size="sm">
-                    {ingredient.ingredientProduct.stockCode &&
-                      `${ingredient.ingredientProduct.stockCode} -`}{" "}
-                    {ingredient.ingredientProduct.name} * {ingredient.ratio}{" "}
-                    {ingredient.ingredientProduct.amountUnit}
-                  </Text>
+                  <Group>
+                    <Group spacing="xs">
+                      <Text size="sm" color="dimmed">
+                        Shopify Ürün ID:
+                      </Text>
+                      <Text inline size="sm">
+                        {ingredient.shopifyProductId}
+                      </Text>
+                    </Group>
+                    <Divider orientation="vertical" />
+                    <Group spacing="xs">
+                      <Text size="sm" color="dimmed">
+                        Shopify Varyant ID:
+                      </Text>
+                      <Text inline size="sm">
+                        {ingredient.shopifyVariantId || "-"}
+                      </Text>
+                    </Group>
+                    <Divider orientation="vertical" />
+                    <ActionIcon color="red" onClick={() => handleDelete(ingredient.id)}>
+                      <IconTrash size={18} />
+                    </ActionIcon>
+                  </Group>
                 </Paper>
               ))}
             </Flex>
             <Stack align="center" justify="center">
-              <Button component={Link} to={`/dashboard/stock-admin/fn-update/${product.stockCode}`}>
-                Güncelle
-              </Button>
+              <Button onClick={() => handleUpdate(product)}>Güncelle</Button>
             </Stack>
           </SimpleGrid>
         </Card>

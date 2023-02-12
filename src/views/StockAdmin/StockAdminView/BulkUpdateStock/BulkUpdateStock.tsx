@@ -4,7 +4,17 @@ import { useMemo, useState } from "react";
 import { useGetProductsQuery, useBulkUpdateProductsMutation } from "@services/productApi";
 
 // UI Components
-import { ActionIcon, Alert, Button, Group, NumberInput, Paper, Select, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Affix,
+  Alert,
+  Button,
+  Group,
+  NumberInput,
+  Paper,
+  Select,
+  Text,
+} from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // UI Utils
@@ -18,7 +28,7 @@ import { Product } from "@interfaces/product";
 
 export const BulkUpdateStock = () => {
   // State
-  const [query, setQuery] = useState({
+  const [pagination, setPagination] = useState({
     page: 1,
     limit: 100,
   });
@@ -26,15 +36,18 @@ export const BulkUpdateStock = () => {
   const [editedProducts, setEditedProducts] = useState<{ [key: number]: Product }>({});
 
   // Queries
-  const { products, totalCount, isTableLoading, error } = useGetProductsQuery(query, {
-    selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
-      ...rest,
-      products: data?.products,
-      totalPages: data?.totalPages,
-      totalCount: data?.totalCount,
-      isTableLoading: isLoading || isFetching,
-    }),
-  });
+  const { products, totalCount, isTableLoading, error } = useGetProductsQuery(
+    { pagination },
+    {
+      selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
+        ...rest,
+        products: data?.products,
+        totalPages: data?.totalPages,
+        totalCount: data?.totalCount,
+        isTableLoading: isLoading || isFetching,
+      }),
+    }
+  );
 
   // Mutations
   const [bulkUpdateProducts, { isLoading: isUpdating }] = useBulkUpdateProductsMutation();
@@ -130,14 +143,18 @@ export const BulkUpdateStock = () => {
   return (
     <>
       {Object.values(editedProducts).length > 0 && (
-        <Group align="center" position="right">
-          <Button size="sm" onClick={handleBulkUpdate}>
-            Toplu Güncelle ({editedRowIndexes.length} ürün)
-          </Button>
-          <Button color="red" size="sm" onClick={handleCancelEdit}>
-            Toplu Vazgeç
-          </Button>
-        </Group>
+        <Affix position={{ bottom: 5, left: "50%" }} style={{ transform: "translate(-50%, -50%)" }}>
+          <Paper withBorder p="md" radius="md" shadow="sm">
+            <Group align="center" position="right">
+              <Button size="sm" onClick={handleBulkUpdate}>
+                Toplu Güncelle ({editedRowIndexes.length} ürün)
+              </Button>
+              <Button color="red" size="sm" onClick={handleCancelEdit}>
+                Toplu Vazgeç
+              </Button>
+            </Group>
+          </Paper>
+        </Affix>
       )}
       <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
         <DataTable
@@ -147,10 +164,10 @@ export const BulkUpdateStock = () => {
           fetching={isTableLoading || isUpdating}
           noRecordsText="Kayıt bulunamadı"
           loadingText="Yükleniyor"
-          recordsPerPage={query.limit}
+          recordsPerPage={pagination.limit}
           totalRecords={totalCount}
-          page={query.page}
-          onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
+          page={pagination.page}
+          onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
           onCellClick={(row) => {
             if (row.column.accessor === "amount" && !editedRowIndexes.includes(row.recordIndex)) {
               setEditedRowIndexes((prev) => [...prev, row.recordIndex]);
@@ -161,10 +178,10 @@ export const BulkUpdateStock = () => {
         <Group>
           <Text size="sm">Sayfa başı satır</Text>
           <Select
-            value={query.limit.toString()}
+            value={pagination.limit.toString()}
             onChange={(limit) => {
               if (limit) {
-                setQuery({ page: 1, limit: +limit });
+                setPagination({ page: 1, limit: +limit });
               }
             }}
             data={[
