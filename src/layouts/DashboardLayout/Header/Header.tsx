@@ -73,7 +73,7 @@ export const Header = ({ isNavbarExpanded, setIsNavbarExpanded }: HeaderProps) =
                 color={theme.colors.gray[6]}
               />
             </MediaQuery>
-            <Title className={classes.title}>Royal Beans</Title>
+            <Title className={classes.title}>TAFT Coffee Co.</Title>
           </Group>
           <Group>
             <MediaQuery smallerThan="md" styles={{ display: "none" }}>

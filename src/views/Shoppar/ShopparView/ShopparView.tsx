@@ -105,7 +105,7 @@ export const ShopparView = () => {
               <Text>Son excel alınma:</Text>
               <b>
                 {data.lastExportedCreatedAt
-                  ? dayjs(data.lastExportedCreatedAt).format("DD MMM YYYY - HH:mm")
+                  ? dayjs(data.lastExportedCreatedAt).format("DD MMMM YYYY - HH:mm")
                   : "?"}
               </b>
             </Group>

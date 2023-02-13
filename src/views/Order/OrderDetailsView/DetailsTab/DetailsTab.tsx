@@ -89,8 +89,11 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ order }) => {
       <DetailsCard title="Gönderi Tipi" value={order.deliveryType} />
       <DetailsCard title="Gönderi Durumu" value={order.status} />
       <DetailsCard title="Kargo Takip No" value={order.cargoTrackNo || "-"} />
-      <DetailsCard title="Gönderi Tarihi" value={dayjs(order.deliveryDate).format("DD MMM YYYY")} />
-      <DetailsCard title="Sipariş Tarihi" value={dayjs(order.createdAt).format("DD MMM YYYY")} />
+      <DetailsCard
+        title="Gönderi Tarihi"
+        value={dayjs(order.deliveryDate).format("DD MMMM YYYY")}
+      />
+      <DetailsCard title="Sipariş Tarihi" value={dayjs(order.createdAt).format("DD MMMM YYYY")} />
     </SimpleGrid>
   );
 };

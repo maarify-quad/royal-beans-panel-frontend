@@ -16,6 +16,11 @@ import { AuthInitialiser } from "@components/AuthInitialiser";
 import { useLocalStorage } from "@mantine/hooks";
 import store from "./app/store";
 
+import dayjs from "dayjs";
+import "dayjs/locale/tr";
+
+dayjs.locale("tr");
+
 function App() {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "colorScheme",

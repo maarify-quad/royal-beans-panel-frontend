@@ -49,7 +49,7 @@ export const RoastsTab = () => {
       {
         accessor: "date",
         title: "Tarih",
-        render: (roast) => dayjs(roast.date).format("DD MMM YYYY"),
+        render: (roast) => dayjs(roast.date).format("DD MMMM YYYY"),
       },
       {
         accessor: "totalInputAmount",

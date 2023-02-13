@@ -14,8 +14,7 @@ const useStyles = createStyles((theme) => ({
     height: "100vh",
     display: "flex",
     placeItems: "center",
-    backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[0],
+    backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[0],
   },
   title: {
     textAlign: "center",
@@ -32,7 +31,7 @@ export const LoginView = () => {
         <div style={{ position: "absolute", top: 20, left: 20 }}>
           <ColorSchemeToggler />
         </div>
-        <Title className={classes.title}>Royal Beans</Title>
+        <Title className={classes.title}>TAFT Coffee Co.</Title>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <LoginForm />
         </Paper>

@@ -57,7 +57,7 @@ export const Results = () => {
       {
         accessor: "deliveryDate",
         title: "Sevkiyat Tarihi",
-        render: (delivery) => dayjs(delivery.deliveryDate).format("DD MMM YYYY"),
+        render: (delivery) => dayjs(delivery.deliveryDate).format("DD MMMM YYYY"),
       },
       { accessor: "supplier.name", title: "Tedarikçi" },
       {

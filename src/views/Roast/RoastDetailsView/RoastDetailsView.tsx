@@ -66,7 +66,7 @@ export const RoastDetailsView = () => {
         },
       ]}
     >
-      <Text color="dimmed">{dayjs(data?.roast.date).format("DD MMM YYYY")}</Text>
+      <Text color="dimmed">{dayjs(data?.roast.date).format("DD MMMM YYYY")}</Text>
       <Stack spacing="lg" mt="md">
         <RoastedCoffees roastDetails={data?.roast.roastDetails} />
         <RoundsTable roastDetails={data?.roast.roastDetails} />
