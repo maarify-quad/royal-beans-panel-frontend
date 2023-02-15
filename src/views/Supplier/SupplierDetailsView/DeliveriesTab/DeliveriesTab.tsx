@@ -49,7 +49,7 @@ export const DeliveriesTab: React.FC<DeliveriesTabProps> = ({ supplierId }) => {
       {
         accessor: "deliveryDate",
         title: "Sevkiyat Tarihi",
-        render: (delivery) => dayjs(delivery.deliveryDate).format("DD MMM YYYY"),
+        render: (delivery) => dayjs(delivery.deliveryDate).format("DD MMMM YYYY"),
       },
       {
         accessor: "id",

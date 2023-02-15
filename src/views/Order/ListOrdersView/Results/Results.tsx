@@ -58,7 +58,7 @@ export const Results = ({ type }: ResultsProps) => {
       {
         accessor: "createdAt",
         title: "Tarih",
-        render: (order) => dayjs(order.createdAt).format("DD MMM YYYY"),
+        render: (order) => dayjs(order.createdAt).format("DD MMMM YYYY"),
       },
       {
         accessor: "customer",

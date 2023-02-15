@@ -1,10 +1,8 @@
 // Icons
 import {
-  IconTruckDelivery,
   IconUsers,
   IconShoppingCart,
   IconUserCircle,
-  IconPackage,
   IconCoffee,
   IconTags,
   TablerIcon,

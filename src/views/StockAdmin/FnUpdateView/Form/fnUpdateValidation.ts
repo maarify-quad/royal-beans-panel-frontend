@@ -22,6 +22,6 @@ export const fnUpdateSchema = z.object({
 export const fnUpdateInitialValues: FnUpdateValues = {
   ingredientProductId: "0",
   ingredientProduct: null,
-  ratio: 0,
+  ratio: 1,
   ingredients: [],
 };

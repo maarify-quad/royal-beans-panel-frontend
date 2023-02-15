@@ -58,7 +58,7 @@ export const LastOrdersTab: React.FC<LastOrdersTabProps> = ({ customer }) => {
       {
         accessor: "createdAt",
         title: "Tarih",
-        render: (order) => dayjs(order.createdAt).format("DD MMM YYYY"),
+        render: (order) => dayjs(order.createdAt).format("DD MMMM YYYY"),
       },
       {
         accessor: "total",

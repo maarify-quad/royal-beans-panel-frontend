@@ -47,7 +47,7 @@ export const DeliveriesTab = ({ stockCode }: DeliveriesTabProps) => {
       {
         accessor: "delivery.deliveryDate",
         title: "Tarih",
-        render: (detail) => dayjs(detail.delivery.deliveryDate).format("DD MMM YYYY"),
+        render: (detail) => dayjs(detail.delivery.deliveryDate).format("DD MMMM YYYY"),
       },
       {
         accessor: "delivery.supplier.name",

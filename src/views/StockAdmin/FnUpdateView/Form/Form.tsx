@@ -150,7 +150,7 @@ export const Form = ({ productId, stockCode }: FormProps) => {
                 ingredientProduct: form.values.ingredientProduct,
               });
               form.setFieldValue("ingredientProductId", "0");
-              form.setFieldValue("ratio", 0);
+              form.setFieldValue("ratio", 1);
             }}
           >
             İçerik Ekle
