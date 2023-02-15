@@ -1,5 +1,4 @@
 import { RoastIngredient } from "./roast";
-import { ShopifyIngredient } from "./shopifyProduct";
 
 export interface Product {
   id: number;
