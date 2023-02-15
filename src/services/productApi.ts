@@ -9,7 +9,6 @@ import {
   ProductRelation,
   ProductWithIngredients,
   ProductWithRoastIngredients,
-  ProductWithShopifyIngredients,
 } from "@interfaces/product";
 
 export const productApi = emptyApi.injectEndpoints({
@@ -37,15 +36,6 @@ export const productApi = emptyApi.injectEndpoints({
     >({
       query: (params) => getPaginatedURL("/products/roast_ingredients", params?.pagination),
       providesTags: [{ type: "Product" as const, id: "roast_ingredients" }],
-    }),
-
-    // Get products with Shopify ingredients
-    getProductsWithShopifyIngredients: builder.query<
-      GetProductsWithShopifyIngredientsResponse,
-      GetProductsRequest | void
-    >({
-      query: (params) => getPaginatedURL("/products/shopify_ingredients", params?.pagination),
-      providesTags: [{ type: "Product" as const, id: "shopify_ingredients" }],
     }),
 
     // Get products by storage type
@@ -129,7 +119,6 @@ export const {
   useGetProductsQuery,
   useGetProductsWithIngredientsQuery,
   useGetProductsWithRoastIngredientsQuery,
-  useGetProductsWithShopifyIngredientsQuery,
   useGetProductsByStorageTypeQuery,
   useGetProductWithIngredientsQuery,
   useGetProductByStockCodeQuery,
@@ -153,12 +142,6 @@ interface GetProductsWithIngredientsResponse {
 
 interface GetProductsWithRoastIngredientsResponse {
   products: ProductWithRoastIngredients[];
-  totalPages: number;
-  totalCount: number;
-}
-
-interface GetProductsWithShopifyIngredientsResponse {
-  products: ProductWithShopifyIngredients[];
   totalPages: number;
   totalCount: number;
 }

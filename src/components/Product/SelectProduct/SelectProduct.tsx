@@ -6,7 +6,15 @@ import { useGetProductsQuery } from "@services/productApi";
 // UI Components
 import { Select, SelectProps } from "@mantine/core";
 
-export const SelectProduct = (props: Omit<SelectProps, "data" | "disabled">) => {
+// Interfaces
+import { Product } from "@interfaces/product";
+
+// Props
+type Props = Omit<SelectProps, "data" | "disabled" | "onChange"> & {
+  onChange: (value: string | null, product: Product | undefined) => void;
+};
+
+export const SelectProduct = ({ onChange, ...rest }: Props) => {
   const { products, isLoading, isFetching } = useGetProductsQuery(undefined, {
     selectFromResult: ({ data, ...rest }) => ({
       products: data?.products,
@@ -23,5 +31,15 @@ export const SelectProduct = (props: Omit<SelectProps, "data" | "disabled">) => 
     [products]
   );
 
-  return <Select {...props} disabled={isLoading || isFetching} data={productSelectOptions} />;
+  return (
+    <Select
+      {...rest}
+      disabled={isLoading || isFetching}
+      data={productSelectOptions}
+      onChange={(value) => {
+        const selectedProduct = products?.find((product) => product.id.toString() === value);
+        onChange(value, selectedProduct);
+      }}
+    />
+  );
 };
