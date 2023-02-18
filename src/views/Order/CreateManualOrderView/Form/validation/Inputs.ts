@@ -2,6 +2,7 @@ import { Product } from "@interfaces/product";
 
 export type Inputs = {
   productId: string;
+  product: Product | null;
   receiver: string;
   receiverNeighborhood: string;
   receiverAddress: string;
@@ -30,6 +31,7 @@ export type Inputs = {
 
 export const initialValues: Inputs = {
   productId: "0",
+  product: null,
   receiver: "",
   receiverNeighborhood: "",
   receiverAddress: "",

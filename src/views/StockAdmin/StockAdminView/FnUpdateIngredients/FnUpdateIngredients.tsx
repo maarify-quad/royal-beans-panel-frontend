@@ -4,7 +4,7 @@ import { memo, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 // Services
-import { useGetProductsWithIngredientsQuery } from "@services/productApi";
+import { RequestQuery, useGetProductsWithIngredientsQuery } from "@services/productApi";
 
 // UI Components
 import {
@@ -29,7 +29,7 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { ProductWithIngredients } from "@interfaces/product";
 
 export const FnUpdateIngredients = () => {
-  const [pagination, setPagination] = useState({
+  const [query, setQuery] = useState<RequestQuery>({
     page: 1,
     limit: 100,
   });
@@ -37,7 +37,7 @@ export const FnUpdateIngredients = () => {
   const [debouncedSearch] = useDebouncedValue(search, 500);
 
   // Queries
-  const { data, isLoading, isFetching } = useGetProductsWithIngredientsQuery({ pagination });
+  const { data, isLoading, isFetching } = useGetProductsWithIngredientsQuery({ query });
 
   const products = useMemo(() => {
     if (!data) {
@@ -72,10 +72,10 @@ export const FnUpdateIngredients = () => {
           <Group>
             <Text size="sm">Sayfa başı satır</Text>
             <Select
-              value={pagination.limit.toString()}
+              value={query.limit?.toString() || "100"}
               onChange={(limit) => {
                 if (limit) {
-                  setPagination({ page: 1, limit: +limit });
+                  setQuery({ page: 1, limit: +limit });
                 }
               }}
               data={[
@@ -90,8 +90,8 @@ export const FnUpdateIngredients = () => {
           {data && (
             <Pagination
               total={data?.totalPages}
-              page={pagination.page}
-              onChange={(page) => setPagination({ ...pagination, page })}
+              page={query.page}
+              onChange={(page) => setQuery({ ...query, page })}
             />
           )}
         </Group>

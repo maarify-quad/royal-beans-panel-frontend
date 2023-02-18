@@ -1,7 +1,11 @@
 import { useMemo, useState } from "react";
 
 // Services
-import { useGetProductsQuery, useBulkUpdateProductsMutation } from "@services/productApi";
+import {
+  useGetProductsQuery,
+  useBulkUpdateProductsMutation,
+  RequestQuery,
+} from "@services/productApi";
 
 // UI Components
 import {
@@ -28,7 +32,7 @@ import { Product } from "@interfaces/product";
 
 export const BulkUpdateStock = () => {
   // State
-  const [pagination, setPagination] = useState({
+  const [query, setQuery] = useState<RequestQuery>({
     page: 1,
     limit: 100,
   });
@@ -37,7 +41,7 @@ export const BulkUpdateStock = () => {
 
   // Queries
   const { products, totalCount, isTableLoading, error } = useGetProductsQuery(
-    { pagination },
+    { query },
     {
       selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
         ...rest,
@@ -57,7 +61,7 @@ export const BulkUpdateStock = () => {
     try {
       await bulkUpdateProducts({
         products: Object.values(editedProducts),
-      });
+      }).unwrap();
       setEditedRowIndexes([]);
       setEditedProducts({});
       showNotification({
@@ -164,10 +168,10 @@ export const BulkUpdateStock = () => {
           fetching={isTableLoading || isUpdating}
           noRecordsText="Kayıt bulunamadı"
           loadingText="Yükleniyor"
-          recordsPerPage={pagination.limit}
+          recordsPerPage={query.limit || 100}
           totalRecords={totalCount}
-          page={pagination.page}
-          onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
+          page={query.page || 1}
+          onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
           onCellClick={(row) => {
             if (row.column.accessor === "amount" && !editedRowIndexes.includes(row.recordIndex)) {
               setEditedRowIndexes((prev) => [...prev, row.recordIndex]);
@@ -178,10 +182,10 @@ export const BulkUpdateStock = () => {
         <Group>
           <Text size="sm">Sayfa başı satır</Text>
           <Select
-            value={pagination.limit.toString()}
+            value={query.limit?.toString() || "100"}
             onChange={(limit) => {
               if (limit) {
-                setPagination({ page: 1, limit: +limit });
+                setQuery({ page: 1, limit: +limit });
               }
             }}
             data={[

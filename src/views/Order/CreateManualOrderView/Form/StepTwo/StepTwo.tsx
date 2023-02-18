@@ -7,30 +7,18 @@ import { Grid, NumberInput, Select } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 
 // Components
+import SelectStorageTypeProduct from "@components/Product/SelectStorageTypeProduct";
 import { Summary } from "./Summary";
 
 // Validation
 import { Inputs } from "../validation/Inputs";
 
-// Interfaces
-import { Product } from "@interfaces/product";
-
 // Props
 type StepTwoProps = {
   form: UseFormReturnType<Inputs>;
-  products?: Product[];
 };
 
-export const StepTwo: React.FC<StepTwoProps> = ({ form, products }) => {
-  const productSelectOptions = useMemo(() => {
-    return (
-      products?.map((product) => ({
-        value: product.id.toString(),
-        label: product.name,
-      })) || []
-    );
-  }, [products]);
-
+export const StepTwo: React.FC<StepTwoProps> = ({ form }) => {
   useEffect(() => {
     const subTotal = form.values.unitPrice * form.values.quantity;
     const tax = form.values.taxRate !== 0 ? (subTotal * form.values.taxRate) / 100 : 0;
@@ -42,13 +30,19 @@ export const StepTwo: React.FC<StepTwoProps> = ({ form, products }) => {
   return (
     <Grid>
       <Grid.Col lg={6}>
-        <Select
+        <SelectStorageTypeProduct
+          storageType="FN"
           label="Ürün"
           placeholder="Ürün seçiniz"
           searchable
-          required
-          data={productSelectOptions}
+          withAsterisk
           {...form.getInputProps("productId")}
+          onChange={(productId, product) => {
+            if (productId && product) {
+              form.setFieldValue("productId", productId);
+              form.setFieldValue("product", product);
+            }
+          }}
         />
         <Select
           label="Öğütme Metodu"

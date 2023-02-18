@@ -51,7 +51,7 @@ export const Summary: React.FC<SummaryProps> = ({ form }) => {
       </Stack>
       {form.values.orderProducts.length > 0 ? (
         <Button mt="md" type="submit">
-          Gönderi oluştur
+          Gönderi Oluştur
         </Button>
       ) : (
         <Alert icon={<IconInfoCircle />} color="cyan">

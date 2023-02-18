@@ -1,6 +1,17 @@
 import { z } from "zod";
 
-export const schema = z.object({
+export type CreateSupplierValues = {
+  name: string;
+  address: string;
+  taxNo: string;
+  taxOffice: string;
+  contactName: string;
+  contactPosition: string;
+  contactPhone: string;
+  contactEmail: string;
+};
+
+export const createSupplierSchema = z.object({
   name: z
     .string({
       required_error: "Tedarikçi adı gereklidir",
@@ -55,7 +66,7 @@ export const schema = z.object({
     .or(z.literal("")),
 });
 
-export const initialValues = {
+export const initialValues: CreateSupplierValues = {
   name: "",
   address: "",
   taxNo: "",

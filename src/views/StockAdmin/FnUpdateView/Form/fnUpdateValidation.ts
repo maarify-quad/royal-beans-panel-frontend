@@ -19,7 +19,7 @@ export const fnUpdateSchema = z.object({
   ratio: z.number().min(0),
 });
 
-export const fnUpdateInitialValues: FnUpdateValues = {
+export const initialValues: FnUpdateValues = {
   ingredientProductId: "0",
   ingredientProduct: null,
   ratio: 1,

@@ -1,6 +1,51 @@
+import { Product } from "@interfaces/product";
 import { z } from "zod";
 
-export const schema = z.object({
+export type CreateDeliveryValues = {
+  deliveryDate: Date;
+  invoiceDate: Date;
+  supplierId: string;
+  productId: string;
+  product: Product | null;
+  storageType: string;
+  quantity: number;
+  unit: string;
+  unitPriceUSD: number;
+  unitPriceTRY: number;
+  taxRate: string;
+  subTotal: number;
+  total: number;
+  deliveryDetails: {
+    product: Product;
+    productId: number;
+    quantity: number;
+    unit: string;
+    unitPriceUSD: number;
+    unitPriceTRY: number;
+    taxRate: number;
+    subTotal: number;
+    total: number;
+  }[];
+};
+
+export const initialValues: CreateDeliveryValues = {
+  deliveryDate: new Date(),
+  invoiceDate: new Date(),
+  supplierId: "",
+  deliveryDetails: [],
+  productId: "0",
+  product: null,
+  storageType: "HM",
+  quantity: 0,
+  unit: "kg",
+  unitPriceUSD: 0,
+  unitPriceTRY: 0,
+  taxRate: "0",
+  subTotal: 0,
+  total: 0,
+};
+
+export const createDeliverySchema = z.object({
   deliveryDate: z.date({
     required_error: "Sevkiyat tarihi gereklidir",
     invalid_type_error: "Geçersiz sevkiyat tarih değeri",
@@ -73,19 +118,3 @@ export const schema = z.object({
     .array()
     .min(1, "Sevkiyat için en az 1 ürün gereklidir"),
 });
-
-export const initialValues = {
-  deliveryDate: new Date(),
-  invoiceDate: new Date(),
-  supplierId: "",
-  deliveryDetails: [],
-  productId: "0",
-  storageType: "HM",
-  quantity: 0,
-  unit: "kg",
-  unitPriceUSD: 0,
-  unitPriceTRY: 0,
-  taxRate: "0",
-  subTotal: 0,
-  total: 0,
-};

@@ -1,10 +1,13 @@
 import React, { useMemo, useState } from "react";
 
+// Routing
+import { Link } from "react-router-dom";
+
 // Services
 import { useGetOrderProductsByCustomerQuery } from "@services/orderProductApi";
 
 // UI Components
-import { Alert, Group, Paper, Select, Text } from "@mantine/core";
+import { Alert, Anchor, Badge, Flex, Group, Paper, Select, Text } from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
@@ -36,6 +39,21 @@ export const LastProductsTab: React.FC<LastProductsTabProps> = ({ customer }) =>
       {
         title: "Ürün",
         accessor: "priceListProduct.product.name",
+        render: (orderProduct) => {
+          const { product } = orderProduct.priceListProduct;
+          return (
+            <Flex align="center" gap="xs">
+              <Anchor component={Link} to={`/dashboard/storage/${product.stockCode}`}>
+                {product.name}
+              </Anchor>
+              {product.deletedAt && (
+                <Badge color="red" size="sm">
+                  İNAKTİF
+                </Badge>
+              )}
+            </Flex>
+          );
+        },
       },
       {
         title: "Adet",
