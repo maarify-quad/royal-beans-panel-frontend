@@ -1,1 +1,1 @@
-export { SelectStorageTypeProduct } from "./SelectStorageTypeProduct";
+export { SelectStorageTypeProduct as default } from "./SelectStorageTypeProduct";

@@ -27,7 +27,7 @@ import { showNotification } from "@mantine/notifications";
 import { IconCircleCheck, IconTrash } from "@tabler/icons";
 
 // Validation
-import { FnUpdateValues, fnUpdateInitialValues, fnUpdateSchema } from "./fnUpdateValidation";
+import { FnUpdateValues, initialValues, fnUpdateSchema } from "./fnUpdateValidation";
 
 // Utils
 import { handleFormError } from "@utils/form";
@@ -40,7 +40,7 @@ type FormProps = {
 
 export const Form = ({ productId, stockCode }: FormProps) => {
   const form = useForm<FnUpdateValues>({
-    initialValues: fnUpdateInitialValues,
+    initialValues,
     validate: zodResolver(fnUpdateSchema),
   });
 

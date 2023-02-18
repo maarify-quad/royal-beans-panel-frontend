@@ -21,13 +21,22 @@ import { schema, initialValues } from "./validation/schema";
 // Utils
 import { handleFormError } from "@utils/form";
 
-export const ManualCreate = () => {
+// Props
+type ManualCreateProps = {
+  productName?: string;
+  onManualCreate?: () => void;
+};
+
+export const ManualCreate = ({ productName, onManualCreate }: ManualCreateProps) => {
   // Mutations
   const [createProductMutation, { isLoading: isCreating }] = useCreateProductMutation();
 
   // Form utils
   const form = useForm<Inputs>({
-    initialValues,
+    initialValues: {
+      ...initialValues,
+      name: productName || initialValues.name,
+    },
     validate: zodResolver(schema),
     validateInputOnChange: true,
     clearInputErrorOnChange: true,
@@ -36,6 +45,7 @@ export const ManualCreate = () => {
   const onCreateProductSubmit = async (values: Inputs) => {
     try {
       await createProductMutation(values).unwrap();
+      onManualCreate?.();
       showNotification({
         title: "Başarılı",
         message: `${form.values.name} ürünü oluşturuldu`,

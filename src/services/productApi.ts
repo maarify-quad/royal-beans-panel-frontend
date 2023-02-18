@@ -1,8 +1,5 @@
 import { emptyApi } from "./emptyApi";
 
-// Utils
-import { getPaginatedURL } from "@utils/service";
-
 // Interfaces
 import {
   Product,
@@ -15,9 +12,13 @@ export const productApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get products
     getProducts: builder.query<GetProductsResponse, GetProductsRequest | void>({
-      query: (params) => getPaginatedURL("/products", params?.pagination),
+      query: (params) => ({
+        url: "/products",
+        ...(Object.keys(params?.query || {}).length && {
+          params: params?.query,
+        }),
+      }),
       providesTags: ["Product"],
-      keepUnusedDataFor: 15,
     }),
 
     // Get products with ingredients
@@ -25,7 +26,12 @@ export const productApi = emptyApi.injectEndpoints({
       GetProductsWithIngredientsResponse,
       GetProductsRequest | void
     >({
-      query: (params) => getPaginatedURL("/products/ingredients", params?.pagination),
+      query: (params) => ({
+        url: "/products/ingredients",
+        ...(Object.keys(params?.query || {}).length && {
+          params: params?.query,
+        }),
+      }),
       providesTags: [{ type: "Product" as const, id: "ingredients" }],
     }),
 
@@ -34,7 +40,12 @@ export const productApi = emptyApi.injectEndpoints({
       GetProductsWithRoastIngredientsResponse,
       GetProductsRequest | void
     >({
-      query: (params) => getPaginatedURL("/products/roast_ingredients", params?.pagination),
+      query: (params) => ({
+        url: "/products/roast_ingredients",
+        ...(Object.keys(params?.query || {}).length && {
+          params: params?.query,
+        }),
+      }),
       providesTags: [{ type: "Product" as const, id: "roast_ingredients" }],
     }),
 
@@ -46,15 +57,9 @@ export const productApi = emptyApi.injectEndpoints({
       query: (params) => ({
         url: `/products/storageType/${params.storageType}`,
         ...(Object.keys(params.query || {}).length && {
-          params: {
-            page: params.query?.page,
-            limit: params.query?.limit,
-            sortBy: params.query?.sortBy,
-            sortOrder: params.query?.sortOrder,
-          },
+          params: params.query,
         }),
       }),
-      keepUnusedDataFor: 15,
       providesTags: (result, _error, params) =>
         result ? [{ type: "Product" as const, id: params.storageType }] : ["Product"],
     }),
@@ -174,13 +179,13 @@ interface GetProductsByStorageTypeResponse {
 }
 
 interface GetProductsRequest {
-  pagination?: { page: number; limit: number };
   relations?: ProductRelation[];
+  query: RequestQuery;
 }
 
 interface GetProductsByStorageTypeRequest {
   storageType: string;
-  query?: { page?: number; limit?: number; sortBy?: string; sortOrder?: "ASC" | "DESC" };
+  query?: RequestQuery;
 }
 
 interface CreateProductRequest {
@@ -205,4 +210,11 @@ interface UpdateProductRequest {
 
 interface BulkUpdateProductsRequest {
   products: { id: number; name: string; storageType: string; amount: number; amountUnit: string }[];
+}
+
+export interface RequestQuery {
+  page?: number;
+  limit?: number;
+  sortBy?: keyof Product;
+  sortOrder?: "ASC" | "DESC";
 }

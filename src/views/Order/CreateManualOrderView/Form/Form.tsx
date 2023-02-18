@@ -4,7 +4,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 // Services
-import { useGetProductsByStorageTypeQuery } from "@services/productApi";
 import { useCreateManualOrderMutation } from "@services/orderApi";
 
 // UI Components
@@ -37,17 +36,6 @@ export const Form = () => {
   const nextStep = () => setStep((current) => (current < 1 ? current + 1 : current));
   const prevStep = () => setStep((current) => (current > 0 ? current - 1 : current));
 
-  // Queries
-  const { products, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery(
-    { storageType: "FN" },
-    {
-      selectFromResult: ({ data, ...rest }) => ({
-        ...rest,
-        products: data?.products,
-      }),
-    }
-  );
-
   // Mutations
   const [createManualOrder, { isLoading: isCreatingOrder }] = useCreateManualOrderMutation();
 
@@ -59,10 +47,8 @@ export const Form = () => {
 
   const handleAddProduct = () => {
     // Destructure form values
-    const { productId, grindType, unitPrice, quantity, taxRate, subTotal, total } = form.values;
-
-    // Find product
-    const product = products?.find((product) => product.id.toString() === productId);
+    const { productId, grindType, unitPrice, quantity, taxRate, subTotal, total, product } =
+      form.values;
 
     // Add product to order
     form.insertListItem("orderProducts", {
@@ -120,13 +106,13 @@ export const Form = () => {
 
   return (
     <form onSubmit={form.onSubmit(onCreateOrderSubmit, handleFormError)}>
-      <LoadingOverlay visible={isCreatingOrder || isProductsLoading} />
+      <LoadingOverlay visible={isCreatingOrder} />
       <Stepper active={step} mt="md">
         <Stepper.Step>
           <StepOne form={form} />
         </Stepper.Step>
-        <Stepper.Step loading={isProductsLoading}>
-          <StepTwo products={products} form={form} />
+        <Stepper.Step>
+          <StepTwo form={form} />
         </Stepper.Step>
       </Stepper>
       <Group mt="lg">
@@ -135,7 +121,7 @@ export const Form = () => {
         </Button>
         {step === 1 ? (
           <Button disabled={form.values.productId === "0"} onClick={handleAddProduct}>
-            Ürün ekle
+            Ürün Ekle
           </Button>
         ) : (
           <Button onClick={nextStep}>İleri</Button>

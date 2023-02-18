@@ -15,8 +15,11 @@ import { useForm, zodResolver } from "@mantine/form";
 import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
-import { Inputs } from "./Form/validation/Inputs";
-import { schema, initialValues } from "./Form/validation/schema";
+import {
+  CreateDeliveryValues,
+  initialValues,
+  createDeliverySchema,
+} from "./Form/createDeliveryValidation";
 
 // Components
 import { Form } from "./Form";
@@ -35,12 +38,12 @@ export const CreateDeliveryView = () => {
   const [createDelivery, { isLoading }] = useCreateDeliveryMutation();
 
   // Form utils
-  const form = useForm<Inputs>({
+  const form = useForm<CreateDeliveryValues>({
     initialValues,
-    validate: zodResolver(schema),
+    validate: zodResolver(createDeliverySchema),
   });
 
-  const onCreateDeliverySubmit = async (values: typeof form.values) => {
+  const onCreateDeliverySubmit = async (values: CreateDeliveryValues) => {
     try {
       const { deliveryDate, invoiceDate, supplierId, deliveryDetails } = values;
       const result = await createDelivery({
@@ -63,7 +66,7 @@ export const CreateDeliveryView = () => {
 
   return (
     <PageLayout
-      title="Sevkiyat Oluştur"
+      title="Yeni Sevkiyat"
       breadcrumbs={[
         {
           label: "Panel",

@@ -60,7 +60,7 @@ export const CreateRoastView = () => {
 
   return (
     <PageLayout
-      title="Kavrum Oluştur"
+      title="Yeni Kavrum"
       breadcrumbs={[
         {
           label: "Panel",

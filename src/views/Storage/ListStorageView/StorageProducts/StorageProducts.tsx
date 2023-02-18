@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 // Services
-import { useGetProductsByStorageTypeQuery } from "@services/productApi";
+import { RequestQuery, useGetProductsByStorageTypeQuery } from "@services/productApi";
 
 // UI Components
 import { Alert, Anchor, Group, Paper, Select, Text } from "@mantine/core";
@@ -23,11 +23,11 @@ type StorageProductsProps = {
 
 export const StorageProducts = ({ storageType }: StorageProductsProps) => {
   // Query state
-  const [query, setQuery] = useState({
+  const [query, setQuery] = useState<RequestQuery>({
     page: 1,
     limit: 100,
     sortBy: "stockCode",
-    sortOrder: "ASC" as "ASC" | "DESC",
+    sortOrder: "ASC",
   });
 
   // Queries
@@ -91,16 +91,16 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
         fetching={isTableLoading}
         noRecordsText="Kayıt bulunamadı"
         loadingText="Yükleniyor"
-        recordsPerPage={query.limit}
+        recordsPerPage={query.limit || 100}
         totalRecords={totalCount}
-        page={query.page}
+        page={query.page || 1}
         onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
         sortStatus={sortStatus}
         onSortStatusChange={(status) => {
           setSortStatus(status);
           setQuery((prev) => ({
             ...prev,
-            sortBy: status.columnAccessor,
+            sortBy: status.columnAccessor as keyof Product,
             sortOrder: status.direction === "asc" ? "ASC" : "DESC",
           }));
         }}
@@ -108,7 +108,7 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
       <Group>
         <Text size="sm">Sayfa başı satır</Text>
         <Select
-          value={query.limit.toString()}
+          value={query.limit?.toString() || "100"}
           onChange={(limit) => {
             if (limit) {
               setQuery((prev) => ({ ...prev, page: 1, limit: +limit }));

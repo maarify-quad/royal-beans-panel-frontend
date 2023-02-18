@@ -14,7 +14,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 
 // Components
-import { SelectStorageTypeProduct } from "@components/Product/SelectStorageTypeProduct";
+import SelectStorageTypeProduct from "@components/Product/SelectStorageTypeProduct";
 import { Summary } from "./Summary";
 
 // Utils
