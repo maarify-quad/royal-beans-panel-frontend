@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 
 // UI Components
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import { createStyles, Title, Group, Breadcrumbs, Anchor, Loader, Alert } from "@mantine/core";
 
 // Icons
@@ -64,21 +65,26 @@ export const PageLayout = ({
   }
 
   return (
-    <div className={classes.root}>
-      <Breadcrumbs>
-        {breadcrumbs.map((breadcrumb) => (
-          <Anchor component={Link} to={breadcrumb.href} key={breadcrumb.href}>
-            {breadcrumb.label}
-          </Anchor>
-        ))}
-      </Breadcrumbs>
-      <Group align="center" position="apart" mt="md">
-        <Title order={2} className={classes.rootTitle}>
-          {title}
-        </Title>
-        {actions}
-      </Group>
-      {children}
-    </div>
+    <HelmetProvider>
+      <Helmet>
+        <title>{title} | TAFT Coffee Co.</title>
+      </Helmet>
+      <div className={classes.root}>
+        <Breadcrumbs>
+          {breadcrumbs.map((breadcrumb) => (
+            <Anchor component={Link} to={breadcrumb.href} key={breadcrumb.href}>
+              {breadcrumb.label}
+            </Anchor>
+          ))}
+        </Breadcrumbs>
+        <Group align="center" position="apart" mt="md">
+          <Title order={2} className={classes.rootTitle}>
+            {title}
+          </Title>
+          {actions}
+        </Group>
+        {children}
+      </div>
+    </HelmetProvider>
   );
 };

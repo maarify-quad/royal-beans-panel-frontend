@@ -79,7 +79,7 @@ export const DeliveryDetailsView = () => {
         </Alert>
       )}
       <PageLayout
-        title={`#${id} - ${data?.supplier.name}`}
+        title={`${id} - ${data?.supplier.name}`}
         breadcrumbs={[
           {
             label: "Panel",
