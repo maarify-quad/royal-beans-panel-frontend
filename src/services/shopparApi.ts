@@ -22,7 +22,7 @@ export const shopparApi = createApi({
     generateCargoExcels: builder.mutation<any, void>({
       query: () => ({
         url: "/cargo",
-        method: "POST",
+        method: "GET",
       }),
     }),
   }),
