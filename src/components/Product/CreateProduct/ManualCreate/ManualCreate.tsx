@@ -15,8 +15,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
-import { Inputs } from "./validation/Inputs";
-import { schema, initialValues } from "./validation/schema";
+import { CreateProductValues, initialValues, createProductSchema } from "./createProductValidation";
 
 // Utils
 import { handleFormError } from "@utils/form";
@@ -32,30 +31,31 @@ export const ManualCreate = ({ productName, onManualCreate }: ManualCreateProps)
   const [createProductMutation, { isLoading: isCreating }] = useCreateProductMutation();
 
   // Form utils
-  const form = useForm<Inputs>({
+  const form = useForm<CreateProductValues>({
     initialValues: {
       ...initialValues,
       name: productName || initialValues.name,
     },
-    validate: zodResolver(schema),
+    validate: zodResolver(createProductSchema),
     validateInputOnChange: true,
     clearInputErrorOnChange: true,
   });
 
-  const onCreateProductSubmit = async (values: Inputs) => {
+  const onCreateProductSubmit = async (values: CreateProductValues) => {
     try {
       await createProductMutation(values).unwrap();
+
       onManualCreate?.();
+
       showNotification({
         title: "Başarılı",
         message: `${form.values.name} ürünü oluşturuldu`,
         icon: <IconCircleCheck />,
         color: "green",
       });
+
       closeAllModals();
-    } catch {
-      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
-    }
+    } catch {}
   };
 
   return (

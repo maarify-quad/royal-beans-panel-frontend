@@ -1,5 +1,3 @@
-import React from "react";
-
 // Services
 import { useCreateSupplierMutation } from "@services/supplierApi";
 
@@ -15,34 +13,47 @@ import { useForm, zodResolver } from "@mantine/form";
 import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
-import { Inputs } from "./validation/Inputs";
-import { schema, initialValues } from "./validation/schema";
+import {
+  CreateSupplierValues,
+  initialValues,
+  createSupplierSchema,
+} from "./createSupplierValidation";
 
 // Utils
 import { handleFormError } from "@utils/form";
 
-export const CreateSupplier = () => {
-  const [createSupplier, { data, isLoading }] = useCreateSupplierMutation();
-  const form = useForm<Inputs>({
-    initialValues,
-    validate: zodResolver(schema),
+// Props
+type CreateSupplierProps = {
+  supplier?: Partial<CreateSupplierValues>;
+  onCreate?: () => void;
+};
+
+export const CreateSupplier = ({ supplier, onCreate }: CreateSupplierProps) => {
+  // Mutations
+  const [createSupplier, { isLoading }] = useCreateSupplierMutation();
+
+  const form = useForm<CreateSupplierValues>({
+    initialValues: { ...initialValues, ...supplier },
+    validate: zodResolver(createSupplierSchema),
     validateInputOnChange: true,
     clearInputErrorOnChange: true,
   });
 
-  const onCreateSupplierSubmit = async (inputs: Inputs) => {
+  const onCreateSupplierSubmit = async (inputs: CreateSupplierValues) => {
     try {
-      await createSupplier(inputs).unwrap();
+      const newSupplier = await createSupplier(inputs).unwrap();
+
+      onCreate?.();
+
       showNotification({
         title: "Başarılı",
-        message: data?.id ? `${data.id} koduyla tedarikçi oluşturuldu` : "Tedarikçi oluşturuldu",
+        message: `${newSupplier.id} koduyla tedarikçi oluşturuldu`,
         icon: <IconCircleCheck />,
         color: "green",
       });
+
       closeAllModals();
-    } catch {
-      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
-    }
+    } catch {}
   };
 
   return (

@@ -1,7 +1,8 @@
-import React from "react";
+// Routing
+import { Link } from "react-router-dom";
 
 // UI Components
-import { Table, ScrollArea, Text, Card, Group, Paper, Badge } from "@mantine/core";
+import { Table, ScrollArea, Text, Card, Group, Paper, Badge, Anchor } from "@mantine/core";
 
 // Utils
 import { formatCurrency } from "@utils/localization";
@@ -14,7 +15,7 @@ type ResultsProps = {
   delivery: Delivery;
 };
 
-export const Results: React.FC<ResultsProps> = ({ delivery }) => {
+export const Results = ({ delivery }: ResultsProps) => {
   return (
     <>
       <Paper p="md" radius="md" shadow="sm" withBorder>
@@ -33,7 +34,12 @@ export const Results: React.FC<ResultsProps> = ({ delivery }) => {
               {delivery.deliveryDetails?.map((deliveryDetail, i) => (
                 <tr key={i}>
                   <td>
-                    {deliveryDetail.product.name}{" "}
+                    <Anchor
+                      component={Link}
+                      to={`/dashboard/storage/${deliveryDetail.product.stockCode}`}
+                    >
+                      {deliveryDetail.product.name}
+                    </Anchor>
                     {deliveryDetail.product.deletedAt && (
                       <Badge color="red" size="sm" ml={4}>
                         İNAKTİF

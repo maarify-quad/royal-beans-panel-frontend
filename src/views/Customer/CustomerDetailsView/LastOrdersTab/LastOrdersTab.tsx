@@ -51,7 +51,7 @@ export const LastOrdersTab: React.FC<LastOrdersTabProps> = ({ customer }) => {
         title: "Sipariş No",
         render: (order) => (
           <Anchor component={Link} to={`/dashboard/orders/${order.orderId}`}>
-            #{order.orderId}
+            {order.orderId}
           </Anchor>
         ),
       },

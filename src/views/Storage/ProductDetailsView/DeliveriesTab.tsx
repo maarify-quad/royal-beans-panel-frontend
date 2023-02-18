@@ -50,6 +50,15 @@ export const DeliveriesTab = ({ stockCode }: DeliveriesTabProps) => {
         render: (detail) => dayjs(detail.delivery.deliveryDate).format("DD MMMM YYYY"),
       },
       {
+        accessor: "deliveryId",
+        title: "Sevkiyat",
+        render: (detail) => (
+          <Anchor component={Link} to={`/dashboard/deliveries/${detail.deliveryId}`}>
+            {detail.deliveryId}
+          </Anchor>
+        ),
+      },
+      {
         accessor: "delivery.supplier.name",
         title: "Tedarikçi",
         render: (detail) => (

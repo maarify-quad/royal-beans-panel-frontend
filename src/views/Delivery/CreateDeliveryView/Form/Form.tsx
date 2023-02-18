@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
 
-// Services
-import { useGetSuppliersQuery } from "@services/supplierApi";
-
 // UI Components
-import { Button, LoadingOverlay, NumberInput, Select, TextInput } from "@mantine/core";
+import { Button, NumberInput, Select, TextInput } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
 
 // Components
 import SelectProduct from "@components/Product/SelectProduct";
+import SelectSupplier from "@components/Supplier/SelectSupplier";
 
 // UI Utils
 import { UseFormReturnType } from "@mantine/form";
@@ -22,23 +20,6 @@ type FormProps = {
 };
 
 export const Form: React.FC<FormProps> = ({ form }) => {
-  // Get latest suppliers
-  const { suppliers, isLoading: isSuppliersLoading } = useGetSuppliersQuery(undefined, {
-    selectFromResult: ({ data, ...rest }) => ({
-      ...rest,
-      suppliers: data?.suppliers,
-    }),
-  });
-
-  const supplierSelectOptions = React.useMemo(
-    () =>
-      suppliers?.map((supplier) => ({
-        value: supplier.id.toString(),
-        label: supplier.name,
-      })) || [],
-    [suppliers]
-  );
-
   const handleAddProduct = () => {
     // Destructuring form values
     const {
@@ -74,7 +55,6 @@ export const Form: React.FC<FormProps> = ({ form }) => {
 
   return (
     <div>
-      <LoadingOverlay visible={isSuppliersLoading} />
       <DatePicker
         label="Sevkiyat Tarihi"
         placeholder="Sevkiyat Tarihi"
@@ -88,7 +68,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         clearable={false}
         {...form.getInputProps("invoiceDate")}
       />
-      <Select
+      <SelectSupplier
         label="Tedarikçi"
         mt="md"
         placeholder="Tedarikçi seçiniz"
@@ -97,18 +77,12 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         nothingFound="Sonuç bulunamadı"
         dropdownComponent="div"
         getCreateLabel={(query) => `+ ${query} oluştur`}
-        onCreate={(query) => {
-          const value = `NEW_${query}`;
-          const item = { value, label: query };
-          supplierSelectOptions.push({
-            label: query,
-            value: value,
-          });
-          form.setFieldValue("supplierId", value);
-          return item;
-        }}
-        data={supplierSelectOptions}
         {...form.getInputProps("supplierId")}
+        onChange={(supplierId) => {
+          if (supplierId) {
+            form.setFieldValue("supplierId", supplierId);
+          }
+        }}
       />
       <SelectProduct
         label="Ürün"
