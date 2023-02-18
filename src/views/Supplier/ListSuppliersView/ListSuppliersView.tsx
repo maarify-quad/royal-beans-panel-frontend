@@ -19,7 +19,7 @@ import { PageLayout } from "@layouts/PageLayout/PageLayout";
 const CreateSupplier = React.lazy(() => import("@components/Supplier/CreateSupplier"));
 
 export const ListSuppliersView = () => {
-  const onCreateSupplierClick = () => {
+  const handleCreateSupplier = () => {
     openModal({
       key: "createSupplier",
       title: "Tedarikçi Oluştur",
@@ -45,7 +45,7 @@ export const ListSuppliersView = () => {
         },
       ]}
       actions={
-        <Button leftIcon={<IconUserPlus />} onClick={onCreateSupplierClick}>
+        <Button leftIcon={<IconUserPlus />} onClick={handleCreateSupplier}>
           Yeni Tedarikçi
         </Button>
       }

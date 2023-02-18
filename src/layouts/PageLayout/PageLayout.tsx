@@ -67,7 +67,7 @@ export const PageLayout = ({
   return (
     <HelmetProvider>
       <Helmet>
-        <title>{title} | TAFT Coffee Co.</title>
+        <title>{title ? `${title} | TAFT Coffee Co.` : "TAFT Coffee Co."}</title>
       </Helmet>
       <div className={classes.root}>
         <Breadcrumbs>
