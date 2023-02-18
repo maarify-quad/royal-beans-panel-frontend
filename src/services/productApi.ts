@@ -43,8 +43,17 @@ export const productApi = emptyApi.injectEndpoints({
       GetProductsByStorageTypeResponse,
       GetProductsByStorageTypeRequest
     >({
-      query: (params) =>
-        getPaginatedURL(`/products/storageType/${params.storageType}`, params?.pagination),
+      query: (params) => ({
+        url: `/products/storageType/${params.storageType}`,
+        ...(Object.keys(params.query || {}).length && {
+          params: {
+            page: params.query?.page,
+            limit: params.query?.limit,
+            sortBy: params.query?.sortBy,
+            sortOrder: params.query?.sortOrder,
+          },
+        }),
+      }),
       keepUnusedDataFor: 15,
       providesTags: (result, _error, params) =>
         result ? [{ type: "Product" as const, id: params.storageType }] : ["Product"],
@@ -93,6 +102,17 @@ export const productApi = emptyApi.injectEndpoints({
       },
     }),
 
+    // Update product
+    updateProduct: builder.mutation<Product, UpdateProductRequest>({
+      query: (body) => ({
+        url: `/products/${body.id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: (result, _error, params) =>
+        result ? [{ type: "Product" as const, id: params.stockCode }] : ["Product"],
+    }),
+
     // Bulk update products
     bulkUpdateProducts: builder.mutation<Product, BulkUpdateProductsRequest>({
       query: (body) => ({
@@ -124,6 +144,7 @@ export const {
   useGetProductByStockCodeQuery,
   useCreateProductMutation,
   useCreateBulkProductsFromExcelMutation,
+  useUpdateProductMutation,
   useBulkUpdateProductsMutation,
   useDeleteProductByStockCodeMutation,
 } = productApi;
@@ -159,7 +180,7 @@ interface GetProductsRequest {
 
 interface GetProductsByStorageTypeRequest {
   storageType: string;
-  pagination?: { page: number; limit: number };
+  query?: { page?: number; limit?: number; sortBy?: string; sortOrder?: "ASC" | "DESC" };
 }
 
 interface CreateProductRequest {
@@ -171,6 +192,15 @@ interface CreateProductRequest {
 
 interface CreateBulkProductsFromExcelParams {
   excel: File;
+}
+
+interface UpdateProductRequest {
+  id: number;
+  stockCode: string;
+  name: string;
+  amount: number;
+  amountUnit: string;
+  tag: string | null;
 }
 
 interface BulkUpdateProductsRequest {

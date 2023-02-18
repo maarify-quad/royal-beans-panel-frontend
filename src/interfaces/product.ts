@@ -8,6 +8,7 @@ export interface Product {
   amount: number;
   amountUnit: string;
   reservedAmount: number;
+  tag: string | null;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;

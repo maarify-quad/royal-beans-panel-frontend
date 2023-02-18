@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
-import sortBy from "lodash/sortBy";
+import { useMemo, useState } from "react";
 
 // Routing
 import { Link } from "react-router-dom";
@@ -24,16 +23,18 @@ type StorageProductsProps = {
 
 export const StorageProducts = ({ storageType }: StorageProductsProps) => {
   // Query state
-  const [pagination, setPagination] = useState({
+  const [query, setQuery] = useState({
     page: 1,
     limit: 100,
+    sortBy: "stockCode",
+    sortOrder: "ASC" as "ASC" | "DESC",
   });
 
   // Queries
   const { products, totalCount, isTableLoading, error } = useGetProductsByStorageTypeQuery(
     {
       storageType,
-      pagination,
+      query,
     },
     {
       selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
@@ -48,10 +49,9 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
 
   // State
   const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
-    columnAccessor: "name",
+    columnAccessor: "stockCode",
     direction: "asc",
   });
-  const [sortedProducts, setSortedProducts] = useState(products);
 
   // Columns
   const columns = useMemo<DataTableColumn<Product>[]>(
@@ -69,18 +69,10 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
       { accessor: "stockCode", title: "Stok Kodu", sortable: true },
       { accessor: "amount", title: "Miktar", sortable: true },
       { accessor: "amountUnit", title: "Miktar Birimi", sortable: true },
+      { accessor: "tag", title: "Etiket", sortable: true },
     ],
     [products]
   );
-
-  useEffect(() => {
-    const data = sortBy(products, sortStatus.columnAccessor);
-    setSortedProducts(sortStatus.direction === "desc" ? data.reverse() : data);
-  }, [sortStatus]);
-
-  useEffect(() => {
-    setSortedProducts(products);
-  }, [products]);
 
   if (error) {
     return (
@@ -94,25 +86,32 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
     <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
       <DataTable
         highlightOnHover
-        records={sortedProducts}
+        records={products}
         columns={columns}
         fetching={isTableLoading}
         noRecordsText="Kayıt bulunamadı"
         loadingText="Yükleniyor"
-        recordsPerPage={pagination.limit}
+        recordsPerPage={query.limit}
         totalRecords={totalCount}
-        page={pagination.page}
-        onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
+        page={query.page}
+        onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
         sortStatus={sortStatus}
-        onSortStatusChange={setSortStatus}
+        onSortStatusChange={(status) => {
+          setSortStatus(status);
+          setQuery((prev) => ({
+            ...prev,
+            sortBy: status.columnAccessor,
+            sortOrder: status.direction === "asc" ? "ASC" : "DESC",
+          }));
+        }}
       />
       <Group>
         <Text size="sm">Sayfa başı satır</Text>
         <Select
-          value={pagination.limit.toString()}
+          value={query.limit.toString()}
           onChange={(limit) => {
             if (limit) {
-              setPagination({ page: 1, limit: +limit });
+              setQuery((prev) => ({ ...prev, page: 1, limit: +limit }));
             }
           }}
           data={[
