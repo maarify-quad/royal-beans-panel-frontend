@@ -10,11 +10,11 @@ import { UseFormReturnType } from "@mantine/form";
 import { IconTrash, IconInfoCircle } from "@tabler/icons";
 
 // Validation
-import { Inputs } from "../Form/validation/Inputs";
+import { CreateDeliveryValues } from "../Form/createDeliveryValidation";
 
 // Props
 type SummaryProps = {
-  form: UseFormReturnType<Inputs>;
+  form: UseFormReturnType<CreateDeliveryValues>;
 };
 
 export const Summary: React.FC<SummaryProps> = ({ form }) => {
