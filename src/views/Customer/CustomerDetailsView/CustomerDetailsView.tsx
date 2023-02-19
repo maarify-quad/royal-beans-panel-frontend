@@ -18,6 +18,7 @@ import { DetailsTab } from "./DetailsTab";
 import { LastOrdersTab } from "./LastOrdersTab";
 import { LastProductsTab } from "./LastProductsTab";
 import { PriceListTab } from "./PriceListTab";
+import { DeliveryAddressesTab } from "./DeliveryAddressesTab";
 
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
@@ -106,6 +107,7 @@ export const CustomerDetailsView = () => {
                 <Tabs.Tab value="lastOrders">Son Siparişler</Tabs.Tab>
                 <Tabs.Tab value="lastProducts">Son Ürünler</Tabs.Tab>
                 <Tabs.Tab value="priceList">Fiyat Listesi</Tabs.Tab>
+                <Tabs.Tab value="deliveryAddresses">Teslimat Adresleri</Tabs.Tab>
               </Tabs.List>
 
               <Tabs.Panel value="details" mt="md">
@@ -119,6 +121,9 @@ export const CustomerDetailsView = () => {
               </Tabs.Panel>
               <Tabs.Panel value="priceList" mt="md">
                 <PriceListTab customer={data} />
+              </Tabs.Panel>
+              <Tabs.Panel value="deliveryAddresses" mt="md">
+                <DeliveryAddressesTab customer={data} />
               </Tabs.Panel>
             </Tabs>
           </>

@@ -9,12 +9,21 @@ export const deliveryAddressApi = emptyApi.injectEndpoints({
         body,
       }),
       invalidatesTags: (result, _error, params) =>
-        result ? ["Customer", { type: "Customer" as const, id: params.customerId }] : ["Customer"],
+        result ? [{ type: "Customer" as const, id: params.customerId }] : ["Customer"],
+    }),
+    deleteDeliveryAddress: build.mutation<any, { id: number; customerId: string }>({
+      query: (body) => ({
+        url: `/delivery_addresses/${body.id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, _error, params) =>
+        result ? [{ type: "Customer" as const, id: params.customerId }] : ["Customer"],
     }),
   }),
 });
 
-export const { useCreateDeliveryAddressMutation } = deliveryAddressApi;
+export const { useCreateDeliveryAddressMutation, useDeleteDeliveryAddressMutation } =
+  deliveryAddressApi;
 
 interface CreateDeliveryAddressParams {
   customerId: string;

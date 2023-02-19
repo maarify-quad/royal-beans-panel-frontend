@@ -1,0 +1,1 @@
+export { DeliveryAddressesTab } from "./DeliveryAddressesTab";

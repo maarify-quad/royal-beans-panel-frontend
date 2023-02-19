@@ -97,7 +97,7 @@ export const CreateDeliveryAddress: React.FC<CreateDeliveryAddressProps> = ({ cu
         required
         {...form.getInputProps("receiverCity")}
       />
-      <Button mt="lg" type="submit" loading={isCreating}>
+      <Button mt="lg" type="submit" disabled={isCreating} loading={isCreating}>
         Oluştur
       </Button>
     </form>
