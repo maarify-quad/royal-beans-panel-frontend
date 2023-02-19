@@ -6,6 +6,7 @@ import { Group, LoadingOverlay, Paper, Select, Table } from "@mantine/core";
 
 // Interfaces
 import { Product } from "@interfaces/product";
+import SelectTag from "@components/Tag/SelectTag";
 
 // Props
 type SummaryTabProps = {
@@ -13,7 +14,7 @@ type SummaryTabProps = {
 };
 
 export const SummaryTab = ({ product }: SummaryTabProps) => {
-  const [updateProduct, { isLoading }] = useUpdateProductMutation();
+  const [updateProduct] = useUpdateProductMutation();
 
   const handleTagChange = async (tag: string | null) => {
     try {
@@ -48,21 +49,16 @@ export const SummaryTab = ({ product }: SummaryTabProps) => {
           </tbody>
         </Table>
       </Paper>
-      <Group style={{ position: "relative" }}>
-        <LoadingOverlay visible={isLoading} />
-        <Select
+      <Group mt="md">
+        <SelectTag
           label="Etiket"
-          placeholder="Etiket seçin"
-          mt="md"
+          placeholder="Etiket seçiniz"
+          nothingFound="Etiket bulunamadı"
+          searchable
           clearable
           value={product.tag}
           onChange={handleTagChange}
-          data={[
-            {
-              label: "Kahve",
-              value: "kahve",
-            },
-          ]}
+          onTagCreate={handleTagChange}
         />
       </Group>
     </>
