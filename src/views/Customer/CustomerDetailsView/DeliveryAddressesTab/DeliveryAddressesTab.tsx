@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 
 // Services
 import { useDeleteDeliveryAddressMutation } from "@services/deliveryAddressApi";
@@ -7,13 +7,19 @@ import { useDeleteDeliveryAddressMutation } from "@services/deliveryAddressApi";
 import { ActionIcon, Alert, Card, Flex, Group, LoadingOverlay, Stack, Text } from "@mantine/core";
 
 // UI Utils
-import { openConfirmModal } from "@mantine/modals";
+import { openConfirmModal, openModal } from "@mantine/modals";
 
 // Icons
 import { IconEdit, IconInfoCircle, IconTrash } from "@tabler/icons";
 
 // Interfaces
 import { Customer } from "@interfaces/customer";
+import { DeliveryAddress } from "@interfaces/deliveryAddress";
+
+// Lazy Components
+const CreateDeliveryAddress = lazy(
+  () => import("@components/DeliveryAddress/CreateDeliveryAddress")
+);
 
 // Props
 type DeliveryAddressesTabProps = {
@@ -31,6 +37,17 @@ export const DeliveryAddressesTab = ({ customer }: DeliveryAddressesTabProps) =>
       </Alert>
     );
   }
+
+  const handleEditDeliveryAddress = (deliveryAddress: DeliveryAddress) => {
+    openModal({
+      title: "Teslimat Adresi Düzenle",
+      children: (
+        <Suspense fallback={<LoadingOverlay visible />}>
+          <CreateDeliveryAddress customerId={customer.id} deliveryAddress={deliveryAddress} />
+        </Suspense>
+      ),
+    });
+  };
 
   const handleDeleteDeliveryAddress = (id: number) => {
     openConfirmModal({
@@ -52,9 +69,16 @@ export const DeliveryAddressesTab = ({ customer }: DeliveryAddressesTabProps) =>
           <LoadingOverlay visible={isLoading && deletedId === deliveryAddress.id} />
           <Group position="apart">
             <Flex direction="column">
-              <Text size="lg" weight="bold">
-                {deliveryAddress.title}
-              </Text>
+              <Group spacing="sm">
+                <Text size="lg" weight="bold">
+                  {deliveryAddress.title}
+                </Text>
+                {deliveryAddress.isPrimary && (
+                  <Text size="sm" color="dimmed">
+                    (Birincil)
+                  </Text>
+                )}
+              </Group>
               <Text>
                 {deliveryAddress.receiverName} ({deliveryAddress.receiverPhone})
               </Text>
@@ -64,7 +88,7 @@ export const DeliveryAddressesTab = ({ customer }: DeliveryAddressesTabProps) =>
               </Text>
             </Flex>
             <Group>
-              <ActionIcon>
+              <ActionIcon onClick={() => handleEditDeliveryAddress(deliveryAddress)}>
                 <IconEdit size={18} />
               </ActionIcon>
               <ActionIcon

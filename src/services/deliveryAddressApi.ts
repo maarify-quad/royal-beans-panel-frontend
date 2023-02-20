@@ -2,10 +2,19 @@ import { emptyApi } from "./emptyApi";
 
 export const deliveryAddressApi = emptyApi.injectEndpoints({
   endpoints: (build) => ({
-    createDeliveryAddress: build.mutation<any, CreateDeliveryAddressParams>({
+    createDeliveryAddress: build.mutation<any, CreateDeliveryAddressRequest>({
       query: (body) => ({
         url: "/delivery_addresses",
         method: "POST",
+        body,
+      }),
+      invalidatesTags: (result, _error, params) =>
+        result ? [{ type: "Customer" as const, id: params.customerId }] : ["Customer"],
+    }),
+    updateDeliveryAddress: build.mutation<any, UpdateDeliveryAddressRequest>({
+      query: (body) => ({
+        url: `/delivery_addresses/${body.id}`,
+        method: "PUT",
         body,
       }),
       invalidatesTags: (result, _error, params) =>
@@ -22,10 +31,13 @@ export const deliveryAddressApi = emptyApi.injectEndpoints({
   }),
 });
 
-export const { useCreateDeliveryAddressMutation, useDeleteDeliveryAddressMutation } =
-  deliveryAddressApi;
+export const {
+  useCreateDeliveryAddressMutation,
+  useUpdateDeliveryAddressMutation,
+  useDeleteDeliveryAddressMutation,
+} = deliveryAddressApi;
 
-interface CreateDeliveryAddressParams {
+interface CreateDeliveryAddressRequest {
   customerId: string;
   title: string;
   receiverName: string;
@@ -33,4 +45,10 @@ interface CreateDeliveryAddressParams {
   receiverAddress: string;
   receiverCity: string;
   receiverProvince: string;
+  isPrimary?: boolean;
+}
+
+interface UpdateDeliveryAddressRequest extends Partial<CreateDeliveryAddressRequest> {
+  id: number;
+  customerId: string;
 }

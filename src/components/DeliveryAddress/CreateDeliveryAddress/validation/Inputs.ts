@@ -5,6 +5,7 @@ export type Inputs = {
   receiverAddress: string;
   receiverProvince: string;
   receiverCity: string;
+  isPrimary: boolean;
 };
 
 export const initialValues: Inputs = {
@@ -14,4 +15,5 @@ export const initialValues: Inputs = {
   receiverAddress: "",
   receiverProvince: "",
   receiverCity: "",
+  isPrimary: false,
 };

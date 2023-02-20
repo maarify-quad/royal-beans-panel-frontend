@@ -1,14 +1,16 @@
-import React from "react";
-
 // Services
-import { useCreateDeliveryAddressMutation } from "@services/deliveryAddressApi";
+import {
+  useCreateDeliveryAddressMutation,
+  useUpdateDeliveryAddressMutation,
+} from "@services/deliveryAddressApi";
 
 // UI Components
-import { Button, LoadingOverlay, TextInput } from "@mantine/core";
+import { Button, Checkbox, TextInput } from "@mantine/core";
 
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
+import { closeAllModals } from "@mantine/modals";
 
 // Icons
 import { IconCircleCheck } from "@tabler/icons";
@@ -16,89 +18,115 @@ import { IconCircleCheck } from "@tabler/icons";
 // Validation
 import { Inputs, initialValues } from "./validation/Inputs";
 import { schema } from "./validation/schema";
-import { closeAllModals } from "@mantine/modals";
 
 // Utils
 import { handleFormError } from "@utils/form";
 
+// Interfaces
+import { DeliveryAddress } from "@interfaces/deliveryAddress";
+
 // Props
-type CreateDeliveryAddressProps = {
+type Props = {
   customerId: string;
+  deliveryAddress?: DeliveryAddress;
 };
 
-export const CreateDeliveryAddress: React.FC<CreateDeliveryAddressProps> = ({ customerId }) => {
+export const CreateDeliveryAddress = ({ customerId, deliveryAddress }: Props) => {
   const [createDeliveryAddress, { isLoading: isCreating }] = useCreateDeliveryAddressMutation();
+  const [updateDeliveryAddress, { isLoading: isUpdating }] = useUpdateDeliveryAddressMutation();
 
   // Form utils
   const form = useForm<Inputs>({
-    initialValues,
+    initialValues: deliveryAddress || initialValues,
     validate: zodResolver(schema),
   });
 
   const onCreateDelieryAddressSubmit = async (values: Inputs) => {
     try {
-      await createDeliveryAddress({
-        customerId,
-        ...values,
-      }).unwrap();
+      if (deliveryAddress) {
+        await updateDeliveryAddress({
+          id: deliveryAddress.id,
+          customerId,
+          ...values,
+        }).unwrap();
+      } else {
+        await createDeliveryAddress({
+          customerId,
+          ...values,
+        }).unwrap();
+      }
+
+      const message = deliveryAddress ? "güncellendi" : "eklendi";
       showNotification({
         title: "Başarılı",
-        message: "Sevkiyat adresi oluşturuldu",
+        message: `Teslimat adresi ${message}`,
         color: "green",
         icon: <IconCircleCheck />,
       });
+
       closeAllModals();
-    } catch (error) {
-      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
+    } catch {
+      // Error is handled by RTK middleware
     }
   };
 
   return (
     <form onSubmit={form.onSubmit(onCreateDelieryAddressSubmit, handleFormError)}>
-      <LoadingOverlay visible={isCreating} />
       <TextInput
         label="Adres başlığı"
         placeholder="Adres başlığı giriniz"
-        required
+        withAsterisk
         {...form.getInputProps("title")}
       />
       <TextInput
         label="Alıcı ad"
         placeholder="Alıcı adı giriniz"
         mt="md"
-        required
+        withAsterisk
         {...form.getInputProps("receiverName")}
       />
       <TextInput
         label="Alıcı adres"
         placeholder="Alıcı adresi giriniz"
         mt="md"
-        required
+        withAsterisk
         {...form.getInputProps("receiverAddress")}
       />
       <TextInput
         label="Alıcı telefon"
         placeholder="Alıcı telefonu giriniz"
         mt="md"
-        required
+        withAsterisk
         {...form.getInputProps("receiverPhone")}
       />
       <TextInput
         label="Alıcı ilçe"
         placeholder="Alıcı ilçe giriniz"
         mt="md"
-        required
+        withAsterisk
         {...form.getInputProps("receiverProvince")}
       />
       <TextInput
         label="Alıcı il"
         placeholder="Alıcı il giriniz"
         mt="md"
-        required
+        withAsterisk
         {...form.getInputProps("receiverCity")}
       />
-      <Button mt="lg" type="submit" disabled={isCreating} loading={isCreating}>
-        Oluştur
+      <Checkbox
+        label="Birincil adres"
+        {...form.getInputProps("isPrimary")}
+        checked={form.values.isPrimary}
+        onChange={(event) => form.setFieldValue("isPrimary", event.currentTarget.checked)}
+        mt="md"
+      />
+      <Button
+        mt="lg"
+        type="submit"
+        disabled={isCreating || isUpdating}
+        loading={isCreating || isUpdating}
+      >
+        {deliveryAddress ? "Güncelle" : "Oluştur"}
       </Button>
     </form>
   );
