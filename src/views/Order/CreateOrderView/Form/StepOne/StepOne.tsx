@@ -48,7 +48,12 @@ export const StepOne: React.FC<StepOneProps> = ({
   useEffect(() => {
     const customer = customers?.find((c) => c.id === form.values.customerId);
     setSelectedCustomer(customer);
-    form.setFieldValue("deliveryAddressId", customer?.deliveryAddresses[0]?.id || 0);
+
+    if (customer) {
+      const deliveryAddress =
+        customer.deliveryAddresses.find((a) => a.isPrimary) || customer.deliveryAddresses[0];
+      form.setFieldValue("deliveryAddressId", deliveryAddress?.id.toString() || "0");
+    }
   }, [form.values.customerId]);
 
   return (
@@ -70,7 +75,7 @@ export const StepOne: React.FC<StepOneProps> = ({
         readOnly
         precision={2}
         icon={<span>₺</span>}
-        value={selectedCustomer ? selectedCustomer.currentBalance : undefined}
+        value={selectedCustomer ? selectedCustomer.currentBalance : 0}
       />
       <TextInput
         label="Fiyat Listesi"
@@ -85,8 +90,9 @@ export const StepOne: React.FC<StepOneProps> = ({
         {...form.getInputProps("specialNote")}
       />
       <Select
-        label="Gönderim Adresi"
-        placeholder="Gönderim adresi seçiniz"
+        label="Teslimat Adresi"
+        placeholder="Teslimat adresi seçiniz"
+        nothingFound="Sonuç bulunamadı"
         disabled={!selectedCustomer}
         required
         mt="md"

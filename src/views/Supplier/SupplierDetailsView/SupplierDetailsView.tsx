@@ -5,10 +5,7 @@ import { Navigate, useParams, useSearchParams } from "react-router-dom";
 import { useGetSupplierByIdQuery } from "@services/supplierApi";
 
 // UI Components
-import { Alert, Loader, Tabs } from "@mantine/core";
-
-// Icons
-import { IconAlertCircle } from "@tabler/icons";
+import { Tabs } from "@mantine/core";
 
 // Components
 import { DetailsTab } from "./DetailsTab";
@@ -33,24 +30,6 @@ export const SupplierDetailsView = () => {
     return <Navigate to="/dashboard" replace />;
   }
 
-  if (error) {
-    return (
-      <Alert
-        icon={<IconAlertCircle />}
-        color="red"
-        title="Tedarikçiye ulaşılamadı"
-        variant="filled"
-        mt="md"
-      >
-        {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
-      </Alert>
-    );
-  }
-
-  if (isLoading) {
-    return <Loader />;
-  }
-
   return (
     <PageLayout
       title={supplier?.name}
@@ -68,6 +47,8 @@ export const SupplierDetailsView = () => {
           href: `/dashboard/suppliers/${id}`,
         },
       ]}
+      isLoading={isLoading}
+      error={error}
     >
       {supplier && (
         <Tabs

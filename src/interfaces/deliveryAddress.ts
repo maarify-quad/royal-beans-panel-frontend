@@ -7,4 +7,7 @@ export interface DeliveryAddress {
   receiverPhone: string;
   receiverProvince: string;
   receiverCity: string;
+  isPrimary: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

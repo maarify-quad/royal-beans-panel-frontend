@@ -18,11 +18,12 @@ import { priceListProductApi } from "@services/priceListProductApi";
 import { orderApi } from "@services/orderApi";
 import { ingredientApi } from "@services/ingredientApi";
 import { roastIngredientApi } from "@services/roastIngredientApi";
+import { shopifyProductApi } from "@services/shopifyProductApi";
+import { tagApi } from "@services/tagApi";
 import { shopparApi } from "@services/shopparApi";
 
 // Middlewares
 import { rtkQueryErrorLogger } from "./middlewares/rtkQueryErrorLogger";
-import { shopifyProductApi } from "@services/shopifyProductApi";
 
 const store = configureStore({
   reducer: {
@@ -41,7 +42,9 @@ const store = configureStore({
     [orderApi.reducerPath]: orderApi.reducer,
     [ingredientApi.reducerPath]: ingredientApi.reducer,
     [roastIngredientApi.reducerPath]: roastIngredientApi.reducer,
+    [tagApi.reducerPath]: tagApi.reducer,
     [shopifyProductApi.reducerPath]: shopifyProductApi.reducer,
+
     [shopparApi.reducerPath]: shopparApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

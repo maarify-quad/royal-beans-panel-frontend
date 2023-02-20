@@ -5,10 +5,10 @@ import { Navigate, useParams, useSearchParams } from "react-router-dom";
 import { useGetOrderByOrderIdQuery } from "@services/orderApi";
 
 // UI Components
-import { Alert, Loader, Tabs, Text } from "@mantine/core";
+import { Alert, Tabs, Text } from "@mantine/core";
 
 // Icons
-import { IconAlertCircle, IconInfoCircle } from "@tabler/icons";
+import { IconInfoCircle } from "@tabler/icons";
 
 // Components
 import { ProductsTab } from "./ProductsTab";
@@ -26,24 +26,6 @@ export const OrderDetailsView = () => {
 
   if (!orderId) {
     return <Navigate to="/dashboard" replace />;
-  }
-
-  if (error) {
-    return (
-      <Alert
-        icon={<IconAlertCircle />}
-        color="red"
-        title="Siparişe ulaşılamadı"
-        variant="filled"
-        mt="md"
-      >
-        {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
-      </Alert>
-    );
-  }
-
-  if (isLoading) {
-    return <Loader />;
   }
 
   return (
@@ -64,6 +46,8 @@ export const OrderDetailsView = () => {
         },
       ]}
       actions={data?.order && <Actions order={data?.order} />}
+      isLoading={isLoading}
+      error={error}
     >
       {data?.order && data.order.isCancelled && (
         <Alert mt="md" color="red" variant="filled" icon={<IconInfoCircle />}>

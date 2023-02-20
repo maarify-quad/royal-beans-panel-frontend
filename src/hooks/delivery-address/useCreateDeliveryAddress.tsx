@@ -13,7 +13,7 @@ export const useCreateDeliveryAddress = () => {
   const openCreateDeliveryAddress = (customerId: string) => {
     openModal({
       key: "createDeliveryAddress",
-      title: "Sevkiyat Adresi Oluştur",
+      title: "Teslimat Adresi Oluştur",
       children: (
         <React.Suspense fallback={<LoadingOverlay visible />}>
           <CreateDeliveryAddress customerId={customerId} />
