@@ -22,7 +22,11 @@ import { PageLayout } from "@layouts/PageLayout/PageLayout";
 export const RoastDetailsView = () => {
   const { id } = useParams();
 
-  const { data, isLoading, error } = useGetRoastByIdQuery(id!, {
+  const { roast, isLoading, error } = useGetRoastByIdQuery(id!, {
+    selectFromResult: ({ data, ...rest }) => ({
+      ...rest,
+      roast: data?.roast,
+    }),
     skip: !id,
   });
 
@@ -30,27 +34,9 @@ export const RoastDetailsView = () => {
     return <Navigate to="/dashboard" replace />;
   }
 
-  if (error) {
-    return (
-      <Alert
-        icon={<IconAlertCircle />}
-        color="red"
-        title="Tedarikçiye ulaşılamadı"
-        variant="filled"
-        mt="md"
-      >
-        {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
-      </Alert>
-    );
-  }
-
-  if (isLoading) {
-    return <Loader />;
-  }
-
   return (
     <PageLayout
-      title={data?.roast.id}
+      title={`Kavrum - ${roast?.id}`}
       breadcrumbs={[
         {
           label: "Panel",
@@ -65,12 +51,18 @@ export const RoastDetailsView = () => {
           href: `/dashboard/roasts/${id}`,
         },
       ]}
+      isLoading={isLoading}
+      error={error}
     >
-      <Text color="dimmed">{dayjs(data?.roast.date).format("DD MMMM YYYY")}</Text>
-      <Stack spacing="lg" mt="md">
-        <RoastedCoffees roastDetails={data?.roast.roastDetails} />
-        <RoundsTable roastDetails={data?.roast.roastDetails} />
-      </Stack>
+      {roast && (
+        <>
+          <Text color="dimmed">{dayjs(roast.date).format("DD MMMM YYYY")}</Text>
+          <Stack spacing="lg" mt="md">
+            <RoastedCoffees roastDetails={roast.roastDetails} />
+            <RoundsTable roastDetails={roast.roastDetails} />
+          </Stack>
+        </>
+      )}
     </PageLayout>
   );
 };
