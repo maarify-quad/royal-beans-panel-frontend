@@ -13,7 +13,7 @@ type ProductsTabProps = {
 
 export const ProductsTab = ({ order }: ProductsTabProps) => {
   if (order.type === "BULK") {
-    <BulkOrderProductsTab order={order} />;
+    return <BulkOrderProductsTab order={order} />;
   } else if (order.type === "MANUAL" && order.source === "dashboard") {
     return <ManualOrderProductsTab order={order} />;
   } else if (order.type === "MANUAL" && order.source === "shopify") {
