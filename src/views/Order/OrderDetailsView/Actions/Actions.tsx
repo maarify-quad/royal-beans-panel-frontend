@@ -30,7 +30,7 @@ const UpdateDelivery = React.lazy(() =>
   }))
 );
 
-export const Actions: React.FC<ActionsProps> = ({ order }) => {
+export const Actions = ({ order }: ActionsProps) => {
   const { openCancelOrder } = useCancelOrder();
 
   const openUpdateDelivery = () => {
@@ -54,24 +54,30 @@ export const Actions: React.FC<ActionsProps> = ({ order }) => {
       <Button color="teal" leftIcon={<IconTruckDelivery />} onClick={openUpdateDelivery}>
         Kargola
       </Button>
-      <Button
-        color="orange"
-        leftIcon={<IconBasket />}
-        component={Link}
-        to={`/dashboard/orders${order.type === "MANUAL" ? "/manual" : ""}/update/${order.orderId}`}
-      >
-        Güncelle
-      </Button>
-      <Button
-        color="red"
-        variant="subtle"
-        leftIcon={<IconTrash />}
-        onClick={() => {
-          openCancelOrder(order.orderId);
-        }}
-      >
-        İptal Et
-      </Button>
+      {order.source !== "shopify" && (
+        <Button
+          color="orange"
+          leftIcon={<IconBasket />}
+          component={Link}
+          to={`/dashboard/orders${order.type === "MANUAL" ? "/manual" : ""}/update/${
+            order.orderId
+          }`}
+        >
+          Güncelle
+        </Button>
+      )}
+      {order.source !== "shopify" && (
+        <Button
+          color="red"
+          variant="subtle"
+          leftIcon={<IconTrash />}
+          onClick={() => {
+            openCancelOrder(order.orderId);
+          }}
+        >
+          İptal Et
+        </Button>
+      )}
     </Group>
   );
 };
