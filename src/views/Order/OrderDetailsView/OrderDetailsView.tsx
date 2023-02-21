@@ -14,6 +14,8 @@ import { IconInfoCircle } from "@tabler/icons";
 import { ProductsTab } from "./ProductsTab";
 import { DetailsTab } from "./DetailsTab";
 import { Actions } from "./Actions";
+
+// Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const OrderDetailsView = () => {
@@ -57,7 +59,7 @@ export const OrderDetailsView = () => {
       {data && (
         <Tabs
           keepMounted={false}
-          defaultValue={searchParams.get("tab") || "products"}
+          defaultValue={searchParams.get("tab") || "details"}
           onTabChange={(tab: string) => setSearchParams({ tab })}
           mt="md"
         >

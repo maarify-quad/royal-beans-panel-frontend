@@ -6,7 +6,7 @@ import { CreateManualOrderProductParams, CreateOrderProductParams } from "@inter
 
 export const orderApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getOrders: builder.query<GetOrdersResponse, GetordersRequest | void>({
+    getOrders: builder.query<GetOrdersResponse, GetOrdersRequest | void>({
       query: (params) => {
         const url = new URL("/orders", import.meta.env.VITE_API_BASE_URL);
         url.searchParams.set("page", params?.page?.toString() || "1");
@@ -96,7 +96,7 @@ export const {
   useCancelOrderMutation,
 } = orderApi;
 
-interface GetordersRequest {
+interface GetOrdersRequest {
   page: number;
   limit?: number;
   type?: OrderType;

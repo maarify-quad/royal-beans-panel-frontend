@@ -1,5 +1,3 @@
-import React from "react";
-
 // UI Components
 import { Table, Card } from "@mantine/core";
 
@@ -11,7 +9,7 @@ type RoundsTableProps = {
   roastDetails?: RoastDetail[];
 };
 
-export const RoundsTable: React.FC<RoundsTableProps> = ({ roastDetails }) => {
+export const RoundsTable = ({ roastDetails }: RoundsTableProps) => {
   return (
     <Card withBorder shadow="xs">
       <Table highlightOnHover verticalSpacing="sm">
@@ -21,7 +19,7 @@ export const RoundsTable: React.FC<RoundsTableProps> = ({ roastDetails }) => {
             <th>Kahve</th>
             <th>Atılan Miktar</th>
             <th>Alınan Miktar</th>
-            <th>Fire Miktar</th>
+            <th>Fire Oranı</th>
           </tr>
         </thead>
         <tbody>
@@ -31,7 +29,7 @@ export const RoundsTable: React.FC<RoundsTableProps> = ({ roastDetails }) => {
               <td>{roastDetail.product.name}</td>
               <td>{roastDetail.inputAmount} kg</td>
               <td>{roastDetail.outputAmount} kg</td>
-              <td>{roastDetail.differenceAmount} kg</td>
+              <td>% {Number(roastDetail.differenceAmount / roastDetail.inputAmount).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>

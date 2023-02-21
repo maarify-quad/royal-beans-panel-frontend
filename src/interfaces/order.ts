@@ -1,11 +1,11 @@
 import { Customer } from "./customer";
-import { ManualOrderProduct, OrderProduct } from "./orderProduct";
+import { ManualOrderProduct, OrderProduct, ManualShopifyOrderProduct } from "./orderProduct";
 
-export type BulkOrder = {
+export type OrderType = "BULK" | "MANUAL";
+export type OrderSource = "dashboard" | "shopify";
+
+export type CommonOrder = {
   id: number;
-  customerId: string;
-  receiver: null;
-  customer: Customer;
   orderNumber: number;
   orderId: string;
   deliveryDate: string;
@@ -13,52 +13,58 @@ export type BulkOrder = {
   subTotal: number;
   taxTotal: number;
   total: number;
-  manualInvoiceStatus: null;
-  specialNote: string | null;
   deliveryType: string;
+  specialNote: string | null;
+  cargoTrackNo: string | null;
+  status: string;
+  type: OrderType;
+  source: OrderSource;
+  isParasutVerified: boolean;
+  isCancelled: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type BulkOrder = CommonOrder & {
+  customerId: string;
+  receiver: null;
+  customer: Customer;
+  manualInvoiceStatus: null;
   receiverNeighborhood: null;
   receiverAddress: null;
   receiverCity: null;
   receiverProvince: null;
-  cargoTrackNo: string | null;
-  status: string;
   type: "BULK";
-  isParasutVerified: boolean;
-  isCancelled: boolean;
   orderProducts: OrderProduct[];
-  createdAt: string;
-  updatedAt: string;
+  source: "dashboard";
 };
 
-export type ManualOrder = {
-  id: number;
+export type ManualOrder = CommonOrder & {
   customerId: null;
   receiver: string;
   customer: null;
-  orderNumber: number;
-  orderId: string;
-  deliveryDate: string;
-  customerBalanceAfterOrder: number;
-  subTotal: number;
-  taxTotal: number;
-  total: number;
-  specialNote: string | null;
   manualInvoiceStatus: string;
-  deliveryType: string;
   receiverNeighborhood: string;
   receiverAddress: string;
   receiverCity: string;
   receiverProvince: string;
-  cargoTrackNo: string | null;
-  status: string;
   type: "MANUAL";
-  isParasutVerified: boolean;
-  isCancelled: boolean;
   orderProducts: ManualOrderProduct[];
-  createdAt: string;
-  updatedAt: string;
+  source: "dashboard";
 };
 
-export type Order = BulkOrder | ManualOrder;
+export type ManualShopifyOrder = CommonOrder & {
+  customerId: null;
+  receiver: string;
+  customer: null;
+  manualInvoiceStatus: string;
+  receiverNeighborhood: string;
+  receiverAddress: string;
+  receiverCity: string;
+  receiverProvince: string;
+  type: "MANUAL";
+  orderProducts: ManualShopifyOrderProduct[];
+  source: "shopify";
+};
 
-export type OrderType = "BULK" | "MANUAL";
+export type Order = BulkOrder | ManualOrder | ManualShopifyOrder;
