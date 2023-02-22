@@ -10,11 +10,11 @@ import { DetailsCard } from "@components/DetailsCard";
 import { formatCurrency } from "@utils/localization";
 
 // Interfaces
-import { ManualOrder, ManualShopifyOrder } from "@interfaces/order";
+import { ManualOrder } from "@interfaces/order";
 
 // Props
 type ManualOrderDetailsTabProps = {
-  order: ManualOrder | ManualShopifyOrder;
+  order: ManualOrder;
 };
 
 export const ManualOrderDetailsTab = ({ order }: ManualOrderDetailsTabProps) => {
