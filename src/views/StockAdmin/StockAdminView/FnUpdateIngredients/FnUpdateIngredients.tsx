@@ -120,9 +120,7 @@ const ProductList = memo(({ products }: { products: ProductWithIngredients[] }) 
               </Text>
             </Flex>
             <Flex align="start" rowGap="xs" direction="column">
-              <Text size="xl" weight="bold">
-                İçerikler:
-              </Text>
+              <Text size="xl">İçerikler:</Text>
               {product.ingredients.map((ingredient) => (
                 <Paper p="xs" radius="md" withBorder key={ingredient.id}>
                   <Text size="sm">
