@@ -33,7 +33,7 @@ export const ManualOrderProductsTab = ({ order }: ManualOrderProductsTabProps) =
           </Flex>
         ),
       },
-      { title: "Öğütüm", accessor: "grindType" },
+      { title: "Öğütüm", accessor: "grindType", hidden: order.source === "shopify" },
       { title: "Adet", accessor: "quantity" },
       {
         title: "Birim Fiyat",
