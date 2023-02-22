@@ -25,7 +25,7 @@ import { DataTable, DataTableColumn } from "mantine-datatable";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { IconInfoCircle, IconX } from "@tabler/icons";
+import { IconCircleCheck, IconInfoCircle, IconX } from "@tabler/icons";
 
 // Interfaces
 import { Product } from "@interfaces/product";
@@ -68,6 +68,7 @@ export const BulkUpdateStock = () => {
         title: "Başarılı",
         message: "Ürünler başarıyla güncellendi",
         color: "green",
+        icon: <IconCircleCheck />,
       });
     } catch {}
   };
