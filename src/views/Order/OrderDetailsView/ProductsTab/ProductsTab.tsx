@@ -1,7 +1,6 @@
 // Components
 import { BulkOrderProductsTab } from "./BulkOrderProductsTab";
 import { ManualOrderProductsTab } from "./ManualOrderProductsTab";
-import { ManualShopifyOrderProductsTab } from "./ManualShopifyOrderProductsTab";
 
 // Interfaces
 import { Order } from "@interfaces/order";
@@ -14,12 +13,10 @@ type ProductsTabProps = {
 export const ProductsTab = ({ order }: ProductsTabProps) => {
   if (order.type === "BULK") {
     return <BulkOrderProductsTab order={order} />;
-  } else if (order.type === "MANUAL" && order.source === "dashboard") {
+  }
+
+  if (order.type === "MANUAL") {
     return <ManualOrderProductsTab order={order} />;
-  } else if (order.type === "MANUAL" && order.source === "shopify") {
-    return <ManualShopifyOrderProductsTab order={order} />;
-  } else {
-    return null;
   }
 
   return null;

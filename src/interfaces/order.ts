@@ -1,8 +1,8 @@
 import { Customer } from "./customer";
-import { ManualOrderProduct, OrderProduct, ManualShopifyOrderProduct } from "./orderProduct";
+import { ManualOrderProduct, OrderProduct } from "./orderProduct";
 
 export type OrderType = "BULK" | "MANUAL";
-export type OrderSource = "dashboard" | "shopify";
+export type OrderSource = "dashboard" | "shopify" | "trendyol" | "hepsiburada";
 
 export type CommonOrder = {
   id: number;
@@ -18,7 +18,6 @@ export type CommonOrder = {
   cargoTrackNo: string | null;
   status: string;
   type: OrderType;
-  source: OrderSource;
   isParasutVerified: boolean;
   isCancelled: boolean;
   createdAt: string;
@@ -50,21 +49,7 @@ export type ManualOrder = CommonOrder & {
   receiverProvince: string;
   type: "MANUAL";
   orderProducts: ManualOrderProduct[];
-  source: "dashboard";
+  source: Omit<OrderSource, "dashboard">;
 };
 
-export type ManualShopifyOrder = CommonOrder & {
-  customerId: null;
-  receiver: string;
-  customer: null;
-  manualInvoiceStatus: string;
-  receiverNeighborhood: string;
-  receiverAddress: string;
-  receiverCity: string;
-  receiverProvince: string;
-  type: "MANUAL";
-  orderProducts: ManualShopifyOrderProduct[];
-  source: "shopify";
-};
-
-export type Order = BulkOrder | ManualOrder | ManualShopifyOrder;
+export type Order = BulkOrder | ManualOrder;

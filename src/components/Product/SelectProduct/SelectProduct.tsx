@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useMemo } from "react";
 
 // Services
 import { useGetProductsQuery } from "@services/productApi";
