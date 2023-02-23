@@ -1,4 +1,5 @@
 import { emptyApi } from "./emptyApi";
+import pickBy from "lodash/pickBy";
 
 // Interfaces
 import {
@@ -29,7 +30,7 @@ export const productApi = emptyApi.injectEndpoints({
       query: (params) => ({
         url: "/products/ingredients",
         ...(Object.keys(params?.query || {}).length && {
-          params: params?.query,
+          params: pickBy(params?.query, (value) => value !== "" && value !== undefined),
         }),
       }),
       providesTags: [{ type: "Product" as const, id: "ingredients" }],
@@ -57,7 +58,7 @@ export const productApi = emptyApi.injectEndpoints({
       query: (params) => ({
         url: `/products/storageType/${params.storageType}`,
         ...(Object.keys(params.query || {}).length && {
-          params: params.query,
+          params: pickBy(params?.query, (value) => value !== "" && value !== undefined),
         }),
       }),
       providesTags: (result, _error, params) =>
@@ -217,4 +218,5 @@ export interface RequestQuery {
   limit?: number;
   sortBy?: keyof Product;
   sortOrder?: "ASC" | "DESC";
+  search?: string;
 }
