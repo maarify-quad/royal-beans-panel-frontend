@@ -23,6 +23,7 @@ export const shopparApi = createApi({
       query: () => ({
         url: "/cargo",
         method: "GET",
+        responseHandler: "text",
       }),
     }),
   }),
