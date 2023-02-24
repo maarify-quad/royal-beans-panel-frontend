@@ -6,7 +6,7 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, api) => {
     const accessToken = (api.getState() as RootState).auth.accessToken;
     if (accessToken) {
-      headers.set("Authorization", accessToken);
+      headers.set("Authorization", `Bearer ${accessToken}`);
     }
     return headers;
   },
@@ -15,23 +15,25 @@ const baseQuery = fetchBaseQuery({
 export const shopparApi = createApi({
   baseQuery,
   reducerPath: "shopparApi",
+  tagTypes: ["Shoppar"],
   endpoints: (builder) => ({
     getSummary: builder.query<GetSummaryResponse, void>({
-      query: () => "/invoice/summary",
+      query: () => "/sales_invoice/summary",
+      providesTags: [{ type: "Shoppar" as const, id: "Summary" }],
     }),
     generateCargoExcels: builder.mutation<any, void>({
       query: () => ({
         url: "/cargo",
         method: "GET",
-        responseHandler: "text",
       }),
+      invalidatesTags: [{ type: "Shoppar" as const, id: "Summary" }],
     }),
   }),
 });
 
 interface GetSummaryResponse {
-  shopifyLastOrderNumber: number;
-  lastExportedCreatedAt?: string;
+  lastShopifyOrderNumber: number;
+  lastExcelExportDate: string | null;
   orderCount: number;
 }
 
