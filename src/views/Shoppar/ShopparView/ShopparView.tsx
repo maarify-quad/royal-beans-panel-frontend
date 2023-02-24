@@ -98,20 +98,20 @@ export const ShopparView = () => {
           <Card p="md" radius="md" shadow="sm" withBorder>
             <Group position="apart">
               <Text>Son işlenen sipariş:</Text>
-              <b>{data.shopifyLastOrderNumber}</b>
+              <b>{data.lastShopifyOrderNumber}</b>
             </Group>
             <Divider my={4} />
             <Group position="apart">
               <Text>Son excel alınma:</Text>
               <b>
-                {data.lastExportedCreatedAt
-                  ? dayjs(data.lastExportedCreatedAt).format("DD MMMM YYYY - HH:mm")
-                  : "?"}
+                {data.lastExcelExportDate
+                  ? dayjs(data.lastExcelExportDate).format("DD MMMM - HH:mm")
+                  : "-"}
               </b>
             </Group>
             <Divider my={4} />
             <Group position="apart">
-              <Text>Son excelden beri sipariş:</Text>
+              <Text>Excel bekleyen sipariş:</Text>
               <b>{data.orderCount}</b>
             </Group>
           </Card>
