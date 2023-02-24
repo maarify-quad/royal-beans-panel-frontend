@@ -6,7 +6,7 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, api) => {
     const accessToken = (api.getState() as RootState).auth.accessToken;
     if (accessToken) {
-      headers.set("Authorization", `Bearer ${accessToken}`);
+      headers.set("Authorization", accessToken);
     }
     return headers;
   },
@@ -23,6 +23,7 @@ export const shopparApi = createApi({
       query: () => ({
         url: "/cargo",
         method: "GET",
+        responseHandler: "text",
       }),
     }),
   }),
