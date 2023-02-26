@@ -165,12 +165,7 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         mt="md"
         {...form.getInputProps("total")}
       />
-      <Button
-        onClick={handleAddProduct}
-        disabled={form.values.total <= 0}
-        variant="outline"
-        mt="md"
-      >
+      <Button onClick={handleAddProduct} disabled={form.values.total <= 0} mt="md">
         Ürün Ekle
       </Button>
     </div>

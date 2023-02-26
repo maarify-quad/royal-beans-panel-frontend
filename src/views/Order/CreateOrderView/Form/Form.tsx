@@ -100,7 +100,7 @@ export const Form = () => {
       } = values;
 
       // Create order
-      await createOrder({
+      const order = await createOrder({
         customerId,
         deliveryDate,
         deliveryAddressId: +deliveryAddressId,
@@ -111,7 +111,7 @@ export const Form = () => {
 
       showNotification({
         title: "Başarılı",
-        message: "Sipariş oluşturuldu",
+        message: `${order.orderId} nolu sipariş oluşturuldu.`,
         icon: <IconCircleCheck />,
         color: "green",
       });

@@ -181,7 +181,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
             leftIcon={<IconUserOff />}
             color="red"
             mt="lg"
-            variant="outline"
+            variant="subtle"
           >
             Devre Dışı Bırak
           </Button>

@@ -79,7 +79,7 @@ export const Form = () => {
       } = values;
 
       // Create order
-      await createManualOrder({
+      const order = await createManualOrder({
         receiver,
         receiverNeighborhood,
         receiverAddress,
@@ -93,7 +93,7 @@ export const Form = () => {
 
       showNotification({
         title: "Başarılı",
-        message: "Manuel gönderi oluşturuldu",
+        message: `${order.orderId} nolu gönderi oluşturuldu.`,
         icon: <IconCircleCheck />,
         color: "green",
       });
