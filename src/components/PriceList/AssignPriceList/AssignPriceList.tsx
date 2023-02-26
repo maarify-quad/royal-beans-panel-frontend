@@ -57,22 +57,22 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
     [data?.customers.length]
   );
 
-  const onAssignPriceListSubmit = async (values: Inputs) => {
+  const handleAssignPriceList = async (values: Inputs) => {
     try {
       await updateCustomer({
         id: values.customerId,
         priceListId,
       }).unwrap();
+
       showNotification({
         title: "Başarılı",
-        message: "Fiyat listesi başarıyla atandı",
+        message: `${selectedCustomer?.name} müşterisi fiyat listesine eklendi`,
         icon: <IconCircleCheck />,
         color: "green",
       });
+
       closeAllModals();
-    } catch (error) {
-      // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
-    }
+    } catch {}
   };
 
   // Set selected customer object on select change
@@ -81,7 +81,7 @@ export const AssignPriceList: React.FC<AssignPriceListProps> = ({ priceListId })
   }, [form.values.customerId]);
 
   return (
-    <form onSubmit={form.onSubmit(onAssignPriceListSubmit, handleFormError)}>
+    <form onSubmit={form.onSubmit(handleAssignPriceList, handleFormError)}>
       <LoadingOverlay visible={isCustomersLoading || isUpdateCustomerLoading} />
       <Select
         label="Müşteri"

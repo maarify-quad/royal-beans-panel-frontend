@@ -41,10 +41,10 @@ export const customerApi = emptyApi.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: (_result, _error, params) => [
-        { type: "Customer" as const, id: params.id },
-        ...(params.priceListId ? [{ type: "PriceList" as const, id: params.priceListId }] : []),
-      ],
+      invalidatesTags: (_result, _error, params) =>
+        params.priceListId
+          ? ["Customer", { type: "PriceList" as const, id: params.priceListId }]
+          : [{ type: "Customer" as const, id: params.id }],
     }),
     deleteCustomer: builder.mutation<void, string>({
       query: (id) => ({

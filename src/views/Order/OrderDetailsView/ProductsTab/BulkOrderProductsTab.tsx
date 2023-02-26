@@ -55,7 +55,7 @@ export const BulkOrderProductsTab = ({ order }: BulkOrderProductsTabProps) => {
         <DataTable<OrderProduct> highlightOnHover records={order.orderProducts} columns={columns} />
       </Paper>
       <Group>
-        <Card withBorder shadow="xs" mt="md" style={{ minWidth: 320, width: "max-content" }}>
+        <Card withBorder shadow="xs" mt="md">
           <Group position="apart">
             <Text>Ara Toplam</Text>
             <Text size="lg" weight="bold">

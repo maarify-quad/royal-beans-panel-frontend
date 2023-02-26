@@ -86,7 +86,7 @@ export const ProductDetailsView = () => {
           !product?.deletedAt && (
             <Button
               color="red"
-              variant="outline"
+              variant="subtle"
               leftIcon={<IconTrash />}
               onClick={handleDeleteProduct}
             >

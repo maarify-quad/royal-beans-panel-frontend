@@ -51,12 +51,14 @@ export const CreateCustomer = () => {
         ...values,
         priceListId: values.priceListId !== "0" ? +values.priceListId : undefined,
       }).unwrap();
+
       showNotification({
         title: "Başarılı",
         message: "Müşteri oluşturuldu",
         icon: <IconCircleCheck />,
         color: "green",
       });
+
       closeAllModals();
     } catch (error) {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
