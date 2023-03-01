@@ -121,6 +121,7 @@ export const CustomerDetailsView = () => {
             </ActionIcon>
           </Group>
         }
+        tabTitle={data?.name}
         breadcrumbs={[
           {
             label: "Panel",
