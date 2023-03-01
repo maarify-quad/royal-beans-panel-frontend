@@ -21,8 +21,8 @@ import { Inputs, initialValues } from "./validation/Inputs";
 import { schema } from "./validation/schema";
 
 // Components
-import { StepOne } from "./StepOne";
-import { StepTwo } from "./StepTwo";
+import StepOne from "./StepOne";
+import StepTwo from "./StepTwo";
 
 // Utils
 import { handleFormError } from "@utils/form";
@@ -30,7 +30,7 @@ import { handleFormError } from "@utils/form";
 export const Form = () => {
   const navigate = useNavigate();
 
-  // Internal state
+  // State
   const [step, setStep] = React.useState(0);
 
   const nextStep = () => setStep((current) => (current < 1 ? current + 1 : current));
@@ -42,6 +42,15 @@ export const Form = () => {
   // Form utils
   const form = useForm<Inputs>({
     initialValues,
+    transformValues: (values) => ({
+      ...values,
+      receiverAddress: values.receiverAddress || null,
+      receiverNeighborhood: values.receiverNeighborhood || null,
+      receiverProvince: values.receiverProvince || null,
+      receiverCity: values.receiverCity || null,
+      receiverPhone: values.receiverPhone || null,
+      specialNote: values.specialNote || null,
+    }),
     validate: zodResolver(schema),
   });
 

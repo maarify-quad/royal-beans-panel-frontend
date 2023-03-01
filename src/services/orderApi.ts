@@ -34,7 +34,7 @@ export const orderApi = emptyApi.injectEndpoints({
       },
       providesTags: (_result, _error, params) => [{ type: "Order", id: params.customer }],
     }),
-    createOrder: builder.mutation<Order, CreateOrderParams>({
+    createOrder: builder.mutation<Order, CreateOrderRequest>({
       query: (body) => ({
         url: "/orders",
         method: "POST",
@@ -42,7 +42,7 @@ export const orderApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: ["Order"],
     }),
-    createManualOrder: builder.mutation<Order, CreateManualOrderParams>({
+    createManualOrder: builder.mutation<Order, CreateManualOrderRequest>({
       query: (body) => ({
         url: "/orders/manual",
         method: "POST",
@@ -114,7 +114,7 @@ interface GetOrdersByCustomerParams {
   limit: number;
 }
 
-interface CreateOrderParams {
+interface CreateOrderRequest {
   customerId: string;
   deliveryDate: Date;
   specialNote: string;
@@ -123,15 +123,15 @@ interface CreateOrderParams {
   orderProducts: CreateOrderProductParams[];
 }
 
-interface CreateManualOrderParams {
+interface CreateManualOrderRequest {
   receiver: string;
-  receiverNeighborhood: string;
-  receiverAddress: string;
-  receiverCity: string;
-  receiverProvince: string;
-  receiverPhone: string;
+  receiverNeighborhood: string | null;
+  receiverAddress: string | null;
+  receiverCity: string | null;
+  receiverProvince: string | null;
+  receiverPhone: string | null;
   manualInvoiceStatus: string;
-  specialNote: string;
+  specialNote: string | null;
   orderProducts: CreateManualOrderProductParams[];
 }
 

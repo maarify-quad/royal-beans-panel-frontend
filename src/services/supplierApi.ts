@@ -9,15 +9,12 @@ import { Supplier } from "@interfaces/supplier";
 export const supplierApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
     getSuppliers: builder.query<GetSuppliersResponse, GetSuppliersRequest | void>({
-      query: (params) => {
-        const url = new URL("/suppliers", import.meta.env.VITE_API_BASE_URL);
-        if (params) {
-          const { page, limit } = params;
-          url.searchParams.append("page", page.toString());
-          url.searchParams.append("limit", limit.toString());
-        }
-        return url.toString();
-      },
+      query: (params) => ({
+        url: "/suppliers",
+        ...(Object.keys(params?.query || {}).length && {
+          params: params?.query,
+        }),
+      }),
       providesTags: ["Supplier"],
     }),
     getSupplierById: builder.query<Omit<Supplier, "deliveries">, string>({
@@ -57,8 +54,7 @@ interface GetSuppliersResponse {
 }
 
 interface GetSuppliersRequest {
-  page: number;
-  limit: number;
+  query?: RequestQuery;
 }
 
 interface CreateSupplierRequest {
@@ -81,4 +77,12 @@ interface UpdateSupplierRequest {
   contactPosition: string | null;
   contactPhone: string | null;
   contactEmail: string | null;
+}
+
+export interface RequestQuery {
+  page?: number;
+  limit?: number;
+  sortBy?: keyof Supplier;
+  sortOrder?: "ASC" | "DESC";
+  search?: string;
 }

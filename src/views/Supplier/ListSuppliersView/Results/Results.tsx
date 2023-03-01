@@ -4,11 +4,11 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 // Services
-import { useGetSuppliersQuery } from "@services/supplierApi";
+import { RequestQuery, useGetSuppliersQuery } from "@services/supplierApi";
 
 // UI Components
 import { Alert, Anchor, Group, Paper, Select, Text } from "@mantine/core";
-import { DataTable, DataTableColumn } from "mantine-datatable";
+import { DataTable, DataTableColumn, DataTableSortStatus } from "mantine-datatable";
 
 // Icons
 import { IconAlertCircle } from "@tabler/icons";
@@ -20,37 +20,48 @@ import { formatCurrency } from "@utils/localization";
 import { Supplier } from "@interfaces/supplier";
 
 export const Results = () => {
-  // Internal state
-  const [query, setQuery] = useState({
+  // State
+  const [query, setQuery] = useState<RequestQuery>({
     page: 1,
     limit: 25,
+    sortBy: "id",
+    sortOrder: "ASC",
+  });
+  const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
+    columnAccessor: "id",
+    direction: "asc",
   });
 
   // Queries
-  const { suppliers, totalCount, isLoading, isFetching, error } = useGetSuppliersQuery(query, {
-    selectFromResult: ({ data, ...rest }) => ({
-      ...rest,
-      suppliers: data?.suppliers,
-      totalPages: data?.totalPages,
-      totalCount: data?.totalCount,
-    }),
-  });
+  const { suppliers, totalCount, isLoading, isFetching, error } = useGetSuppliersQuery(
+    { query },
+    {
+      selectFromResult: ({ data, ...rest }) => ({
+        ...rest,
+        suppliers: data?.suppliers,
+        totalPages: data?.totalPages,
+        totalCount: data?.totalCount,
+      }),
+    }
+  );
 
-  const columns: DataTableColumn<Supplier>[] = useMemo(
+  const columns = useMemo<DataTableColumn<Supplier>[]>(
     () => [
       {
         accessor: "name",
         title: "Tedarikçi",
+        sortable: true,
         render: (supplier) => (
           <Anchor component={Link} to={`/dashboard/suppliers/${supplier.id}`}>
             {supplier.name}
           </Anchor>
         ),
       },
-      { accessor: "id", title: "Tedarikçi Kodu	" },
+      { accessor: "id", title: "Tedarikçi Kodu", sortable: true },
       {
         accessor: "totalVolume",
         title: "Toplam Hacim",
+        sortable: true,
         render: (supplier) => formatCurrency(supplier.totalVolume),
       },
     ],
@@ -80,15 +91,24 @@ export const Results = () => {
         fetching={isLoading || isFetching}
         noRecordsText="Kayıt bulunamadı"
         loadingText="Yükleniyor"
-        recordsPerPage={query.limit}
+        recordsPerPage={query.limit || 25}
         totalRecords={totalCount}
-        page={query.page}
+        page={query.page || 1}
         onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
+        sortStatus={sortStatus}
+        onSortStatusChange={(status) => {
+          setSortStatus(status);
+          setQuery((prev) => ({
+            ...prev,
+            sortBy: status.columnAccessor as keyof Supplier,
+            sortOrder: status.direction === "asc" ? "ASC" : "DESC",
+          }));
+        }}
       />
       <Group>
         <Text size="sm">Sayfa başı satır</Text>
         <Select
-          value={query.limit.toString()}
+          value={query.limit?.toString() || "25"}
           onChange={(limit) => {
             if (limit) {
               setQuery({ page: 1, limit: +limit });

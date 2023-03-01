@@ -18,10 +18,12 @@ import {
   Paper,
   Select,
   Text,
+  TextInput,
 } from "@mantine/core";
-import { DataTable, DataTableColumn } from "mantine-datatable";
+import { DataTable, DataTableColumn, DataTableSortStatus } from "mantine-datatable";
 
 // UI Utils
+import { useDebouncedValue } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
@@ -35,13 +37,26 @@ export const BulkUpdateStock = () => {
   const [query, setQuery] = useState<RequestQuery>({
     page: 1,
     limit: 100,
+    sortBy: "stockCode",
+    sortOrder: "ASC",
+    search: "",
+  });
+  const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
+    columnAccessor: "stockCode",
+    direction: "asc",
   });
   const [editedRowIndexes, setEditedRowIndexes] = useState<number[]>([]);
   const [editedProducts, setEditedProducts] = useState<{ [key: number]: Product }>({});
+  const [debouncedSearch] = useDebouncedValue(query.search, 500);
 
   // Queries
   const { products, totalCount, isTableLoading, error } = useGetProductsQuery(
-    { query },
+    {
+      query: {
+        ...query,
+        search: debouncedSearch,
+      },
+    },
     {
       selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
         ...rest,
@@ -62,8 +77,10 @@ export const BulkUpdateStock = () => {
       await bulkUpdateProducts({
         products: Object.values(editedProducts),
       }).unwrap();
+
       setEditedRowIndexes([]);
       setEditedProducts({});
+
       showNotification({
         title: "Başarılı",
         message: "Ürünler başarıyla güncellendi",
@@ -86,21 +103,23 @@ export const BulkUpdateStock = () => {
     setEditedProducts({});
   };
 
-  const columns: DataTableColumn<Product>[] = useMemo(
+  const columns = useMemo<DataTableColumn<Product>[]>(
     () => [
-      { accessor: "name", title: "Ürün", cellsStyle: { cursor: "default" } },
+      { accessor: "name", title: "Ürün", cellsStyle: { cursor: "default" }, sortable: true },
       {
         accessor: "stockCode",
         title: "Stok Kodu",
         render: (row) => row.stockCode || "-",
         cellsStyle: { cursor: "default" },
+        sortable: true,
       },
-      { accessor: "storageType", title: "Depo", cellsStyle: { cursor: "default" } },
-      { accessor: "amountUnit", title: "Birim", cellsStyle: { cursor: "default" } },
+      { accessor: "storageType", title: "Depo", cellsStyle: { cursor: "default" }, sortable: true },
+      { accessor: "amountUnit", title: "Birim", cellsStyle: { cursor: "default" }, sortable: true },
       {
         accessor: "amount",
         title: "Miktar",
         width: 200,
+        sortable: true,
         cellsStyle: (_, index) => ({
           cursor: editedRowIndexes.includes(index) ? "default" : "text",
         }),
@@ -161,6 +180,12 @@ export const BulkUpdateStock = () => {
           </Paper>
         </Affix>
       )}
+      <TextInput
+        placeholder="Ürün adı veya stok kodu ile ara"
+        my="md"
+        value={query.search}
+        onChange={(e) => setQuery({ ...query, search: e.currentTarget.value })}
+      />
       <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
         <DataTable
           highlightOnHover
@@ -178,6 +203,15 @@ export const BulkUpdateStock = () => {
               setEditedRowIndexes((prev) => [...prev, row.recordIndex]);
               setEditedProducts((prev) => ({ ...prev, [row.recordIndex]: row.record }));
             }
+          }}
+          sortStatus={sortStatus}
+          onSortStatusChange={(status) => {
+            setSortStatus(status);
+            setQuery((prev) => ({
+              ...prev,
+              sortBy: status.columnAccessor as keyof Product,
+              sortOrder: status.direction === "asc" ? "ASC" : "DESC",
+            }));
           }}
         />
         <Group>

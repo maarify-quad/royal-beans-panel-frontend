@@ -6,38 +6,38 @@ export const schema = z.object({
       required_error: "Alıcı gereklidir",
       invalid_type_error: "Geçersiz alıcı değeri",
     })
-    .min(1, "Alıcı gereklidir"),
+    .min(1, "Alıcı gereklidir")
+    .max(255, "Alıcı 255 karakterden uzun olamaz"),
   receiverNeighborhood: z
     .string({
-      required_error: "Alıcı mahalle gereklidir",
       invalid_type_error: "Geçersiz alıcı mahalle değeri",
     })
-    .min(1, "Alıcı mahalle gereklidir"),
+    .max(255, "Alıcı mahalle 255 karakterden uzun olamaz")
+    .nullable(),
   receiverAddress: z
     .string({
-      required_error: "Alıcı adres gereklidir",
       invalid_type_error: "Geçersiz alıcı adres değeri",
     })
-    .min(1, "Alıcı adres gereklidir"),
+    .nullable(),
   receiverCity: z
     .string({
-      required_error: "Alıcı şehir gereklidir",
       invalid_type_error: "Geçersiz alıcı şehir değeri",
     })
-    .min(1, "Alıcı şehir gereklidir"),
+    .max(255, "Alıcı şehir 255 karakterden uzun olamaz")
+    .nullable(),
   receiverProvince: z
     .string({
-      required_error: "Alıcı ilçe gereklidir",
       invalid_type_error: "Geçersiz alıcı ilçe değeri",
     })
-    .min(1, "Alıcı ilçe gereklidir"),
+    .max(255, "Alıcı ilçe 255 karakterden uzun olamaz")
+    .nullable(),
   receiverPhone: z
     .string({
-      required_error: "Alıcı telefon gereklidir",
       invalid_type_error: "Geçersiz alıcı telefon değeri",
     })
-    .min(1, "Alıcı telefon gereklidir"),
-  specialNote: z.string({}).optional(),
+    .max(255, "Alıcı telefon 255 karakterden uzun olamaz")
+    .nullable(),
+  specialNote: z.string({}).nullable(),
   orderProducts: z
     .object({
       productId: z.number({

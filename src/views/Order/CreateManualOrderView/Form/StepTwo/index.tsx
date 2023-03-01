@@ -1,1 +1,1 @@
-export { StepTwo } from "./StepTwo";
+export { StepTwo as default } from "./StepTwo";
