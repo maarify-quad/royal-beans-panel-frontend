@@ -12,6 +12,24 @@ import {
 
 export const NAV_LINKS: NavLink[] = [
   {
+    label: "Siparişler",
+    icon: IconShoppingCart,
+    match: /orders/,
+    link: "/dashboard/orders",
+  },
+  {
+    label: "Müşteriler",
+    icon: IconUserCircle,
+    match: /customers/,
+    link: "/dashboard/customers",
+  },
+  {
+    label: "Kavrum",
+    icon: IconCoffee,
+    match: /roasts/,
+    link: "/dashboard/roasts",
+  },
+  {
     label: "Stok",
     icon: IconPackages,
     match: /^\/dashboard\/(deliveries|storage|stock-admin)/,
@@ -40,24 +58,6 @@ export const NAV_LINKS: NavLink[] = [
     icon: IconUsers,
     match: /suppliers/,
     link: "/dashboard/suppliers",
-  },
-  {
-    label: "Kavrum",
-    icon: IconCoffee,
-    match: /roasts/,
-    link: "/dashboard/roasts",
-  },
-  {
-    label: "Siparişler",
-    icon: IconShoppingCart,
-    match: /orders/,
-    link: "/dashboard/orders",
-  },
-  {
-    label: "Müşteriler",
-    icon: IconUserCircle,
-    match: /customers/,
-    link: "/dashboard/customers",
   },
   {
     label: "Fiyat Listeleri",

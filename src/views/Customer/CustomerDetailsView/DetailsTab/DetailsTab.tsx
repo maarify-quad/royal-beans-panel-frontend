@@ -4,7 +4,7 @@ import React from "react";
 import { useDeleteCustomerMutation } from "@services/customerApi";
 
 // UI Components
-import { Button, Group, LoadingOverlay, SimpleGrid } from "@mantine/core";
+import { Button, Flex, Group, LoadingOverlay, SimpleGrid, Stack, Text } from "@mantine/core";
 
 // UI Utils
 import { openModal, openConfirmModal } from "@mantine/modals";
@@ -33,7 +33,7 @@ const EditCustomer = React.lazy(() =>
   }))
 );
 
-export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
+export const DetailsTab = ({ customer }: DetailsTabProps) => {
   const openEditCustomer = (
     title: string,
     fields: {
@@ -68,6 +68,8 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
       },
     });
   };
+
+  console.log(customer);
 
   return (
     <>
@@ -159,19 +161,30 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ customer }) => {
         <DetailsCard
           title="Kargo"
           value={
-            <>
-              {customer?.cargoAddress || "-"}
-              <br />
-              {customer?.cargoProvince || "-"} / {customer?.cargoCity || "-"}
-            </>
+            <Stack>
+              {customer.deliveryAddresses.map((address) => (
+                <Flex direction="column">
+                  <Group spacing="sm">
+                    <Text size="lg" weight="bold">
+                      {address.title}
+                    </Text>
+                    {address.isPrimary && (
+                      <Text size="sm" color="dimmed">
+                        (Birincil)
+                      </Text>
+                    )}
+                  </Group>
+                  <Text>
+                    {address.receiverName} ({address.receiverPhone})
+                  </Text>
+                  <Text>{address.receiverAddress}</Text>
+                  <Text>
+                    {address.receiverProvince} / {address.receiverCity}
+                  </Text>
+                </Flex>
+              ))}
+            </Stack>
           }
-          editAction={() => {
-            openEditCustomer("Kargo Güncelle", [
-              { label: "Kargo adresi", key: "cargoAddress" },
-              { label: "Kargo il", key: "cargoCity" },
-              { label: "Kargo ilçe", key: "cargoProvince" },
-            ]);
-          }}
         />
       </SimpleGrid>
       {!customer.deletedAt && (

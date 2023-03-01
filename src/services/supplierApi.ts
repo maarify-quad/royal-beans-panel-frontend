@@ -24,7 +24,7 @@ export const supplierApi = emptyApi.injectEndpoints({
       query: (id) => `/suppliers/${id}`,
       providesTags: (_result, _error, id) => [{ type: "Supplier", id }],
     }),
-    createSupplier: builder.mutation<Supplier, CreateSupplierParams>({
+    createSupplier: builder.mutation<Supplier, CreateSupplierRequest>({
       query: (params) => ({
         url: "/suppliers",
         method: "POST",
@@ -32,11 +32,23 @@ export const supplierApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: ["Supplier"],
     }),
+    updateSupplier: builder.mutation<Supplier, UpdateSupplierRequest>({
+      query: (body) => ({
+        url: `/suppliers/${body.id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: (_result, _error, params) => [{ type: "Supplier", id: params.id }],
+    }),
   }),
 });
 
-export const { useGetSuppliersQuery, useGetSupplierByIdQuery, useCreateSupplierMutation } =
-  supplierApi;
+export const {
+  useGetSuppliersQuery,
+  useGetSupplierByIdQuery,
+  useCreateSupplierMutation,
+  useUpdateSupplierMutation,
+} = supplierApi;
 
 interface GetSuppliersResponse {
   suppliers: Supplier[];
@@ -49,11 +61,22 @@ interface GetSuppliersRequest {
   limit: number;
 }
 
-interface CreateSupplierParams {
+interface CreateSupplierRequest {
   name: string;
-  address: string;
-  taxNo: string;
-  taxOffice: string;
+  address: string | null;
+  taxNo: string | null;
+  taxOffice: string | null;
+  contactName: string | null;
+  contactPosition: string | null;
+  contactPhone: string | null;
+  contactEmail: string | null;
+}
+
+interface UpdateSupplierRequest {
+  id: string;
+  address: string | null;
+  taxNo: string | null;
+  taxOffice: string | null;
   contactName: string | null;
   contactPosition: string | null;
   contactPhone: string | null;

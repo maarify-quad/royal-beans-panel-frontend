@@ -1,17 +1,13 @@
 import React from "react";
 
 // UI Components
-import { Group, SimpleGrid, Text } from "@mantine/core";
+import { Group, LoadingOverlay, SimpleGrid, Text } from "@mantine/core";
+
+// UI Utils
+import { openModal } from "@mantine/modals";
 
 // Icons
-import {
-  IconMapPin,
-  IconReceiptTax,
-  IconUserCircle,
-  IconMail,
-  IconPhone,
-  IconUser,
-} from "@tabler/icons";
+import { IconMail, IconPhone } from "@tabler/icons";
 
 // Components
 import { DetailsCard } from "@components/DetailsCard";
@@ -19,12 +15,26 @@ import { DetailsCard } from "@components/DetailsCard";
 // Interfaces
 import { Supplier } from "@interfaces/supplier";
 
+// Lazy Components
+const EditSupplier = React.lazy(() => import("@components/Supplier/EditSupplier"));
+
 // Props
 type DetailsTabProps = {
   supplier: Omit<Supplier, "deliveries">;
 };
 
 export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
+  const handleEditAction = () => {
+    openModal({
+      title: "Tedarikçi Düzenle",
+      children: (
+        <React.Suspense fallback={<LoadingOverlay visible />}>
+          <EditSupplier supplier={supplier} />
+        </React.Suspense>
+      ),
+    });
+  };
+
   return (
     <SimpleGrid
       breakpoints={[
@@ -33,37 +43,14 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
       ]}
       style={{ alignItems: "stretch" }}
     >
+      <DetailsCard title="Adres" value={supplier.address || "-"} editAction={handleEditAction} />
       <DetailsCard
-        title={
-          <Group position="apart">
-            <Text size="xl" weight={700}>
-              Adres
-            </Text>
-            <IconMapPin />
-          </Group>
-        }
-        value={supplier.address || "-"}
-      />
-      <DetailsCard
-        title={
-          <Group position="apart">
-            <Text size="xl" weight={700}>
-              Vergi
-            </Text>
-            <IconReceiptTax />
-          </Group>
-        }
+        title="Vergi"
         value={`${supplier.taxNo || "-"} / ${supplier.taxOffice || "-"}`}
+        editAction={handleEditAction}
       />
       <DetailsCard
-        title={
-          <Group position="apart">
-            <Text size="xl" weight={700}>
-              Yetkili
-            </Text>
-            <IconUser />
-          </Group>
-        }
+        title="Yetkili"
         value={
           <>
             <Text mt="md">
@@ -83,6 +70,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
             </Group>
           </>
         }
+        editAction={handleEditAction}
       />
     </SimpleGrid>
   );

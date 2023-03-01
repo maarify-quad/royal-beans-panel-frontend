@@ -1,6 +1,10 @@
 // Routing
 import { Link, useSearchParams } from "react-router-dom";
 
+// Redux
+import { useReduxSelector } from "@app/hook";
+import { selectIsAdmin } from "@slices/authSlice";
+
 // UI Components
 import { Group, Button, Tabs } from "@mantine/core";
 
@@ -15,6 +19,7 @@ import { RoastsTab } from "./RoastsTab";
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const ListRoastsView = () => {
+  const isAdmin = useReduxSelector(selectIsAdmin);
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
@@ -35,13 +40,15 @@ export const ListRoastsView = () => {
           <Button leftIcon={<IconCoffee />} component={Link} to="/dashboard/roasts/create">
             Yeni Kavrum
           </Button>
-          <Button
-            leftIcon={<IconPlus />}
-            component={Link}
-            to="/dashboard/roasts/ingredients/create"
-          >
-            Yeni Kavrum İçeriği
-          </Button>
+          {isAdmin && (
+            <Button
+              leftIcon={<IconPlus />}
+              component={Link}
+              to="/dashboard/roasts/ingredients/create"
+            >
+              Yeni Kavrum İçeriği
+            </Button>
+          )}
         </Group>
       }
     >
@@ -53,14 +60,16 @@ export const ListRoastsView = () => {
       >
         <Tabs.List>
           <Tabs.Tab value="roasts">Kavrumlar</Tabs.Tab>
-          <Tabs.Tab value="roast-ingredients">Kavrum İçerikleri</Tabs.Tab>
+          {isAdmin && <Tabs.Tab value="roast-ingredients">Kavrum İçerikleri</Tabs.Tab>}
         </Tabs.List>
         <Tabs.Panel value="roasts" mt="md">
           <RoastsTab />
         </Tabs.Panel>
-        <Tabs.Panel value="roast-ingredients" mt="md">
-          <RoastIngredientsTab />
-        </Tabs.Panel>
+        {isAdmin && (
+          <Tabs.Panel value="roast-ingredients" mt="md">
+            <RoastIngredientsTab />
+          </Tabs.Panel>
+        )}
       </Tabs>
     </PageLayout>
   );
