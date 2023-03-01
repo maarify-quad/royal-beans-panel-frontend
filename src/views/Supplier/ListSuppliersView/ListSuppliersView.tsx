@@ -1,4 +1,4 @@
-import React from "react";
+import { Suspense, lazy } from "react";
 
 // UI Components
 import { Button, LoadingOverlay } from "@mantine/core";
@@ -16,7 +16,7 @@ import { Results } from "./Results";
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 // Lazy Components
-const CreateSupplier = React.lazy(() => import("@components/Supplier/CreateSupplier"));
+const CreateSupplier = lazy(() => import("@components/Supplier/CreateSupplier"));
 
 export const ListSuppliersView = () => {
   const handleCreateSupplier = () => {
@@ -24,9 +24,9 @@ export const ListSuppliersView = () => {
       key: "createSupplier",
       title: "Tedarikçi Oluştur",
       children: (
-        <React.Suspense fallback={<LoadingOverlay visible />}>
+        <Suspense fallback={<LoadingOverlay visible />}>
           <CreateSupplier />
-        </React.Suspense>
+        </Suspense>
       ),
     });
   };

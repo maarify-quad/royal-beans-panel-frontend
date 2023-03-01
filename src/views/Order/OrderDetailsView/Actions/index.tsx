@@ -1,1 +1,1 @@
-export { Actions } from "./Actions";
+export { Actions as default } from "./Actions";

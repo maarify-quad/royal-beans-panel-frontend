@@ -20,7 +20,7 @@ const useStyles = createStyles((theme) => ({
 
 // Props
 type PageLayoutProps = {
-  title?: string;
+  title?: string | React.ReactNode;
   breadcrumbs: {
     label?: string;
     href: string;

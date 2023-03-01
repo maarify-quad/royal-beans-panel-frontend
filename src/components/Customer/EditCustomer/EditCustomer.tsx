@@ -77,13 +77,13 @@ export const EditCustomer: React.FC<EditCustomerProps> = ({ fields, customer }) 
       {fields.map((field, i) => (
         <TextInput
           label={field.label}
-          placeholder={`${field.label} (opsiyonel)`}
+          placeholder={`${field.label}`}
           mt={i !== 0 ? "md" : 0}
           key={i}
           {...form.getInputProps(field.key)}
         />
       ))}
-      <Button type="submit" mt="md" loading={isUpdating}>
+      <Button type="submit" mt="lg" loading={isUpdating}>
         Güncelle
       </Button>
     </form>

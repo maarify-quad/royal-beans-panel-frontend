@@ -1,5 +1,3 @@
-import React from "react";
-
 // UI Components
 import { Select, TextInput } from "@mantine/core";
 
@@ -14,21 +12,19 @@ type StepOneProps = {
   form: UseFormReturnType<Inputs>;
 };
 
-export const StepOne: React.FC<StepOneProps> = ({ form }) => {
+export const StepOne = ({ form }: StepOneProps) => {
   return (
     <div>
       <TextInput
         label="Alıcı Ad"
         placeholder="Alıcı adı"
-        required
-        maxLength={255}
+        withAsterisk
         {...form.getInputProps("receiver")}
       />
       <TextInput
         label="Alıcı Mahalle"
         placeholder="Alıcı mahallesi"
         mt="md"
-        required
         maxLength={255}
         {...form.getInputProps("receiverNeighborhood")}
       />
@@ -36,7 +32,6 @@ export const StepOne: React.FC<StepOneProps> = ({ form }) => {
         label="Alıcı Adres"
         placeholder="Alıcı adresi"
         mt="md"
-        required
         maxLength={255}
         {...form.getInputProps("receiverAddress")}
       />
@@ -44,7 +39,6 @@ export const StepOne: React.FC<StepOneProps> = ({ form }) => {
         label="Alıcı İlçe"
         placeholder="Alıcı ilçesi"
         mt="md"
-        required
         maxLength={255}
         {...form.getInputProps("receiverProvince")}
       />
@@ -52,7 +46,6 @@ export const StepOne: React.FC<StepOneProps> = ({ form }) => {
         label="Alıcı İl"
         placeholder="Alıcı ili"
         mt="md"
-        required
         maxLength={255}
         {...form.getInputProps("receiverCity")}
       />
@@ -60,7 +53,6 @@ export const StepOne: React.FC<StepOneProps> = ({ form }) => {
         label="Telefon No"
         placeholder="Alıcı telefon numarası"
         mt="md"
-        required
         maxLength={255}
         {...form.getInputProps("receiverPhone")}
       />

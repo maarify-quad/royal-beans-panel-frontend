@@ -11,9 +11,9 @@ import { Alert, Tabs, Text } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons";
 
 // Components
-import { ProductsTab } from "./ProductsTab";
-import { DetailsTab } from "./DetailsTab";
-import { Actions } from "./Actions";
+import ProductsTab from "./ProductsTab";
+import DetailsTab from "./DetailsTab";
+import Actions from "./Actions";
 
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";

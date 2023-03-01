@@ -31,21 +31,40 @@ export const StepTwo: React.FC<StepTwoProps> = ({ form, priceListProducts }) => 
     [priceListProducts?.length]
   );
 
+  // useEffect(() => {
+  //   const priceListProduct = priceListProducts?.find(
+  //     (priceListProduct) => priceListProduct.id.toString() === form.values.priceListProductId
+  //   );
+
+  //   if (priceListProduct) {
+  // const subTotal = priceListProduct.unitPrice * form.values.quantity;
+  // const tax = priceListProduct.taxRate !== 0 ? (subTotal * priceListProduct.taxRate) / 100 : 0;
+
+  //     form.setFieldValue("unitPrice", priceListProduct.unitPrice);
+  //     form.setFieldValue("taxRate", priceListProduct.taxRate);
+  //     form.setFieldValue("subTotal", subTotal);
+  //     form.setFieldValue("total", subTotal + tax);
+  //   }
+  // }, [form.values.priceListProductId, form.values.quantity]);
+
   useEffect(() => {
     const priceListProduct = priceListProducts?.find(
       (priceListProduct) => priceListProduct.id.toString() === form.values.priceListProductId
     );
 
     if (priceListProduct) {
-      const subTotal = priceListProduct.unitPrice * form.values.quantity;
-      const tax = priceListProduct.taxRate !== 0 ? (subTotal * priceListProduct.taxRate) / 100 : 0;
-
       form.setFieldValue("unitPrice", priceListProduct.unitPrice);
       form.setFieldValue("taxRate", priceListProduct.taxRate);
-      form.setFieldValue("subTotal", subTotal);
-      form.setFieldValue("total", subTotal + tax);
     }
-  }, [form.values.priceListProductId, form.values.quantity]);
+  }, [form.values.priceListProductId]);
+
+  useEffect(() => {
+    const subTotal = form.values.unitPrice * form.values.quantity;
+    const tax = form.values.taxRate !== 0 ? (subTotal * form.values.taxRate) / 100 : 0;
+
+    form.setFieldValue("subTotal", subTotal);
+    form.setFieldValue("total", subTotal + tax);
+  }, [form.values.quantity, form.values.unitPrice, form.values.taxRate]);
 
   return (
     <Grid>
@@ -81,16 +100,16 @@ export const StepTwo: React.FC<StepTwoProps> = ({ form, priceListProducts }) => 
         <NumberInput
           label="Birim Fiyat"
           precision={2}
-          readOnly
-          hideControls
+          // readOnly
+          // hideControls
           icon={<span>₺</span>}
           mt="md"
           {...form.getInputProps("unitPrice")}
         />
         <NumberInput
           label="KDV Oranı"
-          readOnly
-          hideControls
+          // readOnly
+          // hideControls
           icon={<span>%</span>}
           mt="md"
           {...form.getInputProps("taxRate")}

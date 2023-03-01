@@ -79,24 +79,13 @@ export const Actions = ({ order }: ActionsProps) => {
 
   return (
     <Group>
-      {order.type === "BULK" && !order.isParasutVerified ? (
-        <Button
-          onClick={handleCreateParasutSalesInvoice}
-          loading={isCreatingPrasutInvoice}
-          disabled={isCreatingPrasutInvoice}
-          leftIcon={<img src={ParasutLogo} style={{ height: 30 }} />}
-          color="gray"
-        >
-          Paraşüt
-        </Button>
-      ) : null}
-      <Button color="teal" leftIcon={<IconTruckDelivery />} onClick={openUpdateDelivery}>
+      <Button color="teal" leftIcon={<IconTruckDelivery size={20} />} onClick={openUpdateDelivery}>
         Kargola
       </Button>
       {order.source !== "shopify" && (
         <Button
-          color="orange"
-          leftIcon={<IconBasket />}
+          color="violet"
+          leftIcon={<IconBasket size={20} />}
           component={Link}
           to={`/dashboard/orders${order.type === "MANUAL" ? "/manual" : ""}/update/${
             order.orderId
@@ -105,11 +94,23 @@ export const Actions = ({ order }: ActionsProps) => {
           Güncelle
         </Button>
       )}
+      {order.type === "BULK" && !order.isParasutVerified ? (
+        <Button
+          onClick={handleCreateParasutSalesInvoice}
+          loading={isCreatingPrasutInvoice}
+          disabled={isCreatingPrasutInvoice}
+          leftIcon={<img src={ParasutLogo} style={{ height: 25 }} />}
+          color="orange"
+          variant="outline"
+        >
+          Paraşüt
+        </Button>
+      ) : null}
       {order.source !== "shopify" && (
         <Button
           color="red"
           variant="subtle"
-          leftIcon={<IconTrash />}
+          leftIcon={<IconTrash size={20} />}
           onClick={() => {
             openCancelOrder(order.orderId);
           }}

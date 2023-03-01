@@ -1,17 +1,32 @@
+import { Suspense, lazy } from "react";
+
 // Routing
 import { Navigate, useParams, useSearchParams } from "react-router-dom";
 
 // Services
 import { useGetCustomerByIdQuery } from "@services/customerApi";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 // UI Components
-import { Alert, Loader, Tabs, Button, Text } from "@mantine/core";
+import {
+  Alert,
+  Loader,
+  Tabs,
+  Button,
+  Text,
+  Group,
+  ActionIcon,
+  LoadingOverlay,
+} from "@mantine/core";
+
+// UI Utils
+import { openModal } from "@mantine/modals";
 
 // Hooks
 import { useCreateDeliveryAddress } from "@hooks/delivery-address/useCreateDeliveryAddress";
 
 // Icons
-import { IconPlus, IconAlertCircle } from "@tabler/icons";
+import { IconPlus, IconAlertCircle, IconEdit } from "@tabler/icons";
 
 // Components
 import { DetailsTab } from "./DetailsTab";
@@ -23,19 +38,40 @@ import { DeliveryAddressesTab } from "./DeliveryAddressesTab";
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
+// Lazy Imports
+const EditCustomer = lazy(() => import("@components/Customer/EditCustomer"));
+
 export const CustomerDetailsView = () => {
   const { id } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const { openCreateDeliveryAddress } = useCreateDeliveryAddress();
 
   // Queries
-  const { data, isLoading, isDeactivated, error } = useGetCustomerByIdQuery(id!, {
-    skip: !id,
+  const { data, isLoading, isDeactivated, error } = useGetCustomerByIdQuery(id ?? skipToken, {
     selectFromResult: ({ ...rest }) => ({
       ...rest,
       isDeactivated: !!rest.data?.deletedAt,
     }),
   });
+
+  const handleEditCustomer = (
+    title: string,
+    fields: {
+      label: string;
+      key: string;
+    }[]
+  ) => {
+    if (!data) return;
+    openModal({
+      key: "editCustomer",
+      title,
+      children: (
+        <Suspense fallback={<LoadingOverlay visible />}>
+          <EditCustomer fields={fields} customer={data} />
+        </Suspense>
+      ),
+    });
+  };
 
   if (!id) {
     return <Navigate to="/dashboard" replace />;
@@ -67,7 +103,24 @@ export const CustomerDetailsView = () => {
         </Alert>
       )}
       <PageLayout
-        title={data?.name}
+        title={
+          <Group>
+            {data?.name}
+            <ActionIcon
+              size={22}
+              onClick={() =>
+                handleEditCustomer("Müşteri İsmi Güncelle", [
+                  {
+                    label: "Müşteri İsim",
+                    key: "name",
+                  },
+                ])
+              }
+            >
+              <IconEdit />
+            </ActionIcon>
+          </Group>
+        }
         breadcrumbs={[
           {
             label: "Panel",
@@ -78,7 +131,7 @@ export const CustomerDetailsView = () => {
             href: "/dashboard/customers",
           },
           {
-            label: data?.name,
+            label: id,
             href: `/dashboard/customers/${id}`,
           },
         ]}
