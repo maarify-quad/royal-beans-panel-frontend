@@ -21,6 +21,7 @@ const useStyles = createStyles((theme) => ({
 // Props
 type PageLayoutProps = {
   title?: string | React.ReactNode;
+  tabTitle?: string;
   breadcrumbs: {
     label?: string;
     href: string;
@@ -33,6 +34,7 @@ type PageLayoutProps = {
 
 export const PageLayout = ({
   title,
+  tabTitle,
   breadcrumbs,
   children,
   actions,
@@ -64,10 +66,20 @@ export const PageLayout = ({
     );
   }
 
+  const getTitle = () => {
+    if (typeof title === "string") {
+      return `${title} | TAFT Coffee Co.`;
+    } else if (tabTitle) {
+      return `${tabTitle} | TAFT Coffee Co.`;
+    } else {
+      return "TAFT Coffee Co.";
+    }
+  };
+
   return (
     <HelmetProvider>
       <Helmet>
-        <title>{title ? `${title} | TAFT Coffee Co.` : "TAFT Coffee Co."}</title>
+        <title>{getTitle()}</title>
       </Helmet>
       <div className={classes.root}>
         <Breadcrumbs>
