@@ -23,10 +23,11 @@ import { handleFormError } from "@utils/form";
 // Props
 type ManualCreateProps = {
   productName?: string;
+  storageType?: string;
   onManualCreate?: () => void;
 };
 
-export const ManualCreate = ({ productName, onManualCreate }: ManualCreateProps) => {
+export const ManualCreate = ({ productName, storageType, onManualCreate }: ManualCreateProps) => {
   // Mutations
   const [createProductMutation, { isLoading: isCreating }] = useCreateProductMutation();
 
@@ -35,6 +36,7 @@ export const ManualCreate = ({ productName, onManualCreate }: ManualCreateProps)
     initialValues: {
       ...initialValues,
       name: productName || initialValues.name,
+      storageType: storageType || initialValues.storageType,
     },
     validate: zodResolver(createProductSchema),
     validateInputOnChange: true,

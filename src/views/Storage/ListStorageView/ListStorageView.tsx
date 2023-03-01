@@ -25,12 +25,14 @@ export const ListStorageView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const onCreateProductClick = () => {
+    const storageType =
+      searchParams.get("tab") === "Diğer" ? "Other" : searchParams.get("tab") || "HM";
     openModal({
       key: "createProduct",
       title: "Ürün Oluştur",
       children: (
         <Suspense fallback={<LoadingOverlay visible />}>
-          <CreateProduct />
+          <CreateProduct storageType={storageType} />
         </Suspense>
       ),
     });
@@ -38,7 +40,7 @@ export const ListStorageView = () => {
 
   return (
     <PageLayout
-      title="Depo"
+      title={`Depo - ${searchParams.get("tab") || "HM"} `}
       breadcrumbs={[
         {
           label: "Panel",
@@ -65,7 +67,7 @@ export const ListStorageView = () => {
           <Tabs.Tab value="HM">Hammadde</Tabs.Tab>
           <Tabs.Tab value="YM">Yarı Mamül</Tabs.Tab>
           <Tabs.Tab value="FN">Bitmiş Ürün</Tabs.Tab>
-          <Tabs.Tab value="Other">Diğer</Tabs.Tab>
+          <Tabs.Tab value="Diğer">Diğer</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="HM" mt="md">
@@ -77,7 +79,7 @@ export const ListStorageView = () => {
         <Tabs.Panel value="FN" mt="md">
           <StorageProducts storageType="FN" />
         </Tabs.Panel>
-        <Tabs.Panel value="Other" mt="md">
+        <Tabs.Panel value="Diğer" mt="md">
           <StorageProducts storageType="Other" />
         </Tabs.Panel>
       </Tabs>
