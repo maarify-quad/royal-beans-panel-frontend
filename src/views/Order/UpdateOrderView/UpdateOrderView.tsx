@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 // Services
 import { useGetPriceListProductsQuery } from "@services/priceListProductApi";
 import { useGetOrderByOrderIdQuery, useUpdateOrderProductsMutation } from "@services/orderApi";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 // UI Components
 import { Loader, Grid } from "@mantine/core";
@@ -36,9 +37,7 @@ export const UpdateOrderView = () => {
   });
 
   // Queries
-  const { data, isLoading: isOrderLoading } = useGetOrderByOrderIdQuery(orderId!, {
-    skip: !orderId,
-  });
+  const { data, isLoading: isOrderLoading } = useGetOrderByOrderIdQuery(orderId ?? skipToken);
   const { priceListProducts, isLoading: isPriceListProductsLoading } = useGetPriceListProductsQuery(
     {
       priceListId: data?.order.customer?.priceListId!,

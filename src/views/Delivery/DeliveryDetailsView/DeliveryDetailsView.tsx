@@ -5,6 +5,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 // Services
 import { useGetDeliveryByIdQuery, useDeleteDeliveryMutation } from "@services/deliveryApi";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 // UI Components
 import { Alert, Loader, Box, Button, Text } from "@mantine/core";
@@ -26,9 +27,7 @@ export const DeliveryDetailsView = () => {
   const navigate = useNavigate();
 
   // Queries
-  const { data, isLoading, error } = useGetDeliveryByIdQuery(id!, {
-    skip: !id,
-  });
+  const { data, isLoading, error } = useGetDeliveryByIdQuery(id ?? skipToken);
 
   // Mutations
   const [deleteDelivery, { isLoading: isDeleting }] = useDeleteDeliveryMutation();

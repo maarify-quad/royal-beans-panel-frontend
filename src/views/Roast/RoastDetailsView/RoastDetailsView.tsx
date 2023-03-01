@@ -5,29 +5,26 @@ import { Navigate, useParams } from "react-router-dom";
 
 // Services
 import { useGetRoastByIdQuery } from "@services/roastApi";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 // UI Components
-import { Alert, Loader, Text, Stack } from "@mantine/core";
-
-// Icons
-import { IconAlertCircle } from "@tabler/icons";
+import { Text, Stack } from "@mantine/core";
 
 // Components
-import { RoastedCoffees } from "./RoastedCoffees";
-import { RoundsTable } from "./RoundsTable";
+import RoastedCoffees from "./RoastedCoffees";
+import RoundsTable from "./RoundsTable";
 
-// Styles
+// Layout
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const RoastDetailsView = () => {
   const { id } = useParams();
 
-  const { roast, isLoading, error } = useGetRoastByIdQuery(id!, {
+  const { roast, isLoading, error } = useGetRoastByIdQuery(id ?? skipToken, {
     selectFromResult: ({ data, ...rest }) => ({
       ...rest,
       roast: data?.roast,
     }),
-    skip: !id,
   });
 
   if (!id) {

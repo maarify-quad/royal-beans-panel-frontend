@@ -8,8 +8,8 @@ import { useGetShopifyProductWithIngredientsQuery } from "@services/shopifyProdu
 import { Loader, LoadingOverlay } from "@mantine/core";
 
 // Components
-import { IngredientDetails } from "./IngredientDetails";
-import { Form } from "./Form";
+import IngredientDetails from "./IngredientDetails";
+import Form from "./Form";
 
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";

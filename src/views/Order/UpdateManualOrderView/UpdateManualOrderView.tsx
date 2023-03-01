@@ -7,6 +7,7 @@ import {
   useGetOrderByOrderIdQuery,
   useUpdateManualOrderProductsMutation,
 } from "@services/orderApi";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 // UI Components
 import { Loader, Grid } from "@mantine/core";
@@ -39,9 +40,7 @@ export const UpdateManualOrderView = () => {
   });
 
   // Queries
-  const { data, isLoading: isOrderLoading } = useGetOrderByOrderIdQuery(orderId!, {
-    skip: !orderId,
-  });
+  const { data, isLoading: isOrderLoading } = useGetOrderByOrderIdQuery(orderId ?? skipToken);
   const { products, isLoading: isProductsLoading } = useGetProductsByStorageTypeQuery(
     {
       storageType: "FN",

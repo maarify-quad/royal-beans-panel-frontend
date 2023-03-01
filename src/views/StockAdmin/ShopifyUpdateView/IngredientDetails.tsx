@@ -27,7 +27,7 @@ type IngredientDetailsProps = {
   shopifyProduct: ShopifyProduct;
 };
 
-export const IngredientDetails = ({ shopifyProduct }: IngredientDetailsProps) => {
+const IngredientDetails = ({ shopifyProduct }: IngredientDetailsProps) => {
   const [deleteShopifyProductIngredient, { isLoading: isDeleting }] =
     useDeleteShopifyProductIngredientMutation();
 
@@ -86,3 +86,5 @@ export const IngredientDetails = ({ shopifyProduct }: IngredientDetailsProps) =>
     </Card>
   );
 };
+
+export default IngredientDetails;

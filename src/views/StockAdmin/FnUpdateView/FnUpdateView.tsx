@@ -3,13 +3,14 @@ import { Navigate, useParams } from "react-router-dom";
 
 // Services
 import { useGetProductWithIngredientsQuery } from "@services/productApi";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 // UI Components
 import { Loader, LoadingOverlay } from "@mantine/core";
 
 // Components
-import { ProductDetails } from "./ProductDetails";
-import { Form } from "./Form";
+import ProductDetails from "./ProductDetails";
+import Form from "./Form";
 
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
@@ -23,9 +24,7 @@ export const FnUpdateView = () => {
     data: product,
     isLoading,
     isFetching,
-  } = useGetProductWithIngredientsQuery(stockCode || "", {
-    skip: !stockCode,
-  });
+  } = useGetProductWithIngredientsQuery(stockCode ?? skipToken);
 
   if (!stockCode) {
     return <Navigate to="/dashboard/stock-admin" replace />;

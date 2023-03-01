@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 
 // Routing
@@ -22,7 +22,7 @@ type DeliveriesTabProps = {
   supplierId: string;
 };
 
-export const DeliveriesTab: React.FC<DeliveriesTabProps> = ({ supplierId }) => {
+export const DeliveriesTab = ({ supplierId }: DeliveriesTabProps) => {
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 25,

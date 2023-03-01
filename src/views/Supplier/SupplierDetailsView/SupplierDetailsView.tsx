@@ -17,8 +17,8 @@ import { openModal } from "@mantine/modals";
 import { IconEdit } from "@tabler/icons";
 
 // Components
-import { DetailsTab } from "./DetailsTab";
-import { DeliveriesTab } from "./DeliveriesTab";
+import DetailsTab from "./DetailsTab";
+import DeliveriesTab from "./DeliveriesTab";
 
 // Layout
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
@@ -81,7 +81,7 @@ export const SupplierDetailsView = () => {
       {supplier && (
         <Tabs
           keepMounted={false}
-          defaultValue={searchParams.get("tab") || "details"}
+          value={searchParams.get("tab") || "details"}
           onTabChange={(tab: string) => setSearchParams({ tab })}
           mt="md"
         >

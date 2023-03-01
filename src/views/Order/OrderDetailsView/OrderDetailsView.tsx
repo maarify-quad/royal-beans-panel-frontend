@@ -3,6 +3,7 @@ import { Navigate, useParams, useSearchParams } from "react-router-dom";
 
 // Services
 import { useGetOrderByOrderIdQuery } from "@services/orderApi";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 // UI Components
 import { Alert, Tabs, Text } from "@mantine/core";
@@ -22,9 +23,7 @@ export const OrderDetailsView = () => {
   const { orderId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { data, isLoading, error } = useGetOrderByOrderIdQuery(orderId || "", {
-    skip: !orderId,
-  });
+  const { data, isLoading, error } = useGetOrderByOrderIdQuery(orderId ?? skipToken);
 
   if (!orderId) {
     return <Navigate to="/dashboard" replace />;
@@ -59,7 +58,7 @@ export const OrderDetailsView = () => {
       {data && (
         <Tabs
           keepMounted={false}
-          defaultValue={searchParams.get("tab") || "products"}
+          value={searchParams.get("tab") || "products"}
           onTabChange={(tab: string) => setSearchParams({ tab })}
           mt="md"
         >

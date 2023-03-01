@@ -1,1 +1,1 @@
-export { RoastedCoffees } from "./RoastedCoffees";
+export { RoastedCoffees as default } from "./RoastedCoffees";

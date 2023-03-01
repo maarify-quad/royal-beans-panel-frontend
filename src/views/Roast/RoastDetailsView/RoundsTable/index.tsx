@@ -1,1 +1,1 @@
-export { RoundsTable } from "./RoundsTable";
+export { RoundsTable as default } from "./RoundsTable";

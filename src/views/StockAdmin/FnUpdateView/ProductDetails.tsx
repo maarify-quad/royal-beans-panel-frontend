@@ -27,7 +27,7 @@ type ProductDetailsProps = {
   product: ProductWithIngredients;
 };
 
-export const ProductDetails = ({ product }: ProductDetailsProps) => {
+const ProductDetails = ({ product }: ProductDetailsProps) => {
   const [deleteIngredient, { isLoading: isDeleting }] = useDeleteIngredientByIdMutation();
 
   const handleDeleteIngredient = (id: number) => {
@@ -85,3 +85,5 @@ export const ProductDetails = ({ product }: ProductDetailsProps) => {
     </Card>
   );
 };
+
+export default ProductDetails;
