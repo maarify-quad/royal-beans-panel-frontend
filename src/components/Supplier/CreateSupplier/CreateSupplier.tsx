@@ -64,7 +64,7 @@ export const CreateSupplier = ({ supplier, onCreate }: CreateSupplierProps) => {
         type="text"
         placeholder="Tedarikçi adı"
         autoFocus
-        required
+        withAsterisk
         {...form.getInputProps("name")}
       />
       <TextInput
@@ -72,7 +72,7 @@ export const CreateSupplier = ({ supplier, onCreate }: CreateSupplierProps) => {
         type="text"
         placeholder="Tedarikçi adresi"
         mt="md"
-        required
+        withAsterisk
         {...form.getInputProps("address")}
       />
       <TextInput
@@ -80,7 +80,7 @@ export const CreateSupplier = ({ supplier, onCreate }: CreateSupplierProps) => {
         type="text"
         placeholder="Tedarikçi vergi kimlik no"
         mt="md"
-        required
+        withAsterisk
         {...form.getInputProps("taxNo")}
       />
       <TextInput
@@ -88,7 +88,7 @@ export const CreateSupplier = ({ supplier, onCreate }: CreateSupplierProps) => {
         type="text"
         placeholder="Tedarikçi vergi dairesi"
         mt="md"
-        required
+        withAsterisk
         {...form.getInputProps("taxOffice")}
       />
       <TextInput

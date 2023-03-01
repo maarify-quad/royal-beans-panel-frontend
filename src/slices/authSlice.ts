@@ -48,5 +48,7 @@ export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenti
 export const selectUser = (state: RootState) => state.auth.user;
 export const selectRoles = (state: RootState) =>
   state.auth.user?.roles.map((role) => role.name) || [];
+export const selectIsAdmin = (state: RootState) =>
+  state.auth.user?.roles.some((role) => role.name === "admin") || false;
 
 export default authSlice.reducer;
