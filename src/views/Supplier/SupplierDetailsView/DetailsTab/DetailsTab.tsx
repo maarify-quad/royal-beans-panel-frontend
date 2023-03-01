@@ -1,5 +1,3 @@
-import React from "react";
-
 // UI Components
 import { Group, SimpleGrid, Text } from "@mantine/core";
 
@@ -17,7 +15,7 @@ type DetailsTabProps = {
   supplier: Omit<Supplier, "deliveries">;
 };
 
-export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
+export const DetailsTab = ({ supplier }: DetailsTabProps) => {
   return (
     <SimpleGrid
       breakpoints={[

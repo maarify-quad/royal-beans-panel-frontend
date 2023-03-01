@@ -14,10 +14,11 @@ const ExcelCreate = React.lazy(() =>
 // Props
 type CreateProductProps = {
   productName?: string;
+  storageType?: string;
   onManualCreate?: () => void;
 };
 
-export const CreateProduct = ({ productName, onManualCreate }: CreateProductProps) => {
+export const CreateProduct = ({ productName, storageType, onManualCreate }: CreateProductProps) => {
   return (
     <Tabs defaultValue="manual" mt="md">
       <Tabs.List>
@@ -26,7 +27,11 @@ export const CreateProduct = ({ productName, onManualCreate }: CreateProductProp
       </Tabs.List>
 
       <Tabs.Panel value="manual" mt="md">
-        <ManualCreate productName={productName} onManualCreate={onManualCreate} />
+        <ManualCreate
+          productName={productName}
+          storageType={storageType}
+          onManualCreate={onManualCreate}
+        />
       </Tabs.Panel>
       {!productName && (
         <Tabs.Panel value="excel" mt="md">

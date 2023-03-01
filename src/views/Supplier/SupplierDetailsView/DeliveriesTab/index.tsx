@@ -1,1 +1,1 @@
-export { DeliveriesTab } from "./DeliveriesTab";
+export { DeliveriesTab as default } from "./DeliveriesTab";

@@ -151,7 +151,7 @@ export const CustomerDetailsView = () => {
         {data && (
           <>
             <Tabs
-              defaultValue={searchParams.get("tab") || "details"}
+              value={searchParams.get("tab") || "details"}
               onTabChange={(tab: string) => setSearchParams({ tab })}
               mt="md"
             >

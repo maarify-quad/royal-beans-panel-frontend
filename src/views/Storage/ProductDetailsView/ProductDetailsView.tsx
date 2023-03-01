@@ -100,7 +100,7 @@ export const ProductDetailsView = () => {
         {product && (
           <Tabs
             keepMounted={false}
-            defaultValue={searchParams.get("tab") || "summary"}
+            value={searchParams.get("tab") || "summary"}
             onTabChange={(value) => setSearchParams({ tab: value as string })}
             mt="md"
           >

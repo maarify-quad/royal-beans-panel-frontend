@@ -53,7 +53,7 @@ export const ListRoastsView = () => {
       }
     >
       <Tabs
-        defaultValue={searchParams.get("tab") || "roasts"}
+        value={searchParams.get("tab") || "roasts"}
         onTabChange={(tab: string) => setSearchParams({ tab })}
         keepMounted={false}
         mt="md"
