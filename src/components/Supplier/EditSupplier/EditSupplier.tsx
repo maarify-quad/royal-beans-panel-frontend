@@ -58,7 +58,13 @@ export const EditSupplier = ({ supplier }: Props) => {
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
-      <TextInput label="Adres" placeholder="Tedarikçi adresi" {...form.getInputProps("address")} />
+      <TextInput label="Tedarikçi Ad" placeholder="Tedarikçi adı" {...form.getInputProps("name")} />
+      <TextInput
+        label="Adres"
+        placeholder="Tedarikçi adresi"
+        mt="md"
+        {...form.getInputProps("address")}
+      />
       <TextInput
         label="Vergi Numarası"
         placeholder="Tedarikçi vergi numarası"

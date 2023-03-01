@@ -1,10 +1,7 @@
 import React from "react";
 
 // UI Components
-import { Group, LoadingOverlay, SimpleGrid, Text } from "@mantine/core";
-
-// UI Utils
-import { openModal } from "@mantine/modals";
+import { Group, SimpleGrid, Text } from "@mantine/core";
 
 // Icons
 import { IconMail, IconPhone } from "@tabler/icons";
@@ -15,26 +12,12 @@ import { DetailsCard } from "@components/DetailsCard";
 // Interfaces
 import { Supplier } from "@interfaces/supplier";
 
-// Lazy Components
-const EditSupplier = React.lazy(() => import("@components/Supplier/EditSupplier"));
-
 // Props
 type DetailsTabProps = {
   supplier: Omit<Supplier, "deliveries">;
 };
 
 export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
-  const handleEditAction = () => {
-    openModal({
-      title: "Tedarikçi Düzenle",
-      children: (
-        <React.Suspense fallback={<LoadingOverlay visible />}>
-          <EditSupplier supplier={supplier} />
-        </React.Suspense>
-      ),
-    });
-  };
-
   return (
     <SimpleGrid
       breakpoints={[
@@ -43,11 +26,10 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
       ]}
       style={{ alignItems: "stretch" }}
     >
-      <DetailsCard title="Adres" value={supplier.address || "-"} editAction={handleEditAction} />
+      <DetailsCard title="Adres" value={supplier.address || "-"} />
       <DetailsCard
         title="Vergi"
         value={`${supplier.taxNo || "-"} / ${supplier.taxOffice || "-"}`}
-        editAction={handleEditAction}
       />
       <DetailsCard
         title="Yetkili"
@@ -70,7 +52,6 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ supplier }) => {
             </Group>
           </>
         }
-        editAction={handleEditAction}
       />
     </SimpleGrid>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import { Suspense, lazy } from "react";
 
 // Services
 import { useDeleteCustomerMutation } from "@services/customerApi";
@@ -27,11 +27,7 @@ type DetailsTabProps = {
 };
 
 // Lazy Imports
-const EditCustomer = React.lazy(() =>
-  import("@components/Customer/EditCustomer").then((module) => ({
-    default: module.EditCustomer,
-  }))
-);
+const EditCustomer = lazy(() => import("@components/Customer/EditCustomer"));
 
 export const DetailsTab = ({ customer }: DetailsTabProps) => {
   const openEditCustomer = (
@@ -45,9 +41,9 @@ export const DetailsTab = ({ customer }: DetailsTabProps) => {
       key: "editCustomer",
       title,
       children: (
-        <React.Suspense fallback={<LoadingOverlay visible />}>
+        <Suspense fallback={<LoadingOverlay visible />}>
           <EditCustomer fields={fields} customer={customer} />
-        </React.Suspense>
+        </Suspense>
       ),
     });
   };

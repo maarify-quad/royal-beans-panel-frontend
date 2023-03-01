@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export type EditSupplierValues = {
+  name: string;
   address: string | null;
   taxNo: string | null;
   taxOffice: string | null;
@@ -11,6 +12,7 @@ export type EditSupplierValues = {
 };
 
 export const editSupplierSchema = z.object({
+  name: z.string().min(1, "Tedarikçi adı boş olamaz"),
   address: z.string().nullable(),
   taxNo: z.string().max(255, "Vergi numarası 255 karakterden uzun olamaz").nullable(),
   taxOffice: z.string().max(255, "Vergi dairesi 255 karakterden uzun olamaz").nullable(),

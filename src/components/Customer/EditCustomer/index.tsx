@@ -1,1 +1,1 @@
-export { EditCustomer } from "./EditCustomer";
+export { EditCustomer as default } from "./EditCustomer";
