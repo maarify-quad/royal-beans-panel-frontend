@@ -43,10 +43,11 @@ export type ManualOrder = CommonOrder & {
   receiver: string;
   customer: null;
   manualInvoiceStatus: string;
-  receiverNeighborhood: string;
-  receiverAddress: string;
-  receiverCity: string;
-  receiverProvince: string;
+  receiverNeighborhood: string | null;
+  receiverAddress: string | null;
+  receiverCity: string | null;
+  receiverProvince: string | null;
+  receiverPhone: string | null;
   type: "MANUAL";
   orderProducts: ManualOrderProduct[];
   source: Omit<OrderSource, "dashboard">;
