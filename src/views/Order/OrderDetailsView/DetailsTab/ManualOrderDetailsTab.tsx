@@ -37,6 +37,8 @@ export const ManualOrderDetailsTab = ({ order }: ManualOrderDetailsTabProps) => 
             {order.receiverNeighborhood} {order.receiverAddress}
             <br />
             {order.receiverProvince} / {order.receiverCity}
+            <br />
+            {order.receiverPhone}
           </>
         }
       />
