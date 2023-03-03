@@ -17,11 +17,11 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { IconAlertCircle } from "@tabler/icons";
 
 // Interfaces
-import { Product } from "@interfaces/product";
+import { Product, ProductStorageType } from "@interfaces/product";
 
 // Props
 type StorageProductsProps = {
-  storageType: string;
+  storageType: ProductStorageType;
 };
 
 export const StorageProducts = ({ storageType }: StorageProductsProps) => {
