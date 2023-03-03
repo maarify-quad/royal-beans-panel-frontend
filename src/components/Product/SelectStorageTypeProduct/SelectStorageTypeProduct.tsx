@@ -7,11 +7,11 @@ import { useGetProductsByStorageTypeQuery } from "@services/productApi";
 import { Select, SelectProps } from "@mantine/core";
 
 // Interfaces
-import { Product } from "@interfaces/product";
+import { Product, ProductStorageType } from "@interfaces/product";
 
 // Props
 type Props = Omit<SelectProps, "data" | "disabled" | "onChange"> & {
-  storageType: "HM" | "YM" | "FN" | "Other";
+  storageType: ProductStorageType;
   onChange: (value: string | null, product: Product | undefined) => void;
 };
 

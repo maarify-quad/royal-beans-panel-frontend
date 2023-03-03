@@ -1,4 +1,4 @@
-import React from "react";
+import { Fragment, useState } from "react";
 
 // UI Components
 import { Checkbox, TextInput } from "@mantine/core";
@@ -7,18 +7,18 @@ import { Checkbox, TextInput } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 
 // Validation
-import { Inputs } from "../validation/Inputs";
+import { CreateCustomerValues } from "../createCustomerValidation";
 
 // Props
 type ContactStepProps = {
-  form: UseFormReturnType<Inputs>;
+  form: UseFormReturnType<CreateCustomerValues>;
 };
 
-export const ContactStep: React.FC<ContactStepProps> = ({ form }) => {
-  const [isCargoAddressDifferent, setIsCargoAddressDifferent] = React.useState(false);
+export const ContactStep = ({ form }: ContactStepProps) => {
+  const [isCargoAddressDifferent, setIsCargoAddressDifferent] = useState(false);
 
   return (
-    <React.Fragment>
+    <Fragment>
       <TextInput
         label="E-posta"
         placeholder="E-posta adresi giriniz"
@@ -73,6 +73,6 @@ export const ContactStep: React.FC<ContactStepProps> = ({ form }) => {
           />
         </>
       )}
-    </React.Fragment>
+    </Fragment>
   );
 };

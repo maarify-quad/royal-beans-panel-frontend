@@ -36,11 +36,30 @@ export const priceListApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: ["PriceList"],
     }),
+    createPriceListWithProducts: builder.mutation<PriceList, CreatePriceListWithProductsRequest>({
+      query: (body) => ({
+        url: "/price_lists/with_products",
+        method: "POST",
+        body: {
+          name: body.name,
+          products: Object.entries(body.products).map(([productId, product]) => ({
+            productId: +productId,
+            unitPrice: product.unitPrice,
+            taxRate: product.taxRate,
+          })),
+        },
+      }),
+      invalidatesTags: ["PriceList"],
+    }),
   }),
 });
 
-export const { useGetPriceListsQuery, useGetPriceListByIdQuery, useCreatePriceListMutation } =
-  priceListApi;
+export const {
+  useGetPriceListsQuery,
+  useGetPriceListByIdQuery,
+  useCreatePriceListMutation,
+  useCreatePriceListWithProductsMutation,
+} = priceListApi;
 
 interface GetPriceListsRequest {
   page: number;
@@ -62,4 +81,9 @@ interface CreatePriceListParams {
   name: string;
   description?: string;
   cloneDefaultPriceList?: boolean;
+}
+
+interface CreatePriceListWithProductsRequest {
+  name: string;
+  products: { [key: string]: { unitPrice: number; taxRate: number } };
 }

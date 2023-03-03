@@ -1,1 +1,1 @@
-export { CommercialStep } from "./CommercialStep";
+export { CommercialStep as default } from "./CommercialStep";

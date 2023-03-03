@@ -16,8 +16,11 @@ import { closeAllModals } from "@mantine/modals";
 import { IconCircleCheck } from "@tabler/icons";
 
 // Validation
-import { Inputs, initialValues } from "./validation/Inputs";
-import { schema } from "./validation/schema";
+import {
+  CreateDeliveryAddressValues,
+  createDeliveryAddressSchema,
+  initialValues,
+} from "./createDeliveryAddressValidation";
 
 // Utils
 import { handleFormError } from "@utils/form";
@@ -36,12 +39,12 @@ export const CreateDeliveryAddress = ({ customerId, deliveryAddress }: Props) =>
   const [updateDeliveryAddress, { isLoading: isUpdating }] = useUpdateDeliveryAddressMutation();
 
   // Form utils
-  const form = useForm<Inputs>({
+  const form = useForm<CreateDeliveryAddressValues>({
     initialValues: deliveryAddress || initialValues,
-    validate: zodResolver(schema),
+    validate: zodResolver(createDeliveryAddressSchema),
   });
 
-  const onCreateDelieryAddressSubmit = async (values: Inputs) => {
+  const onCreateDelieryAddressSubmit = async (values: CreateDeliveryAddressValues) => {
     try {
       if (deliveryAddress) {
         await updateDeliveryAddress({

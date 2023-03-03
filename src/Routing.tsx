@@ -48,6 +48,7 @@ const CustomerDetailsView = React.lazy(() => import("./views/Customer/CustomerDe
 // PriceList Views
 const ListPriceListsView = React.lazy(() => import("./views/PriceList/ListPriceListsView"));
 const PriceListDetailsView = React.lazy(() => import("./views/PriceList/PriceListDetailsView"));
+const CreatePriceListView = React.lazy(() => import("./views/PriceList/CreatePriceListView"));
 
 // Order Views
 const ListOrdersView = React.lazy(() => import("./views/Order/ListOrdersView"));
@@ -156,6 +157,10 @@ export const Routing = () => {
         {
           path: "/dashboard/price-lists/:id",
           element: <PriceListDetailsView />,
+        },
+        {
+          path: "/dashboard/price-lists/create",
+          element: <CreatePriceListView />,
         },
         {
           path: "/dashboard/orders",

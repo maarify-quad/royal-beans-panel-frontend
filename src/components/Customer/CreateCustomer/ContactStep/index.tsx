@@ -1,1 +1,1 @@
-export { ContactStep } from "./ContactStep";
+export { ContactStep as default } from "./ContactStep";

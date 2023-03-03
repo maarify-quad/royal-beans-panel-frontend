@@ -1,1 +1,1 @@
-export { GeneralStep } from "./GeneralStep";
+export { GeneralStep as default } from "./GeneralStep";

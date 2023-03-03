@@ -4,7 +4,7 @@ export interface Product {
   id: number;
   name: string;
   stockCode: string;
-  storageType: string;
+  storageType: ProductStorageType;
   amount: number;
   amountUnit: string;
   reservedAmount: number;
@@ -32,3 +32,4 @@ export interface Ingredient {
 }
 
 export type ProductRelation = "ingredients" | "roastIngredients";
+export type ProductStorageType = "HM" | "YM" | "FN" | "Other";

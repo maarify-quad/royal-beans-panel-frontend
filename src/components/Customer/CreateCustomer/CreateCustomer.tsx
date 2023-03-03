@@ -4,7 +4,7 @@ import React from "react";
 import { useCreateCustomerMutation } from "@services/customerApi";
 
 // UI Components
-import { Autocomplete, Button, Group, LoadingOverlay, Stepper } from "@mantine/core";
+import { Button, Group, LoadingOverlay, Stepper } from "@mantine/core";
 
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
@@ -15,20 +15,23 @@ import { showNotification } from "@mantine/notifications";
 import { IconCircleCheck } from "@tabler/icons";
 
 // Components
-import { GeneralStep } from "./GeneralStep";
-import { ContactStep } from "./ContactStep";
-import { CommercialStep } from "./CommercialStep";
-import { ExtraStep } from "./ExtraStep";
+import GeneralStep from "./GeneralStep";
+import ContactStep from "./ContactStep";
+import CommercialStep from "./CommercialStep";
+import ExtraStep from "./ExtraStep";
 
 // Validation
-import { Inputs, initialValues } from "./validation/Inputs";
-import { schema } from "./validation/schema";
+import {
+  CreateCustomerValues,
+  createCustomerSchema,
+  initialValues,
+} from "./createCustomerValidation";
 
 // Utils
 import { handleFormError } from "@utils/form";
 
 export const CreateCustomer = () => {
-  // Internal state
+  // State
   const [step, setStep] = React.useState(0);
 
   const nextStep = () => setStep((current) => (current < 4 ? current + 1 : current));
@@ -38,14 +41,14 @@ export const CreateCustomer = () => {
   const [createCustomer, { isLoading: isCreating }] = useCreateCustomerMutation();
 
   // Form utils
-  const form = useForm<Inputs>({
+  const form = useForm<CreateCustomerValues>({
     initialValues,
-    validate: zodResolver(schema),
+    validate: zodResolver(createCustomerSchema),
     validateInputOnChange: true,
     clearInputErrorOnChange: true,
   });
 
-  const onCreateCustomerSubmit = async (values: Inputs) => {
+  const onCreateCustomerSubmit = async (values: CreateCustomerValues) => {
     try {
       await createCustomer({
         ...values,

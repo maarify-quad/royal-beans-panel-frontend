@@ -1,4 +1,4 @@
-import React from "react";
+import { Fragment, useMemo } from "react";
 
 // Services
 import { useGetPriceListsQuery } from "@services/priceListApi";
@@ -10,17 +10,17 @@ import { LoadingOverlay, Select, TextInput } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 
 // Validation
-import { Inputs } from "../validation/Inputs";
+import { CreateCustomerValues } from "../createCustomerValidation";
 
 // Props
 type GeneralStepProps = {
-  form: UseFormReturnType<Inputs>;
+  form: UseFormReturnType<CreateCustomerValues>;
 };
 
-export const GeneralStep: React.FC<GeneralStepProps> = ({ form }) => {
+export const GeneralStep = ({ form }: GeneralStepProps) => {
   const { data, isLoading } = useGetPriceListsQuery();
 
-  const priceListSelectOptions = React.useMemo(
+  const priceListSelectOptions = useMemo(
     () =>
       data?.priceLists.map((product) => ({
         value: product.id.toString(),
@@ -30,7 +30,7 @@ export const GeneralStep: React.FC<GeneralStepProps> = ({ form }) => {
   );
 
   return (
-    <React.Fragment>
+    <Fragment>
       <LoadingOverlay visible={isLoading} />
       <TextInput
         label="Müşteri Adı"
@@ -77,6 +77,6 @@ export const GeneralStep: React.FC<GeneralStepProps> = ({ form }) => {
         data={priceListSelectOptions}
         {...form.getInputProps("priceListId")}
       />
-    </React.Fragment>
+    </Fragment>
   );
 };

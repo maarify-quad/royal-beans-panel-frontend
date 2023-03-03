@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const schema = z.object({
+export const createCustomerSchema = z.object({
   name: z
     .string({
       required_error: "Müşteri adı gereklidir",
@@ -121,4 +121,31 @@ export const schema = z.object({
       invalid_type_error: "Özel not geçersiz",
     })
     .optional(),
+  priceListId: z.any(),
 });
+
+export type CreateCustomerValues = z.infer<typeof createCustomerSchema>;
+
+export const initialValues: CreateCustomerValues = {
+  name: "",
+  companyTitle: "",
+  contactName: "",
+  contactTitle: "",
+  secondContactName: "",
+  secondContactTitle: "",
+  priceListId: "1",
+  email: "",
+  phone: "",
+  address: "",
+  province: "",
+  city: "",
+  cargoAddress: "",
+  cargoProvince: "",
+  cargoCity: "",
+  taxOffice: "",
+  taxNo: "",
+  startBalance: 0,
+  commercialPrinciple: "",
+  comment: "",
+  specialNote: "",
+};
