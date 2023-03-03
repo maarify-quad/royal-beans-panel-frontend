@@ -5,6 +5,7 @@ import pickBy from "lodash/pickBy";
 import {
   Product,
   ProductRelation,
+  ProductStorageType,
   ProductWithIngredients,
   ProductWithRoastIngredients,
 } from "@interfaces/product";
@@ -185,7 +186,7 @@ interface GetProductsRequest {
 }
 
 interface GetProductsByStorageTypeRequest {
-  storageType: string;
+  storageType: ProductStorageType;
   query?: RequestQuery;
 }
 
@@ -210,7 +211,13 @@ interface UpdateProductRequest {
 }
 
 interface BulkUpdateProductsRequest {
-  products: { id: number; name: string; storageType: string; amount: number; amountUnit: string }[];
+  products: {
+    id: number;
+    name: string;
+    storageType: ProductStorageType;
+    amount: number;
+    amountUnit: string;
+  }[];
 }
 
 export interface RequestQuery {

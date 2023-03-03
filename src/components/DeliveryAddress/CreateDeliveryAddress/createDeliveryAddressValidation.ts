@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const schema = z.object({
+export const createDeliveryAddressSchema = z.object({
   title: z
     .string({
       required_error: "Başlık gereklidir",
@@ -48,3 +48,15 @@ export const schema = z.object({
     invalid_type_error: "Geçersiz birincil adres değeri",
   }),
 });
+
+export type CreateDeliveryAddressValues = z.infer<typeof createDeliveryAddressSchema>;
+
+export const initialValues: CreateDeliveryAddressValues = {
+  title: "",
+  receiverName: "",
+  receiverPhone: "",
+  receiverAddress: "",
+  receiverProvince: "",
+  receiverCity: "",
+  isPrimary: false,
+};

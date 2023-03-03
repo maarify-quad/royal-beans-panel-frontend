@@ -38,6 +38,9 @@ import { DeliveryAddressesTab } from "./DeliveryAddressesTab";
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
+// Interfaces
+import { Customer } from "@interfaces/customer";
+
 // Lazy Imports
 const EditCustomer = lazy(() => import("@components/Customer/EditCustomer"));
 
@@ -58,7 +61,7 @@ export const CustomerDetailsView = () => {
     title: string,
     fields: {
       label: string;
-      key: string;
+      key: keyof Customer;
     }[]
   ) => {
     if (!data) return;

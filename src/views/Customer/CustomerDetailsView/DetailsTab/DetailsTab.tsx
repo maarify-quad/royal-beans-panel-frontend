@@ -34,7 +34,7 @@ export const DetailsTab = ({ customer }: DetailsTabProps) => {
     title: string,
     fields: {
       label: string;
-      key: string;
+      key: keyof Customer;
     }[]
   ) => {
     openModal({

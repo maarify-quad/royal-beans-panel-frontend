@@ -1,1 +1,1 @@
-export { ExtraStep } from "./ExtraStep";
+export { ExtraStep as default } from "./ExtraStep";

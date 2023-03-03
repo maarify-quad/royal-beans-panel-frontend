@@ -29,7 +29,7 @@ type EditCustomerProps = {
   >;
   fields: {
     label: string;
-    key: string;
+    key: keyof Customer;
   }[];
 };
 

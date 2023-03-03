@@ -1,4 +1,4 @@
-import React from "react";
+import { Fragment } from "react";
 
 // UI Components
 import { NumberInput, TextInput } from "@mantine/core";
@@ -7,16 +7,16 @@ import { NumberInput, TextInput } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 
 // Validation
-import { Inputs } from "../validation/Inputs";
+import { CreateCustomerValues } from "../createCustomerValidation";
 
 // Props
 type CommercialStepProps = {
-  form: UseFormReturnType<Inputs>;
+  form: UseFormReturnType<CreateCustomerValues>;
 };
 
-export const CommercialStep: React.FC<CommercialStepProps> = ({ form }) => {
+export const CommercialStep = ({ form }: CommercialStepProps) => {
   return (
-    <React.Fragment>
+    <Fragment>
       <TextInput
         label="Vergi dairesi"
         placeholder="Vergi dairesi giriniz"
@@ -42,6 +42,6 @@ export const CommercialStep: React.FC<CommercialStepProps> = ({ form }) => {
         mt="md"
         {...form.getInputProps("commercialPrinciple")}
       />
-    </React.Fragment>
+    </Fragment>
   );
 };
