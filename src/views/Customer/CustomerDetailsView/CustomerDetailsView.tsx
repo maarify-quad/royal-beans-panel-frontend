@@ -50,12 +50,15 @@ export const CustomerDetailsView = () => {
   const { openCreateDeliveryAddress } = useCreateDeliveryAddress();
 
   // Queries
-  const { data, isLoading, isDeactivated, error } = useGetCustomerByIdQuery(id ?? skipToken, {
-    selectFromResult: ({ ...rest }) => ({
-      ...rest,
-      isDeactivated: !!rest.data?.deletedAt,
-    }),
-  });
+  const { data, isLoading, isFetching, isDeactivated, error } = useGetCustomerByIdQuery(
+    id ?? skipToken,
+    {
+      selectFromResult: ({ ...rest }) => ({
+        ...rest,
+        isDeactivated: !!rest.data?.deletedAt,
+      }),
+    }
+  );
 
   const handleEditCustomer = (
     title: string,
@@ -92,10 +95,6 @@ export const CustomerDetailsView = () => {
         {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
       </Alert>
     );
-  }
-
-  if (isLoading) {
-    return <Loader />;
   }
 
   return (
@@ -151,6 +150,7 @@ export const CustomerDetailsView = () => {
             </Button>
           )
         }
+        isLoading={isLoading || isFetching}
       >
         {data && (
           <>

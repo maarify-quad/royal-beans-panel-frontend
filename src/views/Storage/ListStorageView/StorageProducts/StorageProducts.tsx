@@ -7,14 +7,14 @@ import { Link } from "react-router-dom";
 import { RequestQuery, useGetProductsByStorageTypeQuery } from "@services/productApi";
 
 // UI Components
-import { Alert, Anchor, Group, Paper, Select, Text, TextInput } from "@mantine/core";
+import { Alert, Anchor, Group, Loader, Paper, Select, Text, TextInput } from "@mantine/core";
 import { DataTable, DataTableColumn, DataTableSortStatus } from "mantine-datatable";
 
 // UI Utils
 import { useDebouncedValue } from "@mantine/hooks";
 
 // Icons
-import { IconAlertCircle } from "@tabler/icons";
+import { IconAlertCircle, IconSearch } from "@tabler/icons";
 
 // Interfaces
 import { Product, ProductStorageType } from "@interfaces/product";
@@ -36,24 +36,26 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
   const [debouncedSearch] = useDebouncedValue(query.search, 500);
 
   // Queries
-  const { products, totalCount, isTableLoading, error } = useGetProductsByStorageTypeQuery(
-    {
-      storageType,
-      query: {
-        ...query,
-        search: debouncedSearch,
+  const { products, totalCount, isTableLoading, isSearching, error } =
+    useGetProductsByStorageTypeQuery(
+      {
+        storageType,
+        query: {
+          ...query,
+          search: debouncedSearch,
+        },
       },
-    },
-    {
-      selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
-        ...rest,
-        products: data?.products,
-        totalPages: data?.totalPages,
-        totalCount: data?.totalCount,
-        isTableLoading: isLoading || isFetching,
-      }),
-    }
-  );
+      {
+        selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
+          ...rest,
+          products: data?.products,
+          totalPages: data?.totalPages,
+          totalCount: data?.totalCount,
+          isTableLoading: isLoading || isFetching,
+          isSearching: isFetching,
+        }),
+      }
+    );
 
   // State
   const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
@@ -94,6 +96,7 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
     <>
       <TextInput
         placeholder="Ürün adı veya stok kodu ile ara"
+        icon={isSearching ? <Loader size="xs" /> : <IconSearch size={18} />}
         my="md"
         value={query.search}
         onChange={(e) => setQuery({ ...query, search: e.currentTarget.value })}

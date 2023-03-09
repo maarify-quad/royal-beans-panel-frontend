@@ -25,6 +25,9 @@ import {
 // UI Utils
 import { useDebouncedValue } from "@mantine/hooks";
 
+// Icons
+import { IconSearch } from "@tabler/icons";
+
 // Interfaces
 import { ProductWithIngredients } from "@interfaces/product";
 
@@ -63,6 +66,7 @@ export const FnUpdateIngredients = () => {
     <Stack>
       <TextInput
         placeholder="Ürün adı veya stok kodu ile ara"
+        icon={<IconSearch size={18} />}
         value={search}
         onChange={(e) => setSearch(e.currentTarget.value)}
       />

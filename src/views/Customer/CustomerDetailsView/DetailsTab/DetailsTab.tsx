@@ -65,8 +65,6 @@ export const DetailsTab = ({ customer }: DetailsTabProps) => {
     });
   };
 
-  console.log(customer);
-
   return (
     <>
       <LoadingOverlay visible={isDeleting} />
@@ -124,20 +122,28 @@ export const DetailsTab = ({ customer }: DetailsTabProps) => {
         <DetailsCard
           title="İletişim"
           value={
-            <>
-              {customer?.companyTitle || "-"}
-              <br />
-              {customer?.contactName || "-"} / {customer?.contactTitle || "-"}
-              <br />
-              {customer?.secondContactName || "-"} / {customer?.secondContactTitle || "-"}
-              <br />
-              {customer?.address || "-"}
-              <br />
-              {customer?.province || "-"} / {customer?.city || "-"}
-              <br />
-              {customer?.phone || "-"} / {customer?.email || "-"}
-              <br />
-            </>
+            <Stack spacing={4}>
+              {customer?.companyTitle && <Text>{customer.companyTitle}</Text>}
+              {customer.contactName || customer.contactTitle ? (
+                <Text>
+                  {customer.contactName} {customer.contactTitle && `(${customer.contactTitle})`}
+                </Text>
+              ) : null}
+              {customer.secondContactName || customer.secondContactTitle ? (
+                <Text>
+                  {customer.secondContactName}{" "}
+                  {customer.secondContactTitle && `(${customer.secondContactTitle})`}
+                </Text>
+              ) : null}
+              {customer?.address && <Text>{customer.address}</Text>}
+              {customer?.city || customer?.province ? (
+                <Text>
+                  {customer?.city} {customer?.province && `/ ${customer.province}`}
+                </Text>
+              ) : null}
+              {customer?.phone && <Text>{customer.phone}</Text>}
+              {customer?.email && <Text>{customer.email}</Text>}
+            </Stack>
           }
           editAction={() => {
             openEditCustomer("İletişim Güncelle", [
