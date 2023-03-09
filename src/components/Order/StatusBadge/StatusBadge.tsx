@@ -15,8 +15,8 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, deliveryType }
   }
 
   if (status === "İPTAL") {
-    return <Badge color="red">İPTAL EDİLDİ</Badge>;
+    return <Badge color="red">İPTAL</Badge>;
   }
 
-  return <Badge color="green">GÖNDERİLDİ - {deliveryType}</Badge>;
+  return <Badge color="green">{deliveryType}</Badge>;
 };

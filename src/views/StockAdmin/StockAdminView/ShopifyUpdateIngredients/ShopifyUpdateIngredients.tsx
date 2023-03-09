@@ -24,6 +24,9 @@ import {
 // UI Utils
 import { useDebouncedValue } from "@mantine/hooks";
 
+// Icons
+import { IconSearch } from "@tabler/icons";
+
 // Interfaces
 import { ShopifyProduct } from "@interfaces/shopifyProduct";
 
@@ -59,6 +62,7 @@ export const ShopifyUpdateIngredients = () => {
       <LoadingOverlay visible={isFetching} />
       <TextInput
         placeholder="Ürün adı veya varyant adı ile ara"
+        icon={<IconSearch size={18} />}
         value={search}
         onChange={(e) => setSearch(e.currentTarget.value)}
       />

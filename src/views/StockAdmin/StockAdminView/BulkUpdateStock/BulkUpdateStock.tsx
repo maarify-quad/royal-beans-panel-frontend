@@ -14,6 +14,7 @@ import {
   Alert,
   Button,
   Group,
+  Loader,
   NumberInput,
   Paper,
   Select,
@@ -27,7 +28,7 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { IconCircleCheck, IconInfoCircle, IconX } from "@tabler/icons";
+import { IconCircleCheck, IconInfoCircle, IconSearch, IconX } from "@tabler/icons";
 
 // Interfaces
 import { Product } from "@interfaces/product";
@@ -50,7 +51,7 @@ export const BulkUpdateStock = () => {
   const [debouncedSearch] = useDebouncedValue(query.search, 500);
 
   // Queries
-  const { products, totalCount, isTableLoading, error } = useGetProductsQuery(
+  const { products, totalCount, isTableLoading, isSearching, error } = useGetProductsQuery(
     {
       query: {
         ...query,
@@ -64,6 +65,7 @@ export const BulkUpdateStock = () => {
         totalPages: data?.totalPages,
         totalCount: data?.totalCount,
         isTableLoading: isLoading || isFetching,
+        isSearching: isFetching,
       }),
     }
   );
@@ -174,7 +176,7 @@ export const BulkUpdateStock = () => {
                 Toplu Güncelle ({editedRowIndexes.length} ürün)
               </Button>
               <Button color="red" size="sm" onClick={handleCancelEdit}>
-                Toplu Vazgeç
+                Vazgeç
               </Button>
             </Group>
           </Paper>
@@ -182,6 +184,7 @@ export const BulkUpdateStock = () => {
       )}
       <TextInput
         placeholder="Ürün adı veya stok kodu ile ara"
+        icon={isSearching ? <Loader size="xs" /> : <IconSearch size={18} />}
         my="md"
         value={query.search}
         onChange={(e) => setQuery({ ...query, search: e.currentTarget.value })}
