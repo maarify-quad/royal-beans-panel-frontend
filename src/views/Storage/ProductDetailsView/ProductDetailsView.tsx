@@ -6,6 +6,7 @@ import {
   useGetProductByStockCodeQuery,
   useDeleteProductByStockCodeMutation,
 } from "@services/productApi";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 // UI Components
 import { Tabs, Button, Alert, Text } from "@mantine/core";
@@ -17,8 +18,9 @@ import { openConfirmModal } from "@mantine/modals";
 import { IconAlertCircle, IconTrash } from "@tabler/icons";
 
 // Components
-import { SummaryTab } from "./SummaryTab";
-import { DeliveriesTab } from "./DeliveriesTab";
+import ExitsTab from "./ExitsTab";
+import SummaryTab from "./SummaryTab";
+import DeliveriesTab from "./DeliveriesTab";
 
 // Layout
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
@@ -33,9 +35,7 @@ export const ProductDetailsView = () => {
     isLoading,
     isFetching,
     error,
-  } = useGetProductByStockCodeQuery(stockCode || "", {
-    skip: !stockCode,
-  });
+  } = useGetProductByStockCodeQuery(stockCode ?? skipToken);
 
   // Mutations
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductByStockCodeMutation();
@@ -107,12 +107,16 @@ export const ProductDetailsView = () => {
             <Tabs.List>
               <Tabs.Tab value="summary">Özet</Tabs.Tab>
               <Tabs.Tab value="delivery">Sevkiyat</Tabs.Tab>
+              <Tabs.Tab value="exits">Çıkışlar</Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel value="summary" mt="md">
               <SummaryTab product={product} />
             </Tabs.Panel>
             <Tabs.Panel value="delivery" mt="md">
               <DeliveriesTab stockCode={stockCode} />
+            </Tabs.Panel>
+            <Tabs.Panel value="exits" mt="md">
+              <ExitsTab productId={product.id} />
             </Tabs.Panel>
           </Tabs>
         )}
