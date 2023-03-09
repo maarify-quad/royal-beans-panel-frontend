@@ -1,38 +1,46 @@
-import React, { useMemo } from "react";
+import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 
+// Routing
+import { Link } from "react-router-dom";
+
 // Services
-import { useGetOrdersByCustomerQuery } from "@services/orderApi";
+import { RequestQuery, useGetOrdersByCustomerQuery } from "@services/orderApi";
 
 // UI Components
 import { Alert, Anchor, Group, Paper, Select, Text } from "@mantine/core";
-import { DataTable, DataTableColumn } from "mantine-datatable";
+import { DataTable, DataTableColumn, DataTableSortStatus } from "mantine-datatable";
 
 // Icons
-import { IconInfoCircle } from "@tabler/icons";
+import { IconAlertCircle } from "@tabler/icons";
 
 // Utils
 import { formatCurrency } from "@utils/localization";
 
 // Interfaces
 import { Order } from "@interfaces/order";
-import { Link } from "react-router-dom";
 
 // Props
 type LastOrdersTabProps = {
   customer: string;
 };
 
-export const LastOrdersTab: React.FC<LastOrdersTabProps> = ({ customer }) => {
-  // Internal state
-  const [query, setQuery] = React.useState({
+export const LastOrdersTab = ({ customer }: LastOrdersTabProps) => {
+  // State
+  const [query, setQuery] = useState<RequestQuery>({
     page: 1,
     limit: 25,
+    sortBy: "createdAt",
+    sortOrder: "DESC",
+  });
+  const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
+    columnAccessor: "createdAt",
+    direction: "desc",
   });
 
   // Queries
   const { orders, totalCount, isTableLoading, error } = useGetOrdersByCustomerQuery(
-    { customer, ...query },
+    { customer, query },
     {
       selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
         orders: data?.orders,
@@ -54,16 +62,19 @@ export const LastOrdersTab: React.FC<LastOrdersTabProps> = ({ customer }) => {
             {order.orderId}
           </Anchor>
         ),
+        sortable: true,
       },
       {
         accessor: "createdAt",
         title: "Tarih",
         render: (order) => dayjs(order.createdAt).format("DD MMMM YYYY"),
+        sortable: true,
       },
       {
         accessor: "total",
         title: "Tutar",
         render: (order) => formatCurrency(order.total),
+        sortable: true,
       },
     ],
     [orders]
@@ -72,7 +83,7 @@ export const LastOrdersTab: React.FC<LastOrdersTabProps> = ({ customer }) => {
   if (error) {
     return (
       <Alert
-        icon={<IconInfoCircle />}
+        icon={<IconAlertCircle />}
         color="red"
         title="Siparişlere ulaşılamadı"
         variant="filled"
@@ -92,15 +103,24 @@ export const LastOrdersTab: React.FC<LastOrdersTabProps> = ({ customer }) => {
         fetching={isTableLoading}
         noRecordsText="Kayıt bulunamadı"
         loadingText="Yükleniyor"
-        recordsPerPage={query.limit}
+        recordsPerPage={query.limit || 25}
         totalRecords={totalCount}
-        page={query.page}
+        page={query.page || 1}
         onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
+        sortStatus={sortStatus}
+        onSortStatusChange={(status) => {
+          setSortStatus(status);
+          setQuery((prev) => ({
+            ...prev,
+            sortBy: status.columnAccessor as keyof Order,
+            sortOrder: status.direction === "asc" ? "ASC" : "DESC",
+          }));
+        }}
       />
       <Group>
         <Text size="sm">Sayfa başı satır</Text>
         <Select
-          value={query.limit.toString()}
+          value={query.limit?.toString() || "25"}
           onChange={(limit) => {
             if (limit) {
               setQuery({ page: 1, limit: +limit });

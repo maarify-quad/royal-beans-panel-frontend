@@ -7,15 +7,12 @@ import { CreateManualOrderProductParams, CreateOrderProductParams } from "@inter
 export const orderApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
     getOrders: builder.query<GetOrdersResponse, GetOrdersRequest | void>({
-      query: (params) => {
-        const url = new URL("/orders", import.meta.env.VITE_API_BASE_URL);
-        url.searchParams.set("page", params?.page?.toString() || "1");
-        url.searchParams.set("limit", params?.limit?.toString() || "50");
-        if (params?.type) {
-          url.searchParams.set("type", params.type);
-        }
-        return url.toString();
-      },
+      query: (params) => ({
+        url: `/orders${params?.type ? `?type=${params.type}` : ""}`,
+        ...(Object.keys(params?.query || {}).length && {
+          params: params?.query,
+        }),
+      }),
       providesTags: ["Order"],
     }),
     getOrderByOrderId: builder.query<{ order: Order }, string>({
@@ -23,15 +20,12 @@ export const orderApi = emptyApi.injectEndpoints({
       providesTags: (_result, _error, orderId) => [{ type: "Order", id: orderId }],
     }),
     getOrdersByCustomer: builder.query<GetOrdersResponse, GetOrdersByCustomerParams>({
-      query: (params) => {
-        const url = new URL(
-          `/orders/customer/${params.customer}`,
-          import.meta.env.VITE_API_BASE_URL
-        );
-        url.searchParams.set("page", params.page.toString());
-        url.searchParams.set("limit", params.limit.toString());
-        return url.toString();
-      },
+      query: (params) => ({
+        url: `/orders/customer/${params.customer}`,
+        ...(Object.keys(params?.query || {}).length && {
+          params: params?.query,
+        }),
+      }),
       providesTags: (_result, _error, params) => [{ type: "Order", id: params.customer }],
     }),
     createOrder: builder.mutation<Order, CreateOrderRequest>({
@@ -97,9 +91,8 @@ export const {
 } = orderApi;
 
 interface GetOrdersRequest {
-  page: number;
-  limit?: number;
   type?: OrderType;
+  query: RequestQuery;
 }
 
 interface GetOrdersResponse {
@@ -110,8 +103,7 @@ interface GetOrdersResponse {
 
 interface GetOrdersByCustomerParams {
   customer: string;
-  page: number;
-  limit: number;
+  query: RequestQuery;
 }
 
 interface CreateOrderRequest {
@@ -145,4 +137,11 @@ interface UpdateOrderProductsParams {
 interface UpdateManualOrderProductsParams {
   orderId: string;
   orderProducts: CreateManualOrderProductParams[];
+}
+
+export interface RequestQuery {
+  page?: number;
+  limit?: number;
+  sortBy?: keyof Order;
+  sortOrder?: "ASC" | "DESC";
 }

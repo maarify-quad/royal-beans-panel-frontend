@@ -1,15 +1,15 @@
-import React, { useMemo } from "react";
+import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 
 // Routing
 import { useNavigate } from "react-router-dom";
 
 // Services
-import { useGetOrdersQuery } from "@services/orderApi";
+import { RequestQuery, useGetOrdersQuery } from "@services/orderApi";
 
 // UI Components
 import { Text, Alert, ThemeIcon, Group, Paper, Select } from "@mantine/core";
-import { DataTable, DataTableColumn } from "mantine-datatable";
+import { DataTable, DataTableColumn, DataTableSortStatus } from "mantine-datatable";
 
 // Icons
 import { IconInfoCircle, IconCircleCheck, IconX } from "@tabler/icons";
@@ -29,10 +29,16 @@ type ResultsProps = {
 };
 
 export const Results = ({ type }: ResultsProps) => {
-  // Internal state
-  const [query, setQuery] = React.useState({
+  // State
+  const [query, setQuery] = useState<RequestQuery>({
     page: 1,
-    limit: 25,
+    limit: 1,
+    sortBy: "createdAt",
+    sortOrder: "DESC",
+  });
+  const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
+    columnAccessor: "createdAt",
+    direction: "desc",
   });
 
   // Routing
@@ -40,7 +46,7 @@ export const Results = ({ type }: ResultsProps) => {
 
   // Queries
   const { orders, isTableLoading, totalCount, error } = useGetOrdersQuery(
-    { ...query, type },
+    { type, query },
     {
       selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
         ...rest,
@@ -54,26 +60,38 @@ export const Results = ({ type }: ResultsProps) => {
 
   const columns = useMemo<DataTableColumn<Order>[]>(
     () => [
-      { accessor: "orderId", title: "Sipariş No", render: (order) => `#${order.orderId}` },
+      {
+        accessor: "orderId",
+        title: "Sipariş No",
+        render: (order) => `#${order.orderId}`,
+        sortable: true,
+      },
       {
         accessor: "createdAt",
         title: "Tarih",
         render: (order) => dayjs(order.createdAt).format("DD MMMM YYYY"),
+        sortable: true,
       },
       {
         accessor: "customer",
         title: "Müşteri",
         render: (order) => (order.type === "BULK" ? order.customer.name : order.receiver),
       },
-      { accessor: "total", title: "Tutar", render: (order) => formatCurrency(order.total) },
+      {
+        accessor: "total",
+        title: "Tutar",
+        render: (order) => formatCurrency(order.total),
+        sortable: true,
+      },
       {
         accessor: "customerBalanceAfterOrder",
         title: "Bakiye",
         render: (order) =>
           order.type === "BULK" ? formatCurrency(order.customerBalanceAfterOrder) : "-",
+        sortable: true,
       },
       {
-        accessor: "invoiceStatus",
+        accessor: "isParasutVerified",
         title: "Fatura",
         render: (order) =>
           order.type === "BULK" ? (
@@ -91,6 +109,7 @@ export const Results = ({ type }: ResultsProps) => {
           ) : (
             order.manualInvoiceStatus
           ),
+        sortable: true,
       },
       {
         accessor: "status",
@@ -131,23 +150,32 @@ export const Results = ({ type }: ResultsProps) => {
         fetching={isTableLoading}
         noRecordsText="Kayıt bulunamadı"
         loadingText="Yükleniyor"
-        recordsPerPage={query.limit}
+        recordsPerPage={query.limit || 25}
         totalRecords={totalCount}
-        page={query.page}
+        page={query.page || 1}
         onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
         onRowClick={(order) => navigate(`/dashboard/orders/${order.orderId}`)}
+        sortStatus={sortStatus}
+        onSortStatusChange={(status) => {
+          setSortStatus(status);
+          setQuery((prev) => ({
+            ...prev,
+            sortBy: status.columnAccessor as keyof Order,
+            sortOrder: status.direction === "asc" ? "ASC" : "DESC",
+          }));
+        }}
       />
       <Group>
         <Text size="sm">Sayfa başı satır</Text>
         <Select
-          value={query.limit.toString()}
+          value={query.limit?.toString() || "25"}
           onChange={(limit) => {
             if (limit) {
               setQuery({ page: 1, limit: +limit });
             }
           }}
           data={[
-            { label: "25", value: "25" },
+            { label: "1", value: "1" },
             { label: "50", value: "50" },
             { label: "100", value: "100" },
           ]}
