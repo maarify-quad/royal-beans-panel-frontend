@@ -32,7 +32,7 @@ export const Results = ({ type }: ResultsProps) => {
   // State
   const [query, setQuery] = useState<RequestQuery>({
     page: 1,
-    limit: 1,
+    limit: 25,
     sortBy: "createdAt",
     sortOrder: "DESC",
   });
@@ -175,7 +175,7 @@ export const Results = ({ type }: ResultsProps) => {
             }
           }}
           data={[
-            { label: "1", value: "1" },
+            { label: "25", value: "25" },
             { label: "50", value: "50" },
             { label: "100", value: "100" },
           ]}
