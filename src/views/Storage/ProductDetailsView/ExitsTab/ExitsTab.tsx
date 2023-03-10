@@ -51,30 +51,38 @@ export const ExitsTab = ({ productId }: Props) => {
         title: "Tarih",
         accessor: "createdAt",
         sortable: true,
-        render: ({ createdAt }) => dayjs(createdAt).format("DD MMM YYYY"),
+        render: ({ createdAt }) => dayjs(createdAt).format("DD MMMM YYYY"),
       },
       {
         title: "İşlem",
-        accessor: "action",
+        accessor: "order",
         sortable: true,
-        render: ({ action, type }) =>
-          type === "order" ? (
-            <Anchor component={Link} to={`/dashboard/orders/${action}`}>
-              {action}
+        render: ({ order }) =>
+          order ? (
+            <Anchor component={Link} to={`/dashboard/orders/${order.orderId}`}>
+              {order.orderId}
             </Anchor>
           ) : (
             "-"
           ),
       },
       {
+        title: "Müşteri",
+        accessor: "customer",
+        render: ({ order }) => (order ? order.customer?.name || order.receiver : "-"),
+      },
+      {
         title: "Miktar",
         accessor: "amount",
         sortable: true,
+        render: ({ amount, product }) => `${amount} ${product?.amountUnit}`,
       },
       {
         title: "Çıkış Sonrası Miktar",
         accessor: "storageAmountAfterExit",
         sortable: true,
+        render: ({ storageAmountAfterExit, product }) =>
+          `${storageAmountAfterExit} ${product?.amountUnit}`,
       },
     ],
     [exits]

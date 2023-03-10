@@ -3,6 +3,7 @@ import { emptyApi } from "./emptyApi";
 // Interfaces
 import { Customer } from "@interfaces/customer";
 import { Product } from "@interfaces/product";
+import { Order } from "@interfaces/order";
 
 export const exitApi = emptyApi.injectEndpoints({
   endpoints: (build) => ({
@@ -38,16 +39,15 @@ export interface RequestQuery {
 export type Exit = {
   id: number;
   date: string;
-  action: string;
+  orderId: number | null;
   productId: number;
-  customerId: number | null;
   amount: number;
   storageAmountAfterExit: number;
   type: ExitType;
   createdAt: string;
   updatedAt: string;
   product: Product;
-  customer: Customer | null;
+  order: Order | null;
 };
 
 export type ExitType = "order" | "unknown";
