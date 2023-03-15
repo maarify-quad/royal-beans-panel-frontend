@@ -38,6 +38,9 @@ import { DeliveryAddressesTab } from "./DeliveryAddressesTab";
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
+// Assets
+import ParasutLogo from "@assets/parasut-logo.png";
+
 // Interfaces
 import { Customer } from "@interfaces/customer";
 
@@ -140,14 +143,33 @@ export const CustomerDetailsView = () => {
         ]}
         actions={
           !isDeactivated && (
-            <Button
-              leftIcon={<IconPlus />}
-              onClick={() => {
-                openCreateDeliveryAddress(data!.id);
-              }}
-            >
-              Yeni Teslimat Adresi
-            </Button>
+            <Group>
+              <Button
+                leftIcon={<IconPlus />}
+                onClick={() => {
+                  openCreateDeliveryAddress(data!.id);
+                }}
+              >
+                Yeni Teslimat Adresi
+              </Button>
+              <Button
+                onClick={() =>
+                  handleEditCustomer("Müşteri Güncelle", [
+                    {
+                      label: "Paraşüt ID",
+                      key: "parasutId",
+                    },
+                  ])
+                }
+                // loading={isCreatingPrasutInvoice}
+                // disabled={isCreatingPrasutInvoice}
+                leftIcon={<img src={ParasutLogo} style={{ height: 25 }} />}
+                color="orange"
+                variant="outline"
+              >
+                Paraşüt
+              </Button>
+            </Group>
           )
         }
         isLoading={isLoading || isFetching}

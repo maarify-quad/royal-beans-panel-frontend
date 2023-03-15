@@ -17,10 +17,10 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuthentication: (state, action: PayloadAction<Partial<AuthState>>) => {
-      state.accessToken = action.payload.accessToken || null;
-      state.user = action.payload.user || null;
-      state.isAuthenticated = action.payload.isAuthenticated || false;
+    setAuthentication: (state, action: PayloadAction<AuthState>) => {
+      state.accessToken = action.payload.accessToken;
+      state.user = action.payload.user;
+      state.isAuthenticated = action.payload.isAuthenticated;
     },
   },
   extraReducers: (builder) => {

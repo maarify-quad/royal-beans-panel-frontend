@@ -6,17 +6,10 @@ import { getErrors } from "@slices/errorSlice";
 
 export const rtkQueryErrorLogger: Middleware = (api: MiddlewareAPI) => (next) => (action) => {
   if (isRejectedWithValue(action)) {
+    const endpoint = action.meta.arg.endpointName;
     let message = action.payload?.data?.message;
-    const code = action.payload?.data?.code;
 
-    if (code === "SESSION_EXPIRED") {
-      api.dispatch(
-        getErrors({ id: "", message: "Oturum süresi doldu. Lütfen tekrar giriş yapın." })
-      );
-      return next(action);
-    }
-
-    if (action.meta.arg.endpointName === "getProfile") {
+    if (endpoint === "getProfile" && action.payload?.data?.code !== "EXPIRED_REFRESH_TOKEN") {
       return next(action);
     }
 

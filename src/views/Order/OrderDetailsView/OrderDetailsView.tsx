@@ -9,7 +9,7 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { Alert, Tabs, Text } from "@mantine/core";
 
 // Icons
-import { IconInfoCircle } from "@tabler/icons";
+import { IconAlertCircle, IconInfoCircle } from "@tabler/icons";
 
 // Components
 import ProductsTab from "./ProductsTab";
@@ -53,6 +53,11 @@ export const OrderDetailsView = () => {
       {data?.order && data.order.isCancelled && (
         <Alert mt="md" color="red" variant="filled" icon={<IconInfoCircle />}>
           <Text weight={700}>Bu sipariş iptal edilmiştir</Text>
+        </Alert>
+      )}
+      {data?.order.specialNote && (
+        <Alert mt="md" title="Özel Not" color="orange" icon={<IconAlertCircle />}>
+          <Text weight={700}>{data.order.specialNote}</Text>
         </Alert>
       )}
       {data && (
