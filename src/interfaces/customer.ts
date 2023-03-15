@@ -3,6 +3,7 @@ import { DeliveryAddress } from "./deliveryAddress";
 
 export interface Customer {
   id: string;
+  parasutId: string;
   priceListId?: number;
   priceList?: PriceList;
   deliveryAddresses: DeliveryAddress[];
