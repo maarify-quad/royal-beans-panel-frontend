@@ -10,6 +10,7 @@ import { formatCurrency } from "@utils/localization";
 // Interfaces
 import { ManualOrder } from "@interfaces/order";
 import { ManualOrderProduct } from "@interfaces/orderProduct";
+import { ShopifyTotalProductCount } from "./ShopifyTotalProductCount";
 
 // Props
 type ManualOrderProductsTabProps = {
@@ -58,8 +59,8 @@ export const ManualOrderProductsTab = ({ order }: ManualOrderProductsTabProps) =
           columns={columns}
         />
       </Paper>
-      <Group>
-        <Card withBorder shadow="xs" mt="md">
+      <Group align="start" mt="md">
+        <Card withBorder shadow="xs">
           <Group position="apart">
             <Text>Ara Toplam</Text>
             <Text size="lg" weight="bold">
@@ -79,6 +80,9 @@ export const ManualOrderProductsTab = ({ order }: ManualOrderProductsTabProps) =
             </Text>
           </Group>
         </Card>
+        {order.source === "shopify" && (
+          <ShopifyTotalProductCount orderProduts={order.orderProducts} />
+        )}
       </Group>
     </div>
   );
