@@ -1,5 +1,6 @@
 import { PriceListProduct } from "./priceListProduct";
 import { Product } from "./product";
+import { ShopifyProduct } from "./shopifyProduct";
 
 export interface OrderProduct {
   id: number;
@@ -20,7 +21,9 @@ export interface ManualOrderProduct {
   id: number;
   orderId: number;
   productId: number;
+  shopifyProductId: number | null;
   product: Product;
+  shopifyProduct: ShopifyProduct | null;
   grindType: string;
   unitPrice: number;
   quantity: number;
