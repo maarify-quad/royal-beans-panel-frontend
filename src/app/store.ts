@@ -21,6 +21,7 @@ import { roastIngredientApi } from "@services/roastIngredientApi";
 import { shopifyProductApi } from "@services/shopifyProductApi";
 import { tagApi } from "@services/tagApi";
 import { parasutApi } from "@services/parasutApi";
+import { productionApi } from "@services/productionApi";
 import { shopparApi } from "@services/shopparApi";
 
 // Middlewares
@@ -46,7 +47,7 @@ const store = configureStore({
     [tagApi.reducerPath]: tagApi.reducer,
     [parasutApi.reducerPath]: parasutApi.reducer,
     [shopifyProductApi.reducerPath]: shopifyProductApi.reducer,
-
+    [productionApi.reducerPath]: productionApi.reducer,
     [shopparApi.reducerPath]: shopparApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
