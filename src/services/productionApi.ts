@@ -4,11 +4,11 @@ import { emptyApi } from "./emptyApi";
 import { Product } from "@interfaces/product";
 import { Order } from "@interfaces/order";
 
-export const exitApi = emptyApi.injectEndpoints({
+export const productionApi = emptyApi.injectEndpoints({
   endpoints: (build) => ({
-    getProductExits: build.query<GetProductExitsResponse, GetProductExitsRequest>({
+    getProductions: build.query<GetProductionsResponse, GetProductionsRequest>({
       query: (params) => ({
-        url: `/exits/product/${params.productId}`,
+        url: `/productions/product/${params.productId}`,
         ...(Object.keys(params?.query || {}).length && {
           params: params?.query,
         }),
@@ -17,13 +17,13 @@ export const exitApi = emptyApi.injectEndpoints({
   }),
 });
 
-interface GetProductExitsResponse {
-  exits: Exit[];
+interface GetProductionsResponse {
+  productions: Production[];
   totalPages: number;
   totalCount: number;
 }
 
-interface GetProductExitsRequest {
+interface GetProductionsRequest {
   productId: number;
   query: RequestQuery;
 }
@@ -31,24 +31,21 @@ interface GetProductExitsRequest {
 export interface RequestQuery {
   page?: number;
   limit?: number;
-  sortBy?: keyof Exit;
+  sortBy?: keyof Production;
   sortOrder?: "ASC" | "DESC";
 }
 
-export type Exit = {
+export type Production = {
   id: number;
-  date: string;
-  orderId: number | null;
+  orderId: number;
   productId: number;
-  amount: number;
-  storageAmountAfterExit: number;
-  type: ExitType;
+  producedProductId: number;
+  usageAmount: number;
   createdAt: string;
   updatedAt: string;
+  order: Order;
   product: Product;
-  order: Order | null;
+  producedProduct: Product;
 };
 
-export type ExitType = "order" | "unknown";
-
-export const { useGetProductExitsQuery } = exitApi;
+export const { useGetProductionsQuery } = productionApi;
