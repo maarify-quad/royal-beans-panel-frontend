@@ -8,6 +8,7 @@ import {
   TablerIcon,
   IconPackages,
   IconTableExport,
+  IconFileCode,
 } from "@tabler/icons";
 
 export const NAV_LINKS: NavLink[] = [
@@ -70,6 +71,12 @@ export const NAV_LINKS: NavLink[] = [
     icon: IconTableExport,
     match: /shoppar/,
     link: "/dashboard/shoppar",
+  },
+  {
+    label: "Loglar",
+    icon: IconFileCode,
+    match: /logs/,
+    link: "/dashboard/logs",
   },
 ];
 

@@ -63,6 +63,9 @@ const StockAdminView = React.lazy(() => import("./views/StockAdmin/StockAdminVie
 const FnUpdateView = React.lazy(() => import("./views/StockAdmin/FnUpdateView"));
 const ShopifyUpdateView = React.lazy(() => import("./views/StockAdmin/ShopifyUpdateView"));
 
+// Log Views
+const ListLogsView = React.lazy(() => import("./views/Logging/ListLogsView"));
+
 // Shoppar Views
 const ShopparView = React.lazy(() => import("./views/Shoppar/ShopparView"));
 
@@ -199,6 +202,11 @@ export const Routing = () => {
         {
           path: "/dashboard/stock-admin/shopify-update/:shopifyVariantId",
           element: <ShopifyUpdateView />,
+          roles: ["admin"],
+        },
+        {
+          path: "/dashboard/logs",
+          element: <ListLogsView />,
           roles: ["admin"],
         },
         {
