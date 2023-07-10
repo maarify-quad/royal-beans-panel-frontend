@@ -29,10 +29,25 @@ export const roastApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: ["Roast", "Product"],
     }),
+    getRoastsExcelExport: builder.mutation<
+      { success: true; url: string },
+      GetRoastsExcelExportParams
+    >({
+      query: (body) => ({
+        url: `/roasts/excel-export`,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetRoastsQuery, useGetRoastByIdQuery, useCreateRoastMutation } = roastApi;
+export const {
+  useGetRoastsQuery,
+  useGetRoastByIdQuery,
+  useCreateRoastMutation,
+  useGetRoastsExcelExportMutation,
+} = roastApi;
 
 export interface GetRoastsResponse {
   roasts: Roast[];
@@ -56,4 +71,9 @@ export interface CreateRoastParams {
     outputAmount: number;
     product: Product;
   }[];
+}
+
+interface GetRoastsExcelExportParams {
+  startDate: string | null;
+  endDate: string | null;
 }
