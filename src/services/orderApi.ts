@@ -75,6 +75,16 @@ export const orderApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, orderId) => [{ type: "Order", id: orderId }],
     }),
+    getOrdersExcelExport: builder.mutation<
+      { success: true; url: string },
+      GetOrdersExcelExportParams
+    >({
+      query: (body) => ({
+        url: `/orders/excel-export`,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -88,6 +98,7 @@ export const {
   useUpdateOrderProductsMutation,
   useUpdateManualOrderProductsMutation,
   useCancelOrderMutation,
+  useGetOrdersExcelExportMutation,
 } = orderApi;
 
 interface GetOrdersRequest {
@@ -137,6 +148,11 @@ interface UpdateOrderProductsParams {
 interface UpdateManualOrderProductsParams {
   orderId: string;
   orderProducts: CreateManualOrderProductParams[];
+}
+
+interface GetOrdersExcelExportParams {
+  startDate: string | null;
+  endDate: string | null;
 }
 
 export interface RequestQuery {

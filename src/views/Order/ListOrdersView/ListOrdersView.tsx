@@ -1,11 +1,14 @@
+import { Suspense, lazy } from "react";
+
 // Routing
 import { Link, useSearchParams } from "react-router-dom";
 
 // UI Components
-import { Group, Button, Tabs } from "@mantine/core";
+import { Group, Button, Tabs, LoadingOverlay } from "@mantine/core";
+import { openModal } from "@mantine/modals";
 
 // Icons
-import { IconPaperBag, IconShoppingCartPlus } from "@tabler/icons";
+import { IconFileDownload, IconPaperBag, IconShoppingCartPlus } from "@tabler/icons";
 
 // Components
 import { Results } from "./Results";
@@ -13,8 +16,22 @@ import { Results } from "./Results";
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
+// Lazy Components
+const ExcelExportOrders = lazy(() => import("@components/Order/ExcelExportOrders"));
+
 export const ListOrdersView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleExcelExport = () => {
+    openModal({
+      title: "Sipariş Exceli İndir",
+      children: (
+        <Suspense fallback={<LoadingOverlay visible />}>
+          <ExcelExportOrders />
+        </Suspense>
+      ),
+    });
+  };
 
   return (
     <PageLayout
@@ -40,6 +57,9 @@ export const ListOrdersView = () => {
           </Button>
           <Button leftIcon={<IconPaperBag />} component={Link} to="/dashboard/orders/manual/create">
             Yeni Gönderi
+          </Button>
+          <Button color="green" onClick={handleExcelExport} leftIcon={<IconFileDownload />}>
+            Excel
           </Button>
         </Group>
       }
