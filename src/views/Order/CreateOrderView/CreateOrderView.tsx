@@ -1,13 +1,20 @@
+import { useState } from "react";
+
 // Components
 import { Form } from "./Form";
 
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
+// Interfaces
+import { Customer } from "@interfaces/customer";
+
 export const CreateOrderView = () => {
+  const [customer, setCustomer] = useState<Customer>();
+
   return (
     <PageLayout
-      title="Yeni Sipariş"
+      title={`Yeni Sipariş${customer ? ` - ${customer.name}` : ""}`}
       breadcrumbs={[
         {
           label: "Panel",
@@ -23,7 +30,7 @@ export const CreateOrderView = () => {
         },
       ]}
     >
-      <Form />
+      <Form setCustomer={setCustomer} />
     </PageLayout>
   );
 };

@@ -77,10 +77,12 @@ export const PageLayout = ({
   };
 
   return (
-    <HelmetProvider>
-      <Helmet>
-        <title>{getTitle()}</title>
-      </Helmet>
+    <>
+      <HelmetProvider>
+        <Helmet>
+          <title>{getTitle()}</title>
+        </Helmet>
+      </HelmetProvider>
       <div className={classes.root}>
         <Breadcrumbs>
           {breadcrumbs.map((breadcrumb) => (
@@ -96,7 +98,7 @@ export const PageLayout = ({
           {actions}
         </Group>
         {children}
-      </div>
-    </HelmetProvider>
+      </div>{" "}
+    </>
   );
 };

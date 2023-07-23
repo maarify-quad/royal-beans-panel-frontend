@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 
 // Routing
 import { useNavigate } from "react-router-dom";
@@ -31,28 +31,28 @@ import { handleFormError } from "@utils/form";
 // Interfaces
 import { Customer } from "@interfaces/customer";
 
-export const Form = () => {
+// Props
+type Props = {
+  setCustomer: (customer?: Customer) => void;
+};
+
+export const Form = ({ setCustomer }: Props) => {
   const navigate = useNavigate();
 
   // Internal state
-  const [selectedCustomer, setSelectedCustomer] = React.useState<Customer>();
-  const [step, setStep] = React.useState(0);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer>();
+  const [step, setStep] = useState(0);
 
   const nextStep = () => setStep((current) => (current < 1 ? current + 1 : current));
   const prevStep = () => setStep((current) => (current > 0 ? current - 1 : current));
 
   // Queries
-  const { priceListProducts, isLoading: isPriceListProductsLoading } = useGetPriceListProductsQuery(
-    {
-      priceListId: selectedCustomer?.priceListId || 0,
-    },
-    {
-      skip: !selectedCustomer,
-      selectFromResult: ({ data, ...rest }) => ({
-        priceListProducts: data?.priceListProducts,
-        ...rest,
-      }),
-    }
+  const {
+    data: { priceListProducts } = { priceListProducts: [] },
+    isLoading: isPriceListProductsLoading,
+  } = useGetPriceListProductsQuery(
+    { priceListId: selectedCustomer?.priceListId || 0 },
+    { skip: !selectedCustomer }
   );
 
   // Mutations
@@ -130,7 +130,10 @@ export const Form = () => {
           <StepOne
             form={form}
             selectedCustomer={selectedCustomer}
-            setSelectedCustomer={setSelectedCustomer}
+            setSelectedCustomer={(customer) => {
+              setSelectedCustomer(customer);
+              setCustomer(customer);
+            }}
           />
         </Stepper.Step>
         <Stepper.Step loading={isPriceListProductsLoading}>

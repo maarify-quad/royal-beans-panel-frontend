@@ -89,6 +89,7 @@ export const emptyApi = createApi({
     "Product",
     "Roast",
     "Customer",
+    "Receiver",
     "PriceList",
     "PriceListProduct",
     "Order",

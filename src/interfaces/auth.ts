@@ -10,7 +10,6 @@ export interface User {
   lastName: string;
   username: string;
   email: string;
-  password: string;
   roles: Role[];
   createdAt: string;
   updatedAt: string;

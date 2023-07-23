@@ -1,7 +1,10 @@
-import React from "react";
+import { Suspense, lazy } from "react";
+
+// Routing
+import { useSearchParams } from "react-router-dom";
 
 // UI Components
-import { Button, LoadingOverlay } from "@mantine/core";
+import { Button, LoadingOverlay, Tabs } from "@mantine/core";
 
 // UI Utils
 import { openModal } from "@mantine/modals";
@@ -9,24 +12,25 @@ import { openModal } from "@mantine/modals";
 // Icons
 import { IconUserPlus } from "@tabler/icons";
 
-// Components
-import { Results } from "./Results";
-
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 // Lazy Imports
-const CreateCustomer = React.lazy(() => import("@components/Customer/CreateCustomer"));
+const CustomersResult = lazy(() => import("./CustomersResult"));
+const ReceiversResult = lazy(() => import("./ReceiversResult"));
+const CreateCustomer = lazy(() => import("@components/Customer/CreateCustomer"));
 
 export const ListCustomersView = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const openCreateCustomer = () => {
     openModal({
       key: "createCustomer",
       title: "Müşteri Oluştur",
       children: (
-        <React.Suspense fallback={<LoadingOverlay visible />}>
+        <Suspense fallback={<LoadingOverlay visible />}>
           <CreateCustomer />
-        </React.Suspense>
+        </Suspense>
       ),
     });
   };
@@ -50,7 +54,23 @@ export const ListCustomersView = () => {
         </Button>
       }
     >
-      <Results />
+      <Tabs
+        mt="md"
+        keepMounted={false}
+        value={searchParams.get("tab") || "customers"}
+        onTabChange={(tab: string) => setSearchParams({ tab })}
+      >
+        <Tabs.List>
+          <Tabs.Tab value="customers">Müşteriler</Tabs.Tab>
+          <Tabs.Tab value="receiver">Alıcılar</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="customers">
+          <CustomersResult />
+        </Tabs.Panel>
+        <Tabs.Panel value="receiver">
+          <ReceiversResult />
+        </Tabs.Panel>
+      </Tabs>
     </PageLayout>
   );
 };

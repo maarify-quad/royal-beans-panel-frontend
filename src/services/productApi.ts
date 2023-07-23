@@ -139,6 +139,18 @@ export const productApi = emptyApi.injectEndpoints({
       invalidatesTags: (result, _error, stockCode) =>
         result ? [{ type: "Product" as const, id: stockCode }] : ["Product"],
     }),
+
+    // Excel export products
+    getProductsExcelExport: builder.mutation<
+      { success: true; url: string },
+      GetProductsExcelExportRequest | void
+    >({
+      query: (body) => ({
+        url: `/products/excel-export`,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -154,6 +166,7 @@ export const {
   useUpdateProductMutation,
   useBulkUpdateProductsMutation,
   useDeleteProductByStockCodeMutation,
+  useGetProductsExcelExportMutation,
 } = productApi;
 
 interface GetProductsResponse {
@@ -218,6 +231,13 @@ interface BulkUpdateProductsRequest {
     amount: number;
     amountUnit: string;
   }[];
+}
+
+interface GetProductsExcelExportRequest {
+  HM: boolean;
+  YM: boolean;
+  FN: boolean;
+  Other: boolean;
 }
 
 export interface RequestQuery {

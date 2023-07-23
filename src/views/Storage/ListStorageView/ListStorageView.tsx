@@ -4,13 +4,13 @@ import { lazy, Suspense } from "react";
 import { useSearchParams } from "react-router-dom";
 
 // UI Components
-import { Tabs, Button, LoadingOverlay } from "@mantine/core";
+import { Tabs, Button, LoadingOverlay, Group } from "@mantine/core";
 
 // UI Utils
 import { openModal } from "@mantine/modals";
 
 // Icons
-import { IconPlus } from "@tabler/icons";
+import { IconFileDownload, IconPlus } from "@tabler/icons";
 
 // Components
 import { StorageProducts } from "./StorageProducts";
@@ -20,11 +20,12 @@ import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 // Lazy Components
 const CreateProduct = lazy(() => import("@components/Product/CreateProduct"));
+const ExcelExportProducts = lazy(() => import("@components/Product/ExcelExportProducts"));
 
 export const ListStorageView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const onCreateProductClick = () => {
+  const handleCreateProduct = () => {
     const storageType =
       searchParams.get("tab") === "Diğer" ? "Other" : searchParams.get("tab") || "HM";
     openModal({
@@ -33,6 +34,18 @@ export const ListStorageView = () => {
       children: (
         <Suspense fallback={<LoadingOverlay visible />}>
           <CreateProduct storageType={storageType} />
+        </Suspense>
+      ),
+    });
+  };
+
+  const handleExcelExport = () => {
+    openModal({
+      key: "excelExportProducts",
+      title: "Ürün Exceli İndir",
+      children: (
+        <Suspense fallback={<LoadingOverlay visible />}>
+          <ExcelExportProducts />
         </Suspense>
       ),
     });
@@ -52,9 +65,14 @@ export const ListStorageView = () => {
         },
       ]}
       actions={
-        <Button leftIcon={<IconPlus />} onClick={onCreateProductClick}>
-          Yeni Ürün
-        </Button>
+        <Group>
+          <Button leftIcon={<IconPlus />} onClick={handleCreateProduct}>
+            Yeni Ürün
+          </Button>
+          <Button color="green" onClick={handleExcelExport} leftIcon={<IconFileDownload />}>
+            Excel
+          </Button>
+        </Group>
       }
     >
       <Tabs

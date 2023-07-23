@@ -50,6 +50,7 @@ export const ManualOrderDetailsTab = ({ order }: ManualOrderDetailsTabProps) => 
         value={dayjs(order.deliveryDate).format("DD MMMM YYYY")}
       />
       <DetailsCard title="Sipariş Tarihi" value={dayjs(order.createdAt).format("DD MMMM YYYY")} />
+      <DetailsCard title="Oluşturan" value={order.user?.username || "-"} />
     </SimpleGrid>
   );
 };

@@ -1,8 +1,17 @@
 import { useMemo } from "react";
 
 // UI Components
-import { Badge, Card, Flex, Group, Paper, Text } from "@mantine/core";
+import { Badge, Button, Card, Flex, Group, LoadingOverlay, Paper, Text } from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
+
+// Components
+import { ShopifyTotalProductCount } from "./ShopifyTotalProductCount";
+
+// Hooks
+import { useDeleteOrderProduct } from "@hooks/orderProduct/useDeleteOrderProduct";
+
+// Icons
+import { IconTrash } from "@tabler/icons";
 
 // Utils
 import { formatCurrency } from "@utils/localization";
@@ -10,7 +19,6 @@ import { formatCurrency } from "@utils/localization";
 // Interfaces
 import { ManualOrder } from "@interfaces/order";
 import { ManualOrderProduct } from "@interfaces/orderProduct";
-import { ShopifyTotalProductCount } from "./ShopifyTotalProductCount";
 
 // Props
 type ManualOrderProductsTabProps = {
@@ -18,6 +26,8 @@ type ManualOrderProductsTabProps = {
 };
 
 export const ManualOrderProductsTab = ({ order }: ManualOrderProductsTabProps) => {
+  const { handleDeleteOrderProduct, isDeleting } = useDeleteOrderProduct();
+
   const columns = useMemo<DataTableColumn<ManualOrderProduct>[]>(
     () => [
       {
@@ -46,12 +56,29 @@ export const ManualOrderProductsTab = ({ order }: ManualOrderProductsTabProps) =
         accessor: "subTotal",
         render: (product) => formatCurrency(product.subTotal),
       },
+      {
+        accessor: "action",
+        title: "İşlem",
+        render: (orderProduct) =>
+          order.orderProducts.length > 1 && (
+            <Button
+              size="xs"
+              color="red"
+              variant="subtle"
+              leftIcon={<IconTrash size={18} />}
+              onClick={() => handleDeleteOrderProduct(orderProduct.id, order.orderId)}
+            >
+              Sil
+            </Button>
+          ),
+      },
     ],
     []
   );
 
   return (
     <div>
+      <LoadingOverlay visible={isDeleting} />
       <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
         <DataTable<ManualOrderProduct>
           highlightOnHover

@@ -6,7 +6,9 @@ export interface OrderProduct {
   id: number;
   orderId: number;
   priceListProductId: number;
+  productId: number;
   priceListProduct: PriceListProduct;
+  product: Product;
   grindType: string;
   unitPrice: number;
   quantity: number;
@@ -21,8 +23,10 @@ export interface ManualOrderProduct {
   id: number;
   orderId: number;
   productId: number;
+  priceListProductId: null;
   shopifyProductId: number | null;
   product: Product;
+  priceListProduct: null;
   shopifyProduct: ShopifyProduct | null;
   grindType: string;
   unitPrice: number;

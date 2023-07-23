@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // Routing
 import { useNavigate } from "react-router-dom";
@@ -27,7 +27,12 @@ import StepTwo from "./StepTwo";
 // Utils
 import { handleFormError } from "@utils/form";
 
-export const Form = () => {
+// Props
+type Props = {
+  setReceiver: (receiver?: string) => void;
+};
+
+export const Form = ({ setReceiver }: Props) => {
   const navigate = useNavigate();
 
   // State
@@ -77,11 +82,13 @@ export const Form = () => {
       // Destructure form values
       const {
         receiver,
+        receiverId,
         receiverNeighborhood,
         receiverAddress,
         receiverCity,
         receiverProvince,
         receiverPhone,
+        isSaveReceiverChecked,
         manualInvoiceStatus,
         specialNote,
         orderProducts,
@@ -89,12 +96,14 @@ export const Form = () => {
 
       // Create order
       const order = await createManualOrder({
+        receiverId: receiverId ? +receiverId : null,
         receiver,
         receiverNeighborhood,
         receiverAddress,
         receiverCity,
         receiverProvince,
         receiverPhone,
+        isSaveReceiverChecked,
         manualInvoiceStatus,
         specialNote,
         orderProducts,
@@ -112,6 +121,10 @@ export const Form = () => {
       // Error is handled by the RTK Query middleware at @app/middlewares/rtkQueryErrorLogger.ts
     }
   };
+
+  useEffect(() => {
+    setReceiver(form.values.receiver);
+  }, [form.values.receiver]);
 
   return (
     <form onSubmit={form.onSubmit(onCreateOrderSubmit, handleFormError)}>
