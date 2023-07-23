@@ -3,12 +3,14 @@ import { Product } from "@interfaces/product";
 export type Inputs = {
   productId: string;
   product: Product | null;
+  receiverId: string;
   receiver: string;
   receiverNeighborhood: string | null;
   receiverAddress: string | null;
   receiverCity: string | null;
   receiverProvince: string | null;
   receiverPhone: string | null;
+  isSaveReceiverChecked: boolean;
   manualInvoiceStatus: string;
   specialNote: string | null;
   grindType: string;
@@ -31,6 +33,7 @@ export type Inputs = {
 
 export const initialValues: Inputs = {
   productId: "0",
+  receiverId: "",
   product: null,
   receiver: "",
   receiverNeighborhood: "",
@@ -38,6 +41,7 @@ export const initialValues: Inputs = {
   receiverCity: "",
   receiverProvince: "",
   receiverPhone: "",
+  isSaveReceiverChecked: false,
   manualInvoiceStatus: "Faturalı",
   specialNote: "",
   grindType: "Çekirdek",

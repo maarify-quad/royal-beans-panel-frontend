@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 // Components
 import { Form } from "./Form";
 
@@ -5,9 +7,11 @@ import { Form } from "./Form";
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const CreateManualOrderView = () => {
+  const [receiver, setReceiver] = useState<string>();
+
   return (
     <PageLayout
-      title="Yeni Gönderi"
+      title={`Yeni Gönderi${receiver ? ` - ${receiver}` : ""}`}
       breadcrumbs={[
         {
           label: "Panel",
@@ -23,7 +27,7 @@ export const CreateManualOrderView = () => {
         },
       ]}
     >
-      <Form />
+      <Form setReceiver={setReceiver} />
     </PageLayout>
   );
 };

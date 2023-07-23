@@ -1,3 +1,4 @@
+import { User } from "./auth";
 import { Customer } from "./customer";
 import { ManualOrderProduct, OrderProduct } from "./orderProduct";
 
@@ -7,6 +8,7 @@ export type OrderSource = "dashboard" | "shopify" | "trendyol" | "hepsiburada";
 export type CommonOrder = {
   id: number;
   orderNumber: number;
+  userId: number | null;
   orderId: string;
   deliveryDate: string;
   customerBalanceAfterOrder: number;
@@ -22,6 +24,7 @@ export type CommonOrder = {
   isCancelled: boolean;
   createdAt: string;
   updatedAt: string;
+  user: User | null;
 };
 
 export type BulkOrder = CommonOrder & {

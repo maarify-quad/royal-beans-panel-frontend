@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 
 // Services
 import { useGetCustomersQuery } from "@services/customerApi";
@@ -36,7 +36,7 @@ export const StepOne: React.FC<StepOneProps> = ({
     }),
   });
 
-  const customerSelectOptions = React.useMemo(
+  const customerSelectOptions = useMemo(
     () =>
       customers?.map((customer) => ({
         value: customer.id.toString(),

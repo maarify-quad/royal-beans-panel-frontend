@@ -17,7 +17,13 @@ import { showNotification } from "@mantine/notifications";
 import { useCancelOrder } from "@hooks/order/useCancelOrder";
 
 // Icons
-import { IconTrash, IconTruckDelivery, IconBasket, IconCircleCheck } from "@tabler/icons";
+import {
+  IconTrash,
+  IconTruckDelivery,
+  IconBasket,
+  IconCircleCheck,
+  IconRepeat,
+} from "@tabler/icons";
 
 // Interfaces
 import { Order } from "@interfaces/order";
@@ -106,6 +112,11 @@ export const Actions = ({ order }: ActionsProps) => {
           Paraşüt
         </Button>
       ) : null}
+      {order.type === "BULK" && (
+        <Button color="gray" variant="light" leftIcon={<IconRepeat size={20} />}>
+          Tekrarla
+        </Button>
+      )}
       {order.source !== "shopify" && (
         <Button
           color="red"

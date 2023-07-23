@@ -1,8 +1,14 @@
 import { useMemo } from "react";
 
 // UI Components
-import { Badge, Card, Flex, Group, Paper, Text } from "@mantine/core";
+import { Badge, Button, Card, Flex, Group, LoadingOverlay, Paper, Text } from "@mantine/core";
 import { DataTable, DataTableColumn } from "mantine-datatable";
+
+// Hooks
+import { useDeleteOrderProduct } from "@hooks/orderProduct/useDeleteOrderProduct";
+
+// Icons
+import { IconEdit, IconTrash } from "@tabler/icons";
 
 // Utils
 import { formatCurrency } from "@utils/localization";
@@ -10,6 +16,7 @@ import { formatCurrency } from "@utils/localization";
 // Interfaces
 import { BulkOrder } from "@interfaces/order";
 import { OrderProduct } from "@interfaces/orderProduct";
+import { useEditOrderProduct } from "@hooks/orderProduct/useEditOrderProduct";
 
 // Props
 type BulkOrderProductsTabProps = {
@@ -17,6 +24,9 @@ type BulkOrderProductsTabProps = {
 };
 
 export const BulkOrderProductsTab = ({ order }: BulkOrderProductsTabProps) => {
+  const { handleDeleteOrderProduct, isDeleting } = useDeleteOrderProduct();
+  const { handleEditOrderProduct } = useEditOrderProduct();
+
   const columns = useMemo<DataTableColumn<OrderProduct>[]>(
     () => [
       {
@@ -45,12 +55,41 @@ export const BulkOrderProductsTab = ({ order }: BulkOrderProductsTabProps) => {
         accessor: "subTotal",
         render: (product) => formatCurrency(product.subTotal),
       },
+      {
+        accessor: "action",
+        title: "İşlem",
+        render: (orderProduct) => (
+          <Group spacing="xs">
+            <Button
+              size="xs"
+              color="gray"
+              variant="subtle"
+              leftIcon={<IconEdit size={18} />}
+              onClick={() => handleEditOrderProduct(orderProduct, order.orderId)}
+            >
+              Düzenle
+            </Button>
+            {order.orderProducts.length > 1 && (
+              <Button
+                size="xs"
+                color="red"
+                variant="subtle"
+                leftIcon={<IconTrash size={18} />}
+                onClick={() => handleDeleteOrderProduct(orderProduct.id, order.orderId)}
+              >
+                Sil
+              </Button>
+            )}
+          </Group>
+        ),
+      },
     ],
     []
   );
 
   return (
     <div>
+      <LoadingOverlay visible={isDeleting} />
       <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
         <DataTable<OrderProduct> highlightOnHover records={order.orderProducts} columns={columns} />
       </Paper>

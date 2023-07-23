@@ -11,10 +11,27 @@ export const orderProductApi = emptyApi.injectEndpoints({
     >({
       query: (params) => `/order_products/customer/${params.customer}?limit=${params.limit}`,
     }),
+    updateOrderProduct: builder.mutation<any, UpdateOrderProductRequest>({
+      query: ({ id, quantity }) => ({
+        url: `/order_products/${id}`,
+        method: "PATCH",
+        body: { quantity },
+      }),
+    }),
+    deleteOrderProduct: builder.mutation<any, number>({
+      query: (id) => ({
+        url: `/order_products/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
-export const { useGetOrderProductsByCustomerQuery } = orderProductApi;
+export const {
+  useGetOrderProductsByCustomerQuery,
+  useUpdateOrderProductMutation,
+  useDeleteOrderProductMutation,
+} = orderProductApi;
 
 interface GetOrderProductsByCustomerRequest {
   customer: string;
@@ -23,4 +40,9 @@ interface GetOrderProductsByCustomerRequest {
 
 interface GetOrderProductsByCustomerResponse {
   orderProducts: OrderProduct[];
+}
+
+interface UpdateOrderProductRequest {
+  id: number;
+  quantity: number;
 }

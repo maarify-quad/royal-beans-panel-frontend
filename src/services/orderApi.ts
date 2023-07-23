@@ -127,12 +127,14 @@ interface CreateOrderRequest {
 }
 
 interface CreateManualOrderRequest {
+  receiverId: number | null;
   receiver: string;
   receiverNeighborhood: string | null;
   receiverAddress: string | null;
   receiverCity: string | null;
   receiverProvince: string | null;
   receiverPhone: string | null;
+  isSaveReceiverChecked: boolean;
   manualInvoiceStatus: string;
   specialNote: string | null;
   orderProducts: CreateManualOrderProductParams[];
@@ -160,4 +162,5 @@ export interface RequestQuery {
   limit?: number;
   sortBy?: keyof Order;
   sortOrder?: "ASC" | "DESC";
+  search?: string;
 }

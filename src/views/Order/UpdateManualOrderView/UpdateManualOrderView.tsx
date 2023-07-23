@@ -10,7 +10,7 @@ import {
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 // UI Components
-import { Loader, Grid } from "@mantine/core";
+import { Loader, Grid, Stack, Card, Text } from "@mantine/core";
 
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
@@ -104,6 +104,32 @@ export const UpdateManualOrderView = () => {
         <Grid>
           <Grid.Col lg={6}>
             <Form form={form} products={products} />
+            <Text my="sm" size="xl" weight={700}>
+              Güncel Sepet
+            </Text>
+            <Stack spacing="sm">
+              {data?.order.orderProducts.map((orderProduct) => (
+                <Card withBorder shadow="xs" key={orderProduct.id}>
+                  <Card.Section inheritPadding py="xs">
+                    <div>
+                      <Text color="dimmed" size="sm">
+                        {orderProduct.grindType} / {orderProduct.quantity} adet
+                      </Text>
+                      <Text weight={700}>
+                        {orderProduct.priceListProduct?.product.name || orderProduct.product.name}
+                      </Text>
+                      <Text size="sm">
+                        {orderProduct.unitPrice} ₺ x {orderProduct.quantity}={" "}
+                        {orderProduct.subTotal} ₺
+                      </Text>
+                      <Text size="sm">
+                        {orderProduct.subTotal} ₺ + %{orderProduct.taxRate} = {orderProduct.total} ₺
+                      </Text>
+                    </div>
+                  </Card.Section>
+                </Card>
+              ))}
+            </Stack>
           </Grid.Col>
           <Grid.Col lg={6}>
             <Summary form={form} submitProps={{ text: "Gönderi Güncelle", loading: isUpdating }} />

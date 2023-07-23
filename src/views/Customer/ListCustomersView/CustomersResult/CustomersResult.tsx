@@ -19,7 +19,7 @@ import { formatCurrency } from "@utils/localization";
 // Interfaces
 import { Customer } from "@interfaces/customer";
 
-export const Results = () => {
+export const CustomersResult = () => {
   // Internal state
   const [pagination, setPagination] = React.useState({
     page: 1,
