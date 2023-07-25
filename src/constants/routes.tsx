@@ -9,6 +9,7 @@ import {
   IconPackages,
   IconTableExport,
   IconFileCode,
+  IconCoin,
 } from "@tabler/icons";
 
 export const NAV_LINKS: NavLink[] = [
@@ -66,6 +67,12 @@ export const NAV_LINKS: NavLink[] = [
     match: /price-lists/,
     link: "/dashboard/price-lists",
   },
+  // {
+  //   label: "Finans",
+  //   icon: IconCoin,
+  //   match: /finance/,
+  //   link: "/dashboard/finance",
+  // },
   {
     label: "Shoppar",
     icon: IconTableExport,

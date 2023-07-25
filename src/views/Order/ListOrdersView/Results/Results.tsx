@@ -2,13 +2,23 @@ import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 
 // Routing
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Services
 import { RequestQuery, useGetOrdersQuery } from "@services/orderApi";
 
 // UI Components
-import { Text, Alert, ThemeIcon, Group, Paper, Select, TextInput, Loader } from "@mantine/core";
+import {
+  Text,
+  Alert,
+  ThemeIcon,
+  Group,
+  Paper,
+  Select,
+  TextInput,
+  Loader,
+  Anchor,
+} from "@mantine/core";
 import { DataTable, DataTableColumn, DataTableSortStatus } from "mantine-datatable";
 import { useDebouncedValue } from "@mantine/hooks";
 
@@ -67,7 +77,12 @@ export const Results = ({ type }: ResultsProps) => {
       {
         accessor: "orderId",
         title: "Sipariş No",
-        render: (order) => `#${order.orderId}`,
+        render: (order) => (
+          <Anchor
+            component={Link}
+            to={`/dashboard/orders/${order.orderId}`}
+          >{`#${order.orderId}`}</Anchor>
+        ),
         sortable: true,
       },
       {
@@ -159,7 +174,7 @@ export const Results = ({ type }: ResultsProps) => {
             totalRecords={totalCount}
             page={query.page || 1}
             onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
-            onRowClick={(order) => navigate(`/dashboard/orders/${order.orderId}`)}
+            // onRowClick={(order) => navigate(`/dashboard/orders/${order.orderId}`)}
             sortStatus={sortStatus}
             onSortStatusChange={(status) => {
               setSortStatus(status);
