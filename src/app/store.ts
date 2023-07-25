@@ -24,6 +24,7 @@ import { shopifyProductApi } from "@services/shopifyProductApi";
 import { tagApi } from "@services/tagApi";
 import { parasutApi } from "@services/parasutApi";
 import { productionApi } from "@services/productionApi";
+import { stockApi } from "@services/stockApi";
 import { loggingApi } from "@services/loggingApi";
 import { shopparApi } from "@services/shopparApi";
 
@@ -53,6 +54,7 @@ const store = configureStore({
     [parasutApi.reducerPath]: parasutApi.reducer,
     [shopifyProductApi.reducerPath]: shopifyProductApi.reducer,
     [productionApi.reducerPath]: productionApi.reducer,
+    [stockApi.reducerPath]: stockApi.reducer,
     [loggingApi.reducerPath]: loggingApi.reducer,
     [shopparApi.reducerPath]: shopparApi.reducer,
   },
