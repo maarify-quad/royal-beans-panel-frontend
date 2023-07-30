@@ -71,8 +71,7 @@ export const ProductionsTab = ({ productId }: Props) => {
         title: "Kullanım Miktarı",
         accessor: "usageAmount",
         sortable: true,
-        render: ({ usageAmount, producedProduct }) =>
-          `${usageAmount} ${producedProduct.amountUnit}`,
+        render: ({ usageAmount, product }) => `${usageAmount} ${product.amountUnit}`,
       },
       {
         title: "Üretilen",

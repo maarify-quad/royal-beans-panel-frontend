@@ -66,6 +66,7 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
   // Columns
   const columns = useMemo<DataTableColumn<Product>[]>(
     () => [
+      { accessor: "id", title: "ID" },
       {
         accessor: "name",
         title: "Ürün",
