@@ -13,7 +13,14 @@ import { financeValidation, FinanceValues } from "./financeValidation";
 
 // Dayjs
 import dayjs from "dayjs";
+
+// Constants
 import { FINANCE_KEY_LABELS } from "src/constants";
+
+const numberFormatter = new Intl.NumberFormat("tr-TR", {
+  style: "currency",
+  currency: "TRY",
+});
 
 export const FinanceView = () => {
   // Mutations
@@ -127,7 +134,7 @@ export const FinanceView = () => {
         <Stack mt="md" spacing="xs">
           {Object.entries(data).map(([key, value]) => (
             <div key={key}>
-              {FINANCE_KEY_LABELS[key]}: {value}
+              {FINANCE_KEY_LABELS[key]}: {numberFormatter.format(value)}
             </div>
           ))}
         </Stack>
