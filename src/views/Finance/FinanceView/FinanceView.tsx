@@ -1,3 +1,6 @@
+// Services
+import { useGetFinanceMutation } from "@services/financeApi";
+
 // Mantine
 import { Button, NumberInput, Select, Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -10,8 +13,12 @@ import { financeValidation, FinanceValues } from "./financeValidation";
 
 // Dayjs
 import dayjs from "dayjs";
+import { FINANCE_KEY_LABELS } from "src/constants";
 
 export const FinanceView = () => {
+  // Mutations
+  const [getFinance, { data, isLoading }] = useGetFinanceMutation();
+
   const form = useForm<FinanceValues>({
     initialValues: {
       month: dayjs().month().toString(),
@@ -26,7 +33,12 @@ export const FinanceView = () => {
     validate: zodResolver(financeValidation),
   });
 
-  const handleSubmit = async (values: FinanceValues) => {};
+  const handleSubmit = async (values: FinanceValues) => {
+    try {
+      const month = +values.month;
+      await getFinance({ ...values, month }).unwrap();
+    } catch {}
+  };
 
   return (
     <PageLayout
@@ -107,10 +119,19 @@ export const FinanceView = () => {
             {...form.getInputProps("shopifyOrderCargoCost")}
           />
         </Stack>
-        <Button mt="md" type="submit">
+        <Button mt="md" type="submit" loading={isLoading}>
           Hesapla
         </Button>
       </form>
+      {data && (
+        <Stack mt="md" spacing="xs">
+          {Object.entries(data).map(([key, value]) => (
+            <div key={key}>
+              {FINANCE_KEY_LABELS[key]}: {value}
+            </div>
+          ))}
+        </Stack>
+      )}
     </PageLayout>
   );
 };

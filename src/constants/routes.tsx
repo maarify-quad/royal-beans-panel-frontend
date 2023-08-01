@@ -67,12 +67,12 @@ export const NAV_LINKS: NavLink[] = [
     match: /price-lists/,
     link: "/dashboard/price-lists",
   },
-  // {
-  //   label: "Finans",
-  //   icon: IconCoin,
-  //   match: /finance/,
-  //   link: "/dashboard/finance",
-  // },
+  {
+    label: "Finans",
+    icon: IconCoin,
+    match: /finance/,
+    link: "/dashboard/finance",
+  },
   {
     label: "Shoppar",
     icon: IconTableExport,
