@@ -7,6 +7,7 @@ export interface Product {
   storageType: ProductStorageType;
   amount: number;
   amountUnit: string;
+  unitCost: number;
   reservedAmount: number;
   tag: string | null;
   createdAt: string;

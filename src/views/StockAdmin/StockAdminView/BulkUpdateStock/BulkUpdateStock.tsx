@@ -151,7 +151,46 @@ export const BulkUpdateStock = () => {
             );
           }
 
-          return row.amount;
+          return Intl.NumberFormat("tr").format(row.amount);
+        },
+      },
+      {
+        accessor: "unitCost",
+        title: "Birim Maliyet",
+        width: 200,
+        sortable: true,
+        cellsStyle: (_, index) => ({
+          cursor: editedRowIndexes.includes(index) ? "default" : "text",
+        }),
+        render: (row, index) => {
+          if (editedRowIndexes.includes(index)) {
+            return (
+              <Group align="center" position="apart" spacing="xs">
+                <NumberInput
+                  value={editedProducts[index].unitCost}
+                  size="xs"
+                  precision={2}
+                  onChange={(value) => {
+                    setEditedProducts((prev) => ({
+                      ...prev,
+                      [index]: {
+                        ...prev[index],
+                        unitCost: value || 0,
+                      },
+                    }));
+                  }}
+                  style={{ width: 80 }}
+                />
+                <ActionIcon color="red" onClick={() => handleEditRow(row, index)}>
+                  <IconX size={18} />
+                </ActionIcon>
+              </Group>
+            );
+          }
+
+          return Intl.NumberFormat("tr", { style: "currency", currency: "TRY" }).format(
+            row.unitCost
+          );
         },
       },
     ],
@@ -202,7 +241,11 @@ export const BulkUpdateStock = () => {
           page={query.page || 1}
           onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
           onCellClick={(row) => {
-            if (row.column.accessor === "amount" && !editedRowIndexes.includes(row.recordIndex)) {
+            const { accessor } = row.column;
+            if (
+              (accessor === "amount" || accessor === "unitCost") &&
+              !editedRowIndexes.includes(row.recordIndex)
+            ) {
               setEditedRowIndexes((prev) => [...prev, row.recordIndex]);
               setEditedProducts((prev) => ({ ...prev, [row.recordIndex]: row.record }));
             }
