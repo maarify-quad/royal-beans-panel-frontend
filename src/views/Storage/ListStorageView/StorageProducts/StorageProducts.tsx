@@ -78,9 +78,21 @@ export const StorageProducts = ({ storageType }: StorageProductsProps) => {
         ),
       },
       { accessor: "stockCode", title: "Stok Kodu", sortable: true },
-      { accessor: "amount", title: "Miktar", sortable: true },
+      {
+        accessor: "amount",
+        title: "Miktar",
+        sortable: true,
+        render: ({ amount }) => Intl.NumberFormat("tr").format(amount),
+      },
       { accessor: "amountUnit", title: "Miktar Birimi", sortable: true },
       { accessor: "tag", title: "Etiket", sortable: true },
+      {
+        accessor: "unitCost",
+        title: "Birim Maliyet",
+        sortable: true,
+        render: ({ unitCost }) =>
+          Intl.NumberFormat("tr", { style: "currency", currency: "TRY" }).format(unitCost),
+      },
     ],
     [products]
   );

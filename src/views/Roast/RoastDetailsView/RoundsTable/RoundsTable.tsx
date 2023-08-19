@@ -25,7 +25,7 @@ export const RoundsTable = ({ roastDetails }: RoundsTableProps) => {
         <tbody>
           {roastDetails?.map((roastDetail, i) => (
             <tr key={i}>
-              <td>POSTA-{roastDetail.roundId.charAt(roastDetail.roundId.length - 1)}</td>
+              <td>POSTA-{roastDetail.roundId.split("P")[1]}</td>
               <td>{roastDetail.product.name}</td>
               <td>{roastDetail.inputAmount} kg</td>
               <td>{roastDetail.outputAmount} kg</td>
