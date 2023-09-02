@@ -73,6 +73,15 @@ export const productApi = emptyApi.injectEndpoints({
         result ? [{ type: "Product" as const, id: stockCode }] : ["Product"],
     }),
 
+    // Get products by stock codes
+    getProductsByStockCodes: builder.query<Product[], string>({
+      query: (stockCodes) => `/products/stockCodes?stockCodes=${stockCodes}`,
+      providesTags: (result, _error, stockCodes) =>
+        result
+          ? stockCodes.split(",").map((stockCode) => ({ type: "Product" as const, id: stockCode }))
+          : ["Product"],
+    }),
+
     // Get product with ingredients
     getProductWithIngredients: builder.query<ProductWithIngredients, string>({
       query: (stockCode) => `/products/${stockCode}/ingredients`,
@@ -161,6 +170,7 @@ export const {
   useGetProductsByStorageTypeQuery,
   useGetProductWithIngredientsQuery,
   useGetProductByStockCodeQuery,
+  useGetProductsByStockCodesQuery,
   useCreateProductMutation,
   useCreateBulkProductsFromExcelMutation,
   useUpdateProductMutation,
