@@ -48,6 +48,11 @@ export const NAV_LINKS: NavLink[] = [
         match: /^\/dashboard\/deliveries/,
       },
       {
+        label: "Kahve Stok",
+        link: "/dashboard/coffee-stock",
+        match: /^\/dashboard\/coffee-stock/,
+      },
+      {
         label: "Admin",
         link: "/dashboard/stock-admin",
         match: /^\/dashboard\/stock-admin/,

@@ -32,6 +32,7 @@ const CreateDeliveryView = React.lazy(() => import("./views/Delivery/CreateDeliv
 // Storage Views
 const ListStorageView = React.lazy(() => import("./views/Storage/ListStorageView"));
 const ProductDetailsView = React.lazy(() => import("./views/Storage/ProductDetailsView"));
+const CoffeeStockView = React.lazy(() => import("./views/CoffeeStock"));
 
 // Roast Views
 const ListRoastsView = React.lazy(() => import("./views/Roast/ListRoastsView"));
@@ -131,6 +132,10 @@ export const Routing = () => {
         {
           path: "/dashboard/storage/:stockCode",
           element: <ProductDetailsView />,
+        },
+        {
+          path: "/dashboard/coffee-stock",
+          element: <CoffeeStockView />,
         },
         {
           path: "/dashboard/roasts",

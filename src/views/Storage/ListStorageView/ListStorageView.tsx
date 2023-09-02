@@ -3,14 +3,21 @@ import { lazy, Suspense } from "react";
 // Routing
 import { useSearchParams } from "react-router-dom";
 
+// Services
+import { useUpdateDailyStockMutation } from "@services/stockApi";
+
 // UI Components
 import { Tabs, Button, LoadingOverlay, Group } from "@mantine/core";
 
 // UI Utils
-import { openModal } from "@mantine/modals";
+import { openConfirmModal, openModal } from "@mantine/modals";
+import { showNotification } from "@mantine/notifications";
+
+// Hooks
+import { useVerifyRole } from "@hooks/auth/useVerifyRole";
 
 // Icons
-import { IconFileDownload, IconPlus } from "@tabler/icons";
+import { IconCircleCheck, IconFileDownload, IconPlus, IconSettingsAutomation } from "@tabler/icons";
 
 // Components
 import { StorageProducts } from "./StorageProducts";
@@ -23,7 +30,30 @@ const CreateProduct = lazy(() => import("@components/Product/CreateProduct"));
 const ExcelExportProducts = lazy(() => import("@components/Product/ExcelExportProducts"));
 
 export const ListStorageView = () => {
+  const canSeeUpdateDailyStocks = useVerifyRole(["admin", "updateDailyStocks"]);
   const [searchParams, setSearchParams] = useSearchParams();
+
+  // Mutations
+  const [updateDailyStock, { isLoading }] = useUpdateDailyStockMutation();
+
+  const handleUpdateDailyStock = async () => {
+    openConfirmModal({
+      title: "Stokları güncellemek istediğinize emin misiniz?",
+      confirmProps: { color: "green" },
+      labels: { confirm: "Güncelle", cancel: "İptal" },
+      onConfirm: async () => {
+        try {
+          await updateDailyStock().unwrap();
+          showNotification({
+            title: "Başarılı",
+            message: "Stoklar güncellendi",
+            color: "green",
+            icon: <IconCircleCheck />,
+          });
+        } catch {}
+      },
+    });
+  };
 
   const handleCreateProduct = () => {
     const storageType =
@@ -69,6 +99,15 @@ export const ListStorageView = () => {
           <Button leftIcon={<IconPlus />} onClick={handleCreateProduct}>
             Yeni Ürün
           </Button>
+          {canSeeUpdateDailyStocks && (
+            <Button
+              loading={isLoading}
+              leftIcon={<IconSettingsAutomation />}
+              onClick={handleUpdateDailyStock}
+            >
+              Stok Güncelle
+            </Button>
+          )}
           <Button color="green" onClick={handleExcelExport} leftIcon={<IconFileDownload />}>
             Excel
           </Button>
