@@ -15,7 +15,7 @@ export const SelectDeci = (props: Props) => {
   const deciSelectOptions = useMemo(
     () =>
       decis?.map((deci) => ({
-        value: deci.id.toString(),
+        value: deci.value.toString(),
         label: deci.value.toString(),
       })) || [],
     [decis]
