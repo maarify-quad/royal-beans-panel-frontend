@@ -1,12 +1,21 @@
+import { useState } from "react";
+
 // Services
 import { useUpdateProductMutation } from "@services/productApi";
 
-// UI Components
-import { Group, LoadingOverlay, Paper, Select, Table } from "@mantine/core";
+// Mantine
+import { Button, Group, NumberInput, Paper, Table } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
+
+// Icons
+import { IconCircleCheck } from "@tabler/icons";
+
+// Components
+import SelectTag from "@components/Tag/SelectTag";
+import SelectDeci from "@components/Deci/SelectDeci";
 
 // Interfaces
 import { Product } from "@interfaces/product";
-import SelectTag from "@components/Tag/SelectTag";
 
 // Props
 type SummaryTabProps = {
@@ -14,14 +23,28 @@ type SummaryTabProps = {
 };
 
 export const SummaryTab = ({ product }: SummaryTabProps) => {
+  const [weight, setWeight] = useState(product.weight ?? undefined);
+  const [deci, setDeci] = useState(product.deci ?? undefined);
+  const [tag, setTag] = useState(product.tag);
+
+  // Mutations
   const [updateProduct] = useUpdateProductMutation();
 
-  const handleTagChange = async (tag: string | null) => {
+  const handleUpdateProduct = async () => {
     try {
       await updateProduct({
         ...product,
         tag,
+        ...(weight && { weight }),
+        ...(deci && { deci }),
       }).unwrap();
+
+      showNotification({
+        title: "Başarılı",
+        message: "Ürün başarıyla güncellendi",
+        color: "green",
+        icon: <IconCircleCheck />,
+      });
     } catch {}
   };
 
@@ -49,18 +72,44 @@ export const SummaryTab = ({ product }: SummaryTabProps) => {
           </tbody>
         </Table>
       </Paper>
-      <Group mt="md">
-        <SelectTag
-          label="Etiket"
-          placeholder="Etiket seçiniz"
-          nothingFound="Etiket bulunamadı"
-          searchable
-          clearable
-          value={product.tag}
-          onChange={handleTagChange}
-          onTagCreate={handleTagChange}
-        />
-      </Group>
+      <Paper mt="md" p="md" radius="md" withBorder>
+        <Group>
+          <SelectTag
+            label="Etiket"
+            placeholder="Etiket seçiniz"
+            nothingFound="Etiket bulunamadı"
+            searchable
+            clearable
+            value={tag}
+            onChange={(value) => setTag(value)}
+            onTagCreate={(name) => setTag(name)}
+          />
+          <SelectDeci
+            label="Desi"
+            placeholder="Desi seçiniz"
+            nothingFound="Desi bulunamadı"
+            searchable
+            clearable
+            value={deci?.toString()}
+            onChange={(value) => setDeci(value ? parseInt(value) : undefined)}
+          />
+          <NumberInput
+            label="Ağırlık (kg)"
+            placeholder="Ürünün ağırlığı"
+            precision={2}
+            step={0.25}
+            value={weight}
+            onChange={(value) => setWeight(value)}
+          />
+        </Group>
+        <Button
+          disabled={product.tag === tag && product.weight === weight}
+          onClick={handleUpdateProduct}
+          mt="md"
+        >
+          Kaydet
+        </Button>
+      </Paper>
     </>
   );
 };

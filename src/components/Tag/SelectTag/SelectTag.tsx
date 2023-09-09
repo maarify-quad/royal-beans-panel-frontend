@@ -12,6 +12,8 @@ type Props = Omit<SelectProps, "data" | "onCreate" | "creatable"> & {
 };
 
 export const SelectTag = (props: Props) => {
+  const { onTagCreate, ...restProps } = props;
+
   const [createTag, { isLoading: isCreating }] = useCreateTagMutation();
 
   const { tags, isLoading, isFetching } = useGetTagsQuery(undefined, {
@@ -32,14 +34,14 @@ export const SelectTag = (props: Props) => {
 
   const handleCreateTag = (name: string) => {
     createTag({ name }).then(() => {
-      props.onTagCreate?.(name);
+      onTagCreate?.(name);
     });
     return null;
   };
 
   return (
     <Select
-      {...props}
+      {...restProps}
       disabled={isLoading || isFetching || isCreating}
       data={tagSelectOptions}
       creatable

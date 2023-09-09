@@ -26,6 +26,7 @@ import { parasutApi } from "@services/parasutApi";
 import { productionApi } from "@services/productionApi";
 import { stockApi } from "@services/stockApi";
 import { financeApi } from "@services/financeApi";
+import { deciApi } from "@services/deciApi";
 import { loggingApi } from "@services/loggingApi";
 import { shopparApi } from "@services/shopparApi";
 
@@ -57,6 +58,7 @@ const store = configureStore({
     [productionApi.reducerPath]: productionApi.reducer,
     [stockApi.reducerPath]: stockApi.reducer,
     [financeApi.reducerPath]: financeApi.reducer,
+    [deciApi.reducerPath]: deciApi.reducer,
     [loggingApi.reducerPath]: loggingApi.reducer,
     [shopparApi.reducerPath]: shopparApi.reducer,
   },

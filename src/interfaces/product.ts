@@ -9,6 +9,8 @@ export interface Product {
   amountUnit: string;
   unitCost: number;
   reservedAmount: number;
+  weight: number | null;
+  deci: number | null;
   tag: string | null;
   createdAt: string;
   updatedAt: string;

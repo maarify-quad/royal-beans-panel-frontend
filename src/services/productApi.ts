@@ -230,6 +230,8 @@ interface UpdateProductRequest {
   name: string;
   amount: number;
   amountUnit: string;
+  weight: number | null;
+  deci: number | null;
   tag: string | null;
 }
 
