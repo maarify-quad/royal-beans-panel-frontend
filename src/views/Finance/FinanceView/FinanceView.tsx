@@ -15,11 +15,15 @@ import { financeValidation, FinanceValues } from "./financeValidation";
 import dayjs from "dayjs";
 
 // Constants
-import { FINANCE_KEY_LABELS } from "src/constants";
+import { FINANCE_KEY_LABELS, FINANCE_USD_KEY_LABELS } from "src/constants";
 
-const numberFormatter = new Intl.NumberFormat("tr-TR", {
+const tryFormatter = Intl.NumberFormat("tr-TR", {
   style: "currency",
   currency: "TRY",
+});
+const usdFormatter = Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
 });
 
 export const FinanceView = () => {
@@ -134,7 +138,10 @@ export const FinanceView = () => {
         <Stack mt="md" spacing="xs">
           {Object.entries(data).map(([key, value]) => (
             <div key={key}>
-              {FINANCE_KEY_LABELS[key]}: {numberFormatter.format(value)}
+              {FINANCE_KEY_LABELS[key as keyof typeof FINANCE_KEY_LABELS]}:{" "}
+              {FINANCE_USD_KEY_LABELS.includes(key)
+                ? usdFormatter.format(value)
+                : tryFormatter.format(value)}
             </div>
           ))}
         </Stack>

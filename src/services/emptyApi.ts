@@ -96,5 +96,6 @@ export const emptyApi = createApi({
     "Ingredient",
     "ShopifyProductIngredient",
     "Tag",
+    "Deci",
   ],
 });

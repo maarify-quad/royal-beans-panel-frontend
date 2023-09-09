@@ -1,1 +1,1 @@
-export { ShopifyUpdateIngredients } from "./ShopifyUpdateIngredients";
+export { ShopifyUpdateIngredients as default } from "./ShopifyUpdateIngredients";

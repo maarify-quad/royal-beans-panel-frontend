@@ -1,4 +1,4 @@
-export const FINANCE_KEY_LABELS: { [key: string]: string } = {
+export const FINANCE_KEY_LABELS = {
   realProfit: "Reel Kar",
   theoryProfit: "Teoride Kar",
   bulkOrdersProfit: "KarS",
@@ -20,4 +20,14 @@ export const FINANCE_KEY_LABELS: { [key: string]: string } = {
   totalTrendyolRevenue: "Ciro Trendyol",
   totalHepsiBuradaRevenue: "Ciro HepsiBurada",
   totalRevenue: "Tüm Ciro",
-};
+  bulkOrderBoxCost: "Kutu Maliyet S",
+  manualOrderBoxCost: "Kutu Maliyet MG",
+  shopifyOrderBoxCost: "Kutu Maliyet MG Shopify",
+  bulkOrderCargoCost: "Kargo Maliyet S",
+  manualOrderCargoCost: "Kargo Maliyet MG",
+  shopifyOrderCargoCost: "Kargo Maliyet MG Shopify",
+  totalCargoCost: "Kargo Maliyet",
+  navlunCost: "Navlun Maliyet",
+} as const;
+
+export const FINANCE_USD_KEY_LABELS = ["shopifyOrderBoxCost"];
