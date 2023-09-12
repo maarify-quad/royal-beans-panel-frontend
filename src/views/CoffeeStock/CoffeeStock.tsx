@@ -9,6 +9,7 @@ import { Product } from "@interfaces/product";
 import { Paper } from "@mantine/core";
 
 const STOCK_CODES = [
+  "YM-10001",
   "YM-10002",
   "YM-10003",
   "YM-10004",
