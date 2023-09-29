@@ -21,7 +21,7 @@ export const shopparApi = createApi({
       query: () => "/sales_invoice/summary",
       providesTags: [{ type: "Shoppar" as const, id: "Summary" }],
     }),
-    generateCargoExcels: builder.mutation<any, void>({
+    generateCargoExcels: builder.mutation<{ url: string }[], void>({
       query: () => ({
         url: "/cargo",
         method: "GET",
