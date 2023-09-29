@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import FileSaver from "file-saver";
 
 // Services
 import { useGetSummaryQuery, useGenerateCargoExcelsMutation } from "@services/shopparApi";
@@ -43,7 +42,8 @@ export const ShopparView = () => {
 
   const handleDownloadExcel = async () => {
     try {
-      await generateCargoExcels().unwrap();
+      const urls = await generateCargoExcels().unwrap();
+
       showNotification({
         title: "Başarılı",
         message: "Excel dosyaları oluşturuldu",
@@ -51,18 +51,10 @@ export const ShopparView = () => {
         icon: <IconCircleCheck />,
       });
 
-      const filenames = ["Siparisler", "Kargolar", "Günlük", "TopluGonderi"];
-      for (const filename of filenames) {
-        const response = await fetch(
-          `${import.meta.env.VITE_SHOPPAR_BASE_URL}/cargo/excel?filename=${filename}`
-        );
-        const data = await response.blob();
-        const blob = new Blob([data], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-        FileSaver.saveAs(blob, `${filename}.xlsx`);
-      }
-    } catch (error) {}
+      urls.forEach((item) => {
+        window.open(item.url);
+      });
+    } catch {}
   };
 
   return (
