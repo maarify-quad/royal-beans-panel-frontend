@@ -52,7 +52,7 @@ export const ShopparView = () => {
       });
 
       urls.forEach((item) => {
-        window.open(item.url);
+        window.open(item.url, "_blank");
       });
     } catch {}
   };
