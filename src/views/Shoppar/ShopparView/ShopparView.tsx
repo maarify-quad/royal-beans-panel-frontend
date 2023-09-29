@@ -3,10 +3,19 @@ import dayjs from "dayjs";
 // Services
 import { useGetSummaryQuery, useGenerateCargoExcelsMutation } from "@services/shopparApi";
 
-// UI Components
-import { Alert, Box, Button, Card, Divider, Group, Loader, Text, TextInput } from "@mantine/core";
-
-// UI Utils
+// Mantine
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Divider,
+  Group,
+  Loader,
+  LoadingOverlay,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
@@ -21,24 +30,6 @@ export const ShopparView = () => {
 
   // Mutations
   const [generateCargoExcels, { isLoading: isGeneratingExcels }] = useGenerateCargoExcelsMutation();
-
-  if (isLoading || isFetching) {
-    return <Loader />;
-  }
-
-  if (error) {
-    return (
-      <Alert
-        icon={<IconAlertCircle />}
-        color="red"
-        title="Shoppar'a ulaşılamadı"
-        variant="filled"
-        mt="md"
-      >
-        {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
-      </Alert>
-    );
-  }
 
   const handleDownloadExcel = async () => {
     try {
@@ -57,9 +48,27 @@ export const ShopparView = () => {
     } catch {}
   };
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return (
+      <Alert
+        icon={<IconAlertCircle />}
+        color="red"
+        title="Shoppar'a ulaşılamadı"
+        variant="filled"
+        mt="md"
+      >
+        {(error as any)?.data?.message || "Beklenmedik bir hata oluştu"}
+      </Alert>
+    );
+  }
+
   return (
     <PageLayout
-      title="Shoppar"
+      title="Shoppar V3"
       breadcrumbs={[
         {
           label: "Panel",
@@ -81,16 +90,23 @@ export const ShopparView = () => {
         </Button>
       }
     >
+      <LoadingOverlay visible={isFetching} />
       <Box mt="md">
-        <TextInput label="Shopify Sipariş ID" withAsterisk />
-        <Button mt="md">Çalıştır</Button>
+        <TextInput
+          label="Sipariş ID"
+          placeholder="Shopify sipariş ID'sini giriniz (sipariş numarası ve ID farklı)"
+          withAsterisk
+        />
+        <Button disabled mt="md">
+          Çalıştır
+        </Button>
       </Box>
       {data && (
         <Group mt="lg">
           <Card p="md" radius="md" shadow="sm" withBorder>
             <Group position="apart">
               <Text>Son işlenen sipariş:</Text>
-              <b>{data.lastShopifyOrderNumber}</b>
+              <b>#{data.lastShopifyOrderNumber}</b>
             </Group>
             <Divider my={4} />
             <Group position="apart">
