@@ -65,7 +65,8 @@ const FnUpdateView = React.lazy(() => import("./views/StockAdmin/FnUpdateView"))
 const ShopifyUpdateView = React.lazy(() => import("./views/StockAdmin/ShopifyUpdateView"));
 
 // Finance Views
-const FinanceView = React.lazy(() => import("./views/Finance/FinanceView"));
+const ListFinanceView = React.lazy(() => import("./views/Finance/ListFinanceView"));
+const FinanceDetailView = React.lazy(() => import("./views/Finance/FinanceDetailView"));
 
 // Log Views
 const ListLogsView = React.lazy(() => import("./views/Logging/ListLogsView"));
@@ -214,7 +215,12 @@ export const Routing = () => {
         },
         {
           path: "/dashboard/finance",
-          element: <FinanceView />,
+          element: <ListFinanceView />,
+          roles: ["admin"],
+        },
+        {
+          path: "/dashboard/finance/detail",
+          element: <FinanceDetailView />,
           roles: ["admin"],
         },
         {

@@ -27,6 +27,8 @@ export const FINANCE_KEY_LABELS = {
   manualOrderCargoCost: "Kargo Maliyet MG",
   shopifyOrderCargoCost: "Kargo Maliyet MG Shopify",
   totalCargoCost: "Kargo Maliyet",
+  totalAdditionalExpense: "Toplam Ek Gider",
+  totalAdditionalRevenue: "Toplam Ek Gelir",
   navlunCost: "Navlun Maliyet",
 } as const;
 
