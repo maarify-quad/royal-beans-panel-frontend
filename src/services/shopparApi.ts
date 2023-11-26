@@ -21,6 +21,13 @@ export const shopparApi = createApi({
       query: () => "/sales_invoice/summary",
       providesTags: [{ type: "Shoppar" as const, id: "Summary" }],
     }),
+    generateSalesInvoce: builder.mutation<void, { sinceOrderId: string }>({
+      query: ({ sinceOrderId }) => ({
+        url: `/sales_invoice/generate?sinceOrderId=${sinceOrderId}`,
+        method: "POST",
+      }),
+      invalidatesTags: [{ type: "Shoppar" as const, id: "Summary" }],
+    }),
     generateCargoExcels: builder.mutation<{ url: string }[], void>({
       query: () => ({
         url: "/cargo",
@@ -37,4 +44,8 @@ interface GetSummaryResponse {
   orderCount: number;
 }
 
-export const { useGetSummaryQuery, useGenerateCargoExcelsMutation } = shopparApi;
+export const {
+  useGetSummaryQuery,
+  useGenerateSalesInvoceMutation,
+  useGenerateCargoExcelsMutation,
+} = shopparApi;

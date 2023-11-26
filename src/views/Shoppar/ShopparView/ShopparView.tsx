@@ -1,7 +1,12 @@
+import { useState } from "react";
 import dayjs from "dayjs";
 
 // Services
-import { useGetSummaryQuery, useGenerateCargoExcelsMutation } from "@services/shopparApi";
+import {
+  useGetSummaryQuery,
+  useGenerateSalesInvoceMutation,
+  useGenerateCargoExcelsMutation,
+} from "@services/shopparApi";
 
 // Mantine
 import {
@@ -30,6 +35,24 @@ export const ShopparView = () => {
 
   // Mutations
   const [generateCargoExcels, { isLoading: isGeneratingExcels }] = useGenerateCargoExcelsMutation();
+  const [generateSalesInvoce, { isLoading: isGeneratingSalesInvoice }] =
+    useGenerateSalesInvoceMutation();
+
+  // States
+  const [sinceOrderId, setSinceOrderId] = useState("");
+
+  const handleGenerateSalesInvoice = async () => {
+    try {
+      await generateSalesInvoce({ sinceOrderId }).unwrap();
+
+      showNotification({
+        title: "Başarılı",
+        message: "Sistem başarıyla çalıştırıldı",
+        color: "green",
+        icon: <IconCircleCheck />,
+      });
+    } catch {}
+  };
 
   const handleDownloadExcel = async () => {
     try {
@@ -85,6 +108,7 @@ export const ShopparView = () => {
           leftIcon={<IconFileDownload />}
           onClick={handleDownloadExcel}
           loading={isGeneratingExcels}
+          disabled={isGeneratingSalesInvoice}
         >
           Excel Al
         </Button>
@@ -96,8 +120,14 @@ export const ShopparView = () => {
           label="Sipariş ID"
           placeholder="Shopify sipariş ID'sini giriniz (sipariş numarası ve ID farklı)"
           withAsterisk
+          value={sinceOrderId}
+          onChange={(event) => setSinceOrderId(event.currentTarget.value)}
         />
-        <Button disabled mt="md">
+        <Button
+          loading={isGeneratingSalesInvoice}
+          disabled={isGeneratingExcels || !sinceOrderId}
+          mt="md"
+        >
           Çalıştır
         </Button>
       </Box>

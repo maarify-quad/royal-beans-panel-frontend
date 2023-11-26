@@ -6,18 +6,12 @@ import { Delivery, CreateDeliveryDetail, DeliveryDetail } from "@interfaces/deli
 export const deliveryApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
     getDeliveries: builder.query<GetDeliveriesResponse, GetDeliveriesRequest | void>({
-      query: (params) => {
-        const url = new URL("/deliveries", import.meta.env.VITE_API_BASE_URL);
-        if (params?.pagination) {
-          const { page, limit } = params.pagination;
-          url.searchParams.append("page", page.toString());
-          url.searchParams.append("limit", limit.toString());
-        }
-        if (params?.withDeleted) {
-          url.searchParams.append("withDeleted", "true");
-        }
-        return url.toString();
-      },
+      query: (params) => ({
+        url: "/deliveries",
+        ...(Object.keys(params?.query || {}).length && {
+          params: params?.query,
+        }),
+      }),
       providesTags: ["Delivery"],
     }),
     getDeliveryById: builder.query<Delivery, string>({
@@ -86,10 +80,7 @@ interface GetDeliveriesResponse {
 
 interface GetDeliveriesRequest {
   withDeleted?: boolean;
-  pagination?: {
-    page: number;
-    limit: number;
-  };
+  query?: RequestQuery;
 }
 
 interface GetProductDeliveriesResponse {
@@ -119,3 +110,10 @@ interface CreateDeliveryPayload {
   supplierId: string;
   deliveryDetails: CreateDeliveryDetail[];
 }
+
+export type RequestQuery = {
+  page?: number;
+  limit?: number;
+  sortBy?: keyof Delivery;
+  sortOrder?: "ASC" | "DESC";
+};

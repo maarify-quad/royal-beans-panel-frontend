@@ -1,11 +1,11 @@
-import React, { useMemo } from "react";
+import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 
 // Routing
 import { Link } from "react-router-dom";
 
 // Services
-import { useGetDeliveriesQuery } from "@services/deliveryApi";
+import { RequestQuery, useGetDeliveriesQuery } from "@services/deliveryApi";
 
 // UI Components
 import { Alert, Anchor, Paper, Group, Select, Text } from "@mantine/core";
@@ -22,26 +22,15 @@ import { Delivery } from "@interfaces/delivery";
 
 export const Results = () => {
   // Internal state
-  const [pagination, setPagination] = React.useState({
+  const [query, setQuery] = useState<RequestQuery>({
     page: 1,
     limit: 25,
+    sortBy: "createdAt",
+    sortOrder: "DESC",
   });
 
   // Queries
-  const { deliveries, totalCount, isTableLoading, error } = useGetDeliveriesQuery(
-    {
-      pagination,
-    },
-    {
-      selectFromResult: ({ data, isLoading, isFetching, ...rest }) => ({
-        ...rest,
-        deliveries: data?.deliveries,
-        totalPages: data?.totalPages,
-        totalCount: data?.totalCount,
-        isTableLoading: isLoading || isFetching,
-      }),
-    }
-  );
+  const { data, isLoading, isFetching, error } = useGetDeliveriesQuery({ query });
 
   const columns: DataTableColumn<Delivery>[] = useMemo(
     () => [
@@ -66,7 +55,7 @@ export const Results = () => {
         render: (delivery) => formatCurrency(delivery.total),
       },
     ],
-    [deliveries]
+    [data]
   );
 
   if (error) {
@@ -83,7 +72,7 @@ export const Results = () => {
     );
   }
 
-  if (deliveries?.length === 0) {
+  if (data?.deliveries.length === 0) {
     return (
       <Alert color="cyan" mt="md" icon={<IconInfoCircle />}>
         Sevkiyat bulunmamaktadır
@@ -95,23 +84,23 @@ export const Results = () => {
     <Paper radius="md" shadow="sm" p="md" mt="md" withBorder>
       <DataTable
         highlightOnHover
-        records={deliveries}
+        records={data?.deliveries}
         columns={columns}
-        fetching={isTableLoading}
+        fetching={isLoading || isFetching}
         noRecordsText="Kayıt bulunamadı"
         loadingText="Yükleniyor"
-        recordsPerPage={pagination.limit}
-        totalRecords={totalCount}
-        page={pagination.page}
-        onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
+        recordsPerPage={query.limit || 25}
+        totalRecords={data?.totalCount}
+        page={query.page || 1}
+        onPageChange={(page) => setQuery((prev) => ({ ...prev, page }))}
       />
       <Group>
         <Text size="sm">Sayfa başı satır</Text>
         <Select
-          value={pagination.limit.toString()}
+          value={query.limit?.toString() || "25"}
           onChange={(limit) => {
             if (limit) {
-              setPagination({ page: 1, limit: +limit });
+              setQuery({ page: 1, limit: +limit });
             }
           }}
           data={[
