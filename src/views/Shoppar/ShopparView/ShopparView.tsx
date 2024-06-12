@@ -126,6 +126,7 @@ export const ShopparView = () => {
         <Button
           loading={isGeneratingSalesInvoice}
           disabled={isGeneratingExcels || !sinceOrderId}
+          onClick={handleGenerateSalesInvoice}
           mt="md"
         >
           Çalıştır
