@@ -2,11 +2,7 @@ import { useState } from "react";
 import dayjs from "dayjs";
 
 // Services
-import {
-  useGetSummaryQuery,
-  useGenerateSalesInvoceMutation,
-  useExportExcelMutation,
-} from "@services/shopparApi";
+import { useGetSystemInfoQuery, useExportExcelMutation } from "@services/shopparApi";
 
 // Mantine
 import {
@@ -31,23 +27,21 @@ import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 export const ShopparView = () => {
   // Queries
-  const { data, isLoading, isFetching, error } = useGetSummaryQuery();
+  const { data, isLoading, isFetching, error } = useGetSystemInfoQuery();
 
   // Mutations
   const [exportExcel, { isLoading: isGeneratingExcels }] = useExportExcelMutation();
-  const [generateSalesInvoce, { isLoading: isGeneratingSalesInvoice }] =
-    useGenerateSalesInvoceMutation();
 
   // States
   const [sinceOrderId, setSinceOrderId] = useState("");
 
-  const handleGenerateSalesInvoice = async () => {
+  const handleExportExcel = async () => {
     try {
-      await generateSalesInvoce({ sinceOrderId }).unwrap();
+      await exportExcel({ sinceOrderId }).unwrap();
 
       showNotification({
         title: "Başarılı",
-        message: "Sistem başarıyla çalıştırıldı",
+        message: "Sistem başarıyla çalıştırıldı, excel dosyası alabilirsiniz",
         color: "green",
         icon: <IconCircleCheck />,
       });
@@ -56,7 +50,7 @@ export const ShopparView = () => {
 
   const handleDownloadExcel = async () => {
     try {
-      const urls = await exportExcel().unwrap();
+      const urls = await exportExcel({}).unwrap();
 
       showNotification({
         title: "Başarılı",
@@ -108,7 +102,7 @@ export const ShopparView = () => {
           leftIcon={<IconFileDownload />}
           onClick={handleDownloadExcel}
           loading={isGeneratingExcels}
-          disabled={isGeneratingSalesInvoice}
+          disabled={isGeneratingExcels}
         >
           Excel Al
         </Button>
@@ -124,9 +118,9 @@ export const ShopparView = () => {
           onChange={(event) => setSinceOrderId(event.currentTarget.value)}
         />
         <Button
-          loading={isGeneratingSalesInvoice}
+          loading={isGeneratingExcels}
           disabled={isGeneratingExcels || !sinceOrderId}
-          onClick={handleGenerateSalesInvoice}
+          onClick={handleExportExcel}
           mt="md"
         >
           Çalıştır

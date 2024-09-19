@@ -17,35 +17,34 @@ export const shopparApi = createApi({
   reducerPath: "shopparApi",
   tagTypes: ["Shoppar"],
   endpoints: (builder) => ({
-    getSummary: builder.query<GetSummaryResponse, void>({
+    getSystemInfo: builder.query<GetSystemInfoResponse, void>({
       query: () => "/system-info",
       providesTags: [{ type: "Shoppar" as const, id: "Summary" }],
     }),
-    generateSalesInvoce: builder.mutation<void, { sinceOrderId: string }>({
-      query: ({ sinceOrderId }) => ({
-        url: `/sales_invoice/generate?sinceOrderId=${sinceOrderId}`,
-        method: "POST",
-      }),
-      invalidatesTags: [{ type: "Shoppar" as const, id: "Summary" }],
-    }),
-    exportExcel: builder.mutation<{ url: string }[], void>({
-      query: () => ({
-        url: "/export/excel",
-        method: "GET",
-      }),
+    exportExcel: builder.mutation<{ url: string }[], ExportExcelParams>({
+      query: ({ sinceOrderId }) => {
+        let url = "/export/excel";
+        if (sinceOrderId) {
+          url += `?sinceOrderId=${sinceOrderId}`;
+        }
+        return {
+          url,
+          method: "GET",
+        };
+      },
       invalidatesTags: [{ type: "Shoppar" as const, id: "Summary" }],
     }),
   }),
 });
 
-interface GetSummaryResponse {
+type GetSystemInfoResponse = {
   lastShopifyOrderNumber: number;
   lastExcelExportDate: string | null;
   orderCount: number;
-}
+};
 
-export const {
-  useGetSummaryQuery,
-  useGenerateSalesInvoceMutation,
-  useExportExcelMutation,
-} = shopparApi;
+type ExportExcelParams = {
+  sinceOrderId?: string;
+};
+
+export const { useGetSystemInfoQuery, useExportExcelMutation } = shopparApi;
