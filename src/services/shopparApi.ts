@@ -18,7 +18,7 @@ export const shopparApi = createApi({
   tagTypes: ["Shoppar"],
   endpoints: (builder) => ({
     getSummary: builder.query<GetSummaryResponse, void>({
-      query: () => "/sales_invoice/summary",
+      query: () => "/system-info",
       providesTags: [{ type: "Shoppar" as const, id: "Summary" }],
     }),
     generateSalesInvoce: builder.mutation<void, { sinceOrderId: string }>({
@@ -28,9 +28,9 @@ export const shopparApi = createApi({
       }),
       invalidatesTags: [{ type: "Shoppar" as const, id: "Summary" }],
     }),
-    generateCargoExcels: builder.mutation<{ url: string }[], void>({
+    exportExcel: builder.mutation<{ url: string }[], void>({
       query: () => ({
-        url: "/cargo",
+        url: "/export/excel",
         method: "GET",
       }),
       invalidatesTags: [{ type: "Shoppar" as const, id: "Summary" }],
@@ -47,5 +47,5 @@ interface GetSummaryResponse {
 export const {
   useGetSummaryQuery,
   useGenerateSalesInvoceMutation,
-  useGenerateCargoExcelsMutation,
+  useExportExcelMutation,
 } = shopparApi;

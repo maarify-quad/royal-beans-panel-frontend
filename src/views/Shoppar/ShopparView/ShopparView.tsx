@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import {
   useGetSummaryQuery,
   useGenerateSalesInvoceMutation,
-  useGenerateCargoExcelsMutation,
+  useExportExcelMutation,
 } from "@services/shopparApi";
 
 // Mantine
@@ -34,7 +34,7 @@ export const ShopparView = () => {
   const { data, isLoading, isFetching, error } = useGetSummaryQuery();
 
   // Mutations
-  const [generateCargoExcels, { isLoading: isGeneratingExcels }] = useGenerateCargoExcelsMutation();
+  const [exportExcel, { isLoading: isGeneratingExcels }] = useExportExcelMutation();
   const [generateSalesInvoce, { isLoading: isGeneratingSalesInvoice }] =
     useGenerateSalesInvoceMutation();
 
@@ -56,7 +56,7 @@ export const ShopparView = () => {
 
   const handleDownloadExcel = async () => {
     try {
-      const urls = await generateCargoExcels().unwrap();
+      const urls = await exportExcel().unwrap();
 
       showNotification({
         title: "Başarılı",
