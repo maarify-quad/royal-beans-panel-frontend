@@ -29,6 +29,7 @@ import { financeApi } from "@services/financeApi";
 import { deciApi } from "@services/deciApi";
 import { loggingApi } from "@services/loggingApi";
 import { shopparApi } from "@services/shopparApi";
+import { eventsApi } from "@services/eventsApi";
 
 // Middlewares
 import { rtkQueryErrorLogger } from "./middlewares/rtkQueryErrorLogger";
@@ -61,9 +62,15 @@ const store = configureStore({
     [deciApi.reducerPath]: deciApi.reducer,
     [loggingApi.reducerPath]: loggingApi.reducer,
     [shopparApi.reducerPath]: shopparApi.reducer,
+    [eventsApi.reducerPath]: eventsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(emptyApi.middleware, shopparApi.middleware, rtkQueryErrorLogger),
+    getDefaultMiddleware().concat(
+      emptyApi.middleware,
+      shopparApi.middleware,
+      eventsApi.middleware,
+      rtkQueryErrorLogger
+    ),
   devTools: import.meta.env.DEV,
 });
 

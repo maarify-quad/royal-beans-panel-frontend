@@ -10,6 +10,7 @@ import {
   IconTableExport,
   IconFileCode,
   IconCoin,
+  IconCalendarEvent,
 } from "@tabler/icons";
 
 export const NAV_LINKS: NavLink[] = [
@@ -83,6 +84,13 @@ export const NAV_LINKS: NavLink[] = [
     icon: IconTableExport,
     match: /shoppar/,
     link: "/dashboard/shoppar",
+  },
+  {
+    label: "Etkinlikler",
+    icon: IconCalendarEvent,
+    match: /events/,
+    link: "/dashboard/events",
+    roles: ["admin"],
   },
   {
     label: "Loglar",
