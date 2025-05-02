@@ -17,7 +17,7 @@ export const eventsApi = createApi({
   reducerPath: "eventsApi",
   tagTypes: ["Events"],
   endpoints: (builder) => ({
-    filterEvents: builder.query<FilterEventsResponse[], FilterEventsRequest>({
+    filterEvents: builder.query<Event[], FilterEventsRequest>({
       query: (params) => ({
         url: "/events/filter",
         params,
@@ -40,21 +40,12 @@ export type FilterEventsRequest = {
   limit: number;
 };
 
-type FilterEventsResponse = {
-  id: number;
-  title?: string;
-  description?: string;
-  code: string;
-  finisherCode: string;
-  isFinished: boolean;
-  createdAt: string;
-};
-
 type CreateEventParams = {
   title?: string;
   description?: string;
   code: string;
   finisherCode: string;
+  winnerCount: number;
 };
 
 type CreateEventResponse = {
@@ -63,6 +54,18 @@ type CreateEventResponse = {
   description: string;
   code: string;
   finisherCode: string;
+  winnerCount: number;
+};
+
+export type Event = {
+  id: number;
+  title?: string;
+  description?: string;
+  code: string;
+  finisherCode: string;
+  winnerCount: number;
+  isFinished: boolean;
+  createdAt: string;
 };
 
 export const { useFilterEventsQuery, useCreateEventMutation } = eventsApi;

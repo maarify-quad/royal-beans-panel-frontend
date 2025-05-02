@@ -5,4 +5,5 @@ export const schema = z.object({
   description: z.string().optional(),
   code: z.string().min(1, "Kod zorunludur"),
   finisherCode: z.string().min(1, "Bitiş kodu zorunludur"),
+  winnerCount: z.number().min(1, "Kazanan sayısı zorunludur"),
 });

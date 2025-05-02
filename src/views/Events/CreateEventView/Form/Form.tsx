@@ -5,7 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { useCreateEventMutation } from "@services/eventsApi";
 
 // UI Components
-import { TextInput, Textarea, Button, Group, LoadingOverlay, Paper } from "@mantine/core";
+import {
+  TextInput,
+  Textarea,
+  Button,
+  Group,
+  LoadingOverlay,
+  Paper,
+  NumberInput,
+} from "@mantine/core";
 
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
@@ -79,6 +87,13 @@ export const Form = () => {
           mt="md"
           {...form.getInputProps("finisherCode")}
         />
+        <NumberInput
+          required
+          label="Kazanan Sayısı"
+          placeholder="Etkinlik kazanan sayısı"
+          mt="md"
+          {...form.getInputProps("winnerCount")}
+        />
         <Group position="right" mt="xl">
           <Button variant="default" onClick={() => navigate("/dashboard/events")}>
             İptal
@@ -88,4 +103,4 @@ export const Form = () => {
       </form>
     </Paper>
   );
-}; 
+};

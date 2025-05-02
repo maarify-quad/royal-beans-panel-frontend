@@ -8,4 +8,5 @@ export const initialValues: Inputs = {
   description: "",
   code: "",
   finisherCode: "",
-}; 
+  winnerCount: 1,
+};

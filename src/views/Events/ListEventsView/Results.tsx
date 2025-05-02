@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 
 // Services
-import { FilterEventsRequest, useFilterEventsQuery } from "@services/eventsApi";
+import { FilterEventsRequest, useFilterEventsQuery, type Event } from "@services/eventsApi";
 
 // UI Components
 import { Text, Alert, Group, Paper, Select, Badge } from "@mantine/core";
@@ -10,16 +10,6 @@ import { DataTable, DataTableColumn } from "mantine-datatable";
 
 // Icons
 import { IconInfoCircle } from "@tabler/icons";
-
-type Event = {
-  id: number;
-  title?: string;
-  description?: string;
-  code: string;
-  finisherCode: string;
-  isFinished: boolean;
-  createdAt: string;
-};
 
 export const Results = () => {
   // State
@@ -52,6 +42,11 @@ export const Results = () => {
       {
         accessor: "finisherCode",
         title: "Bitiş Kodu",
+      },
+      {
+        accessor: "winnerCount",
+        title: "Kazanan Sayısı",
+        render: (event) => event.winnerCount || "-",
       },
       {
         accessor: "isFinished",
