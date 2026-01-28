@@ -26,7 +26,7 @@ export interface ManualOrderProduct {
   priceListProductId: null;
   shopifyProductId: number | null;
   product: Product;
-  priceListProduct: null;
+  priceListProduct: any;
   shopifyProduct: ShopifyProduct | null;
   grindType: string;
   unitPrice: number;

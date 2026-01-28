@@ -24,6 +24,7 @@ import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 // Utils
 import { handleFormError } from "@utils/form";
+import { BulkOrder } from "@interfaces/order";
 
 export const UpdateOrderView = () => {
   // Routing
@@ -80,6 +81,8 @@ export const UpdateOrderView = () => {
     return <Loader />;
   }
 
+  const order = data?.order as BulkOrder;
+
   return (
     <PageLayout
       title={`#${orderId} - Sipariş Güncelle`}
@@ -106,7 +109,7 @@ export const UpdateOrderView = () => {
               Güncel Sepet
             </Text>
             <Stack spacing="sm">
-              {data?.order.orderProducts.map((orderProduct) => (
+              {order.orderProducts.map((orderProduct) => (
                 <Card withBorder shadow="xs" key={orderProduct.id}>
                   <Card.Section inheritPadding py="xs">
                     <div>

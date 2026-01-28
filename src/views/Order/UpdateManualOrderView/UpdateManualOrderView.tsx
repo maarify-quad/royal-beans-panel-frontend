@@ -27,6 +27,7 @@ import { PageLayout } from "@layouts/PageLayout/PageLayout";
 
 // Utils
 import { handleFormError } from "@utils/form";
+import { ManualOrder } from "@interfaces/order";
 
 export const UpdateManualOrderView = () => {
   // Routing
@@ -82,6 +83,8 @@ export const UpdateManualOrderView = () => {
     return <Loader />;
   }
 
+  const order = data?.order as ManualOrder;
+
   return (
     <PageLayout
       title={`#${orderId} - Gönderi Güncelle`}
@@ -108,7 +111,7 @@ export const UpdateManualOrderView = () => {
               Güncel Sepet
             </Text>
             <Stack spacing="sm">
-              {data?.order.orderProducts.map((orderProduct) => (
+              {order.orderProducts.map((orderProduct) => (
                 <Card withBorder shadow="xs" key={orderProduct.id}>
                   <Card.Section inheritPadding py="xs">
                     <div>
