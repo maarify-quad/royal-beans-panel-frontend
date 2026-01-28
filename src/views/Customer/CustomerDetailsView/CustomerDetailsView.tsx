@@ -1,7 +1,7 @@
 import { Suspense, lazy } from "react";
 
 // Routing
-import { Navigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 
 // Services
 import { useGetCustomerByIdQuery } from "@services/customerApi";
@@ -26,7 +26,7 @@ import { openModal } from "@mantine/modals";
 import { useCreateDeliveryAddress } from "@hooks/delivery-address/useCreateDeliveryAddress";
 
 // Icons
-import { IconPlus, IconAlertCircle, IconEdit } from "@tabler/icons";
+import { IconPlus, IconAlertCircle, IconEdit, IconList } from "@tabler/icons";
 
 // Components
 import { DetailsTab } from "./DetailsTab";
@@ -144,6 +144,16 @@ export const CustomerDetailsView = () => {
         actions={
           !isDeactivated && (
             <Group>
+              {!data?.priceListId && (
+                <Button
+                  component={Link}
+                  to={`/dashboard/price-lists/create?customerId=${data?.id}`}
+                  leftIcon={<IconList />}
+                  color="teal"
+                >
+                  Fiyat Listesi Oluştur
+                </Button>
+              )}
               <Button
                 leftIcon={<IconPlus />}
                 onClick={() => {

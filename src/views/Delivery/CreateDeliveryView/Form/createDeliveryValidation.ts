@@ -12,7 +12,7 @@ export type CreateDeliveryValues = {
   unit: string;
   unitPriceUSD: number;
   unitPriceTRY: number;
-  taxRate: string;
+  taxRate: number;
   subTotal: number;
   total: number;
   deliveryDetails: {
@@ -40,7 +40,7 @@ export const initialValues: CreateDeliveryValues = {
   unit: "kg",
   unitPriceUSD: 0,
   unitPriceTRY: 0,
-  taxRate: "0",
+  taxRate: 0,
   subTotal: 0,
   total: 0,
 };

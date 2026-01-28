@@ -1,18 +1,19 @@
 // Routing
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 // Services
 import { useCreatePriceListWithProductsMutation } from "@services/priceListApi";
+import { useUpdateCustomerMutation } from "@services/customerApi";
 
 // UI Components
-import { Button, TextInput } from "@mantine/core";
+import { Alert, Button, TextInput } from "@mantine/core";
 
 // UI Utils
 import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 
 // Icons
-import { IconCircleCheck, IconPlus } from "@tabler/icons";
+import { IconCircleCheck, IconInfoCircle, IconPlus } from "@tabler/icons";
 
 // Layouts
 import { PageLayout } from "@layouts/PageLayout/PageLayout";
@@ -31,7 +32,11 @@ import {
 import { handleFormError } from "@utils/form";
 
 export const CreatePriceListView = () => {
+  const [searchParams] = useSearchParams();
+  const customerId = searchParams.get("customerId");
+
   const [createPriceList, { isLoading }] = useCreatePriceListWithProductsMutation();
+  const [updateCustomer, { isLoading: isUpdating }] = useUpdateCustomerMutation();
 
   const navigate = useNavigate();
   const form = useForm<CreatePriceListValues>({
@@ -43,16 +48,35 @@ export const CreatePriceListView = () => {
     try {
       const priceList = await createPriceList(values).unwrap();
 
-      showNotification({
-        title: "Başarılı",
-        message: "Fiyat listesi başarıyla oluşturuldu",
-        color: "green",
-        icon: <IconCircleCheck />,
-      });
+      // If customerId is provided, assign the new price list to the customer
+      if (customerId) {
+        await updateCustomer({
+          id: customerId,
+          priceListId: priceList.id,
+        }).unwrap();
 
-      navigate(`/dashboard/price-lists/${priceList.id}`);
+        showNotification({
+          title: "Başarılı",
+          message: "Fiyat listesi oluşturuldu ve müşteriye atandı",
+          color: "green",
+          icon: <IconCircleCheck />,
+        });
+
+        navigate(`/dashboard/customers/${customerId}?tab=priceList`);
+      } else {
+        showNotification({
+          title: "Başarılı",
+          message: "Fiyat listesi başarıyla oluşturuldu",
+          color: "green",
+          icon: <IconCircleCheck />,
+        });
+
+        navigate(`/dashboard/price-lists/${priceList.id}`);
+      }
     } catch {}
   };
+
+  const isSubmitting = isLoading || isUpdating;
 
   return (
     <PageLayout
@@ -74,8 +98,8 @@ export const CreatePriceListView = () => {
       actions={
         <Button
           leftIcon={<IconPlus />}
-          disabled={isLoading}
-          loading={isLoading}
+          disabled={isSubmitting}
+          loading={isSubmitting}
           type="submit"
           form="createPriceList"
         >
@@ -84,6 +108,11 @@ export const CreatePriceListView = () => {
       }
     >
       <form id="createPriceList" onSubmit={form.onSubmit(handleSubmit, handleFormError)}>
+        {customerId && (
+          <Alert icon={<IconInfoCircle />} color="cyan" my="md">
+            Bu fiyat listesi <strong>{customerId}</strong> id'li müşteri için oluşturulacaktır
+          </Alert>
+        )}
         <TextInput
           label="Fiyat Listesi Adı"
           placeholder="Fiyat listesi adını giriniz"

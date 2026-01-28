@@ -121,7 +121,6 @@ export const createCustomerSchema = z.object({
       invalid_type_error: "Özel not geçersiz",
     })
     .optional(),
-  priceListId: z.any(),
 });
 
 export type CreateCustomerValues = z.infer<typeof createCustomerSchema>;
@@ -133,7 +132,6 @@ export const initialValues: CreateCustomerValues = {
   contactTitle: "",
   secondContactName: "",
   secondContactTitle: "",
-  priceListId: "1",
   email: "",
   phone: "",
   address: "",

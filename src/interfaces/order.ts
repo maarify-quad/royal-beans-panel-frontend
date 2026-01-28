@@ -2,7 +2,7 @@ import { User } from "./auth";
 import { Customer } from "./customer";
 import { ManualOrderProduct, OrderProduct } from "./orderProduct";
 
-export type OrderType = "BULK" | "MANUAL";
+export type OrderType = "BULK" | "MANUAL" | "FASON";
 export type OrderSource = "dashboard" | "shopify" | "trendyol" | "hepsiburada";
 
 export type CommonOrder = {
@@ -56,4 +56,30 @@ export type ManualOrder = CommonOrder & {
   source: Omit<OrderSource, "dashboard">;
 };
 
-export type Order = BulkOrder | ManualOrder;
+export type FasonOrder = CommonOrder & {
+  customerId: string;
+  receiver: null;
+  customer: Customer;
+  manualInvoiceStatus: null;
+  receiverNeighborhood: null;
+  receiverAddress: null;
+  receiverCity: null;
+  receiverProvince: null;
+  type: "FASON";
+  orderProducts: {
+    id: number;
+    productId: number;
+    grindType: string;
+    weight: string;
+    quantity: number;
+    product: {
+      id: number;
+      name: string;
+      stockCode: string;
+      deletedAt?: string | null;
+    };
+  }[];
+  source: "dashboard";
+};
+
+export type Order = BulkOrder | ManualOrder | FasonOrder;

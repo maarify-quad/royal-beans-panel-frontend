@@ -1,6 +1,7 @@
 // Components
 import { BulkOrderProductsTab } from "./BulkOrderProductsTab";
 import { ManualOrderProductsTab } from "./ManualOrderProductsTab";
+import { FasonOrderProductsTab } from "./FasonOrderProductsTab";
 
 // Interfaces
 import { Order } from "@interfaces/order";
@@ -17,6 +18,10 @@ export const ProductsTab = ({ order }: ProductsTabProps) => {
 
   if (order.type === "MANUAL") {
     return <ManualOrderProductsTab order={order} />;
+  }
+
+  if (order.type === "FASON") {
+    return <FasonOrderProductsTab order={order} />;
   }
 
   return null;

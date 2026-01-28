@@ -56,8 +56,10 @@ const ListOrdersView = React.lazy(() => import("./views/Order/ListOrdersView"));
 const OrderDetailsView = React.lazy(() => import("./views/Order/OrderDetailsView"));
 const CreateOrderView = React.lazy(() => import("./views/Order/CreateOrderView"));
 const CreateManualOrderView = React.lazy(() => import("./views/Order/CreateManualOrderView"));
+const CreateFasonOrderView = React.lazy(() => import("./views/Order/CreateFasonOrderView"));
 const UpdateOrderView = React.lazy(() => import("./views/Order/UpdateOrderView"));
 const UpdateManualOrderView = React.lazy(() => import("./views/Order/UpdateManualOrderView"));
+const UpdateFasonOrderView = React.lazy(() => import("./views/Order/UpdateFasonOrderView"));
 
 // Stock Admin View
 const StockAdminView = React.lazy(() => import("./views/StockAdmin/StockAdminView"));
@@ -195,12 +197,20 @@ export const Routing = () => {
           element: <CreateManualOrderView />,
         },
         {
+          path: "/dashboard/orders/fason/create",
+          element: <CreateFasonOrderView />,
+        },
+        {
           path: "/dashboard/orders/update/:orderId",
           element: <UpdateOrderView />,
         },
         {
           path: "/dashboard/orders/manual/update/:orderId",
           element: <UpdateManualOrderView />,
+        },
+        {
+          path: "/dashboard/orders/fason/update/:orderId",
+          element: <UpdateFasonOrderView />,
         },
         {
           path: "/dashboard/stock-admin",

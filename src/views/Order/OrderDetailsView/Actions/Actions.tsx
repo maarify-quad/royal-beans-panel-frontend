@@ -93,9 +93,9 @@ export const Actions = ({ order }: ActionsProps) => {
           color="violet"
           leftIcon={<IconBasket size={20} />}
           component={Link}
-          to={`/dashboard/orders${order.type === "MANUAL" ? "/manual" : ""}/update/${
-            order.orderId
-          }`}
+          to={`/dashboard/orders${
+            order.type === "MANUAL" ? "/manual" : order.type === "FASON" ? "/fason" : ""
+          }/update/${order.orderId}`}
         >
           Güncelle
         </Button>

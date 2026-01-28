@@ -2,7 +2,7 @@ import { emptyApi } from "./emptyApi";
 
 // Interfaces
 import { Order, OrderType } from "@interfaces/order";
-import { CreateManualOrderProductParams, CreateOrderProductParams } from "@interfaces/orderProduct";
+import { CreateFasonOrderProductParams, CreateManualOrderProductParams, CreateOrderProductParams } from "@interfaces/orderProduct";
 
 export const orderApi = emptyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -44,6 +44,14 @@ export const orderApi = emptyApi.injectEndpoints({
       }),
       invalidatesTags: ["Order"],
     }),
+    createFasonOrder: builder.mutation<Order, CreateFasonOrderRequest>({
+      query: (body) => ({
+        url: "/orders/fason",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Order"],
+    }),
     updateOrder: builder.mutation<Order, UpdateOrderParams>({
       query: (body) => ({
         url: `/orders`,
@@ -63,6 +71,14 @@ export const orderApi = emptyApi.injectEndpoints({
     updateManualOrderProducts: builder.mutation<Order, UpdateManualOrderProductsParams>({
       query: (body) => ({
         url: `/orders/manual/order_products`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: (_result, _error, params) => [{ type: "Order", id: params.orderId }],
+    }),
+    updateFasonOrderProducts: builder.mutation<Order, UpdateFasonOrderProductsParams>({
+      query: (body) => ({
+        url: `/orders/fason/order_products`,
         method: "PATCH",
         body,
       }),
@@ -94,9 +110,11 @@ export const {
   useGetOrdersByCustomerQuery,
   useCreateOrderMutation,
   useCreateManualOrderMutation,
+  useCreateFasonOrderMutation,
   useUpdateOrderMutation,
   useUpdateOrderProductsMutation,
   useUpdateManualOrderProductsMutation,
+  useUpdateFasonOrderProductsMutation,
   useCancelOrderMutation,
   useGetOrdersExcelExportMutation,
 } = orderApi;
@@ -140,6 +158,12 @@ interface CreateManualOrderRequest {
   orderProducts: CreateManualOrderProductParams[];
 }
 
+interface CreateFasonOrderRequest {
+  customerId: string;
+  specialNote: string | null;
+  orderProducts: CreateFasonOrderProductParams[];
+}
+
 type UpdateOrderParams = Partial<Order> & { orderId: string };
 
 interface UpdateOrderProductsParams {
@@ -150,6 +174,11 @@ interface UpdateOrderProductsParams {
 interface UpdateManualOrderProductsParams {
   orderId: string;
   orderProducts: CreateManualOrderProductParams[];
+}
+
+interface UpdateFasonOrderProductsParams {
+  orderId: string;
+  orderProducts: CreateFasonOrderProductParams[];
 }
 
 interface GetOrdersExcelExportParams {

@@ -13,7 +13,6 @@ import {
   Header as MantineHeader,
   MediaQuery,
   Text,
-  Title,
 } from "@mantine/core";
 
 // Components
@@ -43,7 +42,9 @@ export const Header = ({ isNavbarExpanded, setIsNavbarExpanded }: HeaderProps) =
   const { classes, theme } = usestyles();
 
   return (
-    <MantineHeader height={50} p="xs">
+    <MantineHeader height={50} p="xs" style={{
+      borderBottom: '1px solid #c92a2b'
+    }}>
       <div
         style={{
           display: "flex",
@@ -73,7 +74,7 @@ export const Header = ({ isNavbarExpanded, setIsNavbarExpanded }: HeaderProps) =
                 color={theme.colors.gray[6]}
               />
             </MediaQuery>
-            <Title className={classes.title}>TAFT Coffee Co.</Title>
+            <img src={theme.colorScheme === "dark" ? "/taft-logo-yan-light.png" : "/taft-logo-yan-dark.png"} alt="TAFT Coffee Co." height={20} />
           </Group>
           <Group>
             <MediaQuery smallerThan="md" styles={{ display: "none" }}>

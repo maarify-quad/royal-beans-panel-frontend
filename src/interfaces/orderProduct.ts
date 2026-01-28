@@ -59,3 +59,11 @@ export interface CreateManualOrderProductParams {
   subTotal: number;
   total: number;
 }
+
+export interface CreateFasonOrderProductParams {
+  product: Product;
+  productId: number;
+  grindType: string;
+  weight: string;
+  quantity: number;
+}

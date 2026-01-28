@@ -8,7 +8,7 @@ import { Group, Button, Tabs, LoadingOverlay } from "@mantine/core";
 import { openModal } from "@mantine/modals";
 
 // Icons
-import { IconFileDownload, IconPaperBag, IconShoppingCartPlus } from "@tabler/icons";
+import { IconFileDownload, IconPaperBag, IconShoppingCartPlus, IconCoffee } from "@tabler/icons";
 
 // Components
 import { Results } from "./Results";
@@ -58,6 +58,9 @@ export const ListOrdersView = () => {
           <Button leftIcon={<IconPaperBag />} component={Link} to="/dashboard/orders/manual/create">
             Yeni Gönderi
           </Button>
+          <Button leftIcon={<IconCoffee />} component={Link} to="/dashboard/orders/fason/create" color="orange">
+            Fason Sipariş
+          </Button>
           <Button color="green" onClick={handleExcelExport} leftIcon={<IconFileDownload />}>
             Excel
           </Button>
@@ -74,6 +77,7 @@ export const ListOrdersView = () => {
           <Tabs.Tab value="all">Tüm Siparişler</Tabs.Tab>
           <Tabs.Tab value="bulk">Toplu Siparişler</Tabs.Tab>
           <Tabs.Tab value="manual">Manuel Gönderiler</Tabs.Tab>
+          <Tabs.Tab value="fason">Fason Siparişler</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel mt="md" value="all">
           <Results />
@@ -83,6 +87,9 @@ export const ListOrdersView = () => {
         </Tabs.Panel>
         <Tabs.Panel mt="md" value="manual">
           <Results type="MANUAL" />
+        </Tabs.Panel>
+        <Tabs.Panel mt="md" value="fason">
+          <Results type="FASON" />
         </Tabs.Panel>
       </Tabs>
     </PageLayout>

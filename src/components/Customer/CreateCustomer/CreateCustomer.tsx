@@ -50,10 +50,7 @@ export const CreateCustomer = () => {
 
   const onCreateCustomerSubmit = async (values: CreateCustomerValues) => {
     try {
-      await createCustomer({
-        ...values,
-        priceListId: values.priceListId !== "0" ? +values.priceListId : undefined,
-      }).unwrap();
+      await createCustomer(values).unwrap();
 
       showNotification({
         title: "Başarılı",

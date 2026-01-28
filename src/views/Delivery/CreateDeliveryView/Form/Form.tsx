@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useRef, useCallback } from "react";
 
 // UI Components
 import { Button, NumberInput, Select, TextInput } from "@mantine/core";
@@ -19,7 +19,13 @@ type FormProps = {
   form: UseFormReturnType<CreateDeliveryValues>;
 };
 
+// Helper to round to 2 decimal places
+const round2 = (num: number) => Math.round(num * 100) / 100;
+
 export const Form: React.FC<FormProps> = ({ form }) => {
+  // Ref to prevent recursive calculations
+  const isCalculating = useRef(false);
+
   const handleAddProduct = () => {
     // Destructuring form values
     const {
@@ -36,22 +42,106 @@ export const Form: React.FC<FormProps> = ({ form }) => {
     form.insertListItem("deliveryDetails", {
       ...item,
       productId: +productId,
-      taxRate: +taxRate,
+      taxRate: taxRate,
       product,
     });
   };
 
-  useEffect(() => {
-    if (form.values.productId) {
-      // Calculate subtotal and set it in form
-      const subTotal = form.values.quantity * form.values.unitPriceTRY;
-      form.setFieldValue("subTotal", subTotal);
+  // Calculate from unitPriceTRY (forward calculation)
+  const calculateFromUnitPrice = useCallback(
+    (unitPriceTRY: number, quantity: number, taxRate: number) => {
+      if (isCalculating.current) return;
+      isCalculating.current = true;
 
-      // Calculate total and set it in form
-      const tax = form.values.taxRate !== "0" ? (subTotal * +form.values.taxRate) / 100 : 0;
-      form.setFieldValue("total", subTotal + tax);
+      const subTotal = round2(quantity * unitPriceTRY);
+      const total = round2(subTotal * (1 + taxRate / 100));
+
+      form.setFieldValue("subTotal", subTotal);
+      form.setFieldValue("total", total);
+
+      isCalculating.current = false;
+    },
+    [form]
+  );
+
+  // Calculate from subTotal (reverse calculation)
+  const calculateFromSubTotal = useCallback(
+    (subTotal: number, quantity: number, taxRate: number) => {
+      if (isCalculating.current || quantity === 0) return;
+      isCalculating.current = true;
+
+      const unitPriceTRY = round2(subTotal / quantity);
+      const total = round2(subTotal * (1 + taxRate / 100));
+
+      form.setFieldValue("unitPriceTRY", unitPriceTRY);
+      form.setFieldValue("total", total);
+
+      isCalculating.current = false;
+    },
+    [form]
+  );
+
+  // Calculate from total (reverse calculation)
+  const calculateFromTotal = useCallback(
+    (total: number, quantity: number, taxRate: number) => {
+      if (isCalculating.current || quantity === 0) return;
+      isCalculating.current = true;
+
+      const subTotal = round2(total / (1 + taxRate / 100));
+      const unitPriceTRY = round2(subTotal / quantity);
+
+      form.setFieldValue("subTotal", subTotal);
+      form.setFieldValue("unitPriceTRY", unitPriceTRY);
+
+      isCalculating.current = false;
+    },
+    [form]
+  );
+
+  // Handle unitPriceTRY change
+  const handleUnitPriceChange = (value: number | undefined) => {
+    const unitPriceTRY = value ?? 0;
+    form.setFieldValue("unitPriceTRY", unitPriceTRY);
+    if (form.values.productId) {
+      calculateFromUnitPrice(unitPriceTRY, form.values.quantity, form.values.taxRate);
     }
-  }, [form.values.quantity, form.values.unitPriceTRY, form.values.taxRate]);
+  };
+
+  // Handle quantity change
+  const handleQuantityChange = (value: number | undefined) => {
+    const quantity = value ?? 0;
+    form.setFieldValue("quantity", quantity);
+    if (form.values.productId && quantity > 0) {
+      calculateFromUnitPrice(form.values.unitPriceTRY, quantity, form.values.taxRate);
+    }
+  };
+
+  // Handle taxRate change
+  const handleTaxRateChange = (value: number | undefined) => {
+    const taxRate = value ?? 0;
+    form.setFieldValue("taxRate", taxRate);
+    if (form.values.productId) {
+      calculateFromUnitPrice(form.values.unitPriceTRY, form.values.quantity, taxRate);
+    }
+  };
+
+  // Handle subTotal change (manual entry)
+  const handleSubTotalChange = (value: number | undefined) => {
+    const subTotal = value ?? 0;
+    form.setFieldValue("subTotal", subTotal);
+    if (form.values.productId) {
+      calculateFromSubTotal(subTotal, form.values.quantity, form.values.taxRate);
+    }
+  };
+
+  // Handle total change (manual entry)
+  const handleTotalChange = (value: number | undefined) => {
+    const total = value ?? 0;
+    form.setFieldValue("total", total);
+    if (form.values.productId) {
+      calculateFromTotal(total, form.values.quantity, form.values.taxRate);
+    }
+  };
 
   return (
     <div>
@@ -122,7 +212,9 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         precision={2}
         min={0}
         mt="md"
-        {...form.getInputProps("quantity")}
+        value={form.values.quantity}
+        onChange={handleQuantityChange}
+        error={form.errors.quantity}
       />
       <TextInput label="Birim" mt="md" readOnly {...form.getInputProps("unit")} />
       <NumberInput
@@ -131,39 +223,42 @@ export const Form: React.FC<FormProps> = ({ form }) => {
         min={0}
         icon={<span>₺</span>}
         mt="md"
-        {...form.getInputProps("unitPriceTRY")}
+        value={form.values.unitPriceTRY}
+        onChange={handleUnitPriceChange}
+        error={form.errors.unitPriceTRY}
       />
-      <Select
+      <NumberInput
         label="KDV"
         mt="md"
-        placeholder="KDV oranı seçiniz"
-        dropdownComponent="div"
+        placeholder="KDV oranı giriniz"
         icon={<span>%</span>}
-        data={[
-          { label: "0", value: "0" },
-          { label: "1", value: "1" },
-          { label: "8", value: "8" },
-          { label: "18", value: "18" },
-        ]}
-        {...form.getInputProps("taxRate")}
+        precision={2}
+        min={0}
+        value={form.values.taxRate}
+        onChange={handleTaxRateChange}
+        error={form.errors.taxRate}
       />
       <NumberInput
         label="Ara toplam"
-        readOnly
         precision={2}
         min={0}
         icon={<span>₺</span>}
         mt="md"
-        {...form.getInputProps("subTotal")}
+        value={form.values.subTotal}
+        onChange={handleSubTotalChange}
+        error={form.errors.subTotal}
+        description="Manuel girilirse birim fiyat otomatik hesaplanır"
       />
       <NumberInput
         label="Toplam"
-        readOnly
         precision={2}
         min={0}
         icon={<span>₺</span>}
         mt="md"
-        {...form.getInputProps("total")}
+        value={form.values.total}
+        onChange={handleTotalChange}
+        error={form.errors.total}
+        description="Manuel girilirse ara toplam ve birim fiyat otomatik hesaplanır"
       />
       <Button onClick={handleAddProduct} mt="md">
         Ürün Ekle

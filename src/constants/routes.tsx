@@ -74,12 +74,6 @@ export const NAV_LINKS: NavLink[] = [
     link: "/dashboard/price-lists",
   },
   {
-    label: "Finans",
-    icon: IconCoin,
-    match: /finance/,
-    link: "/dashboard/finance",
-  },
-  {
     label: "Shoppar",
     icon: IconTableExport,
     match: /shoppar/,

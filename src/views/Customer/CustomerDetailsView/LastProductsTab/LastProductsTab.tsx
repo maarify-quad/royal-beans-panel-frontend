@@ -38,9 +38,9 @@ export const LastProductsTab: React.FC<LastProductsTabProps> = ({ customer }) =>
     () => [
       {
         title: "Ürün",
-        accessor: "priceListProduct.product.name",
+        accessor: "xxx",
         render: (orderProduct) => {
-          const { product } = orderProduct.priceListProduct;
+          const product = orderProduct.priceListProduct?.product || orderProduct.product;
           return (
             <Flex align="center" gap="xs">
               <Anchor component={Link} to={`/dashboard/storage/${product.stockCode}`}>

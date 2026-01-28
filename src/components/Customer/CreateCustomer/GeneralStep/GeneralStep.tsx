@@ -1,10 +1,7 @@
-import { Fragment, useMemo } from "react";
-
-// Services
-import { useGetPriceListsQuery } from "@services/priceListApi";
+import { Fragment } from "react";
 
 // UI Components
-import { LoadingOverlay, Select, TextInput } from "@mantine/core";
+import { TextInput } from "@mantine/core";
 
 // UI Utils
 import { UseFormReturnType } from "@mantine/form";
@@ -18,20 +15,8 @@ type GeneralStepProps = {
 };
 
 export const GeneralStep = ({ form }: GeneralStepProps) => {
-  const { data, isLoading } = useGetPriceListsQuery();
-
-  const priceListSelectOptions = useMemo(
-    () =>
-      data?.priceLists.map((product) => ({
-        value: product.id.toString(),
-        label: product.name,
-      })) || [],
-    [data?.priceLists.length]
-  );
-
   return (
     <Fragment>
-      <LoadingOverlay visible={isLoading} />
       <TextInput
         label="Müşteri Adı"
         placeholder="Müşteri adı giriniz"
@@ -68,14 +53,6 @@ export const GeneralStep = ({ form }: GeneralStepProps) => {
         placeholder="İkincil yetkili mevki giriniz"
         mt="md"
         {...form.getInputProps("secondContactTitle")}
-      />
-      <Select
-        label="Fiyat listesi"
-        placeholder="Fiyat listesi seçiniz"
-        searchable
-        mt="md"
-        data={priceListSelectOptions}
-        {...form.getInputProps("priceListId")}
       />
     </Fragment>
   );

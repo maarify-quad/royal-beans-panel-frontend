@@ -94,7 +94,7 @@ export const Results = ({ type }: ResultsProps) => {
       {
         accessor: "customer",
         title: "Müşteri",
-        render: (order) => (order.type === "BULK" ? order.customer.name : order.receiver),
+        render: (order) => (order.type === "MANUAL" ? order.receiver : order.customer.name),
       },
       {
         accessor: "total",
@@ -103,17 +103,12 @@ export const Results = ({ type }: ResultsProps) => {
         sortable: true,
       },
       {
-        accessor: "customerBalanceAfterOrder",
-        title: "Bakiye",
-        render: (order) =>
-          order.type === "BULK" ? formatCurrency(order.customerBalanceAfterOrder) : "-",
-        sortable: true,
-      },
-      {
         accessor: "isParasutVerified",
         title: "Fatura",
         render: (order) =>
-          order.type === "BULK" ? (
+          order.type === "MANUAL" ? (
+            order.manualInvoiceStatus
+          ) : (
             <>
               {order.isParasutVerified ? (
                 <ThemeIcon color="green" radius="xl">
@@ -125,8 +120,6 @@ export const Results = ({ type }: ResultsProps) => {
                 </ThemeIcon>
               )}
             </>
-          ) : (
-            order.manualInvoiceStatus
           ),
         sortable: true,
       },
