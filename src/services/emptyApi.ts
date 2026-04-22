@@ -98,5 +98,7 @@ export const emptyApi = createApi({
     "Tag",
     "Deci",
     "Finance",
+    "ProductMapping", 
+    "ProductMappingRelation"
   ],
 });

@@ -9,7 +9,6 @@ import {
   IconPackages,
   IconTableExport,
   IconFileCode,
-  IconCoin,
   IconCalendarEvent,
 } from "@tabler/icons";
 
@@ -57,6 +56,12 @@ export const NAV_LINKS: NavLink[] = [
         label: "Admin",
         link: "/dashboard/stock-admin",
         match: /^\/dashboard\/stock-admin/,
+        roles: ["admin"],
+      },
+      {
+        label: "Ürün Eşleştirme",
+        link: "/dashboard/product-mapping",
+        match: /^\/dashboard\/product-mapping/,
         roles: ["admin"],
       },
     ],

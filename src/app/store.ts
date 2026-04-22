@@ -23,6 +23,7 @@ import { roastIngredientApi } from "@services/roastIngredientApi";
 import { shopifyProductApi } from "@services/shopifyProductApi";
 import { tagApi } from "@services/tagApi";
 import { parasutApi } from "@services/parasutApi";
+import { productMappingApi } from "@services/productMappingApi";
 import { productionApi } from "@services/productionApi";
 import { stockApi } from "@services/stockApi";
 import { financeApi } from "@services/financeApi";
@@ -55,6 +56,7 @@ const store = configureStore({
     [roastIngredientApi.reducerPath]: roastIngredientApi.reducer,
     [tagApi.reducerPath]: tagApi.reducer,
     [parasutApi.reducerPath]: parasutApi.reducer,
+    [productMappingApi.reducerPath]: productMappingApi.reducer,
     [shopifyProductApi.reducerPath]: shopifyProductApi.reducer,
     [productionApi.reducerPath]: productionApi.reducer,
     [stockApi.reducerPath]: stockApi.reducer,

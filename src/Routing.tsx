@@ -76,6 +76,11 @@ const ListLogsView = React.lazy(() => import("./views/Logging/ListLogsView"));
 // Shoppar Views
 const ShopparView = React.lazy(() => import("./views/Shoppar/ShopparView"));
 
+// Product Mapping Views
+const ProductMappingView = React.lazy(
+  () => import("./views/ProductMapping/ProductMappingView")
+);
+
 // Events Views
 const ListEventsView = React.lazy(() => import("./views/Events/ListEventsView"));
 const CreateEventView = React.lazy(() => import("./views/Events/CreateEventView"));
@@ -245,6 +250,10 @@ export const Routing = () => {
         {
           path: "/dashboard/shoppar",
           element: <ShopparView />,
+        },
+        {
+          path: "/dashboard/product-mapping",
+          element: <ProductMappingView />,
         },
         {
           path: "/dashboard/events",
